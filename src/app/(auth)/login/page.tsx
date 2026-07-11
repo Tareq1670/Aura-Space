@@ -108,7 +108,7 @@ export default function LoginPage() {
 
                     <div className="z-10">
                         <h1 className="text-3xl font-extrabold tracking-tight flex items-center gap-2">
-                            <span className="text-emerald-400">✦</span> StayEase
+                             AuraSpace
                         </h1>
                         <p className="text-indigo-200 mt-1 text-xs uppercase tracking-widest font-medium">
                             Next-Gen Rental Platform
@@ -122,12 +122,12 @@ export default function LoginPage() {
                         </h2>
                         <p className="text-indigo-100 text-sm leading-relaxed max-w-sm font-light">
                             Sign in to manage your bookings, explore premium
-                            stays and continue your journey with StayEase.
+                            stays and continue your journey with AuraSpace.
                         </p>
                     </div>
 
                     <div className="z-10 text-xs text-indigo-300 font-medium">
-                        © 2026 StayEase Inc. Secure Gateways Enabled.
+                        © 2026 AuraSpace Inc. Secure Gateways Enabled.
                     </div>
                 </div>
 
@@ -138,7 +138,7 @@ export default function LoginPage() {
                                 Sign in to your account
                             </h3>
                             <p className="text-sm mt-1.5 text-slate-500">
-                                New to StayEase?{" "}
+                                New to AuraSpace?{" "}
                                 <a
                                     href="/register"
                                     className="text-indigo-600 font-semibold hover:text-indigo-700 hover:underline transition"

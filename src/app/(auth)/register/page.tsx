@@ -156,7 +156,7 @@ export default function RegisterPage() {
 
             setGlobalMessage({
                 type: "success",
-                text: "Registration successful! Welcome to StayEase.",
+                text: "Registration successful! Welcome to AuraSpace.",
             });
 
             setTimeout(() => {
@@ -183,7 +183,7 @@ export default function RegisterPage() {
 
                     <div className="z-10">
                         <h1 className="text-3xl font-extrabold tracking-tight flex items-center gap-2">
-                            <span className="text-emerald-400">✦</span> StayEase
+                            <span className="text-emerald-400">✦</span> AuraSpace
                         </h1>
                         <p className="text-indigo-200 mt-1 text-xs uppercase tracking-widest font-medium">
                             Next-Gen Rental Platform
@@ -206,7 +206,7 @@ export default function RegisterPage() {
                     </div>
 
                     <div className="z-10 text-xs text-indigo-300 font-medium">
-                        © 2026 StayEase Inc. Secure Gateways Enabled.
+                        © 2026 AuraSpace Inc. Secure Gateways Enabled.
                     </div>
                 </div>
 
