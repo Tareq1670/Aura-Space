@@ -1,7 +1,12 @@
+import Hero from "@/Components/Public/hero";
+import OurServices from "@/Components/Public/OurServices";
 
 
 export default function Home() {
   return (
-   <div className="container mx-auto">main page4</div>
+   <div>
+      <Hero/>
+      <OurServices/>
+   </div>
   );
 }

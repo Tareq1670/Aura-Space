@@ -1,3 +1,39 @@
 @import "tailwindcss";
-@import "@heroui/styles"; 
+@import "@heroui/styles";
 
+/* ========== Hero Swiper Fixes ========== */
+section .swiper {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+}
+
+section .swiper-wrapper,
+section .swiper-slide {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+section .swiper-slide-active,
+section .swiper-slide-next,
+section .swiper-slide-prev {
+  z-index: 0 !important;
+}
+
+/* ========== HeroUI Input Overrides for Hero ========== */
+.hero-search-input input {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+/* ========== Smooth Scrollbar ========== */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(16, 185, 129, 0.3) transparent;
+}
+
+/* ========== Selection Color ========== */
+::selection {
+  background: rgba(16, 185, 129, 0.2);
+  color: white;
+}
