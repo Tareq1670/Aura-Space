@@ -903,7 +903,7 @@ const ContactPage = () => {
                       href: "/dashboard/properties/add",
                     },
                     { label: "How It Works", href: "/how-it-works" },
-                    { label: "Read our FAQs", href: "/faqs" },
+                    { label: "Read our FAQs", href: "/faq" },
                     { label: "About AuraSpace", href: "/about" },
                   ].map((link) => (
                     <Link
@@ -1219,7 +1219,7 @@ const ContactPage = () => {
             className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
           >
             <Link
-              href="/faqs"
+              href="/faq"
               className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-[11px] font-extrabold uppercase tracking-[0.15em] text-slate-900 shadow-sm transition-all duration-300 hover:border-indigo-200 hover:bg-indigo-50/50 hover:text-indigo-700"
             >
               View All FAQs

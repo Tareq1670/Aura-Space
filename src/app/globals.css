@@ -29,11 +29,11 @@ section .swiper-slide-prev {
 /* ========== Smooth Scrollbar ========== */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(16, 185, 129, 0.3) transparent;
+  scrollbar-color: rgba(0, 190, 127, 0.74) transparent;
 }
 
 /* ========== Selection Color ========== */
 ::selection {
-  background: rgba(16, 185, 129, 0.2);
-  color: white;
+  background: rgba(0, 200, 133, 0.777);
+  color: rgb(255, 255, 255);
 }

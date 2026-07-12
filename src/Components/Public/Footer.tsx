@@ -19,13 +19,12 @@ const exploreLinks = [
 const companyLinks = [
   { label: "About Us", href: "/about" },
   { label: "How It Works", href: "/how-it-works" },
-  { label: "Become a Host", href: "/dashboard/properties/add" },
   { label: "Contact", href: "/contact" },
 ];
 
 const supportLinks = [
   { label: "Help Center", href: "/support" },
-  { label: "FAQs", href: "/faqs" },
+  { label: "FAQs", href: "/faq" },
   { label: "Privacy Policy", href: "/privacy" },
   { label: "Terms of Service", href: "/terms" },
 ];
