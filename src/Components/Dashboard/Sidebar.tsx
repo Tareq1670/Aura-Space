@@ -65,8 +65,8 @@ const NAV_LINKS: Record<string, NavSection[]> = {
     {
       section: "Overview",
       items: [
-        { label: "Dashboard", href: "/dashboard", icon: HiSquares2X2 },
-        { label: "My Profile", href: "/dashboard/profile", icon: HiUser },
+        { label: "Dashboard", href: "/dashboard/user/main", icon: HiSquares2X2 },
+        { label: "My Profile", href: "/dashboard/user/profile", icon: HiUser },
       ],
     },
     {
@@ -74,19 +74,19 @@ const NAV_LINKS: Record<string, NavSection[]> = {
       items: [
         {
           label: "My Bookings",
-          href: "/dashboard/bookings",
+          href: "/dashboard/user/bookings",
           icon: HiCalendarDays,
           badge: 2,
           badgeColor: "violet",
         },
         {
           label: "Wishlist",
-          href: "/dashboard/wishlist",
+          href: "/dashboard/user/wishlist",
           icon: HiHeart,
         },
         {
           label: "My Reviews",
-          href: "/dashboard/reviews",
+          href: "/dashboard/user/reviews",
           icon: HiStar,
         },
       ],
@@ -96,7 +96,7 @@ const NAV_LINKS: Record<string, NavSection[]> = {
       items: [
         {
           label: "Transaction History",
-          href: "/dashboard/transactions",
+          href: "/dashboard/user/transactions",
           icon: HiBanknotes,
         },
       ],
@@ -106,14 +106,14 @@ const NAV_LINKS: Record<string, NavSection[]> = {
       items: [
         {
           label: "Messages",
-          href: "/dashboard/messages",
+          href: "/dashboard/user/messages",
           icon: HiChatBubbleLeftRight,
           badge: 3,
           badgeColor: "red",
         },
         {
           label: "Notifications",
-          href: "/dashboard/notifications",
+          href: "/dashboard/user/notifications",
           icon: HiBellAlert,
         },
       ],
@@ -123,8 +123,8 @@ const NAV_LINKS: Record<string, NavSection[]> = {
     {
       section: "Overview",
       items: [
-        { label: "Dashboard", href: "/dashboard", icon: HiSquares2X2 },
-        { label: "My Profile", href: "/dashboard/profile", icon: HiUser },
+        { label: "Dashboard", href: "/dashboard/host/main", icon: HiSquares2X2 },
+        { label: "My Profile", href: "/dashboard/host/profile", icon: HiUser },
       ],
     },
     {
@@ -132,17 +132,17 @@ const NAV_LINKS: Record<string, NavSection[]> = {
       items: [
         {
           label: "Add New Property",
-          href: "/items/add",
+          href: "/dashboard/host/items/add",
           icon: HiPlusCircle,
         },
         {
           label: "Manage Properties",
-          href: "/items/manage",
+          href: "/dashboard/host/items/manage",
           icon: HiHome,
         },
         {
           label: "Reservations",
-          href: "/dashboard/reservations",
+          href: "/dashboard/host/reservations",
           icon: HiClipboardDocumentList,
           badge: 5,
           badgeColor: "violet",
@@ -154,17 +154,17 @@ const NAV_LINKS: Record<string, NavSection[]> = {
       items: [
         {
           label: "Earnings",
-          href: "/dashboard/earnings",
+          href: "/dashboard/host/earnings",
           icon: HiCurrencyDollar,
         },
         {
           label: "Transactions",
-          href: "/dashboard/transactions",
+          href: "/dashboard/host/transactions",
           icon: HiBanknotes,
         },
         {
           label: "Analytics",
-          href: "/dashboard/analytics",
+          href: "/dashboard/host/analytics",
           icon: HiPresentationChartLine,
         },
       ],
@@ -174,12 +174,12 @@ const NAV_LINKS: Record<string, NavSection[]> = {
       items: [
         {
           label: "Guest Reviews",
-          href: "/dashboard/reviews",
+          href: "/dashboard/host/reviews",
           icon: HiStar,
         },
         {
           label: "Messages",
-          href: "/dashboard/messages",
+          href: "/dashboard/host/messages",
           icon: HiChatBubbleLeftRight,
           badge: 8,
           badgeColor: "red",
@@ -193,7 +193,7 @@ const NAV_LINKS: Record<string, NavSection[]> = {
       items: [
         {
           label: "Analytics Overview",
-          href: "/admin/dashboard",
+          href: "/dashboard/admin/main",
           icon: HiChartBar,
         },
       ],
@@ -203,22 +203,22 @@ const NAV_LINKS: Record<string, NavSection[]> = {
       items: [
         {
           label: "Manage Users",
-          href: "/admin/users",
+          href: "/dashboard/admin/users",
           icon: HiUsers,
         },
         {
           label: "Manage Hosts",
-          href: "/admin/hosts",
+          href: "/dashboard/admin/hosts",
           icon: HiShieldCheck,
         },
         {
           label: "All Properties",
-          href: "/admin/properties",
+          href: "/dashboard/admin/properties",
           icon: HiBuildingOffice2,
         },
         {
           label: "All Bookings",
-          href: "/admin/bookings",
+          href: "/dashboard/admin/bookings",
           icon: HiCalendarDays,
         },
       ],
@@ -228,19 +228,19 @@ const NAV_LINKS: Record<string, NavSection[]> = {
       items: [
         {
           label: "Reported Content",
-          href: "/admin/reports",
+          href: "/dashboard/admin/reports",
           icon: HiFlag,
           badge: 12,
           badgeColor: "red",
         },
         {
           label: "Reviews",
-          href: "/admin/reviews",
+          href: "/dashboard/admin/reviews",
           icon: HiStar,
         },
         {
           label: "Advertisements",
-          href: "/admin/advertise",
+          href: "/dashboard/admin/advertise",
           icon: HiMegaphone,
         },
       ],
@@ -250,12 +250,12 @@ const NAV_LINKS: Record<string, NavSection[]> = {
       items: [
         {
           label: "Revenue Reports",
-          href: "/admin/revenue",
+          href: "/dashboard/admin/revenue",
           icon: HiCurrencyDollar,
         },
         {
           label: "Transactions",
-          href: "/admin/transactions",
+          href: "/dashboard/admin/transactions",
           icon: HiBanknotes,
         },
       ],
