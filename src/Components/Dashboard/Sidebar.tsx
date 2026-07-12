@@ -65,8 +65,8 @@ const NAV_LINKS: Record<string, NavSection[]> = {
     {
       section: "Overview",
       items: [
-        { label: "Dashboard", href: "/dashboard/user/main", icon: HiSquares2X2 },
-        { label: "My Profile", href: "/dashboard/user/profile", icon: HiUser },
+        { label: "Dashboard", href: "/dashboard/guest/main", icon: HiSquares2X2 },
+        { label: "My Profile", href: "/dashboard/guest/profile", icon: HiUser },        
       ],
     },
     {
@@ -74,19 +74,19 @@ const NAV_LINKS: Record<string, NavSection[]> = {
       items: [
         {
           label: "My Bookings",
-          href: "/dashboard/user/bookings",
+          href: "/dashboard/guest/bookings",
           icon: HiCalendarDays,
           badge: 2,
           badgeColor: "violet",
         },
         {
           label: "Wishlist",
-          href: "/dashboard/user/wishlist",
+          href: "/dashboard/guest/wishlist",
           icon: HiHeart,
         },
         {
           label: "My Reviews",
-          href: "/dashboard/user/reviews",
+          href: "/dashboard/guest/reviews",
           icon: HiStar,
         },
       ],
@@ -96,7 +96,7 @@ const NAV_LINKS: Record<string, NavSection[]> = {
       items: [
         {
           label: "Transaction History",
-          href: "/dashboard/user/transactions",
+          href: "/dashboard/guest/transactions",
           icon: HiBanknotes,
         },
       ],
@@ -106,14 +106,14 @@ const NAV_LINKS: Record<string, NavSection[]> = {
       items: [
         {
           label: "Messages",
-          href: "/dashboard/user/messages",
+          href: "/dashboard/guest/messages",
           icon: HiChatBubbleLeftRight,
           badge: 3,
           badgeColor: "red",
         },
         {
           label: "Notifications",
-          href: "/dashboard/user/notifications",
+          href: "/dashboard/guest/notifications",
           icon: HiBellAlert,
         },
       ],
