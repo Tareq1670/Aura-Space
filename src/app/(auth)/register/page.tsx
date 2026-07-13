@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
     Form,
     Button,
@@ -31,8 +32,14 @@ interface GlobalMessage {
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
+function buildAuthHref(basePath: string, redirectParam: string | null) {
+    if (!redirectParam) return basePath;
+    return `${basePath}?redirect=${encodeURIComponent(redirectParam)}`;
+}
+
 export default function RegisterPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [showConfirmPassword, setShowConfirmPassword] =
@@ -43,6 +50,9 @@ export default function RegisterPage() {
     const [globalMessage, setGlobalMessage] = useState<GlobalMessage | null>(
         null,
     );
+
+    const redirectParam = searchParams.get("redirect");
+    const loginHref = buildAuthHref("/login", redirectParam);
 
     const handleImageChange = (
         e: React.ChangeEvent<HTMLInputElement>,
@@ -154,13 +164,15 @@ export default function RegisterPage() {
                 return;
             }
 
+            await authClient.signOut();
+
             setGlobalMessage({
                 type: "success",
-                text: "Registration successful! Welcome to AuraSpace.",
+                text: "Registration successful! Redirecting to login...",
             });
 
             setTimeout(() => {
-                router.push("/");
+                window.location.replace(loginHref);
             }, 1500);
         } catch (err) {
             const message =
@@ -183,7 +195,8 @@ export default function RegisterPage() {
 
                     <div className="z-10">
                         <h1 className="text-3xl font-extrabold tracking-tight flex items-center gap-2">
-                            <span className="text-emerald-400">✦</span> AuraSpace
+                            <span className="text-emerald-400">✦</span>{" "}
+                            AuraSpace
                         </h1>
                         <p className="text-indigo-200 mt-1 text-xs uppercase tracking-widest font-medium">
                             Next-Gen Rental Platform
@@ -218,12 +231,12 @@ export default function RegisterPage() {
                             </h3>
                             <p className="text-sm mt-1.5 text-slate-500">
                                 Already a member?{" "}
-                                <a
-                                    href="/login"
+                                <Link
+                                    href={loginHref}
                                     className="text-indigo-600 font-semibold hover:text-indigo-700 hover:underline transition"
                                 >
                                     Sign in
-                                </a>
+                                </Link>
                             </p>
                         </div>
 
@@ -296,8 +309,8 @@ export default function RegisterPage() {
                                         {imagePreview ? (
                                             <>
                                                 <Image
-                                                height={140}
-                                                width={140}
+                                                    height={140}
+                                                    width={140}
                                                     src={imagePreview}
                                                     alt="Profile preview"
                                                     className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-md ring-2 ring-indigo-500/20"

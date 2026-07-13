@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
     Form,
     Button,
@@ -17,8 +18,33 @@ interface GlobalMessage {
     text: string;
 }
 
+function getSafeRedirectPath(path: string | null) {
+    if (!path) return "/";
+    if (!path.startsWith("/") || path.startsWith("//")) return "/";
+    if (
+        path === "/login" ||
+        path.startsWith("/login/") ||
+        path.startsWith("/login?") ||
+        path === "/register" ||
+        path.startsWith("/register/") ||
+        path.startsWith("/register?") ||
+        path === "/forgot-password" ||
+        path.startsWith("/forgot-password/") ||
+        path.startsWith("/forgot-password?")
+    ) {
+        return "/";
+    }
+    return path;
+}
+
+function buildAuthHref(basePath: string, redirectPath: string | null) {
+    if (!redirectPath) return basePath;
+    return `${basePath}?redirect=${encodeURIComponent(redirectPath)}`;
+}
+
 export default function LoginPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [email, setEmail] = useState<string>("");
@@ -27,6 +53,10 @@ export default function LoginPage() {
     const [globalMessage, setGlobalMessage] = useState<GlobalMessage | null>(
         null,
     );
+
+    const redirectParam = searchParams.get("redirect");
+    const registerHref = buildAuthHref("/register", redirectParam);
+    const forgotPasswordHref = buildAuthHref("/forgot-password", redirectParam);
 
     const handleDemoLogin = (role: "guest" | "host"): void => {
         setGlobalMessage(null);
@@ -78,14 +108,17 @@ export default function LoginPage() {
                 return;
             }
 
+            const redirectPath = getSafeRedirectPath(
+                searchParams.get("redirect"),
+            );
+
             setGlobalMessage({
                 type: "success",
                 text: "Login successful! Redirecting...",
             });
 
             setTimeout(() => {
-                router.push("/");
-                router.refresh();
+                window.location.replace(redirectPath);
             }, 1000);
         } catch (err) {
             const message =
@@ -108,7 +141,7 @@ export default function LoginPage() {
 
                     <div className="z-10">
                         <h1 className="text-3xl font-extrabold tracking-tight flex items-center gap-2">
-                             AuraSpace
+                            AuraSpace
                         </h1>
                         <p className="text-indigo-200 mt-1 text-xs uppercase tracking-widest font-medium">
                             Next-Gen Rental Platform
@@ -139,12 +172,12 @@ export default function LoginPage() {
                             </h3>
                             <p className="text-sm mt-1.5 text-slate-500">
                                 New to AuraSpace?{" "}
-                                <a
-                                    href="/register"
+                                <Link
+                                    href={registerHref}
                                     className="text-indigo-600 font-semibold hover:text-indigo-700 hover:underline transition"
                                 >
                                     Create an account
-                                </a>
+                                </Link>
                             </p>
                         </div>
 
@@ -297,12 +330,12 @@ export default function LoginPage() {
                                     <Label className="text-xs font-bold uppercase tracking-wider block text-slate-700">
                                         Password
                                     </Label>
-                                    <a
-                                        href="/forgot-password"
+                                    <Link
+                                        href={forgotPasswordHref}
                                         className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 hover:underline transition"
                                     >
                                         Forgot password?
-                                    </a>
+                                    </Link>
                                 </div>
                                 <div className="relative w-full">
                                     <Input
@@ -375,12 +408,12 @@ export default function LoginPage() {
 
                             <Button
                                 type="submit"
+                                isDisabled={isLoading} 
                                 className={`w-full py-3 h-11 mt-3 font-semibold text-sm rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all active:scale-[0.98] ${
                                     isLoading
                                         ? "bg-indigo-400 cursor-not-allowed text-white shadow-none"
                                         : "bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-600/20 hover:shadow-indigo-600/30"
                                 }`}
-                                disabled={isLoading}
                             >
                                 {isLoading ? (
                                     <>
