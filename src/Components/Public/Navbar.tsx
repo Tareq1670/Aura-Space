@@ -88,7 +88,7 @@ export default function Navbar() {
 
   const profileMenuRoutes: NavRoute[] = [
     { label: "Dashboard", href: `/dashboard/${userRole}/main` },
-    { label: "My Profile", href: "/profile" },
+    { label: "My Profile", href: `/dashboard/${userRole}/profile` },
   ];
 
   useEffect(() => {

@@ -1,8 +1,8 @@
 import ProfilePage from "@/Components/Dashboard/Profile";
-import React from "react";
 
-const AdminPage = () => {
+
+const HostPage = () => {
     return <ProfilePage />;
 };
 
-export default AdminPage;
+export default HostPage;

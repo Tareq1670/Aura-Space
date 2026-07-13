@@ -208,6 +208,11 @@ const NAV_LINKS: Record<string, NavSection[]> = {
         {
             section: "Overview",
             items: [
+                 {
+                    label: "My Profile",
+                    href: "/dashboard/host/profile",
+                    icon: HiUser,
+                },
                 {
                     label: "Analytics Overview",
                     href: "/dashboard/admin/main",
