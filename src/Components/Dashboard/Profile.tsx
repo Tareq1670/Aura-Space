@@ -8,7 +8,7 @@ import { authClient } from "@/lib/auth-client";
 import { userAPI } from "@/lib/api/Guest/api";
 import { imageUploader } from "@/lib/imageUploader";
 import { AlertDialog, Button, Skeleton } from "@heroui/react";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 
 interface UserProfile {
     id: string;
@@ -440,7 +440,6 @@ export default function ProfilePage() {
     if (!profile) {
         return (
             <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 via-white to-indigo-50/40">
-                <Toaster position="bottom-right" />
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -480,16 +479,6 @@ export default function ProfilePage() {
     // ── Full profile page ─────────────────────────────────────────────────────
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/40">
-            <Toaster
-                position="bottom-right"
-                toastOptions={{
-                    style: {
-                        borderRadius: "12px",
-                        fontSize: "14px",
-                        fontWeight: 500,
-                    },
-                }}
-            />
 
             <motion.div
                 variants={containerVariants}

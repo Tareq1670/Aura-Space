@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// ✅ Public Routes - কোনো authentication লাগবে না
 const publicRoutes = [
     "/",
-    "/spaces",           // সব spaces দেখা যাবে
-    "/space",            // individual space details
+    "/spaces",
+    "/space",
     "/search",
     "/about",
     "/contact",
@@ -12,11 +11,10 @@ const publicRoutes = [
     "/terms",
     "/privacy",
     "/unauthorized",
-    "/categories",       // categories browse
-    "/locations",        // locations browse
+    "/categories",
+    "/locations",
 ];
 
-// ✅ Auth Routes - শুধু logged out users এর জন্য
 const authRoutes = [
     "/login",
     "/register",
@@ -25,7 +23,6 @@ const authRoutes = [
     "/verify-email",
 ];
 
-// ✅ Protected Routes - শুধু logged in users এর জন্য
 const protectedRoutes = [
     "/dashboard",
     "/profile",
@@ -37,16 +34,10 @@ const protectedRoutes = [
     "/settings",
     "/checkout",
     "/payment",
-    "/reviews/create",   // review create করতে login লাগবে
-    "/reviews/edit",     // review edit করতে login লাগবে
+    "/reviews/create",
+    "/reviews/edit",
     "/host",
     "/admin",
-];
-
-// ✅ Semi-Protected Routes - দেখা যাবে, কিন্তু action এ login লাগবে
-// এগুলো middleware এ handle করবো না, component level এ করবো
-const semiProtectedRoutes = [
-    "/reviews",          // reviews দেখা যাবে, কিন্তু লিখতে login লাগবে
 ];
 
 function matchesRoute(pathname: string, routes: string[]) {
@@ -83,30 +74,16 @@ function getSafeRedirectPath(path: string | null) {
     return decodedPath;
 }
 
-function getRoleFromCookies(request: NextRequest) {
-    return (
-        request.cookies.get("user_role")?.value ||
-        request.cookies.get("role")?.value ||
-        request.cookies.get("better-auth.role")?.value ||
-        request.cookies.get("__Secure-better-auth.role")?.value ||
-        null
+function hasSessionCookie(request: NextRequest) {
+    return Boolean(
+        request.cookies.get("better-auth.session_token")?.value ||
+            request.cookies.get("__Secure-better-auth.session_token")?.value
     );
 }
 
-function getRedirectPathByRole(role: string | null) {
-    if (role === "admin") return "/dashboard/admin/main";
-    if (role === "host") return "/dashboard/host/main";
-    return "/dashboard/guest/main";
-}
-
 export function middleware(request: NextRequest) {
-    const sessionCookie =
-        request.cookies.get("better-auth.session_token")?.value ||
-        request.cookies.get("__Secure-better-auth.session_token")?.value;
-
-    const role = getRoleFromCookies(request);
-
     const { pathname, search, searchParams } = request.nextUrl;
+    const sessionExists = hasSessionCookie(request);
     const currentPath = `${pathname}${search}`;
     const requestedRedirect = getSafeRedirectPath(searchParams.get("redirect"));
 
@@ -114,32 +91,19 @@ export function middleware(request: NextRequest) {
     const isAuthRoute = matchesRoute(pathname, authRoutes);
     const isProtectedRoute = matchesRoute(pathname, protectedRoutes);
 
-    // ✅ Public routes - সবাই access করতে পারবে
     if (isPublicRoute) {
         return NextResponse.next();
     }
 
-    // ✅ Dashboard base route redirect
-    if (pathname === "/dashboard" && sessionCookie) {
-        return NextResponse.redirect(
-            new URL(getRedirectPathByRole(role), request.url)
-        );
-    }
-
-    // ✅ Protected routes - login ছাড়া access নেই
-    if (isProtectedRoute && !sessionCookie) {
+    if (isProtectedRoute && !sessionExists) {
         const loginUrl = new URL("/login", request.url);
         loginUrl.searchParams.set("redirect", currentPath);
         return NextResponse.redirect(loginUrl);
     }
 
-    // ✅ Auth routes - logged in হলে redirect
-    if (isAuthRoute && sessionCookie) {
+    if (isAuthRoute && sessionExists) {
         return NextResponse.redirect(
-            new URL(
-                requestedRedirect ?? getRedirectPathByRole(role),
-                request.url
-            )
+            new URL(requestedRedirect ?? "/dashboard", request.url)
         );
     }
 
@@ -148,6 +112,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
     matcher: [
-        "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|manifest.webmanifest|images|icons|fonts).*)",
+        "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|manifest.webmanifest|.*\\..*).*)",
     ],
 };

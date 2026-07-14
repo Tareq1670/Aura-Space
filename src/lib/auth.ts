@@ -36,15 +36,13 @@ function getMongoClient(): MongoClient {
 const client = getMongoClient();
 const db = client.db(process.env.DB_NAME || "StayEase");
 
-const allowedOrigins = [
+const trustedOrigins = [
     "http://localhost:3000",
     "http://localhost:5000",
     process.env.BETTER_AUTH_URL,
     process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
-    process.env.FRONTEND_URL,
-    process.env.CLIENT_URL,
+    process.env.NEXT_PUBLIC_APP_URL,
     "https://aura-space-ochre.vercel.app",
-    "https://aura-space-atgv.vercel.app",
     "https://aura-space-server.vercel.app",
 ].filter(Boolean) as string[];
 
@@ -53,9 +51,10 @@ export const auth = betterAuth({
     baseURL:
         process.env.BETTER_AUTH_URL ||
         process.env.NEXT_PUBLIC_BETTER_AUTH_URL ||
+        process.env.NEXT_PUBLIC_APP_URL ||
         "http://localhost:3000",
     secret: process.env.BETTER_AUTH_SECRET,
-    trustedOrigins: allowedOrigins,
+    trustedOrigins,
     emailAndPassword: {
         enabled: true,
         autoSignIn: false,
@@ -75,7 +74,7 @@ export const auth = betterAuth({
         defaultCookieAttributes: {
             secure: process.env.NODE_ENV === "production",
             httpOnly: true,
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            sameSite: process.env.NODE_ENV === "production" ? "lax" : "lax",
             path: "/",
         },
     },

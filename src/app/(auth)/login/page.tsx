@@ -2,7 +2,7 @@
 
 import React, { useState, Suspense } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import {
     Form,
     Button,
@@ -49,6 +49,7 @@ function LoginForm() {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [rememberMe, setRememberMe] = useState<boolean>(false);
+    const router = useRouter();
     const [globalMessage, setGlobalMessage] = useState<GlobalMessage | null>(
         null,
     );
@@ -117,7 +118,7 @@ function LoginForm() {
             });
 
             setTimeout(() => {
-                window.location.replace(redirectPath);
+                router.replace(redirectPath);
             }, 1000);
         } catch (err) {
             const message =

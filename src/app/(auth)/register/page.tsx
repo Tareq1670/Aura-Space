@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useRef, Suspense } from "react";
+import React, { useState, useRef, Suspense, useEffect } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import {
     Form,
     Button,
@@ -50,8 +50,17 @@ function RegisterForm() {
         null,
     );
 
+    const router = useRouter();
     const redirectParam = searchParams.get("redirect");
     const loginHref = buildAuthHref("/login", redirectParam);
+
+    useEffect(() => {
+        return () => {
+            if (imagePreview) {
+                URL.revokeObjectURL(imagePreview);
+            }
+        };
+    }, [imagePreview]);
 
     const handleImageChange = (
         e: React.ChangeEvent<HTMLInputElement>,
@@ -179,7 +188,7 @@ function RegisterForm() {
             });
 
             setTimeout(() => {
-                window.location.replace(loginHref);
+                router.replace(loginHref);
             }, 1500);
         } catch (err) {
             document.cookie =

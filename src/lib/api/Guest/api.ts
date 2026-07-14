@@ -47,15 +47,18 @@ async function apiFetch<T>(
 
 export const userAPI = {
     getProfile: () =>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         apiFetch<{ success: boolean; data: any }>("/api/users/profile"),
 
     updateProfile: (body: { name?: string; image?: string }) =>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         apiFetch<{ success: boolean; data: any }>("/api/users/profile", {
             method: "PUT",
             body: JSON.stringify(body),
         }),
 
     updateProfileImage: (imageUrl: string) =>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         apiFetch<{ success: boolean; data: any }>("/api/users/profile-image", {
             method: "PUT",
             body: JSON.stringify({ imageUrl }),

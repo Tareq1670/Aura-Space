@@ -1,5 +1,7 @@
 import { ReactNode } from "react";
-import { requireAdmin } from "../../../../../route-guards";
+import { requireAdmin } from "@/lib/route-guards";
+
+export const dynamic = "force-dynamic";
 
 export default async function AdminLayout({
     children,

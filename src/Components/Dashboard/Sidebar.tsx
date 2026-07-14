@@ -216,7 +216,7 @@ const NAV_LINKS: Record<RoleKey, NavSection[]> = {
             items: [
                 {
                     label: "My Profile",
-                    href: "/dashboard/host/profile",
+                    href: "/dashboard/admin/profile",
                     icon: HiUser,
                 },
                 {
@@ -297,42 +297,35 @@ const roleConfig: Record<RoleKey, { label: string; gradient: string }> = {
     admin: { label: "Admin", gradient: "from-purple-500 to-pink-500" },
 };
 
-const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
-    const pathname = usePathname();
-    const router = useRouter();
-    const [isMinimized, setIsMinimized] = useState(false);
-    const [isLoggingOut, setIsLoggingOut] = useState(false);
-
-    const rawRole = user?.role ?? "user";
-    const role: RoleKey =
-        rawRole === "host" || rawRole === "admin" ? rawRole : "user";
-
-    const navSections = NAV_LINKS[role];
-    const currentRole = roleConfig[role];
-
-    const handleLogout = async () => {
-        if (isLoggingOut) return;
-        setIsLoggingOut(true);
-        try {
-            await authClient.signOut({
-                fetchOptions: {
-                    onSuccess: () => {
-                        router.push("/login");
-                        router.refresh();
-                    },
-                    onError: () => {
-                        router.push("/login");
-                        router.refresh();
-                    },
-                },
-            });
-        } catch {
-            router.push("/login");
-            router.refresh();
-        } finally {
-            setIsLoggingOut(false);
-        }
-    };
+const SidebarInner = ({
+    user,
+    role,
+    currentRole,
+    navSections,
+    isMinimized,
+    isLoggingOut,
+    pathname,
+    router,
+    inDrawer,
+    onClose,
+    onToggleMinimize,
+    handleLogout,
+}: {
+    user?: User | null;
+    role: RoleKey;
+    currentRole: { label: string; gradient: string };
+    navSections: NavSection[];
+    isMinimized: boolean;
+    isLoggingOut: boolean;
+    pathname: string;
+    router: ReturnType<typeof useRouter>;
+    inDrawer?: boolean;
+    onClose?: () => void;
+    onToggleMinimize?: () => void;
+    handleLogout: () => Promise<void>;
+}) => {
+    const showLabels = inDrawer || !isMinimized;
+    const userInitial = user?.name?.charAt(0)?.toUpperCase() || "U";
 
     const isItemActive = (href: string) => {
         if (pathname === href) return true;
@@ -340,19 +333,15 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
         return pathname.startsWith(href);
     };
 
-    const SidebarInner = ({ inDrawer = false }: { inDrawer?: boolean }) => {
-        const showLabels = inDrawer || !isMinimized;
-        const userInitial = user?.name?.charAt(0)?.toUpperCase() || "U";
+    return (
+        <div className="relative h-full flex flex-col bg-[#0A0A0F] overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-violet-500/10 via-indigo-500/[0.04] to-transparent pointer-events-none" />
+            <div className="absolute -top-32 -left-24 w-64 h-64 rounded-full bg-violet-500/20 blur-3xl pointer-events-none" />
+            <div className="absolute bottom-40 -right-20 w-48 h-48 rounded-full bg-indigo-500/15 blur-3xl pointer-events-none" />
+            <div className="absolute top-1/3 -left-10 w-32 h-32 rounded-full bg-purple-500/10 blur-3xl pointer-events-none" />
+            <div className="absolute inset-0 opacity-[0.03] [background-image:linear-gradient(to_right,rgba(255,255,255,0.4)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.4)_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
 
-        return (
-            <div className="relative h-full flex flex-col bg-[#0A0A0F] overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-violet-500/10 via-indigo-500/[0.04] to-transparent pointer-events-none" />
-                <div className="absolute -top-32 -left-24 w-64 h-64 rounded-full bg-violet-500/20 blur-3xl pointer-events-none" />
-                <div className="absolute bottom-40 -right-20 w-48 h-48 rounded-full bg-indigo-500/15 blur-3xl pointer-events-none" />
-                <div className="absolute top-1/3 -left-10 w-32 h-32 rounded-full bg-purple-500/10 blur-3xl pointer-events-none" />
-                <div className="absolute inset-0 opacity-[0.03] [background-image:linear-gradient(to_right,rgba(255,255,255,0.4)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.4)_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
-
-                <div className="relative flex-shrink-0 px-4 pt-5 pb-4 border-b border-white/[0.06]">
+            <div className="relative flex-shrink-0 px-4 pt-5 pb-4 border-b border-white/[0.06]">
                     <div
                         className={`flex items-center ${
                             showLabels ? "justify-between" : "justify-center"
@@ -411,7 +400,7 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
 
                     {!inDrawer && (
                         <button
-                            onClick={() => setIsMinimized(!isMinimized)}
+                            onClick={onToggleMinimize}
                             className="mt-4 w-full h-8 rounded-lg flex items-center justify-center gap-1.5 text-xs font-semibold text-white/40 hover:text-violet-300 hover:bg-violet-500/10 border border-white/[0.04] hover:border-violet-500/20 transition-all"
                         >
                             <motion.div
@@ -449,13 +438,10 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
                                 placeholder="Search..."
                                 className="w-full h-9 pl-9 pr-14 rounded-xl bg-white/[0.04] border border-white/[0.06] text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-violet-500/30 focus:bg-white/[0.06] focus:ring-2 focus:ring-violet-500/10 transition-all"
                             />
-                            <kbd className="absolute right-2 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded-md bg-white/[0.06] border border-white/[0.08] text-[10px] font-mono text-white/40 shadow-sm">
-                                ⌘K
-                            </kbd>
                         </div>
                     ) : (
                         <button
-                            onClick={() => setIsMinimized(false)}
+                            onClick={onToggleMinimize}
                             className="w-full h-9 rounded-xl bg-white/[0.04] hover:bg-violet-500/10 border border-white/[0.06] hover:border-violet-500/20 flex items-center justify-center text-white/40 hover:text-violet-300 transition-colors"
                             aria-label="Search"
                         >
@@ -496,81 +482,39 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
 
                             <ul className="flex flex-col gap-0.5">
                                 {section.items.map((item) => {
-                                    const isActive = isItemActive(item.href);
+                                    const active = isItemActive(item.href);
                                     const Icon = item.icon;
-                                    const itemKey = `${section.section}-${item.label}`;
-
                                     return (
-                                        <li
-                                            key={itemKey}
-                                            className="relative group/item"
-                                        >
+                                        <li key={`${section.section}-${item.label}`} className="relative group/item">
                                             <Link
                                                 href={item.href}
-                                                onClick={
-                                                    inDrawer
-                                                        ? onClose
-                                                        : undefined
-                                                }
+                                                onClick={inDrawer ? onClose : undefined}
                                                 className={`relative flex items-center rounded-xl transition-colors duration-200 ${
-                                                    showLabels
-                                                        ? "gap-3 px-3 py-2.5"
-                                                        : "p-2.5 justify-center"
+                                                    showLabels ? "gap-3 px-3 py-2.5" : "p-2.5 justify-center"
                                                 } ${
-                                                    isActive
-                                                        ? "text-white"
-                                                        : "text-white/60 hover:text-white hover:bg-white/[0.04]"
+                                                    active ? "text-white" : "text-white/60 hover:text-white hover:bg-white/[0.04]"
                                                 }`}
                                             >
-                                                {isActive && (
+                                                {active && (
                                                     <motion.div
-                                                        layoutId={
-                                                            inDrawer
-                                                                ? "activeMobile"
-                                                                : "activeDesktop"
-                                                        }
+                                                        layoutId={inDrawer ? "activeMobile" : "activeDesktop"}
                                                         className="absolute inset-0 bg-gradient-to-r from-violet-500 to-indigo-500 rounded-xl shadow-lg shadow-violet-500/30"
-                                                        transition={{
-                                                            type: "spring",
-                                                            stiffness: 350,
-                                                            damping: 30,
-                                                        }}
+                                                        transition={{ type: "spring", stiffness: 350, damping: 30 }}
                                                     />
                                                 )}
 
-                                                {isActive && (
+                                                {active && (
                                                     <div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none">
                                                         <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20" />
                                                     </div>
                                                 )}
 
                                                 <div className="relative flex items-center justify-center flex-shrink-0 z-10">
-                                                    <Icon
-                                                        className={`transition-colors duration-200 ${
-                                                            showLabels
-                                                                ? "w-[18px] h-[18px]"
-                                                                : "w-5 h-5"
-                                                        } ${
-                                                            isActive
-                                                                ? "text-white"
-                                                                : "text-white/50 group-hover/item:text-violet-300"
-                                                        }`}
-                                                    />
-
-                                                    {item.badge &&
-                                                        !showLabels && (
-                                                            <span
-                                                                className={`absolute -top-1 -right-1 w-2 h-2 rounded-full ring-2 ring-[#0A0A0F] ${
-                                                                    item.badgeColor ===
-                                                                    "red"
-                                                                        ? "bg-red-500"
-                                                                        : item.badgeColor ===
-                                                                            "emerald"
-                                                                          ? "bg-emerald-500"
-                                                                          : "bg-violet-500"
-                                                                }`}
-                                                            />
-                                                        )}
+                                                    <Icon className={`transition-colors duration-200 ${
+                                                        showLabels ? "w-[18px] h-[18px]" : "w-5 h-5"
+                                                    } ${
+                                                        active ? "text-white" : "text-white/50 group-hover/item:text-violet-300"
+                                                    }`} />
                                                 </div>
 
                                                 {showLabels && (
@@ -578,152 +522,20 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
                                                         {item.label}
                                                     </span>
                                                 )}
-
-                                                {item.badge && showLabels && (
-                                                    <span
-                                                        className={`relative flex-shrink-0 min-w-[20px] h-5 px-1.5 rounded-full text-[10px] font-bold flex items-center justify-center z-10 ${
-                                                            isActive
-                                                                ? "bg-white/25 text-white backdrop-blur-sm"
-                                                                : item.badgeColor ===
-                                                                    "red"
-                                                                  ? "bg-red-500/15 text-red-400 border border-red-500/20"
-                                                                  : "bg-violet-500/15 text-violet-300 border border-violet-500/20"
-                                                        }`}
-                                                    >
-                                                        {item.badge}
-                                                    </span>
-                                                )}
                                             </Link>
-
-                                            {!showLabels && (
-                                                <div className="absolute left-full top-1/2 -translate-y-1/2 ml-4 px-3 py-1.5 bg-[#1a1a2e] border border-white/[0.08] text-white text-xs font-medium rounded-lg opacity-0 group-hover/item:opacity-100 pointer-events-none transition-opacity duration-200 whitespace-nowrap z-[60] shadow-xl shadow-black/40">
-                                                    <div className="flex items-center gap-2">
-                                                        {item.label}
-                                                        {item.badge && (
-                                                            <span
-                                                                className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
-                                                                    item.badgeColor ===
-                                                                    "red"
-                                                                        ? "bg-red-500/20 text-red-300"
-                                                                        : "bg-violet-500/20 text-violet-300"
-                                                                }`}
-                                                            >
-                                                                {item.badge}
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                    <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-[#1a1a2e]" />
-                                                </div>
-                                            )}
                                         </li>
                                     );
                                 })}
                             </ul>
                         </div>
                     ))}
-
-                    <AnimatePresence>
-                        {showLabels && role === "user" && (
-                            <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: 10 }}
-                                transition={{ duration: 0.3, delay: 0.1 }}
-                                className="mt-6 mx-1"
-                            >
-                                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-600 via-indigo-600 to-purple-700 p-4 shadow-lg shadow-violet-500/30">
-                                    <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full bg-white/10 blur-2xl" />
-                                    <div className="absolute -bottom-6 -left-6 w-20 h-20 rounded-full bg-white/10 blur-2xl" />
-                                    <div className="absolute inset-0 opacity-30 [background-image:linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:16px_16px]" />
-                                    <div className="relative">
-                                        <div className="w-8 h-8 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center mb-3">
-                                            <HiHome className="w-4 h-4 text-white" />
-                                        </div>
-                                        <h3 className="text-sm font-bold text-white mb-1">
-                                            Become a Host
-                                        </h3>
-                                        <p className="text-[11px] text-violet-100/90 leading-relaxed mb-3">
-                                            List your property & start earning
-                                            today
-                                        </p>
-                                        <Link href="/host/onboarding">
-                                            <button className="w-full h-8 rounded-lg bg-white text-violet-700 text-xs font-bold hover:bg-violet-50 transition-colors flex items-center justify-center gap-1 group">
-                                                Get Started
-                                                <HiArrowUpRight className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                                            </button>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
                 </nav>
 
                 <div className="relative flex-shrink-0 border-t border-white/[0.06]">
-                    <div className="px-3 pt-3">
-                        <Link
-                            href="/dashboard/settings"
-                            onClick={inDrawer ? onClose : undefined}
-                            className={`group/settings flex items-center rounded-xl transition-colors duration-200 text-white/60 hover:text-white hover:bg-white/[0.04] ${
-                                showLabels
-                                    ? "gap-3 px-3 py-2.5"
-                                    : "p-2.5 justify-center"
-                            }`}
-                        >
-                            <HiCog6Tooth
-                                className={`text-white/50 group-hover/settings:text-violet-300 transition-colors ${
-                                    showLabels ? "w-[18px] h-[18px]" : "w-5 h-5"
-                                }`}
-                            />
-                            {showLabels && (
-                                <span className="text-sm font-medium">
-                                    Settings
-                                </span>
-                            )}
-                        </Link>
-                    </div>
-
-                    <div className="px-3 pb-3 pt-1">
-                        <button
-                            onClick={handleLogout}
-                            disabled={isLoggingOut}
-                            className={`group/logout w-full flex items-center rounded-xl transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
-                                isLoggingOut
-                                    ? "text-red-400 bg-red-500/10"
-                                    : "text-white/60 hover:text-red-400 hover:bg-red-500/10"
-                            } ${
-                                showLabels
-                                    ? "gap-3 px-3 py-2.5"
-                                    : "p-2.5 justify-center"
-                            }`}
-                        >
-                            <HiArrowRightOnRectangle
-                                className={`transition-colors ${
-                                    isLoggingOut
-                                        ? "text-red-400 animate-pulse"
-                                        : "text-white/50 group-hover/logout:text-red-400"
-                                } ${
-                                    showLabels ? "w-[18px] h-[18px]" : "w-5 h-5"
-                                }`}
-                            />
-                            {showLabels && (
-                                <span className="text-sm font-medium">
-                                    {isLoggingOut
-                                        ? "Logging out..."
-                                        : "Log Out"}
-                                </span>
-                            )}
-                        </button>
-                    </div>
-
                     <div className="border-t border-white/[0.06] p-3">
-                        <div
-                            className={`flex items-center rounded-xl bg-gradient-to-br from-violet-500/[0.08] to-indigo-500/[0.06] border border-violet-500/[0.15] backdrop-blur-sm ${
-                                showLabels
-                                    ? "gap-3 p-2.5"
-                                    : "p-1.5 justify-center"
-                            }`}
-                        >
+                        <div className={`flex items-center rounded-xl bg-gradient-to-br from-violet-500/[0.08] to-indigo-500/[0.06] border border-violet-500/[0.15] backdrop-blur-sm ${
+                            showLabels ? "gap-3 p-2.5" : "p-1.5 justify-center"
+                        }`}>
                             <div className="relative flex-shrink-0">
                                 {user?.image ? (
                                     <Image
@@ -734,13 +546,9 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
                                         className="w-9 h-9 rounded-xl object-cover ring-2 ring-white/10 shadow-md"
                                     />
                                 ) : (
-                                    <div
-                                        className={`w-9 h-9 rounded-xl bg-gradient-to-br ${currentRole.gradient} flex items-center justify-center text-white text-sm font-bold shadow-md ring-2 ring-white/10 relative overflow-hidden`}
-                                    >
+                                    <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${currentRole.gradient} flex items-center justify-center text-white text-sm font-bold shadow-md ring-2 ring-white/10 relative overflow-hidden`}>
                                         <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-white/20" />
-                                        <span className="relative">
-                                            {userInitial}
-                                        </span>
+                                        <span className="relative">{userInitial}</span>
                                     </div>
                                 )}
                                 <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-[#0A0A0F]" />
@@ -766,6 +574,55 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
         );
     };
 
+const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
+    const pathname = usePathname();
+    const router = useRouter();
+    const [isMinimized, setIsMinimized] = useState(false);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+    const rawRole = user?.role ?? "user";
+    const role: RoleKey =
+        rawRole === "host" || rawRole === "admin" ? rawRole : "user";
+
+    const navSections = NAV_LINKS[role];
+    const currentRole = roleConfig[role];
+
+    const handleLogout = async () => {
+        if (isLoggingOut) return;
+        setIsLoggingOut(true);
+        try {
+            await authClient.signOut({
+                fetchOptions: {
+                    onSuccess: () => {
+                        router.push("/login");
+                    },
+                    onError: () => {
+                        router.push("/login");
+                    },
+                },
+            });
+        } catch {
+            router.push("/login");
+        } finally {
+            setIsLoggingOut(false);
+        }
+    };
+
+    const toggleMinimize = () => setIsMinimized((prev) => !prev);
+
+    const sidebarProps = {
+        user,
+        role,
+        currentRole,
+        navSections,
+        isMinimized,
+        isLoggingOut,
+        pathname,
+        router,
+        handleLogout,
+        onToggleMinimize: toggleMinimize,
+    };
+
     return (
         <>
             <AnimatePresence>
@@ -786,7 +643,7 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 className="hidden lg:flex fixed top-0 left-0 h-screen border-r border-white/[0.06] z-30 shadow-[0_0_60px_-12px_rgba(139,92,246,0.15)]"
             >
-                <SidebarInner />
+                <SidebarInner {...sidebarProps} />
             </motion.aside>
 
             <AnimatePresence>
@@ -802,7 +659,7 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
                         }}
                         className="lg:hidden fixed top-0 left-0 h-full w-[300px] max-w-[85vw] z-50 shadow-2xl shadow-black/50"
                     >
-                        <SidebarInner inDrawer />
+                        <SidebarInner {...sidebarProps} inDrawer onClose={onClose} />
                     </motion.aside>
                 )}
             </AnimatePresence>

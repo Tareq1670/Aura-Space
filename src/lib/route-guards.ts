@@ -1,21 +1,20 @@
+import { cache } from "react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 
-// ✅ Optional Auth - session থাকলে return করবে, না থাকলে null
-export async function getOptionalAuth() {
-    const session = await auth.api.getSession({
+export const getServerSession = cache(async () => {
+    return await auth.api.getSession({
         headers: await headers(),
     });
+});
 
-    return session;
+export async function getOptionalAuth() {
+    return await getServerSession();
 }
 
-// ✅ Required Auth - session না থাকলে login এ redirect
 export async function requireAuth() {
-    const session = await auth.api.getSession({
-        headers: await headers(),
-    });
+    const session = await getServerSession();
 
     if (!session?.user) {
         redirect("/login");
@@ -24,7 +23,6 @@ export async function requireAuth() {
     return session;
 }
 
-// ✅ Admin Only
 export async function requireAdmin() {
     const session = await requireAuth();
 
@@ -35,7 +33,6 @@ export async function requireAdmin() {
     return session;
 }
 
-// ✅ Host or Admin
 export async function requireHost() {
     const session = await requireAuth();
 
@@ -46,19 +43,16 @@ export async function requireHost() {
     return session;
 }
 
-// ✅ Guest Only (if needed)
 export async function requireGuest() {
     const session = await requireAuth();
 
-    if (session.user.role !== "guest") {
+    if (session.user.role !== "guest" && session.user.role !== "admin") {
         redirect("/unauthorized");
     }
 
     return session;
 }
 
-// ✅ Any authenticated user
 export async function requireAnyRole() {
-    const session = await requireAuth();
-    return session;
+    return await requireAuth();
 }

@@ -1,28 +1,25 @@
-// app/page.tsx
-import { Suspense } from "react";
-import BrandPartners from "@/Components/Public/BrandPartners";
-import FAQSection from "@/Components/Public/FAQSection";
+import dynamic from "next/dynamic";
 import Hero from "@/Components/Public/hero";
-import HowItWorks from "@/Components/Public/HowItWorks";
-import NewsletterSubscribe from "@/Components/Public/NewsletterSubscribe";
-import OurServices from "@/Components/Public/OurServices";
-import Statistics from "@/Components/Public/Statistics";
-import Testimonials from "@/Components/Public/Testimonials";
-import HomePageSkeleton from "@/Components/Public/HomePageSkeleton";
+
+const BrandPartners = dynamic(() => import("@/Components/Public/BrandPartners"), { ssr: true });
+const OurServices = dynamic(() => import("@/Components/Public/OurServices"), { ssr: true });
+const HowItWorks = dynamic(() => import("@/Components/Public/HowItWorks"), { ssr: true });
+const Statistics = dynamic(() => import("@/Components/Public/Statistics"), { ssr: true });
+const Testimonials = dynamic(() => import("@/Components/Public/Testimonials"), { ssr: true });
+const FAQSection = dynamic(() => import("@/Components/Public/FAQSection"), { ssr: true });
+const NewsletterSubscribe = dynamic(() => import("@/Components/Public/NewsletterSubscribe"), { ssr: true });
 
 export default function Home() {
   return (
-    <Suspense fallback={<HomePageSkeleton />}>
-      <div>
-        <Hero />
-        <BrandPartners />
-        <OurServices />
-        <HowItWorks />
-        <Statistics />
-        <Testimonials />
-        <FAQSection />
-        <NewsletterSubscribe />
-      </div>
-    </Suspense>
+    <div>
+      <Hero />
+      <BrandPartners />
+      <OurServices />
+      <HowItWorks />
+      <Statistics />
+      <Testimonials />
+      <FAQSection />
+      <NewsletterSubscribe />
+    </div>
   );
 }

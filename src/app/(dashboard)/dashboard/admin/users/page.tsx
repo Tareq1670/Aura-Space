@@ -255,9 +255,8 @@ export default function AdminUsersPage() {
     }
   }, []);
 
-  useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { fetchUsers(); }, [fetchUsers]);
 
   const roles = useMemo(
     () => [...new Set(users.map((u) => u.role))].sort(),

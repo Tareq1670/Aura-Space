@@ -3,10 +3,15 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
-const API_BASE =
-    process.env.NEXT_PUBLIC_SERVER_URL ||
-    process.env.API_BASE_URL ||
-    "http://localhost:5000";
+const API_BASE = (() => {
+    const raw = process.env.NEXT_PUBLIC_SERVER_URL ||
+                process.env.NEXT_PUBLIC_API_URL ||
+                process.env.API_BASE_URL ||
+                "http://localhost:5000";
+    const base = raw.replace(/\/$/, "");
+    if (base.endsWith("/api")) return base;
+    return `${base}/api`;
+})();
 
 interface ActionResponse {
     success: boolean;
@@ -67,7 +72,7 @@ export async function getUsersList(): Promise<ActionResponse> {
     }
 
     try {
-        const res = await fetch(`${API_BASE}/api/admin/users`, {
+        const res = await fetch(`${API_BASE}/admin/users`, {
             method: "GET",
             headers: buildHeaders(token),
             cache: "no-store",
@@ -91,7 +96,7 @@ export async function adminUpdateUserRole(
     if (!token) return { success: false, message: "Not authenticated." };
 
     try {
-        const res = await fetch(`${API_BASE}/api/admin/users/${userId}/role`, {
+        const res = await fetch(`${API_BASE}/admin/users/${userId}/role`, {
             method: "PUT",
             headers: buildHeaders(token),
             body: JSON.stringify({ role }),
@@ -114,7 +119,7 @@ export async function adminUpdateUserStatus(
 
     try {
         const res = await fetch(
-            `${API_BASE}/api/admin/users/${userId}/status`,
+            `${API_BASE}/admin/users/${userId}/status`,
             {
                 method: "PUT",
                 headers: buildHeaders(token),
@@ -134,7 +139,7 @@ export async function adminDeleteUser(userId: string): Promise<ActionResponse> {
     if (!token) return { success: false, message: "Not authenticated." };
 
     try {
-        const res = await fetch(`${API_BASE}/api/admin/users/${userId}`, {
+        const res = await fetch(`${API_BASE}/admin/users/${userId}`, {
             method: "DELETE",
             headers: buildHeaders(token),
             cache: "no-store",

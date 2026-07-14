@@ -132,9 +132,13 @@ export default function Navbar() {
     };
   }, [isMobileMenuOpen]);
 
+  const prevPathname = useRef(pathname);
   useEffect(() => {
-    setIsMobileMenuOpen(false);
-    setIsDropdownOpen(false);
+    if (prevPathname.current !== pathname) {
+      setIsMobileMenuOpen(false);
+      setIsDropdownOpen(false);
+      prevPathname.current = pathname;
+    }
   }, [pathname]);
 
   const handleSignOut = async () => {

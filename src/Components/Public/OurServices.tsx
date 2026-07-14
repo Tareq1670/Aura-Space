@@ -439,6 +439,11 @@ function LargeCard({
 
     const glareX = useTransform(springX, [-0.5, 0.5], [0, 100]);
     const glareY = useTransform(springY, [-0.5, 0.5], [0, 100]);
+    const glareBackground = useTransform(
+        [glareX, glareY],
+        ([x, y]) =>
+            `radial-gradient(circle at ${x}% ${y}%, rgba(255,255,255,0.15) 0%, transparent 60%)`,
+    );
 
     return (
         <motion.div
@@ -485,13 +490,7 @@ function LargeCard({
             {!reduceMotion && (
                 <motion.div
                     className="pointer-events-none absolute inset-0 z-20 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                    style={{
-                        background: useTransform(
-                            [glareX, glareY],
-                            ([x, y]) =>
-                                `radial-gradient(circle at ${x}% ${y}%, rgba(255,255,255,0.15) 0%, transparent 60%)`,
-                        ),
-                    }}
+                    style={{ background: glareBackground }}
                 />
             )}
 
@@ -655,6 +654,11 @@ function ImageCard({
 
     const glareX = useTransform(springX, [-0.5, 0.5], [0, 100]);
     const glareY = useTransform(springY, [-0.5, 0.5], [0, 100]);
+    const glareBackground = useTransform(
+        [glareX, glareY],
+        ([x, y]) =>
+            `radial-gradient(circle at ${x}% ${y}%, rgba(255,255,255,0.08) 0%, transparent 50%)`,
+    );
 
     return (
         <motion.div
@@ -700,13 +704,7 @@ function ImageCard({
                     />
                     <motion.div
                         className="absolute inset-0 opacity-0 group-hover:opacity-100"
-                        style={{
-                            background: useTransform(
-                                [glareX, glareY],
-                                ([x, y]) =>
-                                    `radial-gradient(circle at ${x}% ${y}%, rgba(255,255,255,0.08) 0%, transparent 50%)`,
-                            ),
-                        }}
+                        style={{ background: glareBackground }}
                     />
                 </div>
             )}
@@ -817,6 +815,11 @@ function TextCard({
 
     const glareX = useTransform(springX, [-0.5, 0.5], [0, 100]);
     const glareY = useTransform(springY, [-0.5, 0.5], [0, 100]);
+    const glareBackground = useTransform(
+        [glareX, glareY],
+        ([x, y]) =>
+            `radial-gradient(circle at ${x}% ${y}%, rgba(99,102,241,0.06) 0%, transparent 50%)`,
+    );
 
     return (
         <motion.div
@@ -864,13 +867,7 @@ function TextCard({
             {!reduceMotion && (
                 <motion.div
                     className="pointer-events-none absolute inset-0 z-20 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                    style={{
-                        background: useTransform(
-                            [glareX, glareY],
-                            ([x, y]) =>
-                                `radial-gradient(circle at ${x}% ${y}%, rgba(99,102,241,0.06) 0%, transparent 50%)`,
-                        ),
-                    }}
+                    style={{ background: glareBackground }}
                 />
             )}
 

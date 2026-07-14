@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { HiBars3, HiBell, HiSparkles } from "react-icons/hi2";
@@ -48,30 +48,28 @@ const pulseRing: Variants = {
 };
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
-    const router = useRouter();
     const pathname = usePathname();
+    const router = useRouter();
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
     const { data, isPending } = authClient.useSession();
 
     const sessionUser = data?.user;
 
     useEffect(() => {
-        const timer = setTimeout(() => setIsLoading(false), 800);
-        return () => clearTimeout(timer);
-    }, []);
-
-    useEffect(() => {
         if (!isPending && !sessionUser) {
             const currentPath = `${window.location.pathname}${window.location.search}`;
-            window.location.replace(
+            router.replace(
                 `/login?redirect=${encodeURIComponent(currentPath)}`,
             );
         }
     }, [sessionUser, isPending, router]);
 
+    const prevPath = useRef(pathname);
     useEffect(() => {
-        setSidebarOpen(false);
+        if (prevPath.current !== pathname) {
+            setSidebarOpen(false);
+            prevPath.current = pathname;
+        }
     }, [pathname]);
 
     useEffect(() => {
@@ -101,7 +99,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
               ? "Admin"
               : "Guest";
 
-    if (isLoading || isPending) {
+    if (isPending) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-violet-50/40">
                 <motion.div

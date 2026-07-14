@@ -1,8 +1,8 @@
 import ProfilePage from "@/Components/Dashboard/Profile";
 
 
-const HostPage = () => {
+const AdminProfilePage = () => {
     return <ProfilePage />;
 };
 
-export default HostPage;
+export default AdminProfilePage;
