@@ -301,6 +301,7 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
     const pathname = usePathname();
     const router = useRouter();
     const [isMinimized, setIsMinimized] = useState(false);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     const rawRole = user?.role ?? "user";
     const role: RoleKey =
@@ -310,14 +311,26 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
     const currentRole = roleConfig[role];
 
     const handleLogout = async () => {
-        const currentPath = pathname;
+        if (isLoggingOut) return;
+        setIsLoggingOut(true);
         try {
-            await authClient.signOut();
+            await authClient.signOut({
+                fetchOptions: {
+                    onSuccess: () => {
+                        router.push("/login");
+                        router.refresh();
+                    },
+                    onError: () => {
+                        router.push("/login");
+                        router.refresh();
+                    },
+                },
+            });
         } catch {
-            router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
-        } finally {
-            router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
+            router.push("/login");
             router.refresh();
+        } finally {
+            setIsLoggingOut(false);
         }
     };
 
@@ -337,7 +350,6 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
                 <div className="absolute -top-32 -left-24 w-64 h-64 rounded-full bg-violet-500/20 blur-3xl pointer-events-none" />
                 <div className="absolute bottom-40 -right-20 w-48 h-48 rounded-full bg-indigo-500/15 blur-3xl pointer-events-none" />
                 <div className="absolute top-1/3 -left-10 w-32 h-32 rounded-full bg-purple-500/10 blur-3xl pointer-events-none" />
-
                 <div className="absolute inset-0 opacity-[0.03] [background-image:linear-gradient(to_right,rgba(255,255,255,0.4)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.4)_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
 
                 <div className="relative flex-shrink-0 px-4 pt-5 pb-4 border-b border-white/[0.06]">
@@ -623,7 +635,6 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
                                     <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full bg-white/10 blur-2xl" />
                                     <div className="absolute -bottom-6 -left-6 w-20 h-20 rounded-full bg-white/10 blur-2xl" />
                                     <div className="absolute inset-0 opacity-30 [background-image:linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:16px_16px]" />
-
                                     <div className="relative">
                                         <div className="w-8 h-8 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center mb-3">
                                             <HiHome className="w-4 h-4 text-white" />
@@ -675,20 +686,31 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
                     <div className="px-3 pb-3 pt-1">
                         <button
                             onClick={handleLogout}
-                            className={`group/logout w-full flex items-center rounded-xl transition-colors duration-200 text-white/60 hover:text-red-400 hover:bg-red-500/10 ${
+                            disabled={isLoggingOut}
+                            className={`group/logout w-full flex items-center rounded-xl transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
+                                isLoggingOut
+                                    ? "text-red-400 bg-red-500/10"
+                                    : "text-white/60 hover:text-red-400 hover:bg-red-500/10"
+                            } ${
                                 showLabels
                                     ? "gap-3 px-3 py-2.5"
                                     : "p-2.5 justify-center"
                             }`}
                         >
                             <HiArrowRightOnRectangle
-                                className={`text-white/50 group-hover/logout:text-red-400 transition-colors ${
+                                className={`transition-colors ${
+                                    isLoggingOut
+                                        ? "text-red-400 animate-pulse"
+                                        : "text-white/50 group-hover/logout:text-red-400"
+                                } ${
                                     showLabels ? "w-[18px] h-[18px]" : "w-5 h-5"
                                 }`}
                             />
                             {showLabels && (
                                 <span className="text-sm font-medium">
-                                    Log Out
+                                    {isLoggingOut
+                                        ? "Logging out..."
+                                        : "Log Out"}
                                 </span>
                             )}
                         </button>
