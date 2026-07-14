@@ -1,12 +1,22 @@
 import { authClient } from "@/lib/auth-client";
 
 const SERVER_URL =
-    process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5000";
+    process.env.NEXT_PUBLIC_SERVER_URL ||
+    (typeof window !== "undefined"
+        ? window.location.origin.includes("localhost")
+            ? "http://localhost:5000"
+            : "https://aura-space-server.vercel.app"
+        : "http://localhost:5000");
 
 async function getAuthToken(): Promise<string> {
-    const { data } = await authClient.token();
-    if (!data?.token) throw new Error("Login required.");
-    return data.token;
+    try {
+        const { data } = await authClient.token();
+        if (data?.token) return data.token;
+        throw new Error("No token from authClient.token()");
+    } catch (err) {
+        console.error("[getAuthToken] failed:", err);
+        throw new Error("Login required.");
+    }
 }
 
 async function apiFetch<T>(
@@ -15,10 +25,12 @@ async function apiFetch<T>(
 ): Promise<T> {
     const token = await getAuthToken();
 
+    const isFormData = options.body instanceof FormData;
+
     const res = await fetch(`${SERVER_URL}${endpoint}`, {
         ...options,
         headers: {
-            "Content-Type": "application/json",
+            ...(isFormData ? {} : { "Content-Type": "application/json" }),
             Authorization: `Bearer ${token}`,
             ...options.headers,
         },

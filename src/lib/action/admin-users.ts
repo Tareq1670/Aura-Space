@@ -3,7 +3,10 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_BASE =
+    process.env.NEXT_PUBLIC_SERVER_URL ||
+    process.env.API_BASE_URL ||
+    "http://localhost:5000";
 
 interface ActionResponse {
     success: boolean;
@@ -11,12 +14,10 @@ interface ActionResponse {
     data?: Record<string, unknown>;
 }
 
-// ✅ JWT token নেওয়া
 async function getToken(): Promise<string | null> {
     try {
         const headersList = await headers();
-        
-        // Better Auth JWT token
+
         const tokenResponse = await auth.api.getToken({
             headers: headersList,
         });
@@ -112,12 +113,15 @@ export async function adminUpdateUserStatus(
     if (!token) return { success: false, message: "Not authenticated." };
 
     try {
-        const res = await fetch(`${API_BASE}/api/admin/users/${userId}/status`, {
-            method: "PUT",
-            headers: buildHeaders(token),
-            body: JSON.stringify({ banned, banReason }),
-            cache: "no-store",
-        });
+        const res = await fetch(
+            `${API_BASE}/api/admin/users/${userId}/status`,
+            {
+                method: "PUT",
+                headers: buildHeaders(token),
+                body: JSON.stringify({ banned, banReason }),
+                cache: "no-store",
+            },
+        );
         return await handleResponse(res);
     } catch (error) {
         console.error("[adminUpdateUserStatus] Error:", error);

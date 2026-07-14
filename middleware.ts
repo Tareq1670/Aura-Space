@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// ✅ Public Routes - কোনো authentication লাগবে না
 const publicRoutes = [
     "/",
-    "/spaces",
+    "/spaces",           // সব spaces দেখা যাবে
+    "/space",            // individual space details
     "/search",
     "/about",
     "/contact",
@@ -10,8 +12,11 @@ const publicRoutes = [
     "/terms",
     "/privacy",
     "/unauthorized",
+    "/categories",       // categories browse
+    "/locations",        // locations browse
 ];
 
+// ✅ Auth Routes - শুধু logged out users এর জন্য
 const authRoutes = [
     "/login",
     "/register",
@@ -20,6 +25,7 @@ const authRoutes = [
     "/verify-email",
 ];
 
+// ✅ Protected Routes - শুধু logged in users এর জন্য
 const protectedRoutes = [
     "/dashboard",
     "/profile",
@@ -31,9 +37,16 @@ const protectedRoutes = [
     "/settings",
     "/checkout",
     "/payment",
-    "/reviews",
+    "/reviews/create",   // review create করতে login লাগবে
+    "/reviews/edit",     // review edit করতে login লাগবে
     "/host",
     "/admin",
+];
+
+// ✅ Semi-Protected Routes - দেখা যাবে, কিন্তু action এ login লাগবে
+// এগুলো middleware এ handle করবো না, component level এ করবো
+const semiProtectedRoutes = [
+    "/reviews",          // reviews দেখা যাবে, কিন্তু লিখতে login লাগবে
 ];
 
 function matchesRoute(pathname: string, routes: string[]) {
@@ -101,18 +114,26 @@ export function middleware(request: NextRequest) {
     const isAuthRoute = matchesRoute(pathname, authRoutes);
     const isProtectedRoute = matchesRoute(pathname, protectedRoutes);
 
+    // ✅ Public routes - সবাই access করতে পারবে
+    if (isPublicRoute) {
+        return NextResponse.next();
+    }
+
+    // ✅ Dashboard base route redirect
     if (pathname === "/dashboard" && sessionCookie) {
         return NextResponse.redirect(
             new URL(getRedirectPathByRole(role), request.url)
         );
     }
 
+    // ✅ Protected routes - login ছাড়া access নেই
     if (isProtectedRoute && !sessionCookie) {
         const loginUrl = new URL("/login", request.url);
         loginUrl.searchParams.set("redirect", currentPath);
         return NextResponse.redirect(loginUrl);
     }
 
+    // ✅ Auth routes - logged in হলে redirect
     if (isAuthRoute && sessionCookie) {
         return NextResponse.redirect(
             new URL(
@@ -122,15 +143,11 @@ export function middleware(request: NextRequest) {
         );
     }
 
-    if (isPublicRoute) {
-        return NextResponse.next();
-    }
-
     return NextResponse.next();
 }
 
 export const config = {
     matcher: [
-        "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|manifest.webmanifest).*)",
+        "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|manifest.webmanifest|images|icons|fonts).*)",
     ],
 };
