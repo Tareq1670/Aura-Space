@@ -10,13 +10,16 @@ declare global {
 
 function getMongoClient(): MongoClient {
     const uri = process.env.MONGODB_URI;
-    if (!uri) throw new Error("MONGODB_URI is not set");
+
+    if (!uri) {
+        throw new Error("MONGODB_URI environment variable is not set.");
+    }
 
     if (process.env.NODE_ENV !== "production") {
         if (!global._mongoAuthClient) {
             global._mongoAuthClient = new MongoClient(uri, {
                 maxPoolSize: 10,
-                serverSelectionTimeoutMS: 10000,
+                serverSelectionTimeoutMS: 5000,
                 socketTimeoutMS: 45000,
             });
         }
@@ -25,7 +28,7 @@ function getMongoClient(): MongoClient {
 
     return new MongoClient(uri, {
         maxPoolSize: 10,
-        serverSelectionTimeoutMS: 10000,
+        serverSelectionTimeoutMS: 5000,
         socketTimeoutMS: 45000,
     });
 }
@@ -33,28 +36,23 @@ function getMongoClient(): MongoClient {
 const client = getMongoClient();
 const db = client.db(process.env.DB_NAME || "StayEase");
 
-const BASE_URL =
-    process.env.BETTER_AUTH_URL ||
-    process.env.NEXT_PUBLIC_BETTER_AUTH_URL ||
-    "http://localhost:3000";
-
 export const auth = betterAuth({
     database: mongodbAdapter(db, { client }),
-    baseURL: BASE_URL,
+    baseURL:
+        process.env.BETTER_AUTH_URL ||
+        process.env.NEXT_PUBLIC_BETTER_AUTH_URL ||
+        "http://localhost:3000",
     secret: process.env.BETTER_AUTH_SECRET,
-
     trustedOrigins: [
         "http://localhost:3000",
         "http://localhost:5000",
         "https://aura-space-atgv.vercel.app",
         "https://aura-space-server.vercel.app",
     ],
-
     emailAndPassword: {
         enabled: true,
         autoSignIn: false,
     },
-
     session: {
         cookieCache: {
             enabled: false,
@@ -62,7 +60,6 @@ export const auth = betterAuth({
         expiresIn: 60 * 60 * 24 * 30,
         updateAge: 60 * 60 * 24,
     },
-
     advanced: {
         useSecureCookies: process.env.NODE_ENV === "production",
         crossSubDomainCookies: {
@@ -75,7 +72,6 @@ export const auth = betterAuth({
             path: "/",
         },
     },
-
     plugins: [
         admin({
             defaultRole: "guest",
@@ -87,28 +83,50 @@ export const auth = betterAuth({
             },
         }),
     ],
-
     user: {
         additionalFields: {
-            phone: { type: "string", required: false, input: true },
-            address: { type: "string", required: false, input: true },
-            dob: { type: "string", required: false, input: true },
+            phone: {
+                type: "string",
+                required: false,
+                input: true,
+            },
+            address: {
+                type: "string",
+                required: false,
+                input: true,
+            },
+            dob: {
+                type: "string",
+                required: false,
+                input: true,
+            },
         },
     },
-
     databaseHooks: {
         user: {
             create: {
                 before: async (user) => {
                     let role = "guest";
+
                     try {
                         const cookieStore = await cookies();
-                        const pendingRole = cookieStore.get("pending_role")?.value;
-                        if (pendingRole && ["guest", "host"].includes(pendingRole)) {
+                        const pendingRole =
+                            cookieStore.get("pending_role")?.value;
+
+                        if (
+                            pendingRole &&
+                            ["guest", "host"].includes(pendingRole)
+                        ) {
                             role = pendingRole;
                         }
                     } catch {}
-                    return { data: { ...user, role } };
+
+                    return {
+                        data: {
+                            ...user,
+                            role,
+                        },
+                    };
                 },
             },
         },

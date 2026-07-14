@@ -20,7 +20,7 @@ const authRoutes = [
     "/verify-email",
 ];
 
-const sharedProtectedRoutes = [
+const protectedRoutes = [
     "/dashboard",
     "/profile",
     "/bookings",
@@ -32,24 +32,16 @@ const sharedProtectedRoutes = [
     "/checkout",
     "/payment",
     "/reviews",
+    "/host",
+    "/admin",
 ];
-
-const guestRoutes = ["/dashboard/guest"];
-const hostRoutes = ["/dashboard/host", "/host"];
-const adminRoutes = ["/dashboard/admin", "/admin"];
 
 function matchesRoute(pathname: string, routes: string[]) {
     return routes.some((route) =>
         route === "/"
             ? pathname === "/"
-            : pathname === route || pathname.startsWith(`${route}/`),
+            : pathname === route || pathname.startsWith(`${route}/`)
     );
-}
-
-function normalizeRole(role: string | null) {
-    if (role === "guest") return "user";
-    if (role === "user" || role === "host" || role === "admin") return role;
-    return null;
 }
 
 function getSafeRedirectPath(path: string | null) {
@@ -70,13 +62,22 @@ function getSafeRedirectPath(path: string | null) {
     const cleanPath = decodedPath.split("?")[0];
 
     const isAuthPath = authRoutes.some(
-        (route) =>
-            cleanPath === route || cleanPath.startsWith(`${route}/`),
+        (route) => cleanPath === route || cleanPath.startsWith(`${route}/`)
     );
 
     if (isAuthPath) return null;
 
     return decodedPath;
+}
+
+function getRoleFromCookies(request: NextRequest) {
+    return (
+        request.cookies.get("user_role")?.value ||
+        request.cookies.get("role")?.value ||
+        request.cookies.get("better-auth.role")?.value ||
+        request.cookies.get("__Secure-better-auth.role")?.value ||
+        null
+    );
 }
 
 function getRedirectPathByRole(role: string | null) {
@@ -90,13 +91,7 @@ export function middleware(request: NextRequest) {
         request.cookies.get("better-auth.session_token")?.value ||
         request.cookies.get("__Secure-better-auth.session_token")?.value;
 
-    const rawRole =
-        request.cookies.get("user_role")?.value ||
-        request.cookies.get("better-auth.role")?.value ||
-        request.cookies.get("__Secure-better-auth.role")?.value ||
-        null;
-
-    const role = normalizeRole(rawRole);
+    const role = getRoleFromCookies(request);
 
     const { pathname, search, searchParams } = request.nextUrl;
     const currentPath = `${pathname}${search}`;
@@ -104,17 +99,11 @@ export function middleware(request: NextRequest) {
 
     const isPublicRoute = matchesRoute(pathname, publicRoutes);
     const isAuthRoute = matchesRoute(pathname, authRoutes);
-    const isSharedProtectedRoute = matchesRoute(pathname, sharedProtectedRoutes);
-    const isGuestRoute = matchesRoute(pathname, guestRoutes);
-    const isHostRoute = matchesRoute(pathname, hostRoutes);
-    const isAdminRoute = matchesRoute(pathname, adminRoutes);
-
-    const isProtectedRoute =
-        isSharedProtectedRoute || isGuestRoute || isHostRoute || isAdminRoute;
+    const isProtectedRoute = matchesRoute(pathname, protectedRoutes);
 
     if (pathname === "/dashboard" && sessionCookie) {
         return NextResponse.redirect(
-            new URL(getRedirectPathByRole(role), request.url),
+            new URL(getRedirectPathByRole(role), request.url)
         );
     }
 
@@ -128,21 +117,13 @@ export function middleware(request: NextRequest) {
         return NextResponse.redirect(
             new URL(
                 requestedRedirect ?? getRedirectPathByRole(role),
-                request.url,
-            ),
+                request.url
+            )
         );
     }
 
-    if (isGuestRoute && role !== "user") {
-        return NextResponse.redirect(new URL("/unauthorized", request.url));
-    }
-
-    if (isHostRoute && role !== "host" && role !== "admin") {
-        return NextResponse.redirect(new URL("/unauthorized", request.url));
-    }
-
-    if (isAdminRoute && role !== "admin") {
-        return NextResponse.redirect(new URL("/unauthorized", request.url));
+    if (isPublicRoute) {
+        return NextResponse.next();
     }
 
     return NextResponse.next();
