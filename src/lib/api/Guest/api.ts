@@ -36,13 +36,16 @@ async function apiFetch<T>(
         },
     });
 
-    const json = await res.json();
+    const contentType = res.headers.get("content-type") || "";
+    const isJson = contentType.includes("application/json");
+    const body = isJson ? await res.json() : await res.text();
 
     if (!res.ok) {
-        throw new Error(json.message || "Something went wrong.");
+        const message = isJson ? (body.message || body.error || "Something went wrong.") : `HTTP ${res.status}`;
+        throw new Error(message);
     }
 
-    return json;
+    return body;
 }
 
 export const userAPI = {

@@ -46,6 +46,7 @@ function RegisterForm() {
     const [profileImage, setProfileImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [selectedRole, setSelectedRole] = useState<string>("");
     const [globalMessage, setGlobalMessage] = useState<GlobalMessage | null>(
         null,
     );
@@ -132,7 +133,7 @@ function RegisterForm() {
         const data: RegisterFormData = {
             name: (formData.get("name") as string | null)?.trim() ?? "",
             email: (formData.get("email") as string | null)?.trim() ?? "",
-            role: (formData.get("role") as string | null)?.trim() ?? "",
+            role: selectedRole,
             password: (formData.get("password") as string | null) ?? "",
             confirmPassword:
                 (formData.get("confirmPassword") as string | null) ?? "",
@@ -476,6 +477,10 @@ function RegisterForm() {
                                 name="role"
                                 placeholder="Select your role"
                                 className="w-full"
+                                selectedKey={selectedRole || undefined}
+                                onSelectionChange={(key) => {
+                                    setSelectedRole((key as string) || "");
+                                }}
                             >
                                 <Label className="text-xs font-bold uppercase tracking-wider mb-1 block text-slate-700">
                                     Join As

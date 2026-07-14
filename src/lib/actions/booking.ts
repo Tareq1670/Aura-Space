@@ -15,30 +15,10 @@ function getApiBase(): string {
 const API_BASE = getApiBase();
 
 async function getSessionToken(): Promise<string> {
-    try {
-        const headersList = await headers();
-        const tokenResponse = await auth.api.getToken({ headers: headersList });
-        if (tokenResponse?.token) {
-            return tokenResponse.token;
-        }
-    } catch (err) {
-        console.warn("[Auth] getToken failed:", err);
-    }
-    try {
-        const { cookies } = await import("next/headers");
-        const cookieStore = await cookies();
-        const tokenNames = [
-            "better-auth.session_token",
-            "__Secure-better-auth.session_token",
-            "better-auth.session-token",
-            "__Secure-better-auth.session-token",
-        ];
-        for (const name of tokenNames) {
-            const val = cookieStore.get(name)?.value;
-            if (val) return val;
-        }
-    } catch (err) {
-        console.warn("[Auth] Cookie fallback failed:", err);
+    const headersList = await headers();
+    const tokenResponse = await auth.api.getToken({ headers: headersList });
+    if (tokenResponse?.token) {
+        return tokenResponse.token;
     }
     throw new Error("No session token found. Please login again.");
 }

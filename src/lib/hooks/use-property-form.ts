@@ -68,7 +68,8 @@ export function usePropertyForm() {
         }
         return initialFormData;
     });
-    const [hydrated, setHydrated] = useState(true);
+    const [hydrated, setHydrated] = useState(false);
+    useEffect(() => { setHydrated(true); }, []);
     const [currentStep, setCurrentStep] = useState(0);
     const [draftId, setDraftId] = useState<string | null>(null);
 

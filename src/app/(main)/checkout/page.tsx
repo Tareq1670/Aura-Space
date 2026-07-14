@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation"
 import { requireAuth } from "@/lib/route-guards"
-import { CheckoutForm } from "./CheckoutForm"
+import { CheckoutPaymentWrapper } from "@/Components/Checkout/CheckoutPaymentWrapper"
 
 interface PageProps {
   searchParams: Promise<{ propertyId?: string; checkIn?: string; checkOut?: string; guests?: string; error?: string }>
@@ -126,11 +126,11 @@ export default async function CheckoutPage({ searchParams }: PageProps) {
               </div>
             </div>
 
-            <CheckoutForm
+            <CheckoutPaymentWrapper
               propertyId={propertyId}
               checkIn={checkIn}
               checkOut={checkOut}
-              guests={guests}
+              guests={Number(guests)}
             />
           </div>
         </div>

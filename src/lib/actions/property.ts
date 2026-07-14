@@ -21,35 +21,11 @@ const API_BASE = getApiBase();
 // SESSION TOKEN — from cookie via better-auth
 // ============================================================
 async function getSessionToken(): Promise<string> {
-    try {
-        const headersList = await headers();
-        const tokenResponse = await auth.api.getToken({ headers: headersList });
-        if (tokenResponse?.token) {
-            return tokenResponse.token;
-        }
-    } catch (err) {
-        console.warn("[Auth] getToken failed:", err);
+    const headersList = await headers();
+    const tokenResponse = await auth.api.getToken({ headers: headersList });
+    if (tokenResponse?.token) {
+        return tokenResponse.token;
     }
-
-    // Fallback: read cookies directly
-    try {
-        const { cookies } = await import("next/headers");
-        const cookieStore = await cookies();
-        const tokenNames = [
-            "better-auth.session_token",
-            "__Secure-better-auth.session_token",
-            "better-auth.session-token",
-            "__Secure-better-auth.session-token",
-        ];
-
-        for (const name of tokenNames) {
-            const val = cookieStore.get(name)?.value;
-            if (val) return val;
-        }
-    } catch (err) {
-        console.warn("[Auth] Cookie fallback failed:", err);
-    }
-
     throw new Error("No session token found. Please login again.");
 }
 
@@ -82,8 +58,6 @@ async function apiFetch<T = unknown>(
     const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
     const url = `${API_BASE}${cleanEndpoint}`;
 
-    console.log(`[API] ${options.method || "GET"} ${url}`);
-
     try {
         const authHeaders = await getAuthHeaders();
 
@@ -97,14 +71,11 @@ async function apiFetch<T = unknown>(
         const isJson = contentType?.includes("application/json");
         const result = isJson ? await res.json() : await res.text();
 
-        console.log(`[API] Response ${res.status}:`, result);
-
         if (!res.ok) {
             const errorMsg =
                 typeof result === "object"
                     ? result?.message || result?.error || `HTTP ${res.status}`
                     : `HTTP ${res.status}`;
-            console.error(`[API Error]:`, errorMsg);
             return { success: false, statusCode: res.status, error: errorMsg };
         }
 
@@ -233,18 +204,37 @@ const AMENITY_MAP: Record<string, string> = {
     "security cameras": "security-camera",
     security_cameras: "security-camera",
     cctv: "security-camera",
-    monitor: "workspace",        // monitor → workspace
-    coffee_maker: "kitchen",     // coffee_maker → kitchen
-    beach_access: "balcony",     // beach_access → balcony (closest match)
-    smoking_area: "bbq",         // smoking_area → bbq (closest match)
+    monitor: "workspace",
+    coffee_maker: "kitchen",
+    beach_access: "balcony",
+    smoking_area: "bbq",
     resort: "pool",
     hostel: "wifi",
+    "hot-water": "hot-water",
+    hot_water: "hot-water",
+    hotwater: "hot-water",
+    refrigerator: "refrigerator",
+    fridge: "refrigerator",
+    lock: "lock",
+    "pet-friendly": "pet-friendly",
+    pet_friendly: "pet-friendly",
+    petfriendly: "pet-friendly",
+    "pets allowed": "pet-friendly",
+    "baby-friendly": "baby-friendly",
+    baby_friendly: "baby-friendly",
+    babyfriendly: "baby-friendly",
+    "wheelchair-accessible": "wheelchair-accessible",
+    wheelchair_accessible: "wheelchair-accessible",
+    wheelchairaccessible: "wheelchair-accessible",
+    "wheelchair accessible": "wheelchair-accessible",
 };
 
 const VALID_AMENITIES = new Set([
     "wifi", "pool", "ac", "parking", "gym", "kitchen", "washer", "dryer",
     "tv", "heating", "workspace", "elevator", "balcony", "garden", "bbq",
     "fireplace", "security-camera", "smoke-alarm", "first-aid", "fire-extinguisher",
+    "hot-water", "refrigerator", "lock", "pet-friendly", "baby-friendly",
+    "wheelchair-accessible",
 ]);
 
 function normalizeAmenities(amenities: string[] = []): string[] {
@@ -431,11 +421,6 @@ function preValidate(
 
 export async function createProperty(data: PropertyFormData) {
     const payload = transformToBackend(data);
-
-    console.log(
-        "[createProperty] Final payload:",
-        JSON.stringify(payload, null, 2)
-    );
 
     const error = preValidate(payload);
     if (error) return { success: false, error };

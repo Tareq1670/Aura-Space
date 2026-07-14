@@ -33,6 +33,7 @@ import {
     PawPrint,
     Baby,
     Accessibility,
+    PartyPopper,
     type LucideIcon,
 } from "lucide-react";
 
@@ -121,6 +122,12 @@ export const PROPERTY_TYPES: PropertyTypeOption[] = [
         label: "Farmhouse",
         icon: LandPlot,
         description: "Rural farm property",
+    },
+    {
+        id: "event-space",
+        label: "Event Space",
+        icon: PartyPopper,
+        description: "A venue for gatherings and events",
     },
 ];
 

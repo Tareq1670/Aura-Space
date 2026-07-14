@@ -5,7 +5,7 @@ import { useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { usePropertyForm } from "@/lib/hooks/use-property-form";
-import { createProperty, saveDraft } from "@/lib/actions/property";
+import { createProperty, saveDraft, updateDraft } from "@/lib/actions/property";
 import { stepValidators } from "@/lib/validations/property";
 import { cn } from "@/lib/utils/cn";
 import { ArrowLeft, ArrowRight, Save, Loader2, Rocket, Sparkles, X } from "lucide-react";
@@ -20,7 +20,6 @@ import StepAvailability from "@/Components/property/steps/step-availability";
 import StepHouseRules from "@/Components/property/steps/step-house-rules";
 import StepPreview from "@/Components/property/steps/step-preview";
 import PropertyStepper from "@/Components/property/property-stepper";
-import { hostPropertyAPI } from "@/lib/api/Host/host-property-api";
 
 interface PropertyFormWizardProps {
     propertyId?: string;
@@ -87,11 +86,9 @@ export default function PropertyFormWizard({ propertyId }: PropertyFormWizardPro
 
         try {
             if (isEditMode && propertyId) {
-                const payload = formData;
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const result = await hostPropertyAPI.updateProperty(propertyId, payload as any);
+                const result = await updateDraft(propertyId, formData);
                 if (!result.success) {
-                    toast.error(result.message || "Failed to save changes", { id: toastId });
+                    toast.error(result.error || "Failed to save changes", { id: toastId });
                     return;
                 }
                 toast.success("Changes saved successfully!", { id: toastId });
@@ -137,10 +134,9 @@ export default function PropertyFormWizard({ propertyId }: PropertyFormWizardPro
 
         try {
             if (isEditMode && propertyId) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const result = await hostPropertyAPI.updateProperty(propertyId, formData as any);
+                const result = await updateDraft(propertyId, formData);
                 if (!result.success) {
-                    toast.error(result.message || "Failed to save changes", { id: toastId });
+                    toast.error(result.error || "Failed to save changes", { id: toastId });
                     setIsPublishing(false);
                     return;
                 }

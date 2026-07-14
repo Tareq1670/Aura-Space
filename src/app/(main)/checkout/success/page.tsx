@@ -3,21 +3,39 @@ import { stripe } from "@/lib/stripe"
 import Link from "next/link"
 
 interface Props {
-  searchParams: Promise<{ session_id?: string }>
+  searchParams: Promise<{ session_id?: string; payment_intent?: string }>
 }
 
 export default async function SuccessPage({ searchParams }: Props) {
-  const { session_id } = await searchParams
+  const { session_id, payment_intent } = await searchParams
 
-  if (!session_id) {
+  if (!session_id && !payment_intent) {
     redirect("/")
   }
 
-  const session = await stripe.checkout.sessions.retrieve(session_id, {
-    expand: ["line_items", "payment_intent"],
-  })
+  let session;
+  try {
+    if (session_id) {
+      session = await stripe.checkout.sessions.retrieve(session_id, {
+        expand: ["line_items", "payment_intent"],
+      })
+    } else if (payment_intent) {
+      const pi = await stripe.paymentIntents.retrieve(payment_intent)
+      if (pi.status !== "succeeded") redirect("/")
+      session = {
+        id: pi.id,
+        status: "complete",
+        customer_details: { email: pi.receipt_email },
+        amount_total: pi.amount,
+        metadata: pi.metadata || {},
+        currency: pi.currency,
+      }
+    }
+  } catch {
+    redirect("/")
+  }
 
-  if (session.status === "open") {
+  if (!session || session.status === "open") {
     redirect("/")
   }
 

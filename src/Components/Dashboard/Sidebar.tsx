@@ -310,6 +310,8 @@ const SidebarInner = ({
     onClose,
     onToggleMinimize,
     handleLogout,
+    searchQuery,
+    onSearchChange,
 }: {
     user?: User | null;
     role: RoleKey;
@@ -323,6 +325,8 @@ const SidebarInner = ({
     onClose?: () => void;
     onToggleMinimize?: () => void;
     handleLogout: () => Promise<void>;
+    searchQuery: string;
+    onSearchChange: (query: string) => void;
 }) => {
     const showLabels = inDrawer || !isMinimized;
     const userInitial = user?.name?.charAt(0)?.toUpperCase() || "U";
@@ -434,16 +438,24 @@ const SidebarInner = ({
                                 <HiMagnifyingGlass className="w-4 h-4" />
                             </div>
                             <input
+                                id="sidebar-search-input"
                                 type="text"
+                                value={searchQuery}
+                                onChange={(e) => onSearchChange(e.target.value)}
                                 placeholder="Search..."
                                 className="w-full h-9 pl-9 pr-14 rounded-xl bg-white/[0.04] border border-white/[0.06] text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-violet-500/30 focus:bg-white/[0.06] focus:ring-2 focus:ring-violet-500/10 transition-all"
                             />
                         </div>
                     ) : (
                         <button
-                            onClick={onToggleMinimize}
+                            onClick={() => {
+                                onToggleMinimize?.();
+                                setTimeout(() => {
+                                    document.getElementById("sidebar-search-input")?.focus();
+                                }, 350);
+                            }}
                             className="w-full h-9 rounded-xl bg-white/[0.04] hover:bg-violet-500/10 border border-white/[0.06] hover:border-violet-500/20 flex items-center justify-center text-white/40 hover:text-violet-300 transition-colors"
-                            aria-label="Search"
+                            aria-label="Expand and search"
                         >
                             <HiMagnifyingGlass className="w-4 h-4" />
                         </button>
@@ -579,6 +591,7 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
     const router = useRouter();
     const [isMinimized, setIsMinimized] = useState(false);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
 
     const rawRole = user?.role ?? "user";
     const role: RoleKey =
@@ -610,17 +623,30 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
 
     const toggleMinimize = () => setIsMinimized((prev) => !prev);
 
+    const filteredSections = searchQuery.trim()
+        ? navSections
+              .map((section) => ({
+                  ...section,
+                  items: section.items.filter((item) =>
+                      item.label.toLowerCase().includes(searchQuery.toLowerCase().trim())
+                  ),
+              }))
+              .filter((section) => section.items.length > 0)
+        : navSections;
+
     const sidebarProps = {
         user,
         role,
         currentRole,
-        navSections,
+        navSections: filteredSections,
         isMinimized,
         isLoggingOut,
         pathname,
         router,
         handleLogout,
         onToggleMinimize: toggleMinimize,
+        searchQuery,
+        onSearchChange: setSearchQuery,
     };
 
     return (

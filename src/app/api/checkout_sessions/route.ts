@@ -31,11 +31,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.redirect(new URL("/login?redirect=/checkout", req.url))
     }
 
+    const tokenResponse = await auth.api.getToken({
+      headers: await headers(),
+    })
+    if (!tokenResponse?.token) {
+      return NextResponse.redirect(new URL("/login?redirect=/checkout", req.url))
+    }
+
     const bookingRes = await fetch(`${API_BASE}/bookings`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${session.session.token}`,
+        Authorization: `Bearer ${tokenResponse.token}`,
       },
       body: JSON.stringify({
         propertyId,

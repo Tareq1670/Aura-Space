@@ -24,23 +24,22 @@ async function asyncPool<T, R>(
     limit: number,
     fn: (item: T) => Promise<R>
 ): Promise<R[]> {
-    const results: R[] = [];
-    const executing = new Set<Promise<void>>();
+    const results: R[] = new Array(items.length);
+    let nextIndex = 0;
 
-    for (const item of items) {
-        const p = (async () => {
-            const result = await fn(item);
-            results.push(result);
-        })();
-        executing.add(p);
-        const cleanup = () => executing.delete(p);
-        p.then(cleanup, cleanup);
-        if (executing.size >= limit) {
-            await Promise.race(executing);
+    async function worker(): Promise<void> {
+        while (nextIndex < items.length) {
+            const i = nextIndex++;
+            results[i] = await fn(items[i]);
         }
     }
 
-    await Promise.all(executing);
+    const workers = Array.from(
+        { length: Math.min(limit, items.length) },
+        () => worker()
+    );
+    await Promise.all(workers);
+
     return results;
 }
 

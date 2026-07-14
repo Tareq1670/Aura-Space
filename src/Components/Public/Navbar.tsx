@@ -120,15 +120,21 @@ export default function Navbar() {
     };
 
     const closeMenu = () => setIsMobileMenuOpen(false);
+    const handleOutsideMouseDown = (e: MouseEvent) => {
+      if (!isInside(e.target)) closeMenu();
+    };
+    const handleOutsideTouchStart = (e: TouchEvent) => {
+      if (!isInside(e.target)) closeMenu();
+    };
 
     window.addEventListener("scroll", closeMenu, { passive: true });
-    document.addEventListener("mousedown", (e) => !isInside(e.target) && closeMenu());
-    document.addEventListener("touchstart", (e) => !isInside(e.target) && closeMenu());
+    document.addEventListener("mousedown", handleOutsideMouseDown);
+    document.addEventListener("touchstart", handleOutsideTouchStart);
 
     return () => {
       window.removeEventListener("scroll", closeMenu);
-      document.removeEventListener("mousedown", closeMenu);
-      document.removeEventListener("touchstart", closeMenu);
+      document.removeEventListener("mousedown", handleOutsideMouseDown);
+      document.removeEventListener("touchstart", handleOutsideTouchStart);
     };
   }, [isMobileMenuOpen]);
 

@@ -15,6 +15,7 @@ function mapBackendToFormData(property: any): PropertyFormData {
         location: {
             address: property.location?.address || "",
             city: property.location?.city || "",
+            // Backend PropertyLocation doesn't store state/zipCode — these remain empty on edit
             state: property.location?.state || "",
             country: property.location?.country || "",
             zipCode: property.location?.zipCode || "",

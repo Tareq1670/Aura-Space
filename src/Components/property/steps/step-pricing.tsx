@@ -113,7 +113,7 @@ export default function StepPricing({
                     </span>
                     <input
                         type="number"
-                        value={formData.pricing.perNight || ""}
+                        value={formData.pricing.perNight ?? ""}
                         onChange={(e) =>
                             updateNestedField("pricing", {
                                 perNight: Number(e.target.value),
@@ -154,7 +154,7 @@ export default function StepPricing({
                             </span>
                             <input
                                 type="number"
-                                value={formData.pricing.cleaningFee || ""}
+                                value={formData.pricing.cleaningFee ?? ""}
                                 onChange={(e) =>
                                     updateNestedField("pricing", {
                                         cleaningFee: Number(e.target.value),
@@ -174,7 +174,7 @@ export default function StepPricing({
                             </span>
                             <input
                                 type="number"
-                                value={formData.pricing.serviceFee || ""}
+                                value={formData.pricing.serviceFee ?? ""}
                                 onChange={(e) =>
                                     updateNestedField("pricing", {
                                         serviceFee: Number(e.target.value),
@@ -212,7 +212,7 @@ export default function StepPricing({
                             <input
                                 type="number"
                                 value={
-                                    formData.pricing.weeklyDiscount || ""
+                                    formData.pricing.weeklyDiscount ?? ""
                                 }
                                 onChange={(e) =>
                                     updateNestedField("pricing", {
@@ -239,7 +239,7 @@ export default function StepPricing({
                             <input
                                 type="number"
                                 value={
-                                    formData.pricing.monthlyDiscount || ""
+                                    formData.pricing.monthlyDiscount ?? ""
                                 }
                                 onChange={(e) =>
                                     updateNestedField("pricing", {
