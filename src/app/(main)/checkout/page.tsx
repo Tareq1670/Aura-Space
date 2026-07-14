@@ -1,0 +1,140 @@
+import { notFound, redirect } from "next/navigation"
+import { requireAuth } from "@/lib/route-guards"
+import { CheckoutForm } from "./CheckoutForm"
+
+interface PageProps {
+  searchParams: Promise<{ propertyId?: string; checkIn?: string; checkOut?: string; guests?: string; error?: string }>
+}
+
+export default async function CheckoutPage({ searchParams }: PageProps) {
+  const { propertyId, checkIn, checkOut, guests, error } = await searchParams
+
+  if (!propertyId || !checkIn || !checkOut || !guests) {
+    return redirect("/")
+  }
+
+  await requireAuth()
+
+  const SERVER_URL = (
+    process.env.NEXT_PUBLIC_SERVER_URL ||
+    process.env.NEXT_PUBLIC_API_URL ||
+    "http://localhost:5000"
+  ).replace(/\/$/, "")
+
+  const res = await fetch(`${SERVER_URL}/api/properties/${propertyId}`, {
+    cache: "no-store",
+  })
+
+  if (!res.ok) return notFound()
+
+  const data = await res.json()
+  const property = data?.data?.property
+
+  if (!property) return notFound()
+
+  const checkInDate = new Date(checkIn)
+  const checkOutDate = new Date(checkOut)
+  const nights = Math.max(1, Math.round((checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24)))
+  const pricePerNight = property.price?.perNight || property.price || 0
+  const subtotal = pricePerNight * nights
+  const cleaningFee = property.price?.cleaningFee || 0
+  const serviceFee = Math.round(subtotal * 0.08)
+  const total = subtotal + cleaningFee + serviceFee
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="mx-auto max-w-4xl px-4 py-8">
+        {error && (
+          <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+            {error === "missing_fields" && "Missing required fields. Please try again."}
+            {error === "server_error" && "Something went wrong. Please try again."}
+            {error !== "missing_fields" && error !== "server_error" && error}
+          </div>
+        )}
+
+        <h1 className="mb-8 text-2xl font-bold">Checkout</h1>
+
+        <div className="grid gap-8 lg:grid-cols-5">
+          <div className="lg:col-span-3">
+            <div className="rounded-xl border bg-white p-6">
+              <h2 className="mb-4 text-lg font-semibold">Booking Details</h2>
+
+              <div className="mb-6 flex gap-4">
+                <div className="h-24 w-36 flex-shrink-0 overflow-hidden rounded-lg">
+                  <img
+                    src={property.images?.[0] || "/placeholder.svg"}
+                    alt={property.title}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                <div>
+                  <h3 className="font-semibold">{property.title}</h3>
+                  <p className="text-sm text-gray-500">
+                    {property.location?.city}, {property.location?.country}
+                  </p>
+                  <div className="mt-2 flex items-center gap-1 text-sm">
+                    <span className="text-yellow-500">★</span>
+                    <span>{property.rating?.toFixed(1) || "New"}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-3 border-t pt-4 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Check-in</span>
+                  <span className="font-medium">{checkInDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Check-out</span>
+                  <span className="font-medium">{checkOutDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Nights</span>
+                  <span className="font-medium">{nights}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Guests</span>
+                  <span className="font-medium">{guests}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-2">
+            <div className="rounded-xl border bg-white p-6">
+              <h2 className="mb-4 text-lg font-semibold">Price Breakdown</h2>
+
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">${pricePerNight} x {nights} nights</span>
+                  <span>${subtotal.toFixed(2)}</span>
+                </div>
+                {cleaningFee > 0 && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Cleaning fee</span>
+                    <span>${cleaningFee.toFixed(2)}</span>
+                  </div>
+                )}
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Service fee</span>
+                  <span>${serviceFee.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between border-t pt-3 text-base font-semibold">
+                  <span>Total</span>
+                  <span>${total.toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+
+            <CheckoutForm
+              propertyId={propertyId}
+              checkIn={checkIn}
+              checkOut={checkOut}
+              guests={guests}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
