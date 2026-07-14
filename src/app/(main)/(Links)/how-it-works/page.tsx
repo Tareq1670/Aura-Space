@@ -10,6 +10,7 @@ import {
     useScroll,
     useTransform,
     AnimatePresence,
+    type Variants,
 } from "framer-motion";
 import {
     HiOutlineSearch,
@@ -28,7 +29,6 @@ import {
     HiOutlineChevronDown,
     HiOutlineCheckCircle,
     HiOutlineHome,
-    HiOutlineChatAlt2,
     HiOutlineTrendingUp,
     HiOutlineBadgeCheck,
     HiOutlinePlay,
@@ -38,7 +38,7 @@ import {
 const HERO_IMAGE =
     "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=2000&q=80";
 
-const containerVariants = {
+const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
@@ -46,7 +46,7 @@ const containerVariants = {
     },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
     hidden: { opacity: 0, y: 22, filter: "blur(8px)" },
     visible: {
         opacity: 1,
@@ -60,7 +60,53 @@ const itemVariants = {
     },
 };
 
-const steps = [
+interface Step {
+    number: string;
+    title: string;
+    description: string;
+    icon: React.ReactNode;
+    accent: string;
+    features: string[];
+    image: string;
+}
+
+interface Benefit {
+    title: string;
+    description: string;
+    icon: React.ReactNode;
+    stat: string;
+    statLabel: string;
+}
+
+interface PersonaStep {
+    title: string;
+    description: string;
+}
+
+interface Persona {
+    id: string;
+    label: string;
+    title: string;
+    description: string;
+    icon: React.ReactNode;
+    steps: PersonaStep[];
+}
+
+interface Testimonial {
+    quote: string;
+    name: string;
+    role: string;
+    avatar: string;
+    rating: number;
+}
+
+interface Faq {
+    q: string;
+    a: string;
+    category: string;
+}
+
+const steps: Step[] = [
     {
         number: "01",
         title: "Discover Your Space",
@@ -147,7 +193,7 @@ const steps = [
     },
 ];
 
-const benefits = [
+const benefits: Benefit[] = [
     {
         title: "Verified Quality",
         description:
@@ -198,7 +244,7 @@ const benefits = [
     },
 ];
 
-const personas = [
+const personas: Persona[] = [
     {
         id: "guest",
         label: "For Guests",
@@ -285,7 +331,7 @@ const personas = [
     },
 ];
 
-const testimonials = [
+const testimonials: Testimonial[] = [
     {
         quote: "Booking our anniversary dinner at a rooftop venue took less than a minute. Every detail was handled perfectly.",
         name: "Ayesha Rahman",
@@ -309,7 +355,7 @@ const testimonials = [
     },
 ];
 
-const faqs = [
+const faqs: Faq[] = [
     {
         q: "How do I book a property on AuraSpace?",
         a: "Simply search for your destination, select your dates, and browse verified listings. Once you find your perfect stay, click 'Book Now' and complete payment. You'll receive instant confirmation and check-in details.",
@@ -342,7 +388,20 @@ const faqs = [
     },
 ];
 
-function StepCard({ step, index, reduceMotion }) {
+interface StepCardProps {
+    step: Step;
+    index: number;
+    reduceMotion: boolean;
+}
+
+interface FaqAccordionProps {
+    faq: Faq;
+    index: number;
+    isOpen: boolean;
+    onToggle: () => void;
+}
+
+function StepCard({ step, index, reduceMotion }: StepCardProps) {
     const isEven = index % 2 === 0;
     const cardRef = useRef(null);
     const isInView = useInView(cardRef, { once: true, margin: "-100px" });
@@ -433,7 +492,7 @@ function StepCard({ step, index, reduceMotion }) {
     );
 }
 
-function FaqAccordion({ faq, index, isOpen, onToggle }) {
+function FaqAccordion({ faq, index, isOpen, onToggle }: FaqAccordionProps) {
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -484,7 +543,11 @@ function FaqAccordion({ faq, index, isOpen, onToggle }) {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                        transition={{
+                            duration: 0.35,
+                            ease: [0.16, 1, 0.3, 1],
+                            type: "tween",
+                        }}
                         className="overflow-hidden"
                     >
                         <div className="px-5 pb-5 pl-16 sm:px-6 sm:pb-6 sm:pl-[74px]">
@@ -542,7 +605,7 @@ const HowItWorks = () => {
     const lineProgress = useTransform(stepsScroll, [0.1, 0.9], [0, 1]);
 
     const [activePersona, setActivePersona] = useState("guest");
-    const [openFaq, setOpenFaq] = useState(0);
+    const [openFaq, setOpenFaq] = useState<number | null>(0);
 
     const currentPersona = personas.find((p) => p.id === activePersona);
 
@@ -904,7 +967,11 @@ const HowItWorks = () => {
                                 ? { opacity: 1, y: 0 }
                                 : { opacity: 0, y: 20 }
                         }
-                        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                        transition={{
+                            duration: 0.6,
+                            ease: [0.16, 1, 0.3, 1],
+                            type: "tween",
+                        }}
                         className="mx-auto mb-10 flex max-w-2xl flex-wrap items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm"
                     >
                         {personas.map((persona) => (
@@ -940,69 +1007,74 @@ const HowItWorks = () => {
 
                     <div className="mx-auto max-w-5xl">
                         <AnimatePresence mode="wait">
-                            <motion.div
-                                key={activePersona}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                transition={{
-                                    duration: 0.45,
-                                    ease: [0.16, 1, 0.3, 1],
-                                }}
-                                className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)] sm:p-8 lg:p-10"
-                            >
-                                <div className="mb-8 text-center">
-                                    <h3 className="text-2xl font-black leading-tight tracking-[-0.02em] text-slate-950 sm:text-3xl">
-                                        {currentPersona.title}
-                                    </h3>
-                                    <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-slate-500 sm:text-[15px]">
-                                        {currentPersona.description}
-                                    </p>
-                                </div>
+                            {currentPersona && (
+                                <motion.div
+                                    key={activePersona}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{
+                                        duration: 0.45,
+                                        ease: [0.16, 1, 0.3, 1],
+                                        type: "tween",
+                                    }}
+                                    className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)] sm:p-8 lg:p-10"
+                                >
+                                    <div className="mb-8 text-center">
+                                        <h3 className="text-2xl font-black leading-tight tracking-[-0.02em] text-slate-950 sm:text-3xl">
+                                            {currentPersona.title}
+                                        </h3>
+                                        <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-slate-500 sm:text-[15px]">
+                                            {currentPersona.description}
+                                        </p>
+                                    </div>
 
-                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                                    {currentPersona.steps.map((step, i) => (
-                                        <motion.div
-                                            key={step.title}
-                                            initial={{ opacity: 0, y: 15 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{
-                                                duration: 0.5,
-                                                delay: i * 0.08,
-                                                ease: [0.16, 1, 0.3, 1],
-                                            }}
-                                            className="relative rounded-2xl border border-slate-200 bg-slate-50/50 p-5 transition-all duration-300 hover:border-indigo-200 hover:bg-white hover:shadow-md"
-                                        >
-                                            <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-sm">
-                                                <span className="text-xs font-black">
-                                                    {String(i + 1).padStart(
-                                                        2,
-                                                        "0",
-                                                    )}
-                                                </span>
-                                            </div>
-
-                                            <h4 className="text-sm font-black tracking-[-0.01em] text-slate-950">
-                                                {step.title}
-                                            </h4>
-
-                                            <p className="mt-2 text-xs leading-relaxed text-slate-500">
-                                                {step.description}
-                                            </p>
-
-                                            {i <
-                                                currentPersona.steps.length -
-                                                    1 && (
-                                                <div className="absolute right-0 top-1/2 hidden -translate-y-1/2 translate-x-1/2 lg:block">
-                                                    <div className="flex h-6 w-6 items-center justify-center rounded-full border border-slate-200 bg-white shadow-sm">
-                                                        <HiOutlineArrowRight className="h-3 w-3 text-slate-400" />
-                                                    </div>
+                                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                                        {currentPersona.steps.map((step, i) => (
+                                            <motion.div
+                                                key={step.title}
+                                                initial={{ opacity: 0, y: 15 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{
+                                                    duration: 0.5,
+                                                    delay: i * 0.08,
+                                                    ease: [0.16, 1, 0.3, 1],
+                                                    type: "tween",
+                                                }}
+                                                className="relative rounded-2xl border border-slate-200 bg-slate-50/50 p-5 transition-all duration-300 hover:border-indigo-200 hover:bg-white hover:shadow-md"
+                                            >
+                                                <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-sm">
+                                                    <span className="text-xs font-black">
+                                                        {String(i + 1).padStart(
+                                                            2,
+                                                            "0",
+                                                        )}
+                                                    </span>
                                                 </div>
-                                            )}
-                                        </motion.div>
-                                    ))}
-                                </div>
-                            </motion.div>
+
+                                                <h4 className="text-sm font-black tracking-[-0.01em] text-slate-950">
+                                                    {step.title}
+                                                </h4>
+
+                                                <p className="mt-2 text-xs leading-relaxed text-slate-500">
+                                                    {step.description}
+                                                </p>
+
+                                                {i <
+                                                    currentPersona.steps
+                                                        .length -
+                                                        1 && (
+                                                    <div className="absolute right-0 top-1/2 hidden -translate-y-1/2 translate-x-1/2 lg:block">
+                                                        <div className="flex h-6 w-6 items-center justify-center rounded-full border border-slate-200 bg-white shadow-sm">
+                                                            <HiOutlineArrowRight className="h-3 w-3 text-slate-400" />
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </motion.div>
+                                        ))}
+                                    </div>
+                                </motion.div>
+                            )}
                         </AnimatePresence>
                     </div>
                 </div>
@@ -1151,6 +1223,7 @@ const HowItWorks = () => {
                             duration: 0.6,
                             delay: 0.3,
                             ease: [0.16, 1, 0.3, 1],
+                            type: "tween",
                         }}
                         className="mx-auto mt-10 max-w-3xl rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-50 to-violet-50 p-6 text-center"
                     >

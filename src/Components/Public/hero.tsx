@@ -11,6 +11,8 @@ import {
     useTransform,
     useScroll,
     useSpring,
+    type Variants,
+    type Transition,
 } from "framer-motion";
 import type { Swiper as SwiperType } from "swiper";
 import type { DateValue } from "@internationalized/date";
@@ -139,14 +141,17 @@ const stats = [
 const AUTOPLAY_DELAY = 6000;
 const PREVIEW_COUNT = 4;
 
-const titleAnimation = {
+const EASE_STANDARD = [0.25, 0.46, 0.45, 0.94] as const;
+const EASE_SPRING_OUT = [0.34, 1.56, 0.64, 1] as const;
+
+const titleAnimation: Variants = {
     hidden: { opacity: 0, y: 40, filter: "blur(12px)", rotateX: -15 },
     visible: {
         opacity: 1,
         y: 0,
         filter: "blur(0px)",
         rotateX: 0,
-        transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] },
+        transition: { duration: 0.8, ease: EASE_STANDARD },
     },
     exit: {
         opacity: 0,
@@ -157,13 +162,13 @@ const titleAnimation = {
     },
 };
 
-const subtitleAnimation = {
+const subtitleAnimation: Variants = {
     hidden: { opacity: 0, y: 24, filter: "blur(6px)" },
     visible: {
         opacity: 1,
         y: 0,
         filter: "blur(0px)",
-        transition: { duration: 0.6, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] },
+        transition: { duration: 0.6, delay: 0.15, ease: EASE_STANDARD },
     },
     exit: {
         opacity: 0,
@@ -173,14 +178,14 @@ const subtitleAnimation = {
     },
 };
 
-const tagAnimation = {
+const tagAnimation: Variants = {
     hidden: { opacity: 0, x: -24, scale: 0.85, filter: "blur(6px)" },
     visible: {
         opacity: 1,
         x: 0,
         scale: 1,
         filter: "blur(0px)",
-        transition: { duration: 0.5, ease: [0.34, 1.56, 0.64, 1] },
+        transition: { duration: 0.5, ease: EASE_SPRING_OUT },
     },
     exit: {
         opacity: 0,
@@ -191,7 +196,7 @@ const tagAnimation = {
     },
 };
 
-const staggerContainer = {
+const staggerContainer: Variants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
@@ -202,17 +207,17 @@ const staggerContainer = {
     },
 };
 
-const staggerItem = {
+const staggerItem: Variants = {
     hidden: { opacity: 0, y: 18, scale: 0.9 },
     visible: {
         opacity: 1,
         y: 0,
         scale: 1,
-        transition: { duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] },
+        transition: { duration: 0.45, ease: EASE_STANDARD },
     },
 };
 
-const magneticHover = {
+const magneticHover: Variants = {
     rest: { scale: 1 },
     hover: {
         scale: 1.08,
@@ -221,11 +226,18 @@ const magneticHover = {
     tap: { scale: 0.95 },
 };
 
+const shimmerTransition: Transition = {
+    duration: 3,
+    repeat: Infinity,
+    ease: "linear",
+    repeatDelay: 1.5,
+};
+
 const shimmerAnimation = {
     initial: { backgroundPosition: "-200% 0" },
     animate: {
         backgroundPosition: "200% 0",
-        transition: { duration: 3, repeat: Infinity, ease: "linear", repeatDelay: 1.5 },
+        transition: shimmerTransition,
     },
 };
 
@@ -306,7 +318,11 @@ function AuroraBackground() {
                     y: [0, -80, 60, 0],
                     scale: [1, 1.3, 0.9, 1],
                 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                    duration: 20,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                }}
             />
             <motion.div
                 className="absolute -bottom-1/4 -right-1/4 h-[55%] w-[55%] rounded-full bg-violet-500/[0.05] blur-[100px]"
@@ -315,7 +331,12 @@ function AuroraBackground() {
                     y: [0, 100, -50, 0],
                     scale: [1.1, 0.8, 1.2, 1.1],
                 }}
-                transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+                transition={{
+                    duration: 18,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 2,
+                }}
             />
             <motion.div
                 className="absolute left-1/3 top-1/3 h-[40%] w-[40%] rounded-full bg-fuchsia-500/[0.04] blur-[80px]"
@@ -324,7 +345,12 @@ function AuroraBackground() {
                     y: [0, -60, 40, 0],
                     scale: [0.9, 1.15, 0.85, 0.9],
                 }}
-                transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+                transition={{
+                    duration: 15,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 4,
+                }}
             />
         </div>
     );
@@ -348,7 +374,11 @@ function MorphingGradientBorder({ isActive }: { isActive: boolean }) {
             exit={{ opacity: 0 }}
             transition={{
                 opacity: { duration: 0.3 },
-                backgroundPosition: { duration: 4, repeat: Infinity, ease: "linear" },
+                backgroundPosition: {
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "linear",
+                },
             }}
         />
     );
@@ -469,7 +499,10 @@ export default function Hero() {
             onMouseMove={handleMouseMove}
             className="relative h-[68svh] min-h-[500px] max-h-[780px] w-full overflow-hidden bg-indigo-950 select-none sm:min-h-[560px] lg:h-[66svh] lg:min-h-[600px]"
         >
-            <motion.div className="absolute inset-0 z-0" style={{ y: parallaxY, opacity: parallaxOpacity }}>
+            <motion.div
+                className="absolute inset-0 z-0"
+                style={{ y: parallaxY, opacity: parallaxOpacity }}
+            >
                 <Swiper
                     modules={[Autoplay, EffectFade]}
                     effect="fade"
@@ -585,10 +618,16 @@ export default function Hero() {
                                         className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.08] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-indigo-300 backdrop-blur-xl sm:px-3.5 sm:py-1.5 sm:text-[10px]"
                                         whileHover={{
                                             scale: 1.05,
-                                            borderColor: "rgba(129,140,248,0.4)",
-                                            backgroundColor: "rgba(255,255,255,0.12)",
+                                            borderColor:
+                                                "rgba(129,140,248,0.4)",
+                                            backgroundColor:
+                                                "rgba(255,255,255,0.12)",
                                         }}
-                                        transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                                        transition={{
+                                            type: "spring",
+                                            stiffness: 400,
+                                            damping: 17,
+                                        }}
                                     >
                                         <motion.span
                                             className="h-1.5 w-1.5 rounded-full bg-indigo-400"
@@ -669,7 +708,11 @@ export default function Hero() {
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6, delay: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+                                transition={{
+                                    duration: 0.6,
+                                    delay: 0.35,
+                                    ease: EASE_STANDARD,
+                                }}
                                 className="flex flex-wrap items-center gap-2.5 pt-1 sm:gap-3"
                             >
                                 <motion.button
@@ -684,7 +727,8 @@ export default function Hero() {
                                 >
                                     <motion.span
                                         className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                                        {...shimmerAnimation}
+                                        initial={shimmerAnimation.initial}
+                                        animate={shimmerAnimation.animate}
                                         style={{ backgroundSize: "200% 100%" }}
                                     />
                                     <span className="relative z-10 flex items-center gap-2">
@@ -723,7 +767,11 @@ export default function Hero() {
                                     <span className="flex items-center gap-2">
                                         <motion.span
                                             animate={{ rotate: [0, 360] }}
-                                            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                                            transition={{
+                                                duration: 8,
+                                                repeat: Infinity,
+                                                ease: "linear",
+                                            }}
                                             className="inline-block"
                                         >
                                             ✦
@@ -746,7 +794,11 @@ export default function Hero() {
                                         whileHover={{
                                             y: -3,
                                             scale: 1.06,
-                                            transition: { type: "spring", stiffness: 400, damping: 17 },
+                                            transition: {
+                                                type: "spring",
+                                                stiffness: 400,
+                                                damping: 17,
+                                            },
                                         }}
                                         className="group flex cursor-default items-center gap-1.5 sm:gap-2"
                                     >
@@ -765,7 +817,9 @@ export default function Hero() {
                                                 className="text-xs font-extrabold leading-none text-white sm:text-sm"
                                                 whileHover={{
                                                     color: "rgb(165, 180, 252)",
-                                                    transition: { duration: 0.2 },
+                                                    transition: {
+                                                        duration: 0.2,
+                                                    },
                                                 }}
                                             >
                                                 {stat.value}
@@ -784,7 +838,11 @@ export default function Hero() {
                                 className="flex h-[220px] items-center gap-2.5 overflow-hidden"
                                 initial={{ opacity: 0, x: 60 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.8, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+                                transition={{
+                                    duration: 0.8,
+                                    delay: 0.4,
+                                    ease: EASE_STANDARD,
+                                }}
                             >
                                 <AnimatePresence
                                     initial={false}
@@ -817,17 +875,29 @@ export default function Hero() {
                                                 }}
                                                 transition={{
                                                     duration: 0.6,
-                                                    ease: [0.25, 0.46, 0.45, 0.94],
-                                                    layout: { type: "spring", stiffness: 300, damping: 30 },
+                                                    ease: EASE_STANDARD,
+                                                    layout: {
+                                                        type: "spring",
+                                                        stiffness: 300,
+                                                        damping: 30,
+                                                    },
                                                 }}
                                                 whileHover={{
                                                     y: -6,
                                                     opacity: 1,
-                                                    scale: isActive ? 1.03 : 0.96,
-                                                    transition: { type: "spring", stiffness: 400, damping: 17 },
+                                                    scale: isActive
+                                                        ? 1.03
+                                                        : 0.96,
+                                                    transition: {
+                                                        type: "spring",
+                                                        stiffness: 400,
+                                                        damping: 17,
+                                                    },
                                                 }}
                                                 onClick={() =>
-                                                    goToSlide(slide.originalIndex)
+                                                    goToSlide(
+                                                        slide.originalIndex,
+                                                    )
                                                 }
                                                 aria-label={`View ${slide.highlight}`}
                                                 className={`relative flex-shrink-0 overflow-hidden rounded-2xl text-left transition-shadow duration-300 ${
@@ -850,9 +920,16 @@ export default function Hero() {
                                                 {isActive && (
                                                     <>
                                                         <motion.div
-                                                            initial={{ scaleX: 0 }}
-                                                            animate={{ scaleX: 1 }}
-                                                            transition={{ duration: 0.6, ease: "easeOut" }}
+                                                            initial={{
+                                                                scaleX: 0,
+                                                            }}
+                                                            animate={{
+                                                                scaleX: 1,
+                                                            }}
+                                                            transition={{
+                                                                duration: 0.6,
+                                                                ease: "easeOut",
+                                                            }}
                                                             className="absolute inset-x-0 top-0 h-[2px] origin-left bg-gradient-to-r from-indigo-400 via-violet-400 to-fuchsia-400"
                                                         />
                                                         <motion.div
@@ -864,7 +941,10 @@ export default function Hero() {
                                                                     "inset 0 0 0 rgba(129,140,248,0)",
                                                                 ],
                                                             }}
-                                                            transition={{ duration: 3, repeat: Infinity }}
+                                                            transition={{
+                                                                duration: 3,
+                                                                repeat: Infinity,
+                                                            }}
                                                         />
                                                     </>
                                                 )}
@@ -905,7 +985,9 @@ export default function Hero() {
                                                     {isActive && (
                                                         <motion.div
                                                             initial={{ width: 0 }}
-                                                            animate={{ width: 28 }}
+                                                            animate={{
+                                                                width: 28,
+                                                            }}
                                                             transition={{
                                                                 duration: 0.4,
                                                                 delay: 0.25,
@@ -930,7 +1012,7 @@ export default function Hero() {
                     transition={{
                         duration: 0.75,
                         delay: 0.4,
-                        ease: [0.25, 0.46, 0.45, 0.94],
+                        ease: EASE_STANDARD,
                     }}
                     className="pointer-events-auto mx-auto mb-6 w-full max-w-3xl sm:mb-8 lg:mb-6 lg:max-w-4xl"
                 >
@@ -949,7 +1031,9 @@ export default function Hero() {
                         <AnimatePresence>
                             {isSearchFocused && (
                                 <>
-                                    <MorphingGradientBorder isActive={isSearchFocused} />
+                                    <MorphingGradientBorder
+                                        isActive={isSearchFocused}
+                                    />
                                     <motion.div
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
@@ -970,7 +1054,11 @@ export default function Hero() {
                             <motion.div
                                 className={`${FIELD_CLASSES} sm:col-span-2 lg:col-span-1`}
                                 whileHover={{ scale: 1.01 }}
-                                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                                transition={{
+                                    type: "spring",
+                                    stiffness: 400,
+                                    damping: 25,
+                                }}
                             >
                                 <label
                                     htmlFor="hero-location"
@@ -987,7 +1075,10 @@ export default function Hero() {
                                         strokeWidth="2"
                                         animate={
                                             searchQuery.location
-                                                ? { color: "rgb(99,102,241)", scale: [1, 1.1, 1] }
+                                                ? {
+                                                      color: "rgb(99,102,241)",
+                                                      scale: [1, 1.1, 1],
+                                                  }
                                                 : {}
                                         }
                                         transition={{ duration: 0.3 }}
@@ -1011,7 +1102,10 @@ export default function Hero() {
                                         placeholder="City, region, or property..."
                                         value={searchQuery.location}
                                         onChange={(e) =>
-                                            updateSearch("location", e.target.value)
+                                            updateSearch(
+                                                "location",
+                                                e.target.value,
+                                            )
                                         }
                                         className="h-5 w-full border-0 bg-transparent p-0 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 sm:text-[13px]"
                                     />
@@ -1021,7 +1115,11 @@ export default function Hero() {
                             <motion.div
                                 className={FIELD_CLASSES}
                                 whileHover={{ scale: 1.01 }}
-                                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                                transition={{
+                                    type: "spring",
+                                    stiffness: 400,
+                                    damping: 25,
+                                }}
                             >
                                 <DatePicker
                                     className="w-full"
@@ -1125,7 +1223,11 @@ export default function Hero() {
                             <motion.div
                                 className={FIELD_CLASSES}
                                 whileHover={{ scale: 1.01 }}
-                                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                                transition={{
+                                    type: "spring",
+                                    stiffness: 400,
+                                    damping: 25,
+                                }}
                             >
                                 <Select
                                     className="w-full"
@@ -1133,7 +1235,10 @@ export default function Hero() {
                                     placeholder="Select"
                                     selectedKey={searchQuery.guests}
                                     onSelectionChange={(key) =>
-                                        updateSearch("guests", key ? String(key) : "2")
+                                        updateSearch(
+                                            "guests",
+                                            key ? String(key) : "2",
+                                        )
                                     }
                                 >
                                     <Label className={LABEL_CLASSES}>
@@ -1178,7 +1283,8 @@ export default function Hero() {
                                 type="submit"
                                 whileHover={{
                                     scale: 1.03,
-                                    boxShadow: "0 8px 30px rgba(99,102,241,0.45)",
+                                    boxShadow:
+                                        "0 8px 30px rgba(99,102,241,0.45)",
                                 }}
                                 whileTap={{ scale: 0.96 }}
                                 className="relative min-h-[50px] overflow-hidden rounded-xl bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 px-5 text-[10px] font-bold uppercase tracking-[0.18em] text-white shadow-lg shadow-indigo-600/25 transition-colors sm:col-span-2 sm:min-h-[52px] sm:text-xs lg:col-span-1 lg:min-w-[120px]"
@@ -1192,7 +1298,11 @@ export default function Hero() {
                                         stroke="currentColor"
                                         strokeWidth="2.5"
                                         whileHover={{ rotate: 90, scale: 1.1 }}
-                                        transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                                        transition={{
+                                            type: "spring",
+                                            stiffness: 300,
+                                            damping: 15,
+                                        }}
                                     >
                                         <path
                                             strokeLinecap="round"

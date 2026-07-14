@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useState, useCallback, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Input } from "@heroui/react";
-import { ListBox, Select } from "@heroui/react";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
+import { ListBox, Select, Skeleton } from "@heroui/react";
 import { toast } from "sonner";
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal";
 import DataTable from "@/Components/Dashboard/DataTable";
@@ -32,7 +31,7 @@ interface User {
 type UserRecord = User & Record<string, unknown>;
 type ModalType = "role" | "block" | "unblock" | "delete" | null;
 
-const pageVariants = {
+const pageVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -40,7 +39,7 @@ const pageVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 16 },
   visible: {
     opacity: 1,
@@ -51,13 +50,7 @@ const itemVariants = {
 
 const roleConfig: Record<
   string,
-  {
-    bg: string;
-    text: string;
-    border: string;
-    dot: string;
-    icon: string;
-  }
+  { bg: string; text: string; border: string; dot: string; icon: string }
 > = {
   admin: {
     bg: "bg-violet-50",
@@ -82,6 +75,151 @@ const roleConfig: Record<
   },
 };
 
+// ─── Skeleton Components ──────────────────────────────────────────────────────
+
+/** Mirrors the 5 stat cards */
+function StatCardsSkeleton() {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-8">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div
+          key={i}
+          className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5 shadow-sm"
+        >
+          {/* Icon placeholder */}
+          <div className="flex items-center justify-between mb-3">
+            <Skeleton className="w-10 h-10 rounded-xl" />
+          </div>
+          {/* Big number */}
+          <Skeleton className="h-8 w-12 rounded-lg mb-2" />
+          {/* Label */}
+          <Skeleton className="h-3 w-20 rounded" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/** Mirrors the toolbar: two selects + export button */
+function ToolbarSkeleton() {
+  return (
+    <div className="flex items-center gap-2 flex-wrap">
+      <Skeleton className="h-9 w-36 rounded-xl" />
+      <Skeleton className="h-9 w-36 rounded-xl" />
+      <Skeleton className="h-9 w-24 rounded-xl" />
+    </div>
+  );
+}
+
+/** Mirrors the DataTable: search bar + toolbar + 8 user rows */
+function TableSkeleton() {
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      {/* Table header bar */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 sm:p-5 border-b border-gray-100">
+        {/* Search input */}
+        <Skeleton className="h-9 w-full sm:w-64 rounded-xl" />
+        {/* Toolbar */}
+        <ToolbarSkeleton />
+      </div>
+
+      {/* Column header row */}
+      <div className="hidden sm:grid grid-cols-6 gap-4 px-5 py-3 bg-gray-50/70 border-b border-gray-100">
+        {["User", "Role", "Status", "Verified", "Joined", "Actions"].map(
+          (col) => (
+            <Skeleton key={col} className="h-3 w-16 rounded" />
+          )
+        )}
+      </div>
+
+      {/* Data rows */}
+      <div className="divide-y divide-gray-50">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div
+            key={i}
+            className="flex flex-col sm:grid sm:grid-cols-6 gap-3 sm:gap-4 items-start sm:items-center px-4 sm:px-5 py-4"
+          >
+            {/* User cell — avatar + two lines */}
+            <div className="flex items-center gap-3 col-span-1">
+              <Skeleton className="w-10 h-10 rounded-xl shrink-0" />
+              <div className="space-y-2 flex-1">
+                <Skeleton className="h-3 w-28 rounded" />
+                <Skeleton className="h-3 w-36 rounded" />
+              </div>
+            </div>
+
+            {/* Role badge */}
+            <div className="flex justify-center">
+              <Skeleton className="h-6 w-20 rounded-full" />
+            </div>
+
+            {/* Status badge */}
+            <div className="flex justify-center">
+              <Skeleton className="h-6 w-16 rounded-full" />
+            </div>
+
+            {/* Verified badge */}
+            <div className="flex justify-center">
+              <Skeleton className="h-6 w-12 rounded-md" />
+            </div>
+
+            {/* Joined date */}
+            <div className="flex justify-center">
+              <Skeleton className="h-3 w-24 rounded" />
+            </div>
+
+            {/* Action buttons */}
+            <div className="flex items-center justify-center gap-1.5">
+              <Skeleton className="w-8 h-8 rounded-lg" />
+              <Skeleton className="w-8 h-8 rounded-lg" />
+              <Skeleton className="w-8 h-8 rounded-lg" />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Pagination row */}
+      <div className="flex items-center justify-between px-5 py-4 border-t border-gray-100">
+        <Skeleton className="h-4 w-32 rounded" />
+        <div className="flex items-center gap-2">
+          <Skeleton className="w-8 h-8 rounded-lg" />
+          <Skeleton className="w-8 h-8 rounded-lg" />
+          <Skeleton className="w-8 h-8 rounded-lg" />
+          <Skeleton className="w-8 h-8 rounded-lg" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Full-page skeleton that mirrors the entire AdminUsersPage layout */
+function AdminUsersPageSkeleton() {
+  return (
+    <div className="min-h-screen bg-slate-50/50 p-4 sm:p-6 lg:p-8">
+      <div className="max-w-[1440px] mx-auto">
+        {/* ── Page header ── */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+          <div className="space-y-2">
+            {/* Title */}
+            <Skeleton className="h-8 w-56 rounded-xl" />
+            {/* Subtitle */}
+            <Skeleton className="h-4 w-80 rounded-lg" />
+          </div>
+          {/* Refresh button */}
+          <Skeleton className="h-10 w-28 rounded-xl" />
+        </div>
+
+        {/* ── Stat cards ── */}
+        <StatCardsSkeleton />
+
+        {/* ── Data table ── */}
+        <TableSkeleton />
+      </div>
+    </div>
+  );
+}
+
+// ─── Main Page ────────────────────────────────────────────────────────────────
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -157,8 +295,7 @@ export default function AdminUsersPage() {
     (user: User) => {
       if (isSelf(user.id)) {
         toast.warning("You cannot change your own role", {
-          description:
-            "Ask another admin to change your role if needed.",
+          description: "Ask another admin to change your role if needed.",
         });
         return;
       }
@@ -176,9 +313,7 @@ export default function AdminUsersPage() {
           user.banned
             ? "You cannot unblock yourself"
             : "You cannot block yourself",
-          {
-            description: "This action must be performed by another admin.",
-          }
+          { description: "This action must be performed by another admin." }
         );
         return;
       }
@@ -339,18 +474,18 @@ export default function AdminUsersPage() {
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-400 to-indigo-500 flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-sm overflow-hidden">
               {u.image ? (
                 <img
-                  src={u.image}
-                  alt={u.name}
+                  src={u.image as string}
+                  alt={u.name as string}
                   className="w-full h-full object-cover"
                 />
               ) : (
-                u.name?.charAt(0).toUpperCase()
+                (u.name as string)?.charAt(0).toUpperCase()
               )}
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
                 <p className="font-semibold text-sm text-gray-900 truncate">
-                  {u.name}
+                  {u.name as string}
                 </p>
                 {isSelf(u.id as string) && (
                   <span className="px-1.5 py-0.5 text-[10px] font-bold bg-violet-100 text-violet-600 rounded-md">
@@ -358,7 +493,9 @@ export default function AdminUsersPage() {
                   </span>
                 )}
               </div>
-              <p className="text-xs text-gray-400 truncate">{u.email}</p>
+              <p className="text-xs text-gray-400 truncate">
+                {u.email as string}
+              </p>
             </div>
           </div>
         ),
@@ -402,7 +539,11 @@ export default function AdminUsersPage() {
                 u.banned ? "bg-red-500" : "bg-emerald-500"
               }`}
               style={{
-                boxShadow: `0 0 6px ${u.banned ? "rgba(239,68,68,0.4)" : "rgba(16,185,129,0.4)"}`,
+                boxShadow: `0 0 6px ${
+                  u.banned
+                    ? "rgba(239,68,68,0.4)"
+                    : "rgba(16,185,129,0.4)"
+                }`,
               }}
             />
             {u.banned ? "Blocked" : "Active"}
@@ -484,7 +625,7 @@ export default function AdminUsersPage() {
                 whileTap={{ scale: self ? 1 : 0.9 }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  openRoleModal(u as User);
+                  openRoleModal(u as unknown as User);
                 }}
                 title={self ? "Cannot change own role" : "Change Role"}
                 className={`p-2 rounded-lg border transition-colors ${
@@ -513,7 +654,7 @@ export default function AdminUsersPage() {
                 whileTap={{ scale: self ? 1 : 0.9 }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  openStatusModal(u as User);
+                  openStatusModal(u as unknown as User);
                 }}
                 title={
                   self
@@ -566,7 +707,7 @@ export default function AdminUsersPage() {
                 whileTap={{ scale: self ? 1 : 0.9 }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  openDeleteModal(u as User);
+                  openDeleteModal(u as unknown as User);
                 }}
                 title={self ? "Cannot delete own account" : "Delete User"}
                 className={`p-2 rounded-lg border transition-colors ${
@@ -705,25 +846,12 @@ export default function AdminUsersPage() {
     },
   ];
 
+  // ── Skeleton loading state ──────────────────────────────────────────────────
   if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-50/50 flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{
-              duration: 1,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-            className="w-10 h-10 border-3 border-violet-200 border-t-violet-600 rounded-full"
-          />
-          <p className="text-sm text-gray-400">Loading users...</p>
-        </div>
-      </div>
-    );
+    return <AdminUsersPageSkeleton />;
   }
 
+  // ── Error state ─────────────────────────────────────────────────────────────
   if (error) {
     return (
       <div className="min-h-screen bg-slate-50/50 flex items-center justify-center">
@@ -757,6 +885,7 @@ export default function AdminUsersPage() {
     );
   }
 
+  // ── Full page ───────────────────────────────────────────────────────────────
   return (
     <motion.div
       variants={pageVariants}
@@ -765,6 +894,7 @@ export default function AdminUsersPage() {
       className="min-h-screen bg-slate-50/50 p-4 sm:p-6 lg:p-8"
     >
       <div className="max-w-[1440px] mx-auto">
+        {/* Header */}
         <motion.div
           variants={itemVariants}
           className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8"
@@ -801,6 +931,7 @@ export default function AdminUsersPage() {
           </motion.button>
         </motion.div>
 
+        {/* Stat cards */}
         <motion.div
           variants={itemVariants}
           className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-8"
@@ -809,11 +940,7 @@ export default function AdminUsersPage() {
             <motion.div
               key={card.label}
               whileHover={{ y: -2 }}
-              transition={{
-                type: "spring",
-                damping: 18,
-                stiffness: 300,
-              }}
+              transition={{ type: "spring", damping: 18, stiffness: 300 }}
               className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5 shadow-sm hover:shadow-md hover:border-violet-100 transition-all cursor-default group"
             >
               <div className="flex items-center justify-between mb-3">
@@ -833,6 +960,7 @@ export default function AdminUsersPage() {
           ))}
         </motion.div>
 
+        {/* Data table */}
         <motion.div variants={itemVariants}>
           <DataTable<UserRecord>
             data={filteredUsers as unknown as UserRecord[]}
@@ -867,9 +995,7 @@ export default function AdminUsersPage() {
                         <ListBox.Item
                           key={r}
                           id={r}
-                          textValue={
-                            r.charAt(0).toUpperCase() + r.slice(1)
-                          }
+                          textValue={r.charAt(0).toUpperCase() + r.slice(1)}
                         >
                           {r.charAt(0).toUpperCase() + r.slice(1)}
                           <ListBox.ItemIndicator />
@@ -934,6 +1060,7 @@ export default function AdminUsersPage() {
           />
         </motion.div>
 
+        {/* Role change modal */}
         <AnimatePresence>
           {modalType === "role" && selectedUser && (
             <motion.div
@@ -947,11 +1074,7 @@ export default function AdminUsersPage() {
                 initial={{ opacity: 0, scale: 0.92, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.92, y: 20 }}
-                transition={{
-                  type: "spring",
-                  damping: 25,
-                  stiffness: 300,
-                }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
                 onClick={(e) => e.stopPropagation()}
                 className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl border border-gray-100"
               >
@@ -1055,6 +1178,7 @@ export default function AdminUsersPage() {
           )}
         </AnimatePresence>
 
+        {/* Block / Unblock modal */}
         <ConfirmModal
           isOpen={
             (modalType === "block" || modalType === "unblock") &&
@@ -1062,37 +1186,29 @@ export default function AdminUsersPage() {
           }
           onClose={closeModal}
           onConfirm={handleStatusChange}
-          title={
-            modalType === "block" ? "Block User?" : "Unblock User?"
-          }
+          title={modalType === "block" ? "Block User?" : "Unblock User?"}
           message={
             modalType === "block" ? (
               <>
                 Are you sure you want to block{" "}
-                <strong className="text-gray-900">
-                  {selectedUser?.name}
-                </strong>
-                ? They will be logged out and unable to access their
-                account.
+                <strong className="text-gray-900">{selectedUser?.name}</strong>?
+                They will be logged out and unable to access their account.
               </>
             ) : (
               <>
                 Unblock{" "}
-                <strong className="text-gray-900">
-                  {selectedUser?.name}
-                </strong>
-                ? They will regain full access to their account.
+                <strong className="text-gray-900">{selectedUser?.name}</strong>?
+                They will regain full access to their account.
               </>
             )
           }
-          confirmText={
-            modalType === "block" ? "Block User" : "Unblock"
-          }
+          confirmText={modalType === "block" ? "Block User" : "Unblock"}
           variant={modalType === "block" ? "warning" : "info"}
           loading={actionLoading}
           icon={modalType === "block" ? "🔒" : "🔓"}
         />
 
+        {/* Delete modal */}
         <ConfirmModal
           isOpen={modalType === "delete" && !!selectedUser}
           onClose={closeModal}
@@ -1101,9 +1217,7 @@ export default function AdminUsersPage() {
           message={
             <>
               This will permanently delete{" "}
-              <strong className="text-gray-900">
-                {selectedUser?.name}
-              </strong>
+              <strong className="text-gray-900">{selectedUser?.name}</strong>
               &apos;s account including all their sessions and credentials.{" "}
               <span className="text-red-500 font-semibold">
                 This action cannot be undone.

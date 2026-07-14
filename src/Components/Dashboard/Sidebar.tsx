@@ -36,10 +36,14 @@ import {
 import { authClient } from "@/lib/auth-client";
 
 interface User {
-    name?: string;
-    email?: string;
-    image?: string;
-    role?: "user" | "host" | "admin";
+    id: string;
+    name: string;
+    email: string;
+    emailVerified: boolean;
+    image?: string | null;
+    role?: string | null;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 interface NavItem {
@@ -61,7 +65,9 @@ interface DashboardSidebarProps {
     onClose: () => void;
 }
 
-const NAV_LINKS: Record<string, NavSection[]> = {
+type RoleKey = "user" | "host" | "admin";
+
+const NAV_LINKS: Record<RoleKey, NavSection[]> = {
     user: [
         {
             section: "Overview",
@@ -208,7 +214,7 @@ const NAV_LINKS: Record<string, NavSection[]> = {
         {
             section: "Overview",
             items: [
-                 {
+                {
                     label: "My Profile",
                     href: "/dashboard/host/profile",
                     icon: HiUser,
@@ -285,22 +291,23 @@ const NAV_LINKS: Record<string, NavSection[]> = {
     ],
 };
 
+const roleConfig: Record<RoleKey, { label: string; gradient: string }> = {
+    user: { label: "Guest", gradient: "from-violet-500 to-indigo-500" },
+    host: { label: "Host", gradient: "from-indigo-500 to-purple-500" },
+    admin: { label: "Admin", gradient: "from-purple-500 to-pink-500" },
+};
+
 const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
     const pathname = usePathname();
-    console.log(pathname);
     const router = useRouter();
     const [isMinimized, setIsMinimized] = useState(false);
 
-    const role = (user?.role || "user") as keyof typeof NAV_LINKS;
-    const navSections = NAV_LINKS[role] || NAV_LINKS.user;
+    const rawRole = user?.role ?? "user";
+    const role: RoleKey =
+        rawRole === "host" || rawRole === "admin" ? rawRole : "user";
 
-    const roleConfig = {
-        user: { label: "Guest", gradient: "from-violet-500 to-indigo-500" },
-        host: { label: "Host", gradient: "from-indigo-500 to-purple-500" },
-        admin: { label: "Admin", gradient: "from-purple-500 to-pink-500" },
-    };
-
-    const currentRole = roleConfig[role] || roleConfig.user;
+    const navSections = NAV_LINKS[role];
+    const currentRole = roleConfig[role];
 
     const handleLogout = async () => {
         const currentPath = pathname;

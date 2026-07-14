@@ -2,7 +2,7 @@
 
 import React from "react";
 import Marquee from "react-fast-marquee";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import Image from "next/image";
 
 interface TestimonialItem {
@@ -82,7 +82,9 @@ const testimonials: TestimonialItem[] = [
 const featuredTestimonial = testimonials[0];
 const marqueeTestimonials = testimonials.slice(1);
 
-const containerVariants = {
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
@@ -93,7 +95,7 @@ const containerVariants = {
     },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
     hidden: { opacity: 0, y: 24, filter: "blur(8px)" },
     visible: {
         opacity: 1,
@@ -101,7 +103,7 @@ const itemVariants = {
         filter: "blur(0px)",
         transition: {
             duration: 0.75,
-            ease: [0.16, 1, 0.3, 1],
+            ease: EASE,
         },
     },
 };
@@ -195,7 +197,7 @@ function FeaturedCard({
                         transition={{ duration: 0.7, delay: 0.15 }}
                         className="mt-5 max-w-2xl text-lg font-medium leading-relaxed text-slate-700 sm:text-xl lg:text-[1.45rem] lg:leading-relaxed"
                     >
-                        “{item.quote}”
+                        &ldquo;{item.quote}&rdquo;
                     </motion.p>
 
                     <div className="mt-6 flex items-center gap-4 border-t border-slate-200 pt-5">
@@ -361,7 +363,7 @@ export default function Testimonials() {
 
     return (
         <section className="w-full bg-white py-16 sm:py-20 lg:py-24">
-            <div className="mx-auto w-full container px-4 sm:px-6 lg:px-8">
+            <div className="container mx-auto w-full px-4 sm:px-6 lg:px-8">
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
@@ -409,7 +411,7 @@ export default function Testimonials() {
                     transition={{
                         duration: 0.75,
                         delay: 0.15,
-                        ease: [0.16, 1, 0.3, 1],
+                        ease: EASE,
                     }}
                     className="relative mt-8 sm:mt-10"
                 >

@@ -9,6 +9,7 @@ import {
     useScroll,
     useTransform,
     AnimatePresence,
+    type Variants,
 } from "framer-motion";
 import {
     HiOutlineUsers,
@@ -27,7 +28,6 @@ import {
     HiOutlineArrowRight,
     HiOutlineChevronDown,
     HiOutlinePlay,
-    HiOutlinePhotograph,
     HiOutlineEmojiHappy,
     HiOutlinePlus,
     HiOutlineCheckCircle,
@@ -101,7 +101,7 @@ interface FaqItem {
     a: string;
 }
 
-const containerVariants = {
+const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
@@ -109,7 +109,7 @@ const containerVariants = {
     },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20, filter: "blur(8px)" },
     visible: {
         opacity: 1,
@@ -118,7 +118,6 @@ const itemVariants = {
         transition: {
             duration: 0.6,
             ease: [0.16, 1, 0.3, 1],
-            type: "tween",
         },
     },
 };
@@ -462,8 +461,6 @@ const CommunityPage = () => {
                         variants={containerVariants}
                         className="mx-auto max-w-4xl text-center"
                     >
-                       
-
                         <motion.h1
                             variants={itemVariants}
                             className="text-[40px] font-black leading-[1.05] tracking-[-0.035em] text-white sm:text-6xl md:text-[72px] lg:text-7xl"
@@ -594,8 +591,6 @@ const CommunityPage = () => {
                         variants={containerVariants}
                         className="mx-auto mb-16 max-w-2xl text-center"
                     >
-                        
-
                         <motion.h2
                             variants={itemVariants}
                             className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[46px]"
@@ -610,7 +605,7 @@ const CommunityPage = () => {
                             variants={itemVariants}
                             className="mt-4 text-base leading-relaxed text-slate-500 sm:text-lg"
                         >
-                            Discover the benefits of being part of Bangladesh's
+                            Discover the benefits of being part of Bangladesh&apos;s
                             most vibrant travel community.
                         </motion.p>
                     </motion.div>
@@ -666,8 +661,6 @@ const CommunityPage = () => {
                         variants={containerVariants}
                         className="mx-auto mb-16 max-w-2xl text-center"
                     >
-                        
-
                         <motion.h2
                             variants={itemVariants}
                             className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[46px]"
@@ -763,8 +756,6 @@ const CommunityPage = () => {
                         variants={containerVariants}
                         className="mx-auto mb-16 max-w-2xl text-center"
                     >
-                        
-
                         <motion.h2
                             variants={itemVariants}
                             className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[46px]"
@@ -866,8 +857,6 @@ const CommunityPage = () => {
                         variants={containerVariants}
                         className="mx-auto mb-16 max-w-2xl text-center"
                     >
-                      
-
                         <motion.h2
                             variants={itemVariants}
                             className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[46px]"
@@ -982,8 +971,6 @@ const CommunityPage = () => {
                         variants={containerVariants}
                         className="mx-auto mb-16 max-w-2xl text-center"
                     >
-                        
-
                         <motion.h2
                             variants={itemVariants}
                             className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[46px]"
@@ -1066,7 +1053,6 @@ const CommunityPage = () => {
                         variants={containerVariants}
                         className="mx-auto mb-16 max-w-2xl text-center"
                     >
-
                         <motion.h2
                             variants={itemVariants}
                             className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[46px]"
@@ -1115,7 +1101,6 @@ const CommunityPage = () => {
                         variants={containerVariants}
                         className="mx-auto mb-16 max-w-2xl text-center"
                     >
-
                         <motion.h2
                             variants={itemVariants}
                             className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[46px]"

@@ -2,21 +2,24 @@
 
 import React, { useState, useMemo, useRef } from "react";
 import Link from "next/link";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import {
+    motion,
+    useInView,
+    AnimatePresence,
+    type Variants,
+} from "framer-motion";
 import {
     HiOutlineSearch,
     HiOutlineChevronDown,
     HiOutlineChatAlt2,
     HiOutlineMail,
     HiOutlinePhone,
-    HiOutlineSparkles,
     HiOutlineShieldCheck,
     HiOutlineCreditCard,
     HiOutlineUserCircle,
     HiOutlineHome,
     HiOutlineQuestionMarkCircle,
     HiOutlineArrowRight,
-    HiOutlineCheckCircle,
     HiOutlineLightningBolt,
     HiOutlineGlobe,
     HiOutlineClock,
@@ -39,7 +42,7 @@ interface Category {
     count: number;
 }
 
-const containerVariants = {
+const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
@@ -47,7 +50,7 @@ const containerVariants = {
     },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20, filter: "blur(8px)" },
     visible: {
         opacity: 1,
@@ -56,7 +59,6 @@ const itemVariants = {
         transition: {
             duration: 0.6,
             ease: [0.16, 1, 0.3, 1],
-            type: "tween",
         },
     },
 };
@@ -251,8 +253,6 @@ const FaqPage = () => {
                         variants={containerVariants}
                         className="mx-auto max-w-4xl text-center"
                     >
-                        
-
                         <motion.h1
                             variants={itemVariants}
                             className="text-[36px] font-black leading-[1.05] tracking-[-0.035em] text-white sm:text-5xl md:text-[64px]"

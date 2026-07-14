@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, Suspense } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import {
     Form,
     Button,
@@ -37,8 +37,7 @@ function buildAuthHref(basePath: string, redirectParam: string | null) {
     return `${basePath}?redirect=${encodeURIComponent(redirectParam)}`;
 }
 
-export default function RegisterPage() {
-    const router = useRouter();
+function RegisterForm() {
     const searchParams = useSearchParams();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -146,15 +145,20 @@ export default function RegisterPage() {
                 imageUrl = uploadedImage.display_url;
             }
 
+            document.cookie = `pending_role=${data.role}; path=/; max-age=300; SameSite=Lax`;
+
+            await new Promise((resolve) => setTimeout(resolve, 100));
+
             const { error } = await authClient.signUp.email({
                 name: data.name,
                 email: data.email,
                 password: data.password,
                 image: imageUrl,
-                role: data.role,
             });
 
             if (error) {
+                document.cookie =
+                    "pending_role=; path=/; max-age=0; SameSite=Lax";
                 setGlobalMessage({
                     type: "error",
                     text:
@@ -166,6 +170,9 @@ export default function RegisterPage() {
 
             await authClient.signOut();
 
+            document.cookie =
+                "pending_role=; path=/; max-age=0; SameSite=Lax";
+
             setGlobalMessage({
                 type: "success",
                 text: "Registration successful! Redirecting to login...",
@@ -175,6 +182,8 @@ export default function RegisterPage() {
                 window.location.replace(loginHref);
             }, 1500);
         } catch (err) {
+            document.cookie =
+                "pending_role=; path=/; max-age=0; SameSite=Lax";
             const message =
                 err instanceof Error
                     ? err.message
@@ -670,7 +679,7 @@ export default function RegisterPage() {
                                             ? "bg-indigo-400 cursor-not-allowed text-white shadow-none"
                                             : "bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-600/20 hover:shadow-indigo-600/30"
                                     }`}
-                                    disabled={isLoading}
+                                    isDisabled={isLoading}
                                 >
                                     {isLoading ? (
                                         <>
@@ -709,5 +718,21 @@ export default function RegisterPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+function RegisterFallback() {
+    return (
+        <div className="bg-gradient-to-br from-slate-50 via-white to-indigo-50/40 min-h-screen flex items-center justify-center">
+            <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+        </div>
+    );
+}
+
+export default function RegisterPage() {
+    return (
+        <Suspense fallback={<RegisterFallback />}>
+            <RegisterForm />
+        </Suspense>
     );
 }

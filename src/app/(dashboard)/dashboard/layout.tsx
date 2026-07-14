@@ -3,13 +3,13 @@
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { HiBars3, HiBell, HiSparkles } from "react-icons/hi2";
 import Image from "next/image";
 import DashboardSidebar from "@/Components/Dashboard/Sidebar";
 import { authClient } from "@/lib/auth-client";
 
-const pageVariants = {
+const pageVariants: Variants = {
     initial: {
         opacity: 0,
         y: 20,
@@ -21,7 +21,7 @@ const pageVariants = {
         filter: "blur(0px)",
         transition: {
             duration: 0.45,
-            ease: [0.22, 1, 0.36, 1] as const,
+            ease: [0.22, 1, 0.36, 1],
         },
     },
     exit: {
@@ -30,19 +30,19 @@ const pageVariants = {
         filter: "blur(4px)",
         transition: {
             duration: 0.3,
-            ease: [0.22, 1, 0.36, 1] as const,
+            ease: [0.22, 1, 0.36, 1],
         },
     },
 };
 
-const pulseRing = {
+const pulseRing: Variants = {
     animate: {
         scale: [1, 1.4, 1],
         opacity: [0.5, 0, 0.5],
         transition: {
             duration: 2,
             repeat: Infinity,
-            ease: "easeInOut" as const,
+            ease: "easeInOut",
         },
     },
 };
@@ -54,7 +54,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     const [isLoading, setIsLoading] = useState(true);
     const { data, isPending } = authClient.useSession();
 
-    const user = data?.user;
+    const sessionUser = data?.user;
 
     useEffect(() => {
         const timer = setTimeout(() => setIsLoading(false), 800);
@@ -62,13 +62,13 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     }, []);
 
     useEffect(() => {
-        if (!isPending && !user) {
+        if (!isPending && !sessionUser) {
             const currentPath = `${window.location.pathname}${window.location.search}`;
             window.location.replace(
                 `/login?redirect=${encodeURIComponent(currentPath)}`,
             );
         }
-    }, [user, isPending, router]);
+    }, [sessionUser, isPending, router]);
 
     useEffect(() => {
         setSidebarOpen(false);
@@ -80,6 +80,19 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             document.body.style.overflow = "";
         };
     }, [sidebarOpen]);
+
+    const user = sessionUser
+        ? {
+              id: sessionUser.id,
+              name: sessionUser.name,
+              email: sessionUser.email,
+              emailVerified: sessionUser.emailVerified,
+              image: sessionUser.image ?? null,
+              role: (sessionUser as { role?: string | null }).role ?? "guest",
+              createdAt: sessionUser.createdAt,
+              updatedAt: sessionUser.updatedAt,
+          }
+        : null;
 
     const roleLabel =
         user?.role === "host"

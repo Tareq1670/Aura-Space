@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import {
     Form,
     Button,
@@ -42,8 +42,7 @@ function buildAuthHref(basePath: string, redirectPath: string | null) {
     return `${basePath}?redirect=${encodeURIComponent(redirectPath)}`;
 }
 
-export default function LoginPage() {
-    const router = useRouter();
+function LoginForm() {
     const searchParams = useSearchParams();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -408,7 +407,7 @@ export default function LoginPage() {
 
                             <Button
                                 type="submit"
-                                isDisabled={isLoading} 
+                                isDisabled={isLoading}
                                 className={`w-full py-3 h-11 mt-3 font-semibold text-sm rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all active:scale-[0.98] ${
                                     isLoading
                                         ? "bg-indigo-400 cursor-not-allowed text-white shadow-none"
@@ -444,5 +443,21 @@ export default function LoginPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+function LoginFallback() {
+    return (
+        <div className="bg-gradient-to-br from-slate-50 via-white to-indigo-50/40 min-h-screen flex items-center justify-center">
+            <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+        </div>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={<LoginFallback />}>
+            <LoginForm />
+        </Suspense>
     );
 }

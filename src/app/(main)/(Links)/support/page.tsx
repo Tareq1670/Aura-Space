@@ -9,6 +9,7 @@ import {
     useScroll,
     useTransform,
     AnimatePresence,
+    type Variants,
 } from "framer-motion";
 import {
     HiOutlineSearch,
@@ -21,11 +22,9 @@ import {
     HiOutlineCreditCard,
     HiOutlineUserCircle,
     HiOutlineExclamationCircle,
-    HiOutlineQuestionMarkCircle,
     HiOutlineArrowRight,
     HiOutlineCheckCircle,
     HiOutlineSparkles,
-    HiOutlineLightningBolt,
     HiOutlineGlobe,
     HiOutlineHeart,
     HiOutlinePlus,
@@ -86,7 +85,7 @@ interface FormData {
     message: string;
 }
 
-const containerVariants = {
+const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
@@ -94,7 +93,7 @@ const containerVariants = {
     },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20, filter: "blur(8px)" },
     visible: {
         opacity: 1,
@@ -340,7 +339,7 @@ const SupportPage = () => {
                     <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-indigo-950/90 to-slate-900" />
                     <div className="absolute -left-40 top-0 h-[600px] w-[600px] rounded-full bg-indigo-500/15 blur-3xl" />
                     <div className="absolute -right-40 bottom-0 h-[600px] w-[600px] rounded-full bg-violet-500/15 blur-3xl" />
-                    <div className="absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-fuchsia-500/8 blur-3xl" />
+                    <div className="absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-fuchsia-500/[0.08] blur-3xl" />
                 </motion.div>
 
                 <div
@@ -447,7 +446,11 @@ const SupportPage = () => {
                     <motion.div
                         initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                        transition={{
+                            duration: 0.8,
+                            ease: [0.16, 1, 0.3, 1],
+                            type: "tween",
+                        }}
                         className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
                     >
                         {categories.map((category, idx) => (
@@ -455,7 +458,11 @@ const SupportPage = () => {
                                 key={category.id}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                                transition={{
+                                    duration: 0.5,
+                                    delay: idx * 0.1,
+                                    type: "tween",
+                                }}
                                 whileHover={{
                                     y: -6,
                                     transition: {
@@ -496,7 +503,6 @@ const SupportPage = () => {
                         variants={containerVariants}
                         className="mx-auto mb-16 max-w-2xl text-center"
                     >
-                        
                         <motion.h2
                             variants={itemVariants}
                             className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[46px]"
@@ -572,7 +578,11 @@ const SupportPage = () => {
                                 ? { opacity: 1, y: 0 }
                                 : { opacity: 0, y: 30 }
                         }
-                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                        transition={{
+                            duration: 0.8,
+                            ease: [0.16, 1, 0.3, 1],
+                            type: "tween",
+                        }}
                         className="grid grid-cols-2 gap-4 sm:grid-cols-4"
                     >
                         {[
@@ -607,7 +617,11 @@ const SupportPage = () => {
                                         ? { opacity: 1, scale: 1 }
                                         : { opacity: 0, scale: 0.9 }
                                 }
-                                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                                transition={{
+                                    duration: 0.5,
+                                    delay: idx * 0.1,
+                                    type: "tween",
+                                }}
                                 className="flex flex-col items-center rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-[0_4px_20px_rgba(15,23,42,0.04)]"
                             >
                                 <div className="mb-3 text-indigo-500">
@@ -974,6 +988,7 @@ const SupportPage = () => {
                                             transition={{
                                                 duration: 0.35,
                                                 ease: [0.16, 1, 0.3, 1],
+                                                type: "tween",
                                             }}
                                             className="overflow-hidden"
                                         >
