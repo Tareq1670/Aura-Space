@@ -1,13 +1,15 @@
 "use client"
 
 import { useEffect, useState, useMemo } from "react"
+import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { Tabs, TabList, Tab, Pagination, Skeleton } from "@heroui/react"
 import { toast } from "sonner"
-import { Search, Download, Calendar } from "lucide-react"
+import { Search, Download, Calendar, MessageCircle } from "lucide-react"
 import StatusBadge from "@/Components/Booking/StatusBadge"
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal"
 import { bookingAPI, type BookingItem } from "@/lib/api/Guest/booking-api"
+import { startConversation } from "@/lib/actions/message"
 
 const TABS = ["Pending", "Confirmed", "Completed", "Cancelled"]
 const STATUS_MAP: Record<string, string | undefined> = {
@@ -34,6 +36,7 @@ const cardVariants = {
 }
 
 export default function HostReservationsPage() {
+  const router = useRouter()
   const [bookings, setBookings] = useState<BookingItem[]>([])
   const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState("Pending")
@@ -42,6 +45,7 @@ export default function HostReservationsPage() {
   const [actionId, setActionId] = useState<string | null>(null)
   const [actionType, setActionType] = useState<"confirm" | "cancel" | null>(null)
   const [processing, setProcessing] = useState(false)
+  const [messaging, setMessaging] = useState<Record<string, boolean>>({})
   const [search, setSearch] = useState("")
   const [dateFrom, setDateFrom] = useState("")
   const [dateTo, setDateTo] = useState("")
@@ -114,6 +118,25 @@ export default function HostReservationsPage() {
     a.click()
     URL.revokeObjectURL(url)
     toast.success("CSV exported")
+  }
+
+  async function handleContactGuest(booking: BookingItem) {
+    const guestId = booking.guest?.id || booking.guestId
+    if (!guestId || messaging[booking._id]) return
+    setMessaging((prev) => ({ ...prev, [booking._id]: true }))
+    try {
+      const res = await startConversation(guestId, booking._id, booking.propertyId)
+      if (res.success) {
+        toast.success("Conversation started with " + (booking.guest?.name || "guest"))
+        router.push("/dashboard/host/messages")
+      } else {
+        toast.error(res.error || "Failed to start conversation")
+      }
+    } catch {
+      toast.error("Something went wrong")
+    } finally {
+      setMessaging((prev) => ({ ...prev, [booking._id]: false }))
+    }
   }
 
   async function handleAction() {
@@ -268,6 +291,17 @@ export default function HostReservationsPage() {
                       &ldquo;{b.specialRequest}&rdquo;
                     </p>
                   )}
+
+                  <div className="mt-3 flex gap-2">
+                    <button
+                      onClick={() => handleContactGuest(b)}
+                      disabled={messaging[b._id]}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-violet-200 px-3 py-1.5 text-xs font-semibold text-violet-600 transition hover:bg-violet-50 active:scale-[0.97] disabled:opacity-50"
+                    >
+                      <MessageCircle className="h-3.5 w-3.5" />
+                      {messaging[b._id] ? "..." : "Message"}
+                    </button>
+                  </div>
 
                   {b.status === "pending" && (
                     <div className="mt-3 flex gap-2">

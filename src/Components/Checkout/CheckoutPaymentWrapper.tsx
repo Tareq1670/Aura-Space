@@ -1,10 +1,19 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
-import { authClient } from "@/lib/auth-client"
-import { StripeElementsProvider } from "@/lib/stripe-elements"
-import { PaymentForm } from "@/Components/Checkout/PaymentForm"
+import { useCallback, useEffect, useState, useRef } from "react"
+import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js"
+import { loadStripe } from "@stripe/stripe-js"
 import { Skeleton } from "@heroui/react"
+import { authClient } from "@/lib/auth-client"
+import { createCheckoutSession } from "@/lib/actions/stripe"
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+
+const API_BASE = (
+  process.env.NEXT_PUBLIC_SERVER_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  "http://localhost:5000"
+).replace(/\/$/, "") + "/api"
 
 interface Props {
   propertyId: string
@@ -14,19 +23,9 @@ interface Props {
   specialRequest?: string
 }
 
-type Step = "creating" | "error" | "ready"
-
-const API_BASE = (
-  process.env.NEXT_PUBLIC_SERVER_URL ||
-  process.env.NEXT_PUBLIC_API_URL ||
-  "http://localhost:5000"
-).replace(/\/$/, "") + "/api"
-
 export function CheckoutPaymentWrapper({ propertyId, checkIn, checkOut, guests, specialRequest }: Props) {
-  const [step, setStep] = useState<Step>("creating")
-  const [clientSecret, setClientSecret] = useState<string | null>(null)
   const [bookingId, setBookingId] = useState<string | null>(null)
-  const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
   const started = useRef(false)
 
   useEffect(() => {
@@ -60,37 +59,44 @@ export function CheckoutPaymentWrapper({ propertyId, checkIn, checkOut, guests, 
         }
 
         const booking = bookingData?.data?.booking || bookingData?.data
-        const newBookingId = booking?.id || booking?._id
-        if (!newBookingId) throw new Error("No booking ID returned")
+        const id = booking?.id || String(booking?._id || "")
+        if (!id) throw new Error("No booking ID returned")
 
-        setBookingId(newBookingId)
-
-        const piRes = await fetch(`${API_BASE}/payments/create-payment-intent`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ bookingId: newBookingId }),
-        })
-
-        const piData = await piRes.json()
-        if (!piRes.ok || !piData?.data?.clientSecret) {
-          throw new Error(piData?.message || "Failed to initialize payment")
-        }
-
-        setClientSecret(piData.data.clientSecret)
-        setStep("ready")
-      } catch (err: any) {
-        setErrorMsg(err.message || "Something went wrong")
-        setStep("error")
+        setBookingId(id)
+      } catch (err) {
+        setError((err as Error)?.message || "Something went wrong")
       }
     }
 
     init()
   }, [propertyId, checkIn, checkOut, guests, specialRequest])
 
-  if (step === "creating") {
+  const fetchClientSecret = useCallback(async () => {
+    if (!bookingId) throw new Error("Booking not created yet")
+    return createCheckoutSession(bookingId)
+  }, [bookingId])
+
+  if (error) {
+    return (
+      <div className="mt-4">
+        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          {error}
+        </div>
+        <button
+          onClick={() => {
+            started.current = false
+            setError(null)
+            setBookingId(null)
+          }}
+          className="mt-3 w-full rounded-lg bg-emerald-600 px-6 py-3 text-white font-semibold transition hover:bg-emerald-700"
+        >
+          Try Again
+        </button>
+      </div>
+    )
+  }
+
+  if (!bookingId) {
     return (
       <div className="mt-4 space-y-4">
         <div className="rounded-xl border bg-white p-6">
@@ -102,27 +108,12 @@ export function CheckoutPaymentWrapper({ propertyId, checkIn, checkOut, guests, 
     )
   }
 
-  if (step === "error") {
-    return (
-      <div className="mt-4">
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-          {errorMsg}
-        </div>
-        <button
-          onClick={() => window.location.reload()}
-          className="mt-3 w-full rounded-lg bg-emerald-600 px-6 py-3 text-white font-semibold transition hover:bg-emerald-700"
-        >
-          Try Again
-        </button>
-      </div>
-    )
-  }
-
-  if (!clientSecret || !bookingId) return null
-
   return (
-    <StripeElementsProvider clientSecret={clientSecret}>
-      <PaymentForm bookingId={bookingId} />
-    </StripeElementsProvider>
+    <EmbeddedCheckoutProvider
+      stripe={stripePromise}
+      options={{ fetchClientSecret }}
+    >
+      <EmbeddedCheckout />
+    </EmbeddedCheckoutProvider>
   )
 }

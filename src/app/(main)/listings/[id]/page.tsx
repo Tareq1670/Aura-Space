@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Skeleton } from "@heroui/react";
+import { toast } from "sonner";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Thumbs, Navigation } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
@@ -13,6 +14,12 @@ import "swiper/css/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { getPropertyDetail } from "@/lib/actions/property-public";
 import type { PublicProperty, PublicReview } from "@/lib/actions/property-public";
+import { startConversation } from "@/lib/actions/message";
+import { authClient } from "@/lib/auth-client";
+import { reviewAPI, type PendingBooking } from "@/lib/api/Guest/review-api";
+import { createReview } from "@/lib/actions/review";
+import RatingStars from "@/Components/Review/RatingStars";
+import { PenLine, Sparkles, X } from "lucide-react";
 
 function StarIcon({ filled, size = "h-4 w-4" }: { filled: boolean; size?: string }) {
     return (
@@ -89,6 +96,7 @@ function DetailSkeleton() {
 
 export default function PropertyDetailPage() {
     const params = useParams();
+    const router = useRouter();
     const id = params?.id as string;
 
     const [property, setProperty] = useState<PublicProperty | null>(null);
@@ -97,6 +105,47 @@ export default function PropertyDetailPage() {
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxIndex, setLightboxIndex] = useState(0);
+    const [messaging, setMessaging] = useState(false);
+    const [pendingBooking, setPendingBooking] = useState<PendingBooking | null>(null);
+    const [showReviewModal, setShowReviewModal] = useState(false);
+    const [reviewRating, setReviewRating] = useState(0);
+    const [reviewComment, setReviewComment] = useState("");
+    const [submittingReview, setSubmittingReview] = useState(false);
+    const [reviewLoading, setReviewLoading] = useState(false);
+    const [checkIn, setCheckIn] = useState("");
+    const [checkOut, setCheckOut] = useState("");
+    const [guests, setGuests] = useState(1);
+    const [bookingError, setBookingError] = useState<string | null>(null);
+
+    const today = new Date().toISOString().split("T")[0];
+
+    function getMinCheckOut() {
+        if (!checkIn) return today;
+        const next = new Date(checkIn);
+        next.setDate(next.getDate() + 1);
+        return next.toISOString().split("T")[0];
+    }
+
+    function validateAndGetBookingUrl(): string | null {
+        if (!checkIn || !checkOut || !guests) {
+            setBookingError("Please select dates and number of guests");
+            return null;
+        }
+        if (checkOut <= checkIn) {
+            setBookingError("Check-out must be after check-in");
+            return null;
+        }
+        if (guests < 1) {
+            setBookingError("At least 1 guest required");
+            return null;
+        }
+        if (details && guests > (details.maxGuests || 99)) {
+            setBookingError(`Maximum ${details.maxGuests} guests allowed`);
+            return null;
+        }
+        setBookingError(null);
+        return `/checkout?propertyId=${property.id}&checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}`;
+    }
 
     useEffect(() => {
         if (!id) return;
@@ -114,10 +163,78 @@ export default function PropertyDetailPage() {
         fetchData();
     }, [id]);
 
+    useEffect(() => {
+        if (!property) return;
+        let mounted = true;
+        (async () => {
+            try {
+                const session = await authClient.getSession();
+                if (!session?.data?.user || !mounted) return;
+                setReviewLoading(true);
+                const res = await reviewAPI.getMyReviews({ limit: 50 });
+                if (!mounted) return;
+                const match = res.pending.find((b) => b.propertyId === property.id);
+                if (match) setPendingBooking(match);
+            } catch {
+                // not logged in — no review prompt
+            } finally {
+                if (mounted) setReviewLoading(false);
+            }
+        })();
+        return () => { mounted = false };
+    }, [property]);
+
     const openLightbox = useCallback((index: number) => {
         setLightboxIndex(index);
         setLightboxOpen(true);
     }, []);
+
+    const handleMessageHost = useCallback(async () => {
+        const h = property?.host;
+        if (!h || messaging) return;
+        setMessaging(true);
+        try {
+            const res = await startConversation(h._id, undefined, property?.id);
+            if (res.success) {
+                toast.success("Conversation started");
+                router.push("/dashboard/guest/messages");
+            } else {
+                toast.error(res.error || "Failed to start conversation");
+            }
+        } catch {
+            toast.error("Something went wrong");
+        } finally {
+            setMessaging(false);
+        }
+    }, [messaging, property, router]);
+
+    const handleSubmitReview = useCallback(async () => {
+        if (!reviewRating || !reviewComment.trim() || !pendingBooking) {
+            toast.error("Please provide a rating and comment");
+            return;
+        }
+        setSubmittingReview(true);
+        try {
+            const res = await createReview({
+                bookingId: pendingBooking._id,
+                rating: reviewRating,
+                comment: reviewComment,
+            });
+            if (res.success) {
+                toast.success("Review submitted");
+                setShowReviewModal(false);
+                setReviewRating(0);
+                setReviewComment("");
+                setPendingBooking(null);
+            } else {
+                toast.error(res.error || "Failed to submit review");
+            }
+        } catch {
+            toast.error("Something went wrong");
+        } finally {
+            setSubmittingReview(false);
+        }
+    }, [reviewRating, reviewComment, pendingBooking]);
 
     if (loading) return <DetailSkeleton />;
 
@@ -141,10 +258,109 @@ export default function PropertyDetailPage() {
                         </svg>
                         Browse Properties
                     </Link>
-                </div>
             </div>
-        );
-    }
+
+            <AnimatePresence>
+                {showReviewModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setShowReviewModal(false)}
+                        className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/30 backdrop-blur-sm p-4"
+                    >
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.92, y: 24 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.92, y: 24 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 26 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl"
+                        >
+                            <div className="relative overflow-hidden bg-gradient-to-r from-amber-500 to-orange-500 px-6 py-5">
+                                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-30" />
+                                <div className="relative flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <Sparkles className="h-5 w-5 text-white/80" />
+                                        <h3 className="text-lg font-semibold text-white">Write a Review</h3>
+                                    </div>
+                                    <button
+                                        onClick={() => setShowReviewModal(false)}
+                                        className="rounded-lg p-1.5 text-white/60 transition-colors hover:bg-white/15 hover:text-white"
+                                    >
+                                        <X className="h-5 w-5" />
+                                    </button>
+                                </div>
+                                {pendingBooking && property && (
+                                    <motion.p
+                                        initial={{ opacity: 0, y: -4 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="relative mt-2 text-sm text-white/70"
+                                    >
+                                        Reviewing:{" "}
+                                        <span className="font-medium text-white">
+                                            {property.title}
+                                        </span>
+                                    </motion.p>
+                                )}
+                            </div>
+
+                            <div className="px-6 py-5">
+                                <div className="mb-5">
+                                    <label className="mb-2.5 block text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                        Rating
+                                    </label>
+                                    <div className="inline-block rounded-xl bg-gray-50 px-4 py-3">
+                                        <RatingStars
+                                            rating={reviewRating}
+                                            onRate={setReviewRating}
+                                            size="lg"
+                                            animated
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="mb-5">
+                                    <label className="mb-2.5 block text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                        Comment
+                                    </label>
+                                    <textarea
+                                        value={reviewComment}
+                                        onChange={(e) => setReviewComment(e.target.value)}
+                                        rows={4}
+                                        placeholder="Share your experience..."
+                                        className="w-full resize-none rounded-xl border border-gray-200 bg-white p-3.5 text-sm text-gray-700 outline-none placeholder-gray-300 transition-all hover:border-amber-200 focus:border-amber-400 focus:ring-2 focus:ring-amber-100"
+                                    />
+                                </div>
+
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={() => setShowReviewModal(false)}
+                                        className="flex-1 rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-gray-500 transition-all hover:bg-gray-50 hover:text-gray-700"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <motion.button
+                                        whileHover={{ scale: 1.01 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        onClick={handleSubmitReview}
+                                        disabled={submittingReview || !reviewRating || !reviewComment.trim()}
+                                        className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-amber-500/15 transition-all hover:shadow-xl disabled:opacity-40"
+                                    >
+                                        {submittingReview && (
+                                            <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white" />
+                                        )}
+                                        Submit Review
+                                    </motion.button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    );
+}
 
     const images = property.images?.length ? property.images : ["/placeholder-property.svg"];
     const host = property.host;
@@ -431,6 +647,28 @@ export default function PropertyDetailPage() {
                                     </div>
                                 </div>
                             )}
+
+                            {pendingBooking && (
+                                <div className="rounded-2xl border border-amber-100 bg-amber-50/50 p-6">
+                                    <div className="flex items-center justify-between gap-4">
+                                        <div>
+                                            <h2 className="text-lg font-extrabold text-slate-900">Share Your Experience</h2>
+                                            <p className="mt-1 text-sm text-slate-500">Tell others about your stay at {property.title}</p>
+                                        </div>
+                                        <button
+                                            onClick={() => {
+                                                setReviewRating(0);
+                                                setReviewComment("");
+                                                setShowReviewModal(true);
+                                            }}
+                                            className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-amber-500/20 transition-all hover:shadow-xl hover:shadow-amber-500/30"
+                                        >
+                                            <PenLine className="h-4 w-4" />
+                                            Write a Review
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         <div className="lg:col-span-1">
@@ -439,6 +677,50 @@ export default function PropertyDetailPage() {
                                     <div className="flex items-baseline gap-1">
                                         <span className="text-2xl font-black text-slate-900">${price?.perNight}</span>
                                         <span className="text-sm text-slate-400">/ night</span>
+                                    </div>
+
+                                    <div className="mt-4 space-y-3">
+                                        <div>
+                                            <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Check-in</label>
+                                            <input
+                                                type="date"
+                                                value={checkIn}
+                                                min={today}
+                                                onChange={(e) => {
+                                                    setCheckIn(e.target.value);
+                                                    setBookingError(null);
+                                                    if (checkOut && e.target.value >= checkOut) setCheckOut("");
+                                                }}
+                                                className="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm text-slate-700 outline-none transition-all focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Check-out</label>
+                                            <input
+                                                type="date"
+                                                value={checkOut}
+                                                min={getMinCheckOut()}
+                                                onChange={(e) => {
+                                                    setCheckOut(e.target.value);
+                                                    setBookingError(null);
+                                                }}
+                                                className="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm text-slate-700 outline-none transition-all focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Guests</label>
+                                            <input
+                                                type="number"
+                                                value={guests}
+                                                min={1}
+                                                max={details?.maxGuests || 99}
+                                                onChange={(e) => {
+                                                    setGuests(Math.max(1, Number(e.target.value) || 1));
+                                                    setBookingError(null);
+                                                }}
+                                                className="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm text-slate-700 outline-none transition-all focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+                                            />
+                                        </div>
                                     </div>
 
                                     <hr className="my-4 border-slate-100" />
@@ -458,15 +740,28 @@ export default function PropertyDetailPage() {
                                         )}
                                     </div>
 
-                                    <Link
-                                        href={`/checkout?propertyId=${property.id}`}
+                                    {bookingError && (
+                                        <p className="mt-3 text-xs font-medium text-red-500">{bookingError}</p>
+                                    )}
+
+                                    <button
+                                        onClick={async () => {
+                                            const url = validateAndGetBookingUrl();
+                                            if (!url) return;
+                                            const session = await authClient.getSession();
+                                            if (!session?.data?.user) {
+                                                router.push(`/login?redirect=${encodeURIComponent(url)}`);
+                                                return;
+                                            }
+                                            router.push(url);
+                                        }}
                                         className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-600/20 transition-all hover:bg-indigo-700 hover:shadow-xl hover:shadow-indigo-600/30"
                                     >
                                         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                                         </svg>
                                         Book Now
-                                    </Link>
+                                    </button>
                                 </div>
 
                                 {host && (
@@ -485,6 +780,16 @@ export default function PropertyDetailPage() {
                                                 <p className="text-xs text-slate-400">Member since {formatDate(host.createdAt)}</p>
                                             </div>
                                         </div>
+                                        <button
+                                            onClick={handleMessageHost}
+                                            disabled={messaging}
+                                            className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-700 transition-colors hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 disabled:opacity-50"
+                                        >
+                                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                                            </svg>
+                                            {messaging ? "Starting..." : "Message Host"}
+                                        </button>
                                     </div>
                                 )}
                             </div>
@@ -603,12 +908,34 @@ export default function PropertyDetailPage() {
                         <span className="text-lg font-black text-slate-900">${price?.perNight}</span>
                         <span className="text-xs text-slate-400"> / night</span>
                     </div>
-                    <Link
-                        href={`/checkout?propertyId=${property.id}`}
-                        className="rounded-xl bg-indigo-600 px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-indigo-600/20 transition-colors hover:bg-indigo-700"
-                    >
-                        Book Now
-                    </Link>
+                    <div className="flex items-center gap-2">
+                        {host && (
+                            <button
+                                onClick={handleMessageHost}
+                                disabled={messaging}
+                                className="rounded-xl border border-slate-200 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-600 transition-colors hover:bg-indigo-50 hover:text-indigo-600 disabled:opacity-50"
+                            >
+                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                                </svg>
+                            </button>
+                        )}
+                        <button
+                            onClick={async () => {
+                                const url = validateAndGetBookingUrl();
+                                if (!url) return;
+                                const session = await authClient.getSession();
+                                if (!session?.data?.user) {
+                                    router.push(`/login?redirect=${encodeURIComponent(url)}`);
+                                    return;
+                                }
+                                router.push(url);
+                            }}
+                            className="rounded-xl bg-indigo-600 px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-indigo-600/20 transition-colors hover:bg-indigo-700"
+                        >
+                            Book Now
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { getUnreadCount } from "@/lib/actions/message";
 import {
     HiSquares2X2,
     HiUser,
@@ -624,12 +625,35 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
     const [isMinimized, setIsMinimized] = useState(false);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const [unreadCount, setUnreadCount] = useState(0);
 
     const rawRole = user?.role ?? "user";
     const role: RoleKey =
         rawRole === "host" || rawRole === "admin" ? rawRole : "user";
 
-    const navSections = NAV_LINKS[role];
+    useEffect(() => {
+        async function fetchUnread() {
+            const res = await getUnreadCount();
+            if (res.success && res.data) {
+                const count = typeof res.data === "object" && res.data !== null
+                    ? (res.data as Record<string, unknown>).unreadCount ?? (res.data as Record<string, unknown>).count ?? 0
+                    : Number(res.data) || 0;
+                setUnreadCount(Number(count));
+            }
+        }
+        fetchUnread();
+        const interval = setInterval(fetchUnread, 30000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const navSections = NAV_LINKS[role].map((section) => ({
+        ...section,
+        items: section.items.map((item) =>
+            item.label === "Messages"
+                ? { ...item, badge: unreadCount || undefined }
+                : item
+        ),
+    }));
     const currentRole = roleConfig[role];
 
     const handleLogout = async () => {

@@ -7,9 +7,7 @@ import { toast } from "sonner"
 import { CalendarDays, Heart, CreditCard, MapPin, ArrowRight } from "lucide-react"
 import StatCard from "@/Components/Dashboard/StatCard"
 import ChartCard from "@/Components/Dashboard/ChartCard"
-import { bookingAPI, type BookingItem } from "@/lib/api/Guest/booking-api"
-import { transactionAPI, type TransactionItem } from "@/lib/api/Guest/transaction-api"
-import { getWishlist } from "@/lib/actions/wishlist"
+import { getGuestDashboard, type GuestDashboardData } from "@/lib/actions/dashboard-guest"
 
 const quickLinks = [
   { label: "Browse Spaces", href: "/spaces", color: "from-violet-500 to-purple-600" },
@@ -20,61 +18,21 @@ const quickLinks = [
   { label: "Profile", href: "/dashboard/guest/profile", color: "from-cyan-500 to-sky-600" },
 ]
 
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-
 export default function GuestMainPage() {
   const [loading, setLoading] = useState(true)
-  const [totalBookings, setTotalBookings] = useState(0)
-  const [upcomingTrips, setUpcomingTrips] = useState(0)
-  const [wishlistCount, setWishlistCount] = useState(0)
-  const [totalSpent, setTotalSpent] = useState(0)
-  const [upcomingBookings, setUpcomingBookings] = useState<BookingItem[]>([])
-  const [recentTransactions, setRecentTransactions] = useState<TransactionItem[]>([])
-  const [spendChart, setSpendChart] = useState<Record<string, unknown>[]>([])
+  const [data, setData] = useState<GuestDashboardData | null>(null)
 
   useEffect(() => {
     let mounted = true
     ;(async () => {
       try {
-        const [bookingsRes, upcomingRes, wishlistRes, statsRes, transRes] = await Promise.all([
-          bookingAPI.getMyBookings({ page: 1, limit: 1 }),
-          bookingAPI.getMyBookings({ page: 1, limit: 3, status: "confirmed" }),
-          getWishlist().catch(() => ({ success: false as const, data: [] as unknown as Record<string, unknown> })),
-          transactionAPI.getTransactionStats(),
-          transactionAPI.getMyTransactions({ page: 1, limit: 5 }),
-        ])
+        const res = await getGuestDashboard()
         if (!mounted) return
-
-        setTotalBookings(bookingsRes.data.pagination.total)
-        setUpcomingTrips(upcomingRes.data.pagination.total)
-        setUpcomingBookings(upcomingRes.data.bookings)
-
-        if (wishlistRes.success) {
-          const wishlistData = wishlistRes.data as { items?: unknown[] }
-          setWishlistCount(wishlistData?.items?.length || 0)
+        if (res.success && res.data) {
+          setData(res.data)
+        } else {
+          toast.error(res.message || "Failed to load dashboard")
         }
-
-        setTotalSpent(statsRes.data?.totalSpend || 0)
-        setRecentTransactions(transRes.data?.transactions || [])
-
-        const monthlySpend: Record<string, number> = {}
-        const now = new Date()
-        ;(transRes.data?.transactions || [])
-          .filter((t: TransactionItem) => t.type === "payment" && t.status === "success")
-          .forEach((t: TransactionItem) => {
-            const d = new Date(t.createdAt)
-            if (d.getFullYear() === now.getFullYear()) {
-              const key = `${MONTHS[d.getMonth()]}`
-              monthlySpend[key] = (monthlySpend[key] || 0) + t.amount
-            }
-          })
-
-        setSpendChart(
-          MONTHS.map((m) => ({
-            name: m,
-            spend: monthlySpend[m] || 0,
-          })),
-        )
       } catch {
         if (!mounted) return
         toast.error("Failed to load dashboard data")
@@ -100,131 +58,66 @@ export default function GuestMainPage() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <StatCard
-              label="Total Bookings"
-              value={totalBookings}
-              gradient="from-violet-500 to-indigo-600"
-              prefix=""
-              formatter={(v) => String(v)}
-              icon={<CalendarDays className="h-5 w-5 text-white" />}
-            />
-            <StatCard
-              label="Upcoming Trips"
-              value={upcomingTrips}
-              gradient="from-emerald-500 to-teal-600"
-              prefix=""
-              formatter={(v) => String(v)}
-              icon={<MapPin className="h-5 w-5 text-white" />}
-            />
-            <StatCard
-              label="Wishlist Items"
-              value={wishlistCount}
-              gradient="from-rose-500 to-pink-600"
-              prefix=""
-              formatter={(v) => String(v)}
-              icon={<Heart className="h-5 w-5 text-white" />}
-            />
-            <StatCard
-              label="Total Spent"
-              value={totalSpent}
-              gradient="from-amber-500 to-orange-600"
-              icon={<CreditCard className="h-5 w-5 text-white" />}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            {spendChart.some((d) => Number(d.spend || 0) > 0) && (
-              <ChartCard
-                title="Monthly Spending"
-                data={spendChart}
-                type="area"
-                dataKey="spend"
-                height={220}
-                gradient
-              />
-            )}
-
-            {upcomingBookings.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm"
-              >
-                <div className="mb-4 flex items-center justify-between">
-                  <h3 className="text-sm font-semibold text-gray-900">Upcoming Trips</h3>
-                  <Link
-                    href="/dashboard/guest/bookings"
-                    className="text-xs font-medium text-violet-600 hover:text-violet-700"
-                  >
-                    View all
-                  </Link>
-                </div>
-                <div className="space-y-3">
-                  {upcomingBookings.map((b) => (
-                    <Link
-                      key={b._id}
-                      href={`/dashboard/guest/bookings`}
-                      className="flex items-center gap-3 rounded-xl border border-gray-50 bg-gray-50/50 p-3 transition-colors hover:bg-gray-100"
-                    >
-                      <div className="h-12 w-16 shrink-0 overflow-hidden rounded-lg">
-                        <img
-                          src={b.propertyImage || "/placeholder.svg"}
-                          alt={b.propertyTitle}
-                          className="h-full w-full object-cover"
-                          onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg" }}
-                        />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-medium text-gray-900">{b.propertyTitle}</p>
-                        <p className="text-xs text-gray-400">
-                          {new Date(b.checkIn).toLocaleDateString()} – {new Date(b.checkOut).toLocaleDateString()}
-                        </p>
-                      </div>
-                      <ArrowRight className="h-4 w-4 shrink-0 text-gray-300" />
-                    </Link>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </div>
-
-          {recentTransactions.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm"
-            >
-              <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-gray-900">Recent Transactions</h3>
-                <Link
-                  href="/dashboard/guest/transactions"
-                  className="text-xs font-medium text-violet-600 hover:text-violet-700"
-                >
-                  View all
-                </Link>
+          {data && (
+            <>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <StatCard label="Total Bookings" value={data.totalBookings} gradient="from-violet-500 to-indigo-600" prefix="" formatter={(v) => String(v)} icon={<CalendarDays className="h-5 w-5 text-white" />} />
+                <StatCard label="Upcoming Trips" value={data.upcomingTrips} gradient="from-emerald-500 to-teal-600" prefix="" formatter={(v) => String(v)} icon={<MapPin className="h-5 w-5 text-white" />} />
+                <StatCard label="Wishlist Items" value={data.wishlistCount} gradient="from-rose-500 to-pink-600" prefix="" formatter={(v) => String(v)} icon={<Heart className="h-5 w-5 text-white" />} />
+                <StatCard label="Total Spent" value={data.totalSpent} gradient="from-amber-500 to-orange-600" icon={<CreditCard className="h-5 w-5 text-white" />} />
               </div>
-              <div className="space-y-2">
-                {recentTransactions.slice(0, 5).map((t) => (
-                  <div
-                    key={t._id}
-                    className="flex items-center justify-between rounded-lg px-3 py-2 text-sm"
-                  >
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate font-medium text-gray-900">{t.description || t.type}</p>
-                      <p className="text-xs text-gray-400">
-                        {new Date(t.createdAt).toLocaleDateString()} · {t.type}
-                      </p>
+
+              <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                {data.monthlySpend?.some((d) => d.spend > 0) && (
+                  <ChartCard title="Monthly Spending" data={data.monthlySpend as unknown as Record<string, unknown>[]} type="area" dataKey="spend" height={220} gradient />
+                )}
+
+                {data.upcomingBookings?.length > 0 && (
+                  <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+                    <div className="mb-4 flex items-center justify-between">
+                      <h3 className="text-sm font-semibold text-gray-900">Upcoming Trips</h3>
+                      <Link href="/dashboard/guest/bookings" className="text-xs font-medium text-violet-600 hover:text-violet-700">View all</Link>
                     </div>
-                    <span className={`ml-3 shrink-0 font-semibold ${
-                      t.type === "payment" ? "text-red-500" : "text-emerald-500"
-                    }`}>
-                      {t.type === "payment" ? "-" : "+"}${t.amount.toFixed(2)}
-                    </span>
-                  </div>
-                ))}
+                    <div className="space-y-3">
+                      {(data.upcomingBookings as Record<string, unknown>[]).map((b: Record<string, unknown>) => (
+                        <Link key={b._id as string} href="/dashboard/guest/bookings" className="flex items-center gap-3 rounded-xl border border-gray-50 bg-gray-50/50 p-3 transition-colors hover:bg-gray-100">
+                          <div className="h-12 w-16 shrink-0 overflow-hidden rounded-lg">
+                            <img src={(b.propertyImage as string) || "/placeholder.svg"} alt={b.propertyTitle as string} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg" }} />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-medium text-gray-900">{b.propertyTitle as string}</p>
+                            <p className="text-xs text-gray-400">{new Date(b.checkIn as string).toLocaleDateString()} – {new Date(b.checkOut as string).toLocaleDateString()}</p>
+                          </div>
+                          <ArrowRight className="h-4 w-4 shrink-0 text-gray-300" />
+                        </Link>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
               </div>
-            </motion.div>
+
+              {data.recentTransactions?.length > 0 && (
+                <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+                  <div className="mb-4 flex items-center justify-between">
+                    <h3 className="text-sm font-semibold text-gray-900">Recent Transactions</h3>
+                    <Link href="/dashboard/guest/transactions" className="text-xs font-medium text-violet-600 hover:text-violet-700">View all</Link>
+                  </div>
+                  <div className="space-y-2">
+                    {(data.recentTransactions as Record<string, unknown>[]).slice(0, 5).map((t: Record<string, unknown>) => (
+                      <div key={t._id as string} className="flex items-center justify-between rounded-lg px-3 py-2 text-sm">
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate font-medium text-gray-900">{(t.description as string) || (t.type as string)}</p>
+                          <p className="text-xs text-gray-400">{new Date(t.createdAt as string).toLocaleDateString()} · {t.type as string}</p>
+                        </div>
+                        <span className={`ml-3 shrink-0 font-semibold ${t.type === "payment" ? "text-red-500" : "text-emerald-500"}`}>
+                          {t.type === "payment" ? "-" : "+"}${(t.amount as number).toFixed(2)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </>
           )}
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

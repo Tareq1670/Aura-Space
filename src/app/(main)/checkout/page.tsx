@@ -38,7 +38,8 @@ export default async function CheckoutPage({ searchParams }: PageProps) {
   const pricePerNight = property.price?.perNight || property.price || 0
   const subtotal = pricePerNight * nights
   const cleaningFee = property.price?.cleaningFee || 0
-  const serviceFee = Math.round(subtotal * 0.08)
+  const feePercent = Number(process.env.NEXT_PUBLIC_PLATFORM_FEE_PERCENT) || 10
+  const serviceFee = Math.round(subtotal * (feePercent / 100))
   const total = subtotal + cleaningFee + serviceFee
 
   return (

@@ -1,12 +1,14 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { Tabs, TabList, Tab } from "@heroui/react"
 import { toast } from "sonner"
 import BookingCard from "@/Components/Booking/BookingCard"
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal"
 import { bookingAPI, type BookingItem } from "@/lib/api/Guest/booking-api"
+import { startConversation } from "@/lib/actions/message"
 
 const TABS = ["All", "Upcoming", "Completed", "Cancelled"]
 const STATUS_MAP: Record<string, string | undefined> = {
@@ -17,6 +19,7 @@ const STATUS_MAP: Record<string, string | undefined> = {
 }
 
 export default function GuestBookingsPage() {
+  const router = useRouter()
   const [bookings, setBookings] = useState<BookingItem[]>([])
   const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState("All")
@@ -26,6 +29,7 @@ export default function GuestBookingsPage() {
   const [cancelId, setCancelId] = useState<string | null>(null)
   const [detail, setDetail] = useState<BookingItem | null>(null)
   const [cancelling, setCancelling] = useState(false)
+  const [messaging, setMessaging] = useState<string | null>(null)
   const [refreshKey, setRefreshKey] = useState(0)
   const limit = 10
 
@@ -53,6 +57,25 @@ export default function GuestBookingsPage() {
     })()
     return () => { mounted = false }
   }, [page, tab, search, refreshKey])
+  async function handleContactHost(booking: BookingItem) {
+    const hostId = booking.host?.id || booking.hostId
+    if (!hostId || messaging) return
+    setMessaging(booking._id)
+    try {
+      const res = await startConversation(hostId, booking._id, booking.propertyId)
+      if (res.success) {
+        toast.success("Conversation started with host")
+        router.push("/dashboard/guest/messages")
+      } else {
+        toast.error(res.error || "Failed to start conversation")
+      }
+    } catch {
+      toast.error("Something went wrong")
+    } finally {
+      setMessaging(null)
+    }
+  }
+
   async function handleCancel() {
     if (!cancelId) return
     setCancelling(true)
@@ -122,7 +145,7 @@ export default function GuestBookingsPage() {
             {bookings.map((b) => (
               <motion.div key={b._id} layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
                 <div onClick={() => setDetail(b)} className="cursor-pointer">
-                  <BookingCard booking={b} onCancel={setCancelId} />
+                  <BookingCard booking={b} onCancel={setCancelId} onMessage={handleContactHost} messageLoading={messaging === b._id} />
                 </div>
               </motion.div>
             ))}

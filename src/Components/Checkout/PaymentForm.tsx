@@ -42,6 +42,7 @@ export function PaymentForm({ bookingId }: Props) {
     if (paymentIntent?.status === "succeeded") {
       if (typeof window !== "undefined") {
         localStorage.removeItem("property_draft")
+        sessionStorage.clear()
       }
       toast.success("Payment successful! Booking confirmed.")
       router.push(`/checkout/success?payment_intent=${paymentIntent.id}`)
