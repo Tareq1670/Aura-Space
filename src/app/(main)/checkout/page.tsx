@@ -21,14 +21,18 @@ export default async function CheckoutPage({ searchParams }: PageProps) {
     "http://localhost:5000"
   ).replace(/\/$/, "")
 
-  const res = await fetch(`${SERVER_URL}/api/properties/${propertyId}`, {
-    cache: "no-store",
-  })
-
-  if (!res.ok) return notFound()
-
-  const data = await res.json()
-  const property = data?.data?.property
+  let property: Record<string, any> | null = null
+  try {
+    const res = await fetch(`${SERVER_URL}/api/properties/${propertyId}`, {
+      cache: "no-store",
+    })
+    if (res.ok) {
+      const data = await res.json()
+      property = data?.data?.property ?? null
+    }
+  } catch {
+    // backend unreachable — fall through to notFound
+  }
 
   if (!property) return notFound()
 

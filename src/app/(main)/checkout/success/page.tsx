@@ -44,7 +44,7 @@ export default async function SuccessPage({ searchParams }: Props) {
   const bookingId = session.metadata?.bookingId
 
   return (
-    <div className="flex min-h-[60vh] items-center justify-center px-4">
+    <div className="flex min-h-[95vh] items-center justify-center px-4">
       <div className="w-full max-w-lg text-center">
         <div className="mb-6 flex justify-center">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">

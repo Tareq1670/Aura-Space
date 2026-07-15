@@ -127,6 +127,10 @@ export default function PropertyDetailPage() {
     }
 
     function validateAndGetBookingUrl(): string | null {
+        if (!property) {
+            setBookingError("Property not found");
+            return null;
+        }
         if (!checkIn || !checkOut || !guests) {
             setBookingError("Please select dates and number of guests");
             return null;
@@ -139,8 +143,8 @@ export default function PropertyDetailPage() {
             setBookingError("At least 1 guest required");
             return null;
         }
-        if (details && guests > (details.maxGuests || 99)) {
-            setBookingError(`Maximum ${details.maxGuests} guests allowed`);
+        if (property.details && guests > (property.details.maxGuests || 99)) {
+            setBookingError(`Maximum ${property.details.maxGuests} guests allowed`);
             return null;
         }
         setBookingError(null);
@@ -748,12 +752,16 @@ export default function PropertyDetailPage() {
                                         onClick={async () => {
                                             const url = validateAndGetBookingUrl();
                                             if (!url) return;
-                                            const session = await authClient.getSession();
-                                            if (!session?.data?.user) {
+                                            try {
+                                                const session = await authClient.getSession();
+                                                if (!session?.data?.user) {
+                                                    router.push(`/login?redirect=${encodeURIComponent(url)}`);
+                                                    return;
+                                                }
+                                                router.push(url);
+                                            } catch {
                                                 router.push(`/login?redirect=${encodeURIComponent(url)}`);
-                                                return;
                                             }
-                                            router.push(url);
                                         }}
                                         className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-600/20 transition-all hover:bg-indigo-700 hover:shadow-xl hover:shadow-indigo-600/30"
                                     >
@@ -924,12 +932,16 @@ export default function PropertyDetailPage() {
                             onClick={async () => {
                                 const url = validateAndGetBookingUrl();
                                 if (!url) return;
-                                const session = await authClient.getSession();
-                                if (!session?.data?.user) {
+                                try {
+                                    const session = await authClient.getSession();
+                                    if (!session?.data?.user) {
+                                        router.push(`/login?redirect=${encodeURIComponent(url)}`);
+                                        return;
+                                    }
+                                    router.push(url);
+                                } catch {
                                     router.push(`/login?redirect=${encodeURIComponent(url)}`);
-                                    return;
                                 }
-                                router.push(url);
                             }}
                             className="rounded-xl bg-indigo-600 px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-indigo-600/20 transition-colors hover:bg-indigo-700"
                         >
