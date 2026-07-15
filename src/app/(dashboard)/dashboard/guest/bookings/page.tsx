@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Tabs, Tab } from "@heroui/react"
+import { Tabs, TabList, Tab } from "@heroui/react"
 import { toast } from "sonner"
 import BookingCard from "@/Components/Booking/BookingCard"
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal"
@@ -84,9 +84,11 @@ export default function GuestBookingsPage() {
           selectedKey={tab}
           onSelectionChange={(k) => setTab(String(k))}
         >
-          {TABS.map((t) => (
-            <Tab key={t} id={t}>{t}</Tab>
-          ))}
+          <TabList>
+            {TABS.map((t) => (
+              <Tab key={t} id={t}>{t}</Tab>
+            ))}
+          </TabList>
         </Tabs>
 
         <div className="w-full sm:w-64">

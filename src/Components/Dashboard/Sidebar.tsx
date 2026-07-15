@@ -186,6 +186,11 @@ const NAV_LINKS: Record<RoleKey, NavSection[]> = {
                     icon: HiBanknotes,
                 },
                 {
+                    label: "Payout Settings",
+                    href: "/dashboard/host/payout-settings",
+                    icon: HiCog6Tooth,
+                },
+                {
                     label: "Analytics",
                     href: "/dashboard/host/analytics",
                     icon: HiPresentationChartLine,
@@ -544,7 +549,7 @@ const SidebarInner = ({
                 </nav>
 
                 <div className="relative flex-shrink-0 border-t border-white/[0.06]">
-                    <div className="border-t border-white/[0.06] p-3">
+                    <div className="p-3 pb-1">
                         <div className={`flex items-center rounded-xl bg-gradient-to-br from-violet-500/[0.08] to-indigo-500/[0.06] border border-violet-500/[0.15] backdrop-blur-sm ${
                             showLabels ? "gap-3 p-2.5" : "p-1.5 justify-center"
                         }`}>
@@ -581,6 +586,25 @@ const SidebarInner = ({
                             )}
                         </div>
                     </div>
+
+                    <div className="px-3 pb-3">
+                        <button
+                            onClick={handleLogout}
+                            disabled={isLoggingOut}
+                            className={`flex items-center rounded-xl transition-colors duration-200 w-full ${
+                                showLabels ? "gap-3 px-3 py-2.5" : "p-2.5 justify-center"
+                            } text-white/50 hover:text-red-400 hover:bg-red-500/10`}
+                        >
+                            <HiArrowRightOnRectangle className={`transition-colors duration-200 ${
+                                showLabels ? "w-[18px] h-[18px]" : "w-5 h-5"
+                            }`} />
+                            {showLabels && (
+                                <span className="flex-1 text-left text-sm font-medium whitespace-nowrap truncate">
+                                    {isLoggingOut ? "Logging out..." : "Logout"}
+                                </span>
+                            )}
+                        </button>
+                    </div>
                 </div>
             </div>
         );
@@ -604,21 +628,12 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
         if (isLoggingOut) return;
         setIsLoggingOut(true);
         try {
-            await authClient.signOut({
-                fetchOptions: {
-                    onSuccess: () => {
-                        router.push("/login");
-                    },
-                    onError: () => {
-                        router.push("/login");
-                    },
-                },
-            });
+            await authClient.signOut();
         } catch {
-            router.push("/login");
-        } finally {
-            setIsLoggingOut(false);
+            // ignore — redirect regardless
         }
+        const redirect = encodeURIComponent(pathname);
+        window.location.href = `/login?redirect=${redirect}`;
     };
 
     const toggleMinimize = () => setIsMinimized((prev) => !prev);

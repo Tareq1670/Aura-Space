@@ -154,24 +154,12 @@ export default function Navbar() {
     setIsMobileMenuOpen(false);
 
     try {
-      await authClient.signOut({
-        fetchOptions: {
-          onSuccess: () => {
-            router.push("/login");
-            router.refresh();
-          },
-          onError: () => {
-            router.push("/login");
-            router.refresh();
-          },
-        },
-      });
+      await authClient.signOut();
     } catch {
-      router.push("/login");
-      router.refresh();
-    } finally {
-      setIsSigningOut(false);
+      // ignore — redirect regardless
     }
+    const redirect = encodeURIComponent(pathname);
+    window.location.href = `/login?redirect=${redirect}`;
   };
 
   const isActive = (href: string) => {

@@ -9,9 +9,17 @@ interface Props {
   value: string | number
   trend?: { label: string; positive: boolean }
   gradient: string
+  prefix?: string
+  formatter?: (value: number) => string
 }
 
-export default function StatCard({ icon, label, value, trend, gradient }: Props) {
+export default function StatCard({ icon, label, value, trend, gradient, prefix = "$", formatter }: Props) {
+  const displayValue = typeof value === "number"
+    ? formatter
+      ? formatter(value)
+      : `${prefix}${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+    : value
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -19,12 +27,12 @@ export default function StatCard({ icon, label, value, trend, gradient }: Props)
       className={`rounded-2xl bg-gradient-to-br ${gradient} p-5 text-white shadow-lg`}
     >
       <div className="flex items-start justify-between">
-        <div>
-          <p className="text-sm font-medium text-white/70">{label}</p>
-          <p className="mt-1 text-2xl font-bold">${Number(value).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-medium text-white/70">{label}</p>
+          <p className="mt-1 truncate text-2xl font-bold">{displayValue}</p>
         </div>
         {icon && (
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20">
+          <div className="ml-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/20">
             {icon}
           </div>
         )}
