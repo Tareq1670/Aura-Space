@@ -173,7 +173,7 @@ export default function AdminTransactionsPage() {
               selectedKey={typeFilter}
               onSelectionChange={(key) => setTypeFilter((key as string) || "")}
             >
-              <Label>Type</Label>
+
               <Select.Trigger>
                 <Select.Value />
                 <Select.Indicator />
@@ -195,7 +195,7 @@ export default function AdminTransactionsPage() {
               selectedKey={statusFilter}
               onSelectionChange={(key) => setStatusFilter((key as string) || "")}
             >
-              <Label>Status</Label>
+ 
               <Select.Trigger>
                 <Select.Value />
                 <Select.Indicator />
@@ -217,7 +217,7 @@ export default function AdminTransactionsPage() {
               selectedKey={methodFilter}
               onSelectionChange={(key) => setMethodFilter((key as string) || "")}
             >
-              <Label>Method</Label>
+
               <Select.Trigger>
                 <Select.Value />
                 <Select.Indicator />

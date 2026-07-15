@@ -36,7 +36,7 @@ export async function requireAdmin() {
 export async function requireHost() {
     const session = await requireAuth();
 
-    if (session.user.role !== "host" && session.user.role !== "admin") {
+    if (session.user.role !== "host") {
         redirect("/unauthorized");
     }
 
@@ -46,7 +46,7 @@ export async function requireHost() {
 export async function requireGuest() {
     const session = await requireAuth();
 
-    if (session.user.role !== "guest" && session.user.role !== "admin") {
+    if (session.user.role !== "guest") {
         redirect("/unauthorized");
     }
 
@@ -55,4 +55,15 @@ export async function requireGuest() {
 
 export async function requireAnyRole() {
     return await requireAuth();
+}
+
+export async function requireRole(allowedRoles: string[]) {
+    const session = await requireAuth();
+    const role = session.user.role ?? "";
+
+    if (!allowedRoles.includes(role)) {
+        redirect("/unauthorized");
+    }
+
+    return session;
 }

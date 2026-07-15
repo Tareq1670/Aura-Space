@@ -56,13 +56,31 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     const sessionUser = data?.user;
 
     useEffect(() => {
-        if (!isPending && !sessionUser) {
+        if (isPending) return;
+
+        if (!sessionUser) {
             const currentPath = `${window.location.pathname}${window.location.search}`;
             router.replace(
                 `/login?redirect=${encodeURIComponent(currentPath)}`,
             );
+            return;
         }
-    }, [sessionUser, isPending, router]);
+
+        const role = (sessionUser as { role?: string }).role ?? "guest";
+        const path = pathname;
+
+        const isGuestRoute = path.startsWith("/dashboard/guest/");
+        const isHostRoute = path.startsWith("/dashboard/host/");
+        const isAdminRoute = path.startsWith("/dashboard/admin/");
+
+        if (role === "guest" && (isHostRoute || isAdminRoute)) {
+            router.replace("/dashboard/guest/main");
+        } else if (role === "host" && (isGuestRoute || isAdminRoute)) {
+            router.replace("/dashboard/host/main");
+        } else if (role === "admin" && (isGuestRoute || isHostRoute)) {
+            router.replace("/dashboard/admin/main");
+        }
+    }, [sessionUser, isPending, router, pathname]);
 
     const prevPath = useRef(pathname);
     useEffect(() => {
