@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
 import { DollarSign, TrendingUp, Clock, Users, Trophy, Building2 } from "lucide-react"
@@ -107,28 +107,31 @@ export default function AdminRevenuePage() {
     return { revenueData: rev, topHosts: hosts, topProperties: props }
   }
 
-  const fetchStats = useCallback(async () => {
-    setLoading(true)
-    try {
-      const [statsRes, txnRes] = await Promise.all([
-        transactionAPI.getTransactionStats(),
-        transactionAPI.getAdminTransactions({ page: 1, limit: 500 }),
-      ])
-      if (statsRes.success && statsRes.data) setStats(statsRes.data as any)
-      if (txnRes.success && txnRes.data?.transactions) {
-        const agg = aggregateData(txnRes.data.transactions)
-        setRevenueData(agg.revenueData)
-        setTopHosts(agg.topHosts)
-        setTopProperties(agg.topProperties)
+  useEffect(() => {
+    let mounted = true
+    ;(async () => {
+      try {
+        const [statsRes, txnRes] = await Promise.all([
+          transactionAPI.getTransactionStats(),
+          transactionAPI.getAdminTransactions({ page: 1, limit: 500 }),
+        ])
+        if (!mounted) return
+        if (statsRes.success && statsRes.data) setStats(statsRes.data as any)
+        if (txnRes.success && txnRes.data?.transactions) {
+          const agg = aggregateData(txnRes.data.transactions)
+          setRevenueData(agg.revenueData)
+          setTopHosts(agg.topHosts)
+          setTopProperties(agg.topProperties)
+        }
+      } catch (err: any) {
+        if (!mounted) return
+        toast.error(err.message || "Failed to load revenue data")
+      } finally {
+        if (mounted) setLoading(false)
       }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to load revenue data")
-    } finally {
-      setLoading(false)
-    }
+    })()
+    return () => { mounted = false }
   }, [])
-
-  useEffect(() => { fetchStats() }, [fetchStats])
 
   const period = chartPeriod || "monthly"
 

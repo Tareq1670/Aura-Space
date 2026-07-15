@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { Select, ListBox } from "@heroui/react"
 import { toast } from "sonner"
@@ -21,25 +21,30 @@ export default function AdminBookingsPage() {
   const [cancelId, setCancelId] = useState<string | null>(null)
   const [processing, setProcessing] = useState(false)
 
-  const fetchBookings = useCallback(async () => {
-    setLoading(true)
-    try {
-      const res = await bookingAPI.getAdminBookings({
-        status: statusFilter !== "all" ? statusFilter : undefined,
-        search: search || undefined,
-        limit: 100,
-      })
-      if (res.success && res.data) {
-        setBookings(res.data.bookings)
-      }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to load bookings")
-    } finally {
-      setLoading(false)
-    }
-  }, [statusFilter, search])
+  const [refreshKey, setRefreshKey] = useState(0)
 
-  useEffect(() => { fetchBookings() }, [fetchBookings])
+  useEffect(() => {
+    let mounted = true
+    ;(async () => {
+      try {
+        const res = await bookingAPI.getAdminBookings({
+          status: statusFilter !== "all" ? statusFilter : undefined,
+          search: search || undefined,
+          limit: 100,
+        })
+        if (!mounted) return
+        if (res.success && res.data) {
+          setBookings(res.data.bookings)
+        }
+      } catch (err: any) {
+        if (!mounted) return
+        toast.error(err.message || "Failed to load bookings")
+      } finally {
+        if (mounted) setLoading(false)
+      }
+    })()
+    return () => { mounted = false }
+  }, [statusFilter, search, refreshKey])
 
   async function handleForceCancel() {
     if (!cancelId) return
@@ -49,7 +54,7 @@ export default function AdminBookingsPage() {
       if (res.success) {
         toast.success("Booking force cancelled")
         setCancelId(null)
-        fetchBookings()
+        setRefreshKey(k => k + 1)
       } else {
         toast.error("Failed to cancel booking")
       }

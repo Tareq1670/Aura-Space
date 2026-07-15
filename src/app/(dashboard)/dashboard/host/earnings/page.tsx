@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { toast } from "sonner"
 import { DollarSign, TrendingUp, Clock, Wallet, X } from "lucide-react"
@@ -62,35 +62,40 @@ export default function HostEarningsPage() {
     }))
   }
 
-  const fetchAll = useCallback(async () => {
-    setLoading(true)
-    try {
-      const [statsRes, payoutRes, txnRes, allRes] = await Promise.all([
-        transactionAPI.getTransactionStats(),
-        transactionAPI.getPayoutHistory({ page: payoutPage, limit }),
-        transactionAPI.getHostTransactions({ page: txnPage, limit }),
-        transactionAPI.getHostTransactions({ page: 1, limit: 500 }),
-      ])
-      if (statsRes.success && statsRes.data) setStats(statsRes.data as any)
-      if (payoutRes.success && payoutRes.data) {
-        setPayouts(payoutRes.data.transactions)
-        setPayoutTotal(payoutRes.data.pagination.total)
-      }
-      if (txnRes.success && txnRes.data) {
-        setTransactions(txnRes.data.transactions)
-        setTxnTotal(txnRes.data.pagination.total)
-      }
-      if (allRes.success && allRes.data?.transactions) {
-        setChartData(buildChartData(allRes.data.transactions))
-      }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to load earnings")
-    } finally {
-      setLoading(false)
-    }
-  }, [payoutPage, txnPage])
+  const [refreshKey, setRefreshKey] = useState(0)
 
-  useEffect(() => { fetchAll() }, [fetchAll])
+  useEffect(() => {
+    let mounted = true
+    ;(async () => {
+      try {
+        const [statsRes, payoutRes, txnRes, allRes] = await Promise.all([
+          transactionAPI.getTransactionStats(),
+          transactionAPI.getPayoutHistory({ page: payoutPage, limit }),
+          transactionAPI.getHostTransactions({ page: txnPage, limit }),
+          transactionAPI.getHostTransactions({ page: 1, limit: 500 }),
+        ])
+        if (!mounted) return
+        if (statsRes.success && statsRes.data) setStats(statsRes.data as any)
+        if (payoutRes.success && payoutRes.data) {
+          setPayouts(payoutRes.data.transactions)
+          setPayoutTotal(payoutRes.data.pagination.total)
+        }
+        if (txnRes.success && txnRes.data) {
+          setTransactions(txnRes.data.transactions)
+          setTxnTotal(txnRes.data.pagination.total)
+        }
+        if (allRes.success && allRes.data?.transactions) {
+          setChartData(buildChartData(allRes.data.transactions))
+        }
+      } catch (err: any) {
+        if (!mounted) return
+        toast.error(err.message || "Failed to load earnings")
+      } finally {
+        if (mounted) setLoading(false)
+      }
+    })()
+    return () => { mounted = false }
+  }, [payoutPage, txnPage, refreshKey])
 
   async function handleRequestPayout() {
     setRequesting(true)
@@ -99,7 +104,7 @@ export default function HostEarningsPage() {
       if (res.success) {
         toast.success("Withdrawal requested. Admin will review it.")
         setShowRequestModal(false)
-        fetchAll()
+        setRefreshKey(k => k + 1)
       } else {
         toast.error(res.message || "Failed to request payout")
       }

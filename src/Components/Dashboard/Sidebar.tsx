@@ -22,7 +22,6 @@ import {
     HiXMark,
     HiSparkles,
     HiMagnifyingGlass,
-    HiArrowUpRight,
     HiBanknotes,
     HiStar,
     HiBellAlert,
@@ -304,7 +303,6 @@ const roleConfig: Record<RoleKey, { label: string; gradient: string }> = {
 
 const SidebarInner = ({
     user,
-    role,
     currentRole,
     navSections,
     isMinimized,
@@ -651,7 +649,6 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
 
     const sidebarProps = {
         user,
-        role,
         currentRole,
         navSections: filteredSections,
         isMinimized,

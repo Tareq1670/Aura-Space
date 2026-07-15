@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback, useMemo } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Select, ListBox, Skeleton } from "@heroui/react"
 import { toast } from "sonner"
@@ -171,30 +171,34 @@ export default function AdminPropertiesPage() {
     const [deleteId, setDeleteId] = useState<string | null>(null)
     const [processing, setProcessing] = useState(false)
     const [detailsModalOpen, setDetailsModalOpen] = useState(false)
+    const [refreshKey, setRefreshKey] = useState(0)
 
-    const fetchProperties = useCallback(async () => {
-        setLoading(true)
-        try {
-            const res = await getAdminProperties({
-                status: statusFilter !== "all" ? statusFilter : undefined,
-                category: categoryFilter !== "all" ? categoryFilter : undefined,
-                search: search || undefined,
-                limit: 100,
-            })
-            if (res.success && res.data) {
-                setProperties((res.data.properties as PropertyRecord[]) || [])
-                setStats((res.data.stats as Record<string, number>) || {})
-            } else {
-                toast.error(res.message || "Failed to load properties")
+    useEffect(() => {
+        let mounted = true
+        ;(async () => {
+            try {
+                const res = await getAdminProperties({
+                    status: statusFilter !== "all" ? statusFilter : undefined,
+                    category: categoryFilter !== "all" ? categoryFilter : undefined,
+                    search: search || undefined,
+                    limit: 100,
+                })
+                if (!mounted) return
+                if (res.success && res.data) {
+                    setProperties((res.data.properties as PropertyRecord[]) || [])
+                    setStats((res.data.stats as Record<string, number>) || {})
+                } else {
+                    toast.error(res.message || "Failed to load properties")
+                }
+            } catch (err: any) {
+                if (!mounted) return
+                toast.error(err.message || "Failed to load properties")
+            } finally {
+                if (mounted) setLoading(false)
             }
-        } catch (err: any) {
-            toast.error(err.message || "Failed to load properties")
-        } finally {
-            setLoading(false)
-        }
-    }, [statusFilter, categoryFilter, search])
-
-    useEffect(() => { fetchProperties() }, [fetchProperties])
+        })()
+        return () => { mounted = false }
+    }, [statusFilter, categoryFilter, search, refreshKey])
 
     const pendingProperties = useMemo(
         () => properties.filter((p) => p.status === "pending"),
@@ -209,7 +213,7 @@ export default function AdminPropertiesPage() {
             if (res.success) {
                 toast.success("Property approved and published")
                 setApproveId(null)
-                fetchProperties()
+                setRefreshKey(k => k + 1)
             } else {
                 toast.error(res.message || "Failed to approve property")
             }
@@ -218,7 +222,7 @@ export default function AdminPropertiesPage() {
         } finally {
             setProcessing(false)
         }
-    }, [approveId, fetchProperties])
+    }, [approveId])
 
     const handleReject = useCallback(async () => {
         if (!rejectId || !rejectReason.trim()) return
@@ -229,7 +233,7 @@ export default function AdminPropertiesPage() {
                 toast.success("Property rejected")
                 setRejectId(null)
                 setRejectReason("")
-                fetchProperties()
+                setRefreshKey(k => k + 1)
             } else {
                 toast.error(res.message || "Failed to reject property")
             }
@@ -238,7 +242,7 @@ export default function AdminPropertiesPage() {
         } finally {
             setProcessing(false)
         }
-    }, [rejectId, rejectReason, fetchProperties])
+    }, [rejectId, rejectReason])
 
     const handleToggleFeatured = useCallback(async (id: string, current: boolean) => {
         setFeaturedLoading(id)
@@ -267,7 +271,7 @@ export default function AdminPropertiesPage() {
             if (res.success) {
                 toast.success("Property permanently deleted")
                 setDeleteId(null)
-                fetchProperties()
+                setRefreshKey(k => k + 1)
             } else {
                 toast.error(res.message || "Failed to delete property")
             }
@@ -276,7 +280,7 @@ export default function AdminPropertiesPage() {
         } finally {
             setProcessing(false)
         }
-    }, [deleteId, fetchProperties])
+    }, [deleteId])
 
     const handleExport = useCallback(() => {
         const data = properties.map((p) => ({

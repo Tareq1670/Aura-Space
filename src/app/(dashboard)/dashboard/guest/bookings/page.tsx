@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Tabs, TabList, Tab } from "@heroui/react"
 import { toast } from "sonner"
@@ -26,31 +26,33 @@ export default function GuestBookingsPage() {
   const [cancelId, setCancelId] = useState<string | null>(null)
   const [detail, setDetail] = useState<BookingItem | null>(null)
   const [cancelling, setCancelling] = useState(false)
+  const [refreshKey, setRefreshKey] = useState(0)
   const limit = 10
 
-  const fetchBookings = useCallback(async () => {
-    setLoading(true)
-    try {
-      const res = await bookingAPI.getMyBookings({
-        page,
-        limit,
-        status: STATUS_MAP[tab],
-        search: search || undefined,
-      })
-      if (res.success && res.data) {
-        setBookings(res.data.bookings)
-        setTotal(res.data.pagination.total)
+  useEffect(() => {
+    let mounted = true
+    ;(async () => {
+      try {
+        const res = await bookingAPI.getMyBookings({
+          page,
+          limit,
+          status: STATUS_MAP[tab],
+          search: search || undefined,
+        })
+        if (!mounted) return
+        if (res.success && res.data) {
+          setBookings(res.data.bookings)
+          setTotal(res.data.pagination.total)
+        }
+      } catch (err: any) {
+        if (!mounted) return
+        toast.error(err.message || "Failed to load bookings")
+      } finally {
+        if (mounted) setLoading(false)
       }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to load bookings")
-    } finally {
-      setLoading(false)
-    }
-  }, [page, tab, search])
-
-  useEffect(() => { fetchBookings() }, [fetchBookings])
-  useEffect(() => { setPage(1) }, [tab, search])
-
+    })()
+    return () => { mounted = false }
+  }, [page, tab, search, refreshKey])
   async function handleCancel() {
     if (!cancelId) return
     setCancelling(true)
@@ -59,7 +61,7 @@ export default function GuestBookingsPage() {
       if (res.success) {
         toast.success("Booking cancelled")
         setCancelId(null)
-        fetchBookings()
+        setRefreshKey(k => k + 1)
       } else {
         toast.error("Failed to cancel booking")
       }
@@ -82,7 +84,7 @@ export default function GuestBookingsPage() {
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <Tabs
           selectedKey={tab}
-          onSelectionChange={(k) => setTab(String(k))}
+          onSelectionChange={(k) => { setTab(String(k)); setPage(1); }}
         >
           <TabList>
             {TABS.map((t) => (

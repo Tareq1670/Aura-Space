@@ -22,17 +22,11 @@ import {
     WashingMachine,
     Dumbbell,
     ShieldCheck,
-    Snowflake,
     Coffee,
-    Bath,
     Heater,
     Monitor,
     Laptop,
-    Lock,
     Cigarette,
-    PawPrint,
-    Baby,
-    Accessibility,
     PartyPopper,
     type LucideIcon,
 } from "lucide-react";
@@ -190,14 +184,14 @@ export const AMENITIES: AmenityOption[] = [
         category: "Essentials",
     },
     {
-        id: "hot_water",
-        label: "Hot Water",
-        icon: Bath,
+        id: "washer",
+        label: "Washer",
+        icon: WashingMachine,
         category: "Essentials",
     },
     {
-        id: "washer",
-        label: "Washer",
+        id: "dryer",
+        label: "Dryer",
         icon: WashingMachine,
         category: "Essentials",
     },
@@ -253,13 +247,6 @@ export const AMENITIES: AmenityOption[] = [
         icon: Coffee,
         category: "Kitchen",
     },
-    {
-        id: "refrigerator",
-        label: "Refrigerator",
-        icon: Snowflake,
-        category: "Kitchen",
-    },
-
     // Safety
     {
         id: "security_cameras",
@@ -267,13 +254,6 @@ export const AMENITIES: AmenityOption[] = [
         icon: ShieldCheck,
         category: "Safety",
     },
-    {
-        id: "lock",
-        label: "Lock on Door",
-        icon: Lock,
-        category: "Safety",
-    },
-
     // Outdoor
     {
         id: "garden",
@@ -295,24 +275,6 @@ export const AMENITIES: AmenityOption[] = [
         icon: Cigarette,
         category: "Accessibility",
     },
-    {
-        id: "pet_friendly",
-        label: "Pet Friendly",
-        icon: PawPrint,
-        category: "Accessibility",
-    },
-    {
-        id: "baby_friendly",
-        label: "Baby Friendly",
-        icon: Baby,
-        category: "Accessibility",
-    },
-    {
-        id: "wheelchair_accessible",
-        label: "Wheelchair Accessible",
-        icon: Accessibility,
-        category: "Accessibility",
-    },
 ];
 
 export const CURRENCIES = [
@@ -329,6 +291,91 @@ export const TIME_OPTIONS = [
     "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM",
     "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM",
 ];
+
+// ============================================================
+// AMENITY MAPPING (shared between server actions and client)
+// Frontend IDs → backend valid values
+// ============================================================
+export const AMENITY_MAP: Record<string, string> = {
+    // Direct valid values
+    wifi: "wifi",
+    pool: "pool",
+    ac: "ac",
+    parking: "parking",
+    gym: "gym",
+    kitchen: "kitchen",
+    washer: "washer",
+    dryer: "dryer",
+    tv: "tv",
+    heating: "heating",
+    workspace: "workspace",
+    elevator: "elevator",
+    balcony: "balcony",
+    garden: "garden",
+    bbq: "bbq",
+    fireplace: "fireplace",
+    "security-camera": "security-camera",
+    "smoke-alarm": "smoke-alarm",
+    "first-aid": "first-aid",
+    "fire-extinguisher": "fire-extinguisher",
+
+    // Frontend alternatives → backend valid
+    "air-conditioning": "ac",
+    "air conditioning": "ac",
+    air_conditioning: "ac",
+    airconditioning: "ac",
+    "air conditioner": "ac",
+    "swimming-pool": "pool",
+    "swimming pool": "pool",
+    swimming_pool: "pool",
+    internet: "wifi",
+    "free-parking": "parking",
+    free_parking: "parking",
+    "smoke alarm": "smoke-alarm",
+    smoke_alarm: "smoke-alarm",
+    smokealarm: "smoke-alarm",
+    "first aid": "first-aid",
+    first_aid: "first-aid",
+    "fire extinguisher": "fire-extinguisher",
+    fire_extinguisher: "fire-extinguisher",
+    "security camera": "security-camera",
+    security_camera: "security-camera",
+    "security cameras": "security-camera",
+    security_cameras: "security-camera",
+    cctv: "security-camera",
+    monitor: "workspace",
+    coffee_maker: "kitchen",
+    beach_access: "garden",
+    smoking_area: "bbq",
+    "hot-water": "hot-water",
+    hot_water: "hot-water",
+    hotwater: "hot-water",
+    refrigerator: "refrigerator",
+    fridge: "refrigerator",
+    lock: "lock",
+    "pet-friendly": "pet-friendly",
+    pet_friendly: "pet-friendly",
+    petfriendly: "pet-friendly",
+    "pets allowed": "pet-friendly",
+    "pets_allowed": "pet-friendly",
+    "baby-friendly": "baby-friendly",
+    baby_friendly: "baby-friendly",
+    babyfriendly: "baby-friendly",
+    "wheelchair-accessible": "wheelchair-accessible",
+    wheelchair_accessible: "wheelchair-accessible",
+    wheelchairaccessible: "wheelchair-accessible",
+    "wheelchair accessible": "wheelchair-accessible",
+    resort: "pool",
+    hostel: "wifi",
+};
+
+export const VALID_AMENITIES = new Set([
+    "wifi", "pool", "ac", "parking", "gym", "kitchen", "washer", "dryer",
+    "tv", "heating", "workspace", "elevator", "balcony", "garden", "bbq",
+    "fireplace", "security-camera", "smoke-alarm", "first-aid", "fire-extinguisher",
+    "hot-water", "refrigerator", "lock", "pet-friendly", "baby-friendly",
+    "wheelchair-accessible",
+]);
 
 export const COUNTRIES = [
     "Bangladesh", "India", "United States", "United Kingdom", "Canada",

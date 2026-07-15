@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
 import { CreditCard, Search } from "lucide-react"
@@ -58,34 +58,35 @@ export default function GuestTransactionsPage() {
   const [search, setSearch] = useState("")
   const limit = 15
 
-  const fetchTransactions = useCallback(async () => {
-    setLoading(true)
-    try {
-      const [txnRes, statsRes] = await Promise.all([
-        transactionAPI.getMyTransactions({
-          page, limit,
-          status: statusFilter || undefined,
-          method: methodFilter || undefined,
-        }),
-        transactionAPI.getTransactionStats(),
-      ])
-      if (txnRes.success && txnRes.data) {
-        setTransactions(txnRes.data.transactions)
-        setTotal(txnRes.data.pagination.total)
+  useEffect(() => {
+    let mounted = true
+    ;(async () => {
+      try {
+        const [txnRes, statsRes] = await Promise.all([
+          transactionAPI.getMyTransactions({
+            page, limit,
+            status: statusFilter || undefined,
+            method: methodFilter || undefined,
+          }),
+          transactionAPI.getTransactionStats(),
+        ])
+        if (!mounted) return
+        if (txnRes.success && txnRes.data) {
+          setTransactions(txnRes.data.transactions)
+          setTotal(txnRes.data.pagination.total)
+        }
+        if (statsRes.success && statsRes.data) {
+          setTotalSpend(statsRes.data.totalSpend ?? 0)
+        }
+      } catch (err: any) {
+        if (!mounted) return
+        toast.error(err.message || "Failed to load transactions")
+      } finally {
+        if (mounted) setLoading(false)
       }
-      if (statsRes.success && statsRes.data) {
-        setTotalSpend(statsRes.data.totalSpend ?? 0)
-      }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to load transactions")
-    } finally {
-      setLoading(false)
-    }
+    })()
+    return () => { mounted = false }
   }, [page, statusFilter, methodFilter])
-
-  useEffect(() => { fetchTransactions() }, [fetchTransactions])
-  useEffect(() => { setPage(1) }, [statusFilter, methodFilter, search])
-
   const filtered = search
     ? transactions.filter((t) =>
         t.transactionId?.toLowerCase().includes(search.toLowerCase())
@@ -141,7 +142,7 @@ export default function GuestTransactionsPage() {
             className="w-full sm:w-44"
             placeholder="All statuses"
             selectedKey={statusFilter}
-            onSelectionChange={(key) => setStatusFilter((key as string) || "")}
+            onSelectionChange={(key) => { setStatusFilter((key as string) || ""); setPage(1); }}
           >
             <Label>Status</Label>
             <Select.Trigger>
@@ -163,7 +164,7 @@ export default function GuestTransactionsPage() {
             className="w-full sm:w-44"
             placeholder="All methods"
             selectedKey={methodFilter}
-            onSelectionChange={(key) => setMethodFilter((key as string) || "")}
+            onSelectionChange={(key) => { setMethodFilter((key as string) || ""); setPage(1); }}
           >
             <Label>Method</Label>
             <Select.Trigger>

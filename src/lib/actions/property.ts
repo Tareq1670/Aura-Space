@@ -157,85 +157,7 @@ export interface PropertyFormData {
 // AMENITY NORMALIZER
 // frontend amenity names → backend valid values
 // ============================================================
-const AMENITY_MAP: Record<string, string> = {
-    // Direct valid values
-    wifi: "wifi",
-    pool: "pool",
-    ac: "ac",
-    parking: "parking",
-    gym: "gym",
-    kitchen: "kitchen",
-    washer: "washer",
-    dryer: "dryer",
-    tv: "tv",
-    heating: "heating",
-    workspace: "workspace",
-    elevator: "elevator",
-    balcony: "balcony",
-    garden: "garden",
-    bbq: "bbq",
-    fireplace: "fireplace",
-    "security-camera": "security-camera",
-    "smoke-alarm": "smoke-alarm",
-    "first-aid": "first-aid",
-    "fire-extinguisher": "fire-extinguisher",
-
-    // Frontend alternatives → backend valid
-    "air-conditioning": "ac",
-    "air conditioning": "ac",
-    air_conditioning: "ac",
-    airconditioning: "ac",
-    "air conditioner": "ac",
-    "swimming-pool": "pool",
-    "swimming pool": "pool",
-    "swimming_pool": "pool",
-    internet: "wifi",
-    "free-parking": "parking",
-    free_parking: "parking",
-    "smoke alarm": "smoke-alarm",
-    smoke_alarm: "smoke-alarm",
-    smokealarm: "smoke-alarm",
-    "first aid": "first-aid",
-    first_aid: "first-aid",
-    "fire extinguisher": "fire-extinguisher",
-    fire_extinguisher: "fire-extinguisher",
-    "security camera": "security-camera",
-    security_camera: "security-camera",
-    "security cameras": "security-camera",
-    security_cameras: "security-camera",
-    cctv: "security-camera",
-    monitor: "workspace",
-    coffee_maker: "kitchen",
-    beach_access: "balcony",
-    smoking_area: "bbq",
-    resort: "pool",
-    hostel: "wifi",
-    "hot-water": "hot-water",
-    hot_water: "hot-water",
-    hotwater: "hot-water",
-    refrigerator: "refrigerator",
-    fridge: "refrigerator",
-    lock: "lock",
-    "pet-friendly": "pet-friendly",
-    pet_friendly: "pet-friendly",
-    petfriendly: "pet-friendly",
-    "pets allowed": "pet-friendly",
-    "baby-friendly": "baby-friendly",
-    baby_friendly: "baby-friendly",
-    babyfriendly: "baby-friendly",
-    "wheelchair-accessible": "wheelchair-accessible",
-    wheelchair_accessible: "wheelchair-accessible",
-    wheelchairaccessible: "wheelchair-accessible",
-    "wheelchair accessible": "wheelchair-accessible",
-};
-
-const VALID_AMENITIES = new Set([
-    "wifi", "pool", "ac", "parking", "gym", "kitchen", "washer", "dryer",
-    "tv", "heating", "workspace", "elevator", "balcony", "garden", "bbq",
-    "fireplace", "security-camera", "smoke-alarm", "first-aid", "fire-extinguisher",
-    "hot-water", "refrigerator", "lock", "pet-friendly", "baby-friendly",
-    "wheelchair-accessible",
-]);
+import { AMENITY_MAP, VALID_AMENITIES } from "@/lib/constants/property-options";
 
 function normalizeAmenities(amenities: string[] = []): string[] {
     const result = amenities
@@ -283,7 +205,7 @@ function normalizeCategory(type?: string): string {
 // "9:00 PM" → "21:00", "6:00 AM" → "06:00"
 // ============================================================
 function normalizeTime(timeStr?: string): string {
-    if (!timeStr) return "14:00";
+    if (!timeStr) return "";
 
     const trimmed = timeStr.trim();
 
@@ -328,10 +250,13 @@ function transformToBackend(data: Partial<PropertyFormData>) {
         title: (data.title || "").trim(),
         description: (data.description || "").trim(),
         category: normalizeCategory(data.propertyType),
+        placeType: (data.placeType || "").trim(),
         location: {
             address: (data.location?.address || "").trim(),
             city: (data.location?.city || "").trim(),
+            state: (data.location?.state || "").trim(),
             country: (data.location?.country || "").trim(),
+            zipCode: (data.location?.zipCode || "").trim(),
             ...(data.location?.coordinates &&
                 data.location.coordinates.lat !== 0 &&
                 data.location.coordinates.lng !== 0 && {
@@ -343,18 +268,11 @@ function transformToBackend(data: Partial<PropertyFormData>) {
         },
         price: {
             perNight: Number(data.pricing?.perNight) || 0,
-            ...(Number(data.pricing?.cleaningFee) > 0 && {
-                cleaningFee: Number(data.pricing?.cleaningFee),
-            }),
-            ...(Number(data.pricing?.serviceFee) > 0 && {
-                serviceFee: Number(data.pricing?.serviceFee),
-            }),
-            ...(Number(data.pricing?.weeklyDiscount) > 0 && {
-                weeklyDiscount: Number(data.pricing?.weeklyDiscount),
-            }),
-            ...(Number(data.pricing?.monthlyDiscount) > 0 && {
-                monthlyDiscount: Number(data.pricing?.monthlyDiscount),
-            }),
+            ...(data.pricing?.currency && { currency: data.pricing.currency.trim() }),
+            cleaningFee: Number(data.pricing?.cleaningFee) || 0,
+            serviceFee: Number(data.pricing?.serviceFee) || 0,
+            weeklyDiscount: Number(data.pricing?.weeklyDiscount) || 0,
+            monthlyDiscount: Number(data.pricing?.monthlyDiscount) || 0,
         },
         details: {
             bedrooms: Number(data.bedrooms) || 0,
@@ -373,21 +291,23 @@ function transformToBackend(data: Partial<PropertyFormData>) {
             smokingAllowed: Boolean(data.houseRules?.smokingAllowed),
             petsAllowed: Boolean(data.houseRules?.petsAllowed),
             partiesAllowed: Boolean(data.houseRules?.partiesAllowed),
-            // ✅ Time format normalize
             checkInTime: normalizeTime(data.houseRules?.checkInTime),
             checkOutTime: normalizeTime(data.houseRules?.checkOutTime),
-            ...(data.houseRules?.quietHoursStart && {
-                quietHoursStart: normalizeTime(data.houseRules.quietHoursStart),
-            }),
-            ...(data.houseRules?.quietHoursEnd && {
-                quietHoursEnd: normalizeTime(data.houseRules.quietHoursEnd),
-            }),
+            quietHoursStart: normalizeTime(data.houseRules?.quietHoursStart || ""),
+            quietHoursEnd: normalizeTime(data.houseRules?.quietHoursEnd || ""),
             ...(Array.isArray(data.houseRules?.additionalRules) &&
                 data.houseRules.additionalRules.length > 0 && {
                     additionalRules: data.houseRules.additionalRules.filter(
                         (r) => typeof r === "string" && r.trim()
                     ),
                 }),
+        },
+        availabilitySettings: {
+            minStay: Number(data.availability?.minStay) || 1,
+            maxStay: Number(data.availability?.maxStay) || 30,
+            advanceNotice: Number(data.availability?.advanceNotice) || 1,
+            availableFrom: data.availability?.availableFrom || "",
+            availableTo: data.availability?.availableTo || "",
         },
     };
 }

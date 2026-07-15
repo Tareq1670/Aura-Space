@@ -385,7 +385,7 @@ export default function PropertyFormWizard({ propertyId }: PropertyFormWizardPro
                             whileTap={{ scale: 0.98 }}
                             type="button"
                             onClick={handleNext}
-                            className="flex items-center gap-2 px-8 py-3.5 bg-gray-900 dark:bg-white dark:text-gray-900 text-white rounded-xl font-bold text-sm hover:bg-gray-800 dark:hover:bg-gray-100 shadow-lg shadow-gray-900/10 transition-all"
+                            className="flex items-center gap-2 px-8 py-3.5 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-rose-500/25 transition-all"
                         >
                             Next
                             <ArrowRight className="w-4 h-4" />

@@ -59,6 +59,7 @@ export default function WishlistPage() {
         } catch {}
     }, []);
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     useEffect(() => { fetchWishlist(activeList); fetchLists(); }, [activeList, fetchWishlist, fetchLists]);
 
     const handleRemove = useCallback(async (id: string) => {

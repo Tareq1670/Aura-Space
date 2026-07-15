@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback, useMemo } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { motion } from "framer-motion"
 import { Tabs, TabList, Tab, Pagination, Skeleton } from "@heroui/react"
 import { toast } from "sonner"
@@ -47,27 +47,28 @@ export default function HostReservationsPage() {
   const [dateTo, setDateTo] = useState("")
   const limit = 10
 
-  const fetchReservations = useCallback(async () => {
-    setLoading(true)
-    try {
-      const res = await bookingAPI.getHostReservations({
-        page, limit,
-        status: STATUS_MAP[tab],
-      })
-      if (res.success && res.data) {
-        setBookings(res.data.bookings)
-        setTotal(res.data.pagination.total)
+  useEffect(() => {
+    let mounted = true
+    ;(async () => {
+      try {
+        const res = await bookingAPI.getHostReservations({
+          page, limit,
+          status: STATUS_MAP[tab],
+        })
+        if (!mounted) return
+        if (res.success && res.data) {
+          setBookings(res.data.bookings)
+          setTotal(res.data.pagination.total)
+        }
+      } catch (err: any) {
+        if (!mounted) return
+        toast.error(err.message || "Failed to load reservations")
+      } finally {
+        if (mounted) setLoading(false)
       }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to load reservations")
-    } finally {
-      setLoading(false)
-    }
+    })()
+    return () => { mounted = false }
   }, [page, tab])
-
-  useEffect(() => { fetchReservations() }, [fetchReservations])
-  useEffect(() => { setPage(1) }, [tab, search, dateFrom, dateTo])
-
   const filtered = useMemo(() => {
     let result = bookings
     if (search.trim()) {
@@ -160,7 +161,7 @@ export default function HostReservationsPage() {
       <div className="mb-6">
         <Tabs
           selectedKey={tab}
-          onSelectionChange={(k) => setTab(String(k))}
+          onSelectionChange={(k) => { setTab(String(k)); setPage(1); }}
         >
           <TabList>
             {TABS.map((t) => (

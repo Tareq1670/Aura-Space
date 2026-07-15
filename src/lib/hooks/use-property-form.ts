@@ -4,6 +4,35 @@
 import { useState, useCallback, useEffect } from "react";
 import { PropertyFormData } from "@/lib/actions/property";
 
+const NESTED_KEYS: Set<keyof PropertyFormData> = new Set([
+    "location",
+    "pricing",
+    "availability",
+    "houseRules",
+]);
+
+function deepMerge(
+    base: PropertyFormData,
+    override: Partial<PropertyFormData>
+): PropertyFormData {
+    const result = { ...base };
+    for (const key of Object.keys(override) as (keyof PropertyFormData)[]) {
+        if (NESTED_KEYS.has(key)) {
+            result[key] = {
+                ...(base[key] as object),
+                ...(override[key] as object),
+            } as PropertyFormData[typeof key];
+        } else {
+            // Arrays and primitives — use new value or fall back to base
+            result[key] =
+                override[key] !== undefined
+                    ? override[key]
+                    : base[key];
+        }
+    }
+    return result;
+}
+
 const initialFormData: PropertyFormData = {
     propertyType: "",
     placeType: "",
@@ -58,7 +87,7 @@ export function usePropertyForm() {
             const saved = localStorage.getItem("property_draft");
             if (saved) {
                 try {
-                    return { ...initialFormData, ...JSON.parse(saved) };
+                    return deepMerge(initialFormData, JSON.parse(saved));
                 } catch {
                     // corrupted data, use defaults
                 }
@@ -69,6 +98,7 @@ export function usePropertyForm() {
         return initialFormData;
     });
     const [hydrated, setHydrated] = useState(false);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     useEffect(() => { setHydrated(true); }, []);
     const [currentStep, setCurrentStep] = useState(0);
     const [draftId, setDraftId] = useState<string | null>(null);
@@ -76,7 +106,7 @@ export function usePropertyForm() {
     const updateFormData = useCallback(
         (updates: Partial<PropertyFormData>) => {
             setFormData((prev) => {
-                const newData = { ...prev, ...updates };
+                const newData = deepMerge(prev, updates);
                 try {
                     localStorage.setItem(
                         "property_draft",

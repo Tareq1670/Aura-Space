@@ -1,10 +1,10 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
 import { ArrowUpDown } from "lucide-react"
-import { Label, ListBox, Pagination, Select, Skeleton } from "@heroui/react"
+import { ListBox, Pagination, Select, Skeleton } from "@heroui/react"
 import { transactionAPI, type TransactionItem } from "@/lib/api/Guest/transaction-api"
 
 const STATUS_STYLES: Record<string, string> = {
@@ -61,28 +61,29 @@ export default function HostTransactionsPage() {
   const [statusFilter, setStatusFilter] = useState<string>("")
   const limit = 15
 
-  const fetchTransactions = useCallback(async () => {
-    setLoading(true)
-    try {
-      const res = await transactionAPI.getHostTransactions({
-        page, limit,
-        type: typeFilter || undefined,
-        status: statusFilter || undefined,
-      })
-      if (res.success && res.data) {
-        setTransactions(res.data.transactions)
-        setTotal(res.data.pagination.total)
+  useEffect(() => {
+    let mounted = true
+    ;(async () => {
+      try {
+        const res = await transactionAPI.getHostTransactions({
+          page, limit,
+          type: typeFilter || undefined,
+          status: statusFilter || undefined,
+        })
+        if (!mounted) return
+        if (res.success && res.data) {
+          setTransactions(res.data.transactions)
+          setTotal(res.data.pagination.total)
+        }
+      } catch (err: any) {
+        if (!mounted) return
+        toast.error(err.message || "Failed to load transactions")
+      } finally {
+        if (mounted) setLoading(false)
       }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to load transactions")
-    } finally {
-      setLoading(false)
-    }
+    })()
+    return () => { mounted = false }
   }, [page, typeFilter, statusFilter])
-
-  useEffect(() => { fetchTransactions() }, [fetchTransactions])
-  useEffect(() => { setPage(1) }, [typeFilter, statusFilter])
-
   const totalPages = Math.max(1, Math.ceil(total / limit))
 
   return (
@@ -109,7 +110,7 @@ export default function HostTransactionsPage() {
             className="w-36"
             placeholder="All types"
             selectedKey={typeFilter}
-            onSelectionChange={(key) => setTypeFilter((key as string) || "")}
+            onSelectionChange={(key) => { setTypeFilter((key as string) || ""); setPage(1); }}
           >
             <Select.Trigger>
               <Select.Value />
@@ -130,7 +131,7 @@ export default function HostTransactionsPage() {
             className="w-36"
             placeholder="All statuses"
             selectedKey={statusFilter}
-            onSelectionChange={(key) => setStatusFilter((key as string) || "")}
+            onSelectionChange={(key) => { setStatusFilter((key as string) || ""); setPage(1); }}
           >
 
             <Select.Trigger>
@@ -192,7 +193,7 @@ export default function HostTransactionsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
-                {transactions.map((t, i) => (
+                {transactions.map((t) => (
                   <motion.tr
                     key={t._id}
                     variants={rowVariants}

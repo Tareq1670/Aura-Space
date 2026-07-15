@@ -268,7 +268,7 @@ export default function StepHouseRules({
                 className="bg-white dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 space-y-5"
             >
                 <div className="flex items-center gap-2">
-                    <Moon className="w-5 h-5 text-indigo-500" />
+                    <Moon className="w-5 h-5 text-rose-500" />
                     <h3 className="font-bold text-lg text-gray-900 dark:text-white">
                         Quiet Hours
                     </h3>
@@ -321,7 +321,7 @@ export default function StepHouseRules({
                 className="bg-white dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 space-y-5"
             >
                 <div className="flex items-center gap-2">
-                    <Shield className="w-5 h-5 text-emerald-500" />
+                    <Shield className="w-5 h-5 text-rose-500" />
                     <h3 className="font-bold text-lg text-gray-900 dark:text-white">
                         Additional Rules
                     </h3>

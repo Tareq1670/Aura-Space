@@ -296,16 +296,6 @@ const guarantees = [
   },
 ];
 
-const team = [
-  {
-    name: "Founder & Lead Developer",
-    role: "Building AuraSpace",
-    image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=faces&auto=format&q=80",
-    bio: "Passionate about premium hospitality and building trusted digital experiences for guests and hosts across Bangladesh.",
-  },
-];
-
 const testimonials = [
   {
     quote:
@@ -358,36 +348,6 @@ const itemVariants: Variants = {
   },
 };
 
-function SectionBadge({
-  children,
-  reduceMotion,
-}: {
-  children: React.ReactNode;
-  reduceMotion: boolean;
-}) {
-  return (
-    <div className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50/80 px-4 py-1.5">
-      <motion.span
-        className="h-1.5 w-1.5 rounded-full bg-indigo-500"
-        animate={
-          reduceMotion
-            ? undefined
-            : { scale: [1, 1.4, 1], opacity: [0.7, 1, 0.7] }
-        }
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-          type: "tween",
-        }}
-      />
-      <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-indigo-600">
-        {children}
-      </span>
-    </div>
-  );
-}
-
 export default function AboutPage() {
   const reduceMotion = !!useReducedMotion();
   const heroRef = useRef<HTMLElement>(null);
@@ -398,7 +358,6 @@ export default function AboutPage() {
   const howRef = useRef<HTMLElement>(null);
   const storyRef = useRef<HTMLElement>(null);
   const guaranteeRef = useRef<HTMLElement>(null);
-  const teamRef = useRef<HTMLElement>(null);
   const testimonialRef = useRef<HTMLElement>(null);
   const ctaRef = useRef<HTMLElement>(null);
 
@@ -409,7 +368,6 @@ export default function AboutPage() {
   const isHowInView = useInView(howRef, { once: true, margin: "-80px" });
   const isStoryInView = useInView(storyRef, { once: true, margin: "-80px" });
   const isGuaranteeInView = useInView(guaranteeRef, { once: true, margin: "-80px" });
-  const isTeamInView = useInView(teamRef, { once: true, margin: "-80px" });
   const isTestimonialInView = useInView(testimonialRef, { once: true, margin: "-80px" });
   const isCtaInView = useInView(ctaRef, { once: true, margin: "-80px" });
 

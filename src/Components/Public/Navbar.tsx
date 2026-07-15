@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 
 type UserRole = "guest" | "host" | "admin";
@@ -60,7 +60,6 @@ const roleLabels: Record<UserRole, string> = {
 };
 
 export default function Navbar() {
-  const router = useRouter();
   const pathname = usePathname();
   const { data: session, isPending } = authClient.useSession();
 

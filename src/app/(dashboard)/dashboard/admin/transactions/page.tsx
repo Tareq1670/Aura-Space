@@ -1,10 +1,10 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
 import { Filter, Search, CheckCircle } from "lucide-react"
-import { Label, ListBox, Pagination, Select, Skeleton } from "@heroui/react"
+import { ListBox, Pagination, Select, Skeleton } from "@heroui/react"
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal"
 import { transactionAPI, type TransactionItem } from "@/lib/api/Guest/transaction-api"
 
@@ -78,31 +78,33 @@ export default function AdminTransactionsPage() {
   const [search, setSearch] = useState("")
   const [processId, setProcessId] = useState<string | null>(null)
   const [processing, setProcessing] = useState(false)
+  const [refreshKey, setRefreshKey] = useState(0)
   const limit = 20
 
-  const fetchTransactions = useCallback(async () => {
-    setLoading(true)
-    try {
-      const res = await transactionAPI.getAdminTransactions({
-        page, limit,
-        type: typeFilter || undefined,
-        status: statusFilter || undefined,
-        method: methodFilter || undefined,
-      })
-      if (res.success && res.data) {
-        setTransactions(res.data.transactions)
-        setTotal(res.data.pagination.total)
+  useEffect(() => {
+    let mounted = true
+    ;(async () => {
+      try {
+        const res = await transactionAPI.getAdminTransactions({
+          page, limit,
+          type: typeFilter || undefined,
+          status: statusFilter || undefined,
+          method: methodFilter || undefined,
+        })
+        if (!mounted) return
+        if (res.success && res.data) {
+          setTransactions(res.data.transactions)
+          setTotal(res.data.pagination.total)
+        }
+      } catch (err: any) {
+        if (!mounted) return
+        toast.error(err.message || "Failed to load transactions")
+      } finally {
+        if (mounted) setLoading(false)
       }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to load transactions")
-    } finally {
-      setLoading(false)
-    }
-  }, [page, typeFilter, statusFilter, methodFilter])
-
-  useEffect(() => { fetchTransactions() }, [fetchTransactions])
-  useEffect(() => { setPage(1) }, [typeFilter, statusFilter, methodFilter, search])
-
+    })()
+    return () => { mounted = false }
+  }, [page, typeFilter, statusFilter, methodFilter, refreshKey])
   async function handleProcessPayout() {
     if (!processId) return
     setProcessing(true)
@@ -111,7 +113,7 @@ export default function AdminTransactionsPage() {
       if (res.success) {
         toast.success("Payout processed successfully")
         setProcessId(null)
-        fetchTransactions()
+        setRefreshKey(k => k + 1)
       } else {
         toast.error(res.message || "Failed to process payout")
       }
@@ -171,10 +173,10 @@ export default function AdminTransactionsPage() {
               className="w-32"
               placeholder="All types"
               selectedKey={typeFilter}
-              onSelectionChange={(key) => setTypeFilter((key as string) || "")}
-            >
+               onSelectionChange={(key) => { setTypeFilter((key as string) || ""); setPage(1); }}
+             >
 
-              <Select.Trigger>
+               <Select.Trigger>
                 <Select.Value />
                 <Select.Indicator />
               </Select.Trigger>
@@ -193,10 +195,10 @@ export default function AdminTransactionsPage() {
               className="w-32"
               placeholder="All statuses"
               selectedKey={statusFilter}
-              onSelectionChange={(key) => setStatusFilter((key as string) || "")}
-            >
- 
-              <Select.Trigger>
+               onSelectionChange={(key) => { setStatusFilter((key as string) || ""); setPage(1); }}
+             >
+  
+               <Select.Trigger>
                 <Select.Value />
                 <Select.Indicator />
               </Select.Trigger>
@@ -215,10 +217,10 @@ export default function AdminTransactionsPage() {
               className="w-32"
               placeholder="All methods"
               selectedKey={methodFilter}
-              onSelectionChange={(key) => setMethodFilter((key as string) || "")}
-            >
+               onSelectionChange={(key) => { setMethodFilter((key as string) || ""); setPage(1); }}
+             >
 
-              <Select.Trigger>
+               <Select.Trigger>
                 <Select.Value />
                 <Select.Indicator />
               </Select.Trigger>

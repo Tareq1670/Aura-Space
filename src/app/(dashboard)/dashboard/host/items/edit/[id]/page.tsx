@@ -4,8 +4,50 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { hostPropertyAPI } from "@/lib/api/Host/host-property-api";
 import type { PropertyFormData } from "@/lib/actions/property";
+import { AMENITIES, AMENITY_MAP } from "@/lib/constants/property-options";
 import PropertyFormWizard from "@/Components/property/PropertyFormWizard";
 import { Loader2 } from "lucide-react";
+
+// Reverse map: backend amenity value → frontend amenity ID
+function buildReverseAmenityMap(): Record<string, string> {
+    const reverse: Record<string, string> = {};
+    for (const amenity of AMENITIES) {
+        const key = amenity.id.toLowerCase().trim();
+        const mapped = AMENITY_MAP[key];
+        const backendValue = mapped || key;
+        reverse[backendValue] = amenity.id;
+    }
+    return reverse;
+}
+
+const REVERSE_AMENITY_MAP = buildReverseAmenityMap();
+
+function to12HourTime(timeStr?: string): string {
+    if (!timeStr) return "";
+    const trimmed = timeStr.trim();
+    if (/^\d{1,2}:\d{2}\s*(AM|PM)$/i.test(trimmed)) {
+        return trimmed.toUpperCase();
+    }
+    const match = trimmed.match(/^(\d{1,2}):(\d{2})$/);
+    if (match) {
+        let hour = parseInt(match[1]);
+        const min = match[2];
+        const period = hour >= 12 ? "PM" : "AM";
+        if (hour === 0) hour = 12;
+        else if (hour > 12) hour -= 12;
+        return `${hour}:${min} ${period}`;
+    }
+    return "";
+}
+
+function toFrontendAmenities(backendAmenities: string[]): string[] {
+    return (backendAmenities || [])
+        .map((a) => {
+            const key = String(a).toLowerCase().trim();
+            return REVERSE_AMENITY_MAP[key] || a;
+        })
+        .filter((a, i, arr) => arr.indexOf(a) === i);
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapBackendToFormData(property: any): PropertyFormData {
@@ -15,7 +57,6 @@ function mapBackendToFormData(property: any): PropertyFormData {
         location: {
             address: property.location?.address || "",
             city: property.location?.city || "",
-            // Backend PropertyLocation doesn't store state/zipCode — these remain empty on edit
             state: property.location?.state || "",
             country: property.location?.country || "",
             zipCode: property.location?.zipCode || "",
@@ -30,7 +71,9 @@ function mapBackendToFormData(property: any): PropertyFormData {
         bathrooms: property.details?.bathrooms ?? 1,
         beds: property.details?.beds ?? 1,
         maxGuests: property.details?.maxGuests ?? 1,
-        amenities: Array.isArray(property.amenities) ? property.amenities : [],
+        amenities: toFrontendAmenities(
+            Array.isArray(property.amenities) ? property.amenities : []
+        ),
         photos: Array.isArray(property.images) ? property.images : [],
         pricing: {
             perNight: property.price?.perNight || 0,
@@ -41,11 +84,14 @@ function mapBackendToFormData(property: any): PropertyFormData {
             currency: property.price?.currency || "BDT",
         },
         availability: {
-            minStay: typeof property.availability?.minStay === "number" ? property.availability.minStay : 1,
-            maxStay: typeof property.availability?.maxStay === "number" ? property.availability.maxStay : 30,
-            advanceNotice: typeof property.availability?.advanceNotice === "number" ? property.availability.advanceNotice : 1,
-            availableFrom: property.availability?.availableFrom || "",
-            availableTo: property.availability?.availableTo || "",
+            minStay: property.availabilitySettings?.minStay ??
+                (typeof property.availability?.minStay === "number" ? property.availability.minStay : 1),
+            maxStay: property.availabilitySettings?.maxStay ??
+                (typeof property.availability?.maxStay === "number" ? property.availability.maxStay : 30),
+            advanceNotice: property.availabilitySettings?.advanceNotice ??
+                (typeof property.availability?.advanceNotice === "number" ? property.availability.advanceNotice : 1),
+            availableFrom: property.availabilitySettings?.availableFrom || property.availability?.availableFrom || "",
+            availableTo: property.availabilitySettings?.availableTo || property.availability?.availableTo || "",
             blockedDates: (() => {
                 const avail = property.availability;
                 if (Array.isArray(avail)) {
@@ -64,13 +110,13 @@ function mapBackendToFormData(property: any): PropertyFormData {
             smokingAllowed: !!property.houseRules?.smokingAllowed,
             petsAllowed: !!property.houseRules?.petsAllowed,
             partiesAllowed: !!property.houseRules?.partiesAllowed,
-            checkInTime: property.houseRules?.checkInTime || "3:00 PM",
-            checkOutTime: property.houseRules?.checkOutTime || "11:00 AM",
+            checkInTime: to12HourTime(property.houseRules?.checkInTime) || "3:00 PM",
+            checkOutTime: to12HourTime(property.houseRules?.checkOutTime) || "11:00 AM",
             additionalRules: Array.isArray(property.houseRules?.additionalRules)
                 ? property.houseRules.additionalRules
                 : [],
-            quietHoursStart: property.houseRules?.quietHoursStart || "10:00 PM",
-            quietHoursEnd: property.houseRules?.quietHoursEnd || "7:00 AM",
+            quietHoursStart: to12HourTime(property.houseRules?.quietHoursStart) || "10:00 PM",
+            quietHoursEnd: to12HourTime(property.houseRules?.quietHoursEnd) || "7:00 AM",
         },
         status: property.status === "active" || property.status === "published" ? "published" : "draft",
     };
@@ -87,6 +133,8 @@ export default function EditPropertyPage() {
         if (!id) return;
 
         let cancelled = false;
+        setLoading(true);
+        setError(null);
 
         async function load() {
             try {
@@ -136,5 +184,5 @@ export default function EditPropertyPage() {
         );
     }
 
-    return <PropertyFormWizard propertyId={id} />;
+    return <PropertyFormWizard key={id} propertyId={id} />;
 }

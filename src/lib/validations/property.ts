@@ -50,7 +50,7 @@ export function validateStep3(data: {
     return { isValid: Object.keys(errors).length === 0, errors };
 }
 
-export function validateStep4(data: { amenities: string[] }): StepValidation {
+export function validateStep4(_data: { amenities: string[] }): StepValidation {
     const errors: Record<string, string> = {};
     // Amenities are optional, so no strict validation
     return { isValid: true, errors };
