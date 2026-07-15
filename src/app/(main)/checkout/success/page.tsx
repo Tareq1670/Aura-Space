@@ -43,6 +43,7 @@ export default async function SuccessPage({ searchParams }: Props) {
   const customerEmail = session.customer_details?.email
   const amountTotal = session.amount_total ? (session.amount_total / 100).toFixed(2) : null
   const bookingId = session.metadata?.bookingId
+  const propertyId = session.metadata?.propertyId
 
   return (
     <div className="flex min-h-[95vh] items-center justify-center px-4">
@@ -85,7 +86,7 @@ export default async function SuccessPage({ searchParams }: Props) {
             After your trip, come back to write a review and help other travelers.
           </p>
           <Link
-            href="/dashboard/guest/reviews"
+            href={propertyId ? `/listings/${propertyId}` : "/dashboard/guest/reviews"}
             className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-2 text-xs font-semibold text-white shadow-md transition hover:shadow-lg"
           >
             <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">

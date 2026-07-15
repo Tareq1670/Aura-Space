@@ -91,6 +91,23 @@ export async function replyToReview(id: string, reply: string): Promise<ApiRespo
   }
 }
 
+export async function dismissReviewReport(id: string): Promise<ApiResponse<unknown>> {
+  try {
+    const API_BASE = getApiBase()
+    const authHeaders = await getAuthHeaders()
+    const res = await fetch(`${API_BASE}/admin/reviews/${id}/dismiss-report`, {
+      method: "PUT",
+      headers: authHeaders,
+      cache: "no-store",
+    })
+    const result = await res.json()
+    if (!res.ok) return { success: false, error: result.message || result.error || "Failed to dismiss report", statusCode: res.status }
+    return { success: true, data: result }
+  } catch (err: unknown) {
+    return { success: false, error: err instanceof Error ? err.message : "Failed to dismiss report" }
+  }
+}
+
 export async function reportReview(id: string): Promise<ApiResponse<unknown>> {
   try {
     const API_BASE = getApiBase()

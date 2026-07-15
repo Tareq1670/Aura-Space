@@ -196,7 +196,7 @@ const supportChannels: SupportChannel[] = [
     description:
       "Guidance for listing your property, managing bookings, and growing revenue.",
     cta: "Host Assistance",
-    href: "/dashboard/properties/add",
+    href: "/dashboard/host/items/add",
     icon: <HiOutlineSparkles className="h-5 w-5" />,
   },
   {
@@ -900,7 +900,7 @@ const ContactPage = () => {
                     { label: "Browse Listings", href: "/listings" },
                     {
                       label: "Become a Host",
-                      href: "/dashboard/properties/add",
+                      href: "/dashboard/host/items/add",
                     },
                     { label: "How It Works", href: "/how-it-works" },
                     { label: "Read our FAQs", href: "/faq" },

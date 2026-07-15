@@ -1303,7 +1303,7 @@ const HowItWorks = () => {
                             </Link>
 
                             <Link
-                                href="/dashboard/properties/add"
+                                href="/dashboard/host/items/add"
                                 className="group inline-flex h-[56px] items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[0.08] px-8 text-[11px] font-extrabold uppercase tracking-[0.18em] text-white backdrop-blur-md transition-all duration-300 hover:border-white/40 hover:bg-white/[0.14]"
                             >
                                 Become a Host

@@ -6,7 +6,7 @@ export function getApiBaseClient(): string {
         "http://localhost:5000";
     const base = raw.replace(/\/$/, "");
     if (base.endsWith("/api")) return base;
-    return `${base}/api`;
+    return base;
 }
 
 export async function getClientToken(): Promise<string> {

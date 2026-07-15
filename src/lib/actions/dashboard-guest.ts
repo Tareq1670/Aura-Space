@@ -1,8 +1,6 @@
 "use server"
 
-import { headers } from "next/headers"
-import { auth } from "@/lib/auth"
-import { getApiBase } from "@/lib/api-base"
+import { getApiBase, getAuthHeaders } from "@/lib/api-base"
 
 const API_BASE = getApiBase()
 
@@ -22,12 +20,9 @@ export async function getGuestDashboard(): Promise<{
   message?: string
 }> {
   try {
-    const headersList = await headers()
-    const tokenRes = await (auth.api as any).getToken({ headers: headersList })
-    if (!tokenRes?.token) return { success: false, message: "Not authenticated" }
-
+    const authHeaders = await getAuthHeaders()
     const res = await fetch(`${API_BASE}/dashboard/guest`, {
-      headers: { Authorization: `Bearer ${tokenRes.token}` },
+      headers: authHeaders,
       cache: "no-store",
     })
     const body = await res.json()

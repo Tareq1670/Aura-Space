@@ -1,8 +1,6 @@
 "use server";
 
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
-import { getApiBase } from "@/lib/api-base";
+import { getApiBase, getAuthHeaders } from "@/lib/api-base";
 
 const API_BASE = getApiBase();
 
@@ -10,28 +8,6 @@ interface ActionResponse {
     success: boolean;
     message?: string;
     data?: Record<string, unknown>;
-}
-
-async function getToken(): Promise<string | null> {
-    try {
-        const headersList = await headers();
-        const tokenResponse = await (auth.api as any).getToken({ headers: headersList });
-        if (!tokenResponse?.token) {
-            console.warn("[getToken] No JWT token found");
-            return null;
-        }
-        return tokenResponse.token;
-    } catch (error) {
-        console.error("[getToken] Error:", error);
-        return null;
-    }
-}
-
-function buildHeaders(token: string): HeadersInit {
-    return {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-    };
 }
 
 async function handleResponse(res: Response): Promise<ActionResponse> {
@@ -56,10 +32,8 @@ export interface AdminPropertyParams {
 }
 
 export async function getAdminProperties(params?: AdminPropertyParams): Promise<ActionResponse> {
-    const token = await getToken();
-    if (!token) return { success: false, message: "Not authenticated. Please login again." };
-
     try {
+        const authHeaders = await getAuthHeaders();
         const query = new URLSearchParams();
         if (params?.status && params.status !== "all") query.set("status", params.status);
         if (params?.category && params.category !== "all") query.set("category", params.category);
@@ -75,7 +49,7 @@ export async function getAdminProperties(params?: AdminPropertyParams): Promise<
 
         const res = await fetch(url, {
             method: "GET",
-            headers: buildHeaders(token),
+            headers: authHeaders,
             cache: "no-store",
         });
         return await handleResponse(res);
@@ -86,13 +60,11 @@ export async function getAdminProperties(params?: AdminPropertyParams): Promise<
 }
 
 export async function approveProperty(id: string): Promise<ActionResponse> {
-    const token = await getToken();
-    if (!token) return { success: false, message: "Not authenticated." };
-
     try {
+        const authHeaders = await getAuthHeaders();
         const res = await fetch(`${API_BASE}/admin/properties/${id}/approve`, {
             method: "PUT",
-            headers: buildHeaders(token),
+            headers: authHeaders,
             cache: "no-store",
         });
         return await handleResponse(res);
@@ -103,13 +75,11 @@ export async function approveProperty(id: string): Promise<ActionResponse> {
 }
 
 export async function rejectProperty(id: string, reason: string): Promise<ActionResponse> {
-    const token = await getToken();
-    if (!token) return { success: false, message: "Not authenticated." };
-
     try {
+        const authHeaders = await getAuthHeaders();
         const res = await fetch(`${API_BASE}/admin/properties/${id}/reject`, {
             method: "PUT",
-            headers: buildHeaders(token),
+            headers: authHeaders,
             body: JSON.stringify({ reason }),
             cache: "no-store",
         });
@@ -121,13 +91,11 @@ export async function rejectProperty(id: string, reason: string): Promise<Action
 }
 
 export async function toggleFeatured(id: string, isFeatured: boolean): Promise<ActionResponse> {
-    const token = await getToken();
-    if (!token) return { success: false, message: "Not authenticated." };
-
     try {
+        const authHeaders = await getAuthHeaders();
         const res = await fetch(`${API_BASE}/admin/properties/${id}/feature`, {
             method: "PUT",
-            headers: buildHeaders(token),
+            headers: authHeaders,
             body: JSON.stringify({ isFeatured }),
             cache: "no-store",
         });
@@ -139,13 +107,11 @@ export async function toggleFeatured(id: string, isFeatured: boolean): Promise<A
 }
 
 export async function deleteAdminProperty(id: string): Promise<ActionResponse> {
-    const token = await getToken();
-    if (!token) return { success: false, message: "Not authenticated." };
-
     try {
+        const authHeaders = await getAuthHeaders();
         const res = await fetch(`${API_BASE}/admin/properties/${id}`, {
             method: "DELETE",
-            headers: buildHeaders(token),
+            headers: authHeaders,
             cache: "no-store",
         });
         return await handleResponse(res);

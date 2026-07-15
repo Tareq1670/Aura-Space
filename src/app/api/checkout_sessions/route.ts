@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { stripe } from "@/lib/stripe"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
-import { getApiBase } from "@/lib/api-base"
+import { getApiBase, getAuthHeaders, getSessionToken } from "@/lib/api-base"
 
 export async function POST(req: NextRequest) {
   try {
@@ -26,18 +26,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.redirect(new URL("/login?redirect=/checkout", req.url))
     }
 
-    const tokenResponse = await (auth.api as any).getToken({
-      headers: await headers(),
-    })
-    if (!tokenResponse?.token) {
-      return NextResponse.redirect(new URL("/login?redirect=/checkout", req.url))
-    }
+    const token = await getSessionToken()
 
     const bookingRes = await fetch(`${getApiBase()}/bookings`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${tokenResponse.token}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         propertyId,
@@ -76,6 +71,7 @@ export async function POST(req: NextRequest) {
       ],
       metadata: {
         bookingId: booking.id || booking._id,
+        propertyId: booking.propertyId,
         guestId: session.user.id,
       },
       success_url: `${process.env.BETTER_AUTH_URL || "http://localhost:3000"}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,

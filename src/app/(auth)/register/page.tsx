@@ -15,6 +15,7 @@ import {
 } from "@heroui/react";
 import { imageUploader } from "@/lib/imageUploader";
 import { authClient } from "@/lib/auth-client";
+import { validatePasswordServer } from "@/lib/actions/auth";
 import Image from "next/image";
 
 interface RegisterFormData {
@@ -142,6 +143,12 @@ function RegisterForm() {
         const validationError = validateFormData(data);
         if (validationError) {
             setGlobalMessage({ type: "error", text: validationError });
+            return;
+        }
+
+        const serverValidation = await validatePasswordServer(data.password);
+        if (!serverValidation.valid) {
+            setGlobalMessage({ type: "error", text: serverValidation.error! });
             return;
         }
 
