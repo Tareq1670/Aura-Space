@@ -146,20 +146,22 @@ export default function Navbar() {
     }
   }, [pathname]);
 
-  const handleSignOut = async () => {
-    if (isSigningOut) return;
-    setIsSigningOut(true);
-    setIsDropdownOpen(false);
-    setIsMobileMenuOpen(false);
+const handleSignOut = async () => {
+  if (isSigningOut) return;
 
-    try {
-      await authClient.signOut();
-    } catch {
-      // ignore — redirect regardless
-    }
-    const redirect = encodeURIComponent(pathname);
-    window.location.href = `/login?redirect=${redirect}`;
-  };
+  setIsSigningOut(true);
+  setIsDropdownOpen(false);
+  setIsMobileMenuOpen(false);
+
+  try {
+    await authClient.signOut();
+  } catch {
+    // ignore
+  }
+
+  // Refresh the current page after logout
+  window.location.reload();
+};
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";

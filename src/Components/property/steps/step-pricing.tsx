@@ -21,10 +21,10 @@ interface StepPricingProps {
 }
 
 const inputClass =
-    "w-full px-4 py-3.5 rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:border-rose-500 dark:focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all outline-none text-sm";
+    "w-full px-4 py-3.5 rounded-xl border-2 border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all outline-none text-sm";
 
 const labelClass =
-    "block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2";
+    "block text-sm font-semibold text-gray-700 mb-2";
 
 export default function StepPricing({
     formData,
@@ -48,42 +48,42 @@ export default function StepPricing({
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -30 }}
             transition={{ duration: 0.4 }}
-            className="space-y-8"
-        >
-            <div>
-                <motion.h2
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-3xl font-bold text-gray-900 dark:text-white mb-2"
-                >
-                    Set your pricing
-                </motion.h2>
-                <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.1 }}
-                    className="text-gray-500 dark:text-gray-400"
-                >
-                    You can change these anytime. Competitive pricing helps
-                    your listing stand out.
-                </motion.p>
-            </div>
-
-            {/* Currency Selection */}
-            <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 }}
+                className="space-y-8"
             >
-                <label className={labelClass}>Currency</label>
-                <select
-                    value={formData.pricing.currency}
-                    onChange={(e) =>
-                        updateNestedField("pricing", {
-                            currency: e.target.value,
-                        })
-                    }
-                    className={`${inputClass} max-w-xs`}
+                <div>
+                    <motion.h2
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-3xl font-bold text-gray-900 mb-2"
+                    >
+                        Set your pricing
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.1 }}
+                        className="text-gray-500"
+                    >
+                        You can change these anytime. Competitive pricing helps
+                        your listing stand out.
+                    </motion.p>
+                </div>
+
+                {/* Currency Selection */}
+                <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15 }}
+                >
+                    <label className={labelClass}>Currency</label>
+                    <select
+                        value={formData.pricing.currency}
+                        onChange={(e) =>
+                            updateNestedField("pricing", {
+                                currency: e.target.value,
+                            })
+                        }
+                        className={`${inputClass} max-w-xs`}
                 >
                     {CURRENCIES.map((currency) => (
                         <option key={currency.code} value={currency.code}>
@@ -103,7 +103,7 @@ export default function StepPricing({
             >
                 <div className="flex items-center gap-2 mb-4">
                     <DollarSign className="w-5 h-5 text-rose-500" />
-                    <h3 className="font-bold text-lg text-gray-900 dark:text-white">
+                    <h3 className="font-bold text-lg text-gray-900">
                         Price per night
                     </h3>
                 </div>
@@ -121,7 +121,7 @@ export default function StepPricing({
                         }
                         placeholder="0"
                         min={0}
-                        className="w-full pl-12 pr-4 py-5 rounded-xl border-2 border-rose-200 dark:border-rose-800 bg-white dark:bg-gray-900 text-3xl font-bold text-gray-900 dark:text-white placeholder-gray-300 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all outline-none"
+                        className="w-full pl-12 pr-4 py-5 rounded-xl border-2 border-rose-200 bg-white text-3xl font-bold text-gray-900 placeholder-gray-300 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all outline-none"
                     />
                 </div>
                 {errors.perNight && (
@@ -136,11 +136,11 @@ export default function StepPricing({
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25 }}
-                className="bg-white dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 space-y-5"
+                className="bg-white rounded-2xl border border-gray-200 p-6 space-y-5"
             >
                 <div className="flex items-center gap-2 mb-2">
                     <Sparkles className="w-5 h-5 text-amber-500" />
-                    <h3 className="font-bold text-lg text-gray-900 dark:text-white">
+                    <h3 className="font-bold text-lg text-gray-900">
                         Additional Fees
                     </h3>
                 </div>
@@ -194,11 +194,11 @@ export default function StepPricing({
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="bg-white dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 space-y-5"
+                className="bg-white rounded-2xl border border-gray-200 p-6 space-y-5"
             >
                 <div className="flex items-center gap-2 mb-2">
                     <TrendingDown className="w-5 h-5 text-green-500" />
-                    <h3 className="font-bold text-lg text-gray-900 dark:text-white">
+                    <h3 className="font-bold text-lg text-gray-900">
                         Discounts
                     </h3>
                 </div>
@@ -223,7 +223,7 @@ export default function StepPricing({
                                 }
                                 placeholder="0"
                                 min={0}
-                                max={100}
+                                max={90}
                                 className={inputClass}
                             />
                             <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">
@@ -250,7 +250,7 @@ export default function StepPricing({
                                 }
                                 placeholder="0"
                                 min={0}
-                                max={100}
+                                max={90}
                                 className={inputClass}
                             />
                             <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">
@@ -266,16 +266,16 @@ export default function StepPricing({
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.35 }}
-                className="bg-gray-900 dark:bg-gray-950 rounded-2xl p-6 text-white"
+                className="bg-white border border-gray-200 rounded-2xl p-6 text-gray-900"
             >
                 <div className="flex items-center gap-2 mb-4">
-                    <Calculator className="w-5 h-5 text-rose-400" />
+                    <Calculator className="w-5 h-5 text-rose-500" />
                     <h3 className="font-bold text-lg">
                         Guest sees (1 night)
                     </h3>
                 </div>
                 <div className="space-y-3">
-                    <div className="flex justify-between text-gray-300">
+                    <div className="flex justify-between text-gray-600">
                         <span>Base price</span>
                         <span>
                             {selectedCurrency.symbol}
@@ -283,7 +283,7 @@ export default function StepPricing({
                         </span>
                     </div>
                     {formData.pricing.cleaningFee > 0 && (
-                        <div className="flex justify-between text-gray-300">
+                        <div className="flex justify-between text-gray-600">
                             <span>Cleaning fee</span>
                             <span>
                                 {selectedCurrency.symbol}
@@ -292,7 +292,7 @@ export default function StepPricing({
                         </div>
                     )}
                     {formData.pricing.serviceFee > 0 && (
-                        <div className="flex justify-between text-gray-300">
+                        <div className="flex justify-between text-gray-600">
                             <span>Service fee</span>
                             <span>
                                 {selectedCurrency.symbol}
@@ -300,9 +300,9 @@ export default function StepPricing({
                             </span>
                         </div>
                     )}
-                    <div className="border-t border-gray-700 pt-3 flex justify-between font-bold text-xl">
+                    <div className="border-t border-gray-200 pt-3 flex justify-between font-bold text-xl">
                         <span>Total</span>
-                        <span className="text-rose-400">
+                        <span className="text-rose-600">
                             {selectedCurrency.symbol}
                             {calculateGuestTotal()}
                         </span>

@@ -38,9 +38,20 @@ export default async function CheckoutPage({ searchParams }: PageProps) {
   const pricePerNight = property.price?.perNight || property.price || 0
   const subtotal = pricePerNight * nights
   const cleaningFee = property.price?.cleaningFee || 0
-  const feePercent = Number(process.env.NEXT_PUBLIC_PLATFORM_FEE_PERCENT) || 10
-  const serviceFee = Math.round(subtotal * (feePercent / 100))
-  const total = subtotal + cleaningFee + serviceFee
+  const serviceFee = property.price?.serviceFee || 0
+
+  // Apply weekly/monthly discounts
+  const weeklyDiscountPct = property.price?.weeklyDiscount || 0
+  const monthlyDiscountPct = property.price?.monthlyDiscount || 0
+  let discountPercent = 0
+  if (nights >= 28 && monthlyDiscountPct > 0) {
+    discountPercent = monthlyDiscountPct
+  } else if (nights >= 7 && weeklyDiscountPct > 0) {
+    discountPercent = weeklyDiscountPct
+  }
+  const discountAmount = Math.round(subtotal * discountPercent / 100)
+  const discountedSubtotal = subtotal - discountAmount
+  const total = discountedSubtotal + cleaningFee + serviceFee
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -110,16 +121,24 @@ export default async function CheckoutPage({ searchParams }: PageProps) {
                   <span className="text-gray-600">{formatCurrency(pricePerNight)} x {nights} nights</span>
                   <span>{formatCurrency(subtotal)}</span>
                 </div>
+                {discountAmount > 0 && (
+                  <div className="flex justify-between text-green-600">
+                    <span>{discountPercent}% {nights >= 28 ? "Monthly" : "Weekly"} discount</span>
+                    <span>-{formatCurrency(discountAmount)}</span>
+                  </div>
+                )}
                 {cleaningFee > 0 && (
                   <div className="flex justify-between">
                     <span className="text-gray-600">Cleaning fee</span>
                     <span>{formatCurrency(cleaningFee)}</span>
                   </div>
                 )}
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Service fee</span>
-                  <span>{formatCurrency(serviceFee)}</span>
-                </div>
+                {serviceFee > 0 && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Service fee</span>
+                    <span>{formatCurrency(serviceFee)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between border-t pt-3 text-base font-semibold">
                   <span>Total</span>
                   <span>{formatCurrency(total)}</span>

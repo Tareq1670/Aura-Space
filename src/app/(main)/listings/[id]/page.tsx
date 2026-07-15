@@ -601,17 +601,29 @@ export default function PropertyDetailPage() {
 
                                     <hr className="my-4 border-slate-100" />
 
-                                    <div className="space-y-3 text-sm">
-                                        {price?.cleaningFee && (
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-slate-500">Cleaning fee</span>
-                                                <span className="font-medium text-slate-700">${price.cleaningFee}</span>
+                                    <div className="space-y-2 text-sm">
+                                        {price && (price.weeklyDiscount ?? 0) > 0 && (
+                                            <div className="flex items-center justify-between text-green-600">
+                                                <span>Weekly discount (7+ nights)</span>
+                                                <span className="font-medium">{price.weeklyDiscount ?? 0}%</span>
                                             </div>
                                         )}
-                                        {price?.serviceFee && (
+                                        {price && (price.monthlyDiscount ?? 0) > 0 && (
+                                            <div className="flex items-center justify-between text-green-600">
+                                                <span>Monthly discount (28+ nights)</span>
+                                                <span className="font-medium">{price.monthlyDiscount ?? 0}%</span>
+                                            </div>
+                                        )}
+                                        {price && (price.cleaningFee ?? 0) > 0 && (
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-slate-500">Cleaning fee</span>
+                                                <span className="font-medium text-slate-700">${price.cleaningFee ?? 0}</span>
+                                            </div>
+                                        )}
+                                        {price && (price.serviceFee ?? 0) > 0 && (
                                             <div className="flex items-center justify-between">
                                                 <span className="text-slate-500">Service fee</span>
-                                                <span className="font-medium text-slate-700">${price.serviceFee}</span>
+                                                <span className="font-medium text-slate-700">${price.serviceFee ?? 0}</span>
                                             </div>
                                         )}
                                     </div>

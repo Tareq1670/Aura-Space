@@ -27,6 +27,8 @@ export interface PublicProperty {
         currency: string;
         cleaningFee?: number;
         serviceFee?: number;
+        weeklyDiscount?: number;
+        monthlyDiscount?: number;
     };
     details: {
         bedrooms: number;

@@ -300,7 +300,7 @@ export default function StepPreview({
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="bg-gray-900 dark:bg-gray-950 rounded-2xl p-6 text-white"
+                className="bg-white border border-gray-200 rounded-2xl p-6"
             >
                 <SectionHeader
                     title="Pricing"
@@ -308,7 +308,7 @@ export default function StepPreview({
                     goToStep={goToStep}
                 />
                 <div className="text-4xl font-bold mb-4">
-                    <span className="text-rose-400">
+                    <span className="text-rose-600">
                         {currency.symbol}
                         {formData.pricing.perNight}
                     </span>
@@ -316,7 +316,16 @@ export default function StepPreview({
                         / night
                     </span>
                 </div>
-                <div className="space-y-2 text-gray-300 text-sm">
+                {formData.pricing.serviceFee > 0 && (
+                    <div className="flex justify-between text-sm text-gray-500">
+                        <span>Service fee</span>
+                        <span>
+                            {currency.symbol}
+                            {formData.pricing.serviceFee}
+                        </span>
+                    </div>
+                )}
+                <div className="space-y-2 text-sm text-gray-500">
                     {formData.pricing.cleaningFee > 0 && (
                         <div className="flex justify-between">
                             <span>Cleaning fee</span>
@@ -327,7 +336,7 @@ export default function StepPreview({
                         </div>
                     )}
                     {formData.pricing.weeklyDiscount > 0 && (
-                        <div className="flex justify-between text-green-400">
+                        <div className="flex justify-between text-green-600">
                             <span>Weekly discount</span>
                             <span>
                                 {formData.pricing.weeklyDiscount}%
@@ -335,7 +344,7 @@ export default function StepPreview({
                         </div>
                     )}
                     {formData.pricing.monthlyDiscount > 0 && (
-                        <div className="flex justify-between text-green-400">
+                        <div className="flex justify-between text-green-600">
                             <span>Monthly discount</span>
                             <span>
                                 {formData.pricing.monthlyDiscount}%
