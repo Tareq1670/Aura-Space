@@ -2,6 +2,7 @@
 
 import StatusBadge from "./StatusBadge"
 import type { BookingItem } from "@/lib/api/Guest/booking-api"
+import { formatCurrency } from "@/lib/currency"
 
 interface Props {
   booking: BookingItem
@@ -48,7 +49,7 @@ export default function BookingCard({ booking, onCancel, onMessage, messageLoadi
               {checkOut.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
             </span>
             <span>{nights} night{nights !== 1 ? "s" : ""}</span>
-            <span className="font-semibold text-gray-900">${Number(booking.totalAmount).toFixed(2)}</span>
+            <span className="font-semibold text-gray-900">{formatCurrency(Number(booking.totalAmount))}</span>
           </div>
 
           <div className="mt-3 flex flex-wrap items-center gap-2">

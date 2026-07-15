@@ -4,16 +4,10 @@ import { useCallback, useEffect, useState, useRef } from "react"
 import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js"
 import { loadStripe } from "@stripe/stripe-js"
 import { Skeleton } from "@heroui/react"
-import { authClient } from "@/lib/auth-client"
+import { apiClientFetch } from "@/lib/client-fetch"
 import { createCheckoutSession } from "@/lib/actions/stripe"
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
-
-const API_BASE = (
-  process.env.NEXT_PUBLIC_SERVER_URL ||
-  process.env.NEXT_PUBLIC_API_URL ||
-  "http://localhost:5000"
-).replace(/\/$/, "") + "/api"
 
 interface Props {
   propertyId: string
@@ -34,16 +28,8 @@ export function CheckoutPaymentWrapper({ propertyId, checkIn, checkOut, guests, 
 
     async function init() {
       try {
-        const { data: tokenData } = await authClient.token()
-        const token = tokenData?.token
-        if (!token) throw new Error("Authentication required")
-
-        const bookingRes = await fetch(`${API_BASE}/bookings`, {
+        const bookingData = await apiClientFetch<Record<string, any>>("/api/bookings", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
           body: JSON.stringify({
             propertyId,
             checkIn,
@@ -52,11 +38,6 @@ export function CheckoutPaymentWrapper({ propertyId, checkIn, checkOut, guests, 
             specialRequest: specialRequest || "",
           }),
         })
-
-        const bookingData = await bookingRes.json()
-        if (!bookingRes.ok) {
-          throw new Error(bookingData?.message || bookingData?.error || "Failed to create booking")
-        }
 
         const booking = bookingData?.data?.booking || bookingData?.data
         const id = booking?.id || String(booking?._id || "")

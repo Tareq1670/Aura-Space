@@ -117,7 +117,7 @@ export default function HostReviewsPage() {
         setReplyText("")
         setRefreshKey((k) => k + 1)
       } else {
-        toast.error(res.error || "Failed to post reply")
+        toast.error((res as any).message || res.error || "Failed to post reply")
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to reply")

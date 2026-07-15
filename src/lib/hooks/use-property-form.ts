@@ -56,7 +56,7 @@ const initialFormData: PropertyFormData = {
         serviceFee: 0,
         weeklyDiscount: 0,
         monthlyDiscount: 0,
-        currency: "BDT",
+        currency: "USD",
     },
     availability: {
         minStay: 1,

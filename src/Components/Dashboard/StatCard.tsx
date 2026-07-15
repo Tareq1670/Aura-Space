@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import type { ReactNode } from "react"
+import { getCurrencySymbol } from "@/lib/currency"
 
 interface Props {
   icon?: ReactNode
@@ -13,11 +14,12 @@ interface Props {
   formatter?: (value: number) => string
 }
 
-export default function StatCard({ icon, label, value, trend, gradient, prefix = "$", formatter }: Props) {
+export default function StatCard({ icon, label, value, trend, gradient, prefix, formatter }: Props) {
+  const currencyPrefix = prefix ?? getCurrencySymbol()
   const displayValue = typeof value === "number"
     ? formatter
       ? formatter(value)
-      : `${prefix}${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+      : `${currencyPrefix}${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
     : value
 
   return (

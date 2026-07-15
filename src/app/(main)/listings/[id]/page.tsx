@@ -21,31 +21,7 @@ import { createReview } from "@/lib/actions/review";
 import RatingStars from "@/Components/Review/RatingStars";
 import { PenLine, Sparkles, X } from "lucide-react";
 
-function StarIcon({ filled, size = "h-4 w-4" }: { filled: boolean; size?: string }) {
-    return (
-        <svg
-            className={`${size} ${filled ? "text-amber-400" : "text-slate-200"}`}
-            fill="currentColor"
-            viewBox="0 0 20 20"
-        >
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-        </svg>
-    );
-}
 
-function StarRatingDisplay({ rating, count }: { rating: number; count: number }) {
-    return (
-        <div className="flex items-center gap-1.5">
-            <div className="flex items-center gap-0.5">
-                {Array.from({ length: 5 }).map((_, i) => (
-                    <StarIcon key={i} filled={i < Math.round(rating)} size="h-4 w-4" />
-                ))}
-            </div>
-            <span className="text-sm font-semibold text-slate-700">{rating.toFixed(1)}</span>
-            <span className="text-sm text-slate-400">({count} reviews)</span>
-        </div>
-    );
-}
 
 function AmenityIcon({ amenity }: { amenity: string }) {
     const iconMap: Record<string, string> = {
@@ -203,7 +179,7 @@ export default function PropertyDetailPage() {
                 toast.success("Conversation started");
                 router.push("/dashboard/guest/messages");
             } else {
-                toast.error(res.error || "Failed to start conversation");
+                toast.error((res as any).message || res.error || "Failed to start conversation");
             }
         } catch {
             toast.error("Something went wrong");
@@ -231,7 +207,7 @@ export default function PropertyDetailPage() {
                 setReviewComment("");
                 setPendingBooking(null);
             } else {
-                toast.error(res.error || "Failed to submit review");
+                toast.error((res as any).message || res.error || "Failed to submit review");
             }
         } catch {
             toast.error("Something went wrong");
@@ -263,105 +239,6 @@ export default function PropertyDetailPage() {
                         Browse Properties
                     </Link>
             </div>
-
-            <AnimatePresence>
-                {showReviewModal && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={() => setShowReviewModal(false)}
-                        className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/30 backdrop-blur-sm p-4"
-                    >
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.92, y: 24 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.92, y: 24 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 26 }}
-                            onClick={(e) => e.stopPropagation()}
-                            className="w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl"
-                        >
-                            <div className="relative overflow-hidden bg-gradient-to-r from-amber-500 to-orange-500 px-6 py-5">
-                                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-30" />
-                                <div className="relative flex items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                        <Sparkles className="h-5 w-5 text-white/80" />
-                                        <h3 className="text-lg font-semibold text-white">Write a Review</h3>
-                                    </div>
-                                    <button
-                                        onClick={() => setShowReviewModal(false)}
-                                        className="rounded-lg p-1.5 text-white/60 transition-colors hover:bg-white/15 hover:text-white"
-                                    >
-                                        <X className="h-5 w-5" />
-                                    </button>
-                                </div>
-                                {pendingBooking && property && (
-                                    <motion.p
-                                        initial={{ opacity: 0, y: -4 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        className="relative mt-2 text-sm text-white/70"
-                                    >
-                                        Reviewing:{" "}
-                                        <span className="font-medium text-white">
-                                            {property.title}
-                                        </span>
-                                    </motion.p>
-                                )}
-                            </div>
-
-                            <div className="px-6 py-5">
-                                <div className="mb-5">
-                                    <label className="mb-2.5 block text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                        Rating
-                                    </label>
-                                    <div className="inline-block rounded-xl bg-gray-50 px-4 py-3">
-                                        <RatingStars
-                                            rating={reviewRating}
-                                            onRate={setReviewRating}
-                                            size="lg"
-                                            animated
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="mb-5">
-                                    <label className="mb-2.5 block text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                        Comment
-                                    </label>
-                                    <textarea
-                                        value={reviewComment}
-                                        onChange={(e) => setReviewComment(e.target.value)}
-                                        rows={4}
-                                        placeholder="Share your experience..."
-                                        className="w-full resize-none rounded-xl border border-gray-200 bg-white p-3.5 text-sm text-gray-700 outline-none placeholder-gray-300 transition-all hover:border-amber-200 focus:border-amber-400 focus:ring-2 focus:ring-amber-100"
-                                    />
-                                </div>
-
-                                <div className="flex gap-3">
-                                    <button
-                                        onClick={() => setShowReviewModal(false)}
-                                        className="flex-1 rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-gray-500 transition-all hover:bg-gray-50 hover:text-gray-700"
-                                    >
-                                        Cancel
-                                    </button>
-                                    <motion.button
-                                        whileHover={{ scale: 1.01 }}
-                                        whileTap={{ scale: 0.98 }}
-                                        onClick={handleSubmitReview}
-                                        disabled={submittingReview || !reviewRating || !reviewComment.trim()}
-                                        className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-amber-500/15 transition-all hover:shadow-xl disabled:opacity-40"
-                                    >
-                                        {submittingReview && (
-                                            <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white" />
-                                        )}
-                                        Submit Review
-                                    </motion.button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </div>
     );
 }
@@ -458,8 +335,9 @@ export default function PropertyDetailPage() {
                                                 {property.location?.city}{property.location?.city && property.location?.country ? ", " : ""}{property.location?.country}
                                             </span>
                                         </div>
-                                        <div className="mt-3">
-                                            <StarRatingDisplay rating={property.rating} count={property.reviewCount} />
+                                        <div className="mt-3 flex items-center gap-1.5">
+                                            <RatingStars rating={property.rating} showValue readonly size="sm" />
+                                            <span className="text-sm text-slate-400">({property.reviewCount} reviews)</span>
                                         </div>
                                     </div>
                                 </div>
@@ -593,11 +471,9 @@ export default function PropertyDetailPage() {
                                     <div className="mt-6 flex flex-col gap-4 sm:flex-row">
                                         <div className="flex flex-col items-center justify-center rounded-xl bg-slate-50 p-6 sm:w-48">
                                             <span className="text-4xl font-black text-slate-900">{property.rating.toFixed(1)}</span>
-                                            <div className="mt-2 flex items-center gap-0.5">
-                                                {Array.from({ length: 5 }).map((_, i) => (
-                                                    <StarIcon key={i} filled={i < Math.round(property.rating)} size="h-4 w-4" />
-                                                ))}
-                                            </div>
+                                        <div className="mt-2">
+                                            <RatingStars rating={property.rating} readonly size="sm" />
+                                        </div>
                                             <span className="mt-1 text-xs text-slate-400">{reviews.length} reviews</span>
                                         </div>
                                         <div className="flex-1 space-y-2">
@@ -634,11 +510,7 @@ export default function PropertyDetailPage() {
                                                     <div>
                                                         <p className="text-sm font-bold text-slate-900">{review.guestName}</p>
                                                         <div className="flex items-center gap-2">
-                                                            <div className="flex items-center gap-0.5">
-                                                                {Array.from({ length: 5 }).map((_, i) => (
-                                                                    <StarIcon key={i} filled={i < Math.round(review.rating)} size="h-3 w-3" />
-                                                                ))}
-                                                            </div>
+                                                            <RatingStars rating={review.rating} readonly size="sm" />
                                                             <span className="text-[11px] text-slate-400">{formatDate(review.createdAt)}</span>
                                                         </div>
                                                     </div>
@@ -835,7 +707,7 @@ export default function PropertyDetailPage() {
                                                         ${prop.price?.perNight} <span className="text-xs font-normal text-slate-400">/ night</span>
                                                     </span>
                                                     <div className="flex items-center gap-1">
-                                                        <StarIcon filled size="h-3 w-3" />
+                                                        <RatingStars rating={5} readonly size="sm" />
                                                         <span className="text-xs font-semibold text-slate-600">{prop.rating.toFixed(1)}</span>
                                                     </div>
                                                 </div>
@@ -950,6 +822,105 @@ export default function PropertyDetailPage() {
                     </div>
                 </div>
             </div>
+
+            <AnimatePresence>
+                {showReviewModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setShowReviewModal(false)}
+                        className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/30 backdrop-blur-sm p-4"
+                    >
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.92, y: 24 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.92, y: 24 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 26 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl"
+                        >
+                            <div className="relative overflow-hidden bg-gradient-to-r from-amber-500 to-orange-500 px-6 py-5">
+                                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-30" />
+                                <div className="relative flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <Sparkles className="h-5 w-5 text-white/80" />
+                                        <h3 className="text-lg font-semibold text-white">Write a Review</h3>
+                                    </div>
+                                    <button
+                                        onClick={() => setShowReviewModal(false)}
+                                        className="rounded-lg p-1.5 text-white/60 transition-colors hover:bg-white/15 hover:text-white"
+                                    >
+                                        <X className="h-5 w-5" />
+                                    </button>
+                                </div>
+                                {pendingBooking && property && (
+                                    <motion.p
+                                        initial={{ opacity: 0, y: -4 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="relative mt-2 text-sm text-white/70"
+                                    >
+                                        Reviewing:{" "}
+                                        <span className="font-medium text-white">
+                                            {property.title}
+                                        </span>
+                                    </motion.p>
+                                )}
+                            </div>
+
+                            <div className="px-6 py-5">
+                                <div className="mb-5">
+                                    <label className="mb-2.5 block text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                        Rating
+                                    </label>
+                                    <div className="inline-block rounded-xl bg-gray-50 px-4 py-3">
+                                        <RatingStars
+                                            rating={reviewRating}
+                                            onRate={setReviewRating}
+                                            size="lg"
+                                            animated
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="mb-5">
+                                    <label className="mb-2.5 block text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                        Comment
+                                    </label>
+                                    <textarea
+                                        value={reviewComment}
+                                        onChange={(e) => setReviewComment(e.target.value)}
+                                        rows={4}
+                                        placeholder="Share your experience..."
+                                        className="w-full resize-none rounded-xl border border-gray-200 bg-white p-3.5 text-sm text-gray-700 outline-none placeholder-gray-300 transition-all hover:border-amber-200 focus:border-amber-400 focus:ring-2 focus:ring-amber-100"
+                                    />
+                                </div>
+
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={() => setShowReviewModal(false)}
+                                        className="flex-1 rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-gray-500 transition-all hover:bg-gray-50 hover:text-gray-700"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <motion.button
+                                        whileHover={{ scale: 1.01 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        onClick={handleSubmitReview}
+                                        disabled={submittingReview || !reviewRating || !reviewComment.trim()}
+                                        className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-amber-500/15 transition-all hover:shadow-xl disabled:opacity-40"
+                                    >
+                                        {submittingReview && (
+                                            <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white" />
+                                        )}
+                                        Submit Review
+                                    </motion.button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

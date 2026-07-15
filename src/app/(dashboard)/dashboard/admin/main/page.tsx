@@ -11,6 +11,7 @@ import {
 } from "recharts"
 import StatCard from "@/Components/Dashboard/StatCard"
 import { getAdminDashboard, type AdminDashboardData } from "@/lib/actions/dashboard-admin"
+import { formatCurrency } from "@/lib/currency"
 
 const COLORS = ["#8b5cf6", "#10b981", "#f59e0b", "#ef4444", "#06b6d4", "#ec4899", "#84cc16", "#6366f1"]
 
@@ -69,7 +70,7 @@ export default function AdminMainPage() {
             <StatCard label="Total Properties" value={data.totalProperties} gradient="from-blue-500 to-cyan-600" prefix="" formatter={(v) => String(v)} icon={<Building className="h-5 w-5 text-white" />} />
             <StatCard label="Total Bookings" value={data.totalBookings} gradient="from-emerald-500 to-teal-600" prefix="" formatter={(v) => String(v)} icon={<CalendarCheck className="h-5 w-5 text-white" />} />
             <StatCard label="Platform Revenue" value={data.commissionEarned} gradient="from-amber-500 to-orange-600" icon={<DollarSign className="h-5 w-5 text-white" />} />
-            <StatCard label="Pending Payouts" value={data.pendingPayouts} gradient="from-rose-500 to-pink-600" prefix="" formatter={(v) => `$${v.toLocaleString("en-US", { minimumFractionDigits: 2 })}`} icon={<Activity className="h-5 w-5 text-white" />} />
+            <StatCard label="Pending Payouts" value={data.pendingPayouts} gradient="from-rose-500 to-pink-600" prefix="" formatter={(v) => formatCurrency(v)} icon={<Activity className="h-5 w-5 text-white" />} />
           </div>
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
@@ -130,7 +131,7 @@ export default function AdminMainPage() {
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium text-gray-900">{b.propertyTitle as string}</p>
-                        <p className="text-xs text-gray-400">{((b.guest as Record<string, unknown>)?.name as string) || "Guest"} · ${b.totalAmount as number} · {b.status as string}</p>
+                        <p className="text-xs text-gray-400">{((b.guest as Record<string, unknown>)?.name as string) || "Guest"} · {formatCurrency(Number(b.totalAmount as number))} · {b.status as string}</p>
                       </div>
                       <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${b.status === "confirmed" ? "bg-emerald-50 text-emerald-600" : b.status === "pending" ? "bg-amber-50 text-amber-600" : b.status === "completed" ? "bg-blue-50 text-blue-600" : "bg-red-50 text-red-600"}`}>
                         {b.status as string}

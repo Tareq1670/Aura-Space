@@ -1,44 +1,8 @@
 "use server";
 
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-
-// ============================================================
-// API BASE URL
-// ============================================================
-function getApiBase(): string {
-    const raw = process.env.NEXT_PUBLIC_SERVER_URL ||
-                process.env.NEXT_PUBLIC_API_URL ||
-                "http://localhost:5000";
-    const base = raw.replace(/\/$/, "");
-    if (base.endsWith("/api")) return base;
-    return `${base}/api`;
-}
+import { getApiBase, getAuthHeaders, getSessionToken } from "@/lib/api-base";
 
 const API_BASE = getApiBase();
-
-// ============================================================
-// SESSION TOKEN — from cookie via better-auth
-// ============================================================
-async function getSessionToken(): Promise<string> {
-    const headersList = await headers();
-    const tokenResponse = await auth.api.getToken({ headers: headersList });
-    if (tokenResponse?.token) {
-        return tokenResponse.token;
-    }
-    throw new Error("No session token found. Please login again.");
-}
-
-// ============================================================
-// AUTH HEADERS
-// ============================================================
-async function getAuthHeaders(): Promise<Record<string, string>> {
-    const token = await getSessionToken();
-    return {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-    };
-}
 
 // ============================================================
 // GENERIC FETCH

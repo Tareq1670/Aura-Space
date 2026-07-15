@@ -7,6 +7,7 @@ import { Filter, Search, CheckCircle } from "lucide-react"
 import { ListBox, Pagination, Select, Skeleton } from "@heroui/react"
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal"
 import { transactionAPI, type TransactionItem } from "@/lib/api/Guest/transaction-api"
+import { formatCurrency } from "@/lib/currency"
 
 const STATUS_STYLES: Record<string, string> = {
   success: "bg-emerald-50 text-emerald-700 border-emerald-200",
@@ -293,7 +294,7 @@ export default function AdminTransactionsPage() {
                     <td className="whitespace-nowrap px-5 py-3.5 font-mono text-xs text-gray-500">{t.transactionId?.slice(0, 16)}…</td>
                     <td className="whitespace-nowrap px-5 py-3.5 font-mono text-xs text-gray-500">{t.userId?.slice(0, 12)}…</td>
                     <td className="px-5 py-3.5 text-gray-700">{t.description || "—"}</td>
-                    <td className="whitespace-nowrap px-5 py-3.5 font-semibold text-gray-900">${t.amount.toFixed(2)}</td>
+                    <td className="whitespace-nowrap px-5 py-3.5 font-semibold text-gray-900">{formatCurrency(t.amount)}</td>
                     <td className="whitespace-nowrap px-5 py-3.5 text-gray-600">{METHOD_LABELS[t.method] || t.method}</td>
                     <td className="whitespace-nowrap px-5 py-3.5">
                       <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${TYPE_STYLES[t.type] || "bg-gray-50 text-gray-700 border-gray-200"}`}>

@@ -8,6 +8,7 @@ import { CalendarDays, Heart, CreditCard, MapPin, ArrowRight } from "lucide-reac
 import StatCard from "@/Components/Dashboard/StatCard"
 import ChartCard from "@/Components/Dashboard/ChartCard"
 import { getGuestDashboard, type GuestDashboardData } from "@/lib/actions/dashboard-guest"
+import { formatCurrency } from "@/lib/currency"
 
 const quickLinks = [
   { label: "Browse Spaces", href: "/spaces", color: "from-violet-500 to-purple-600" },
@@ -110,7 +111,7 @@ export default function GuestMainPage() {
                           <p className="text-xs text-gray-400">{new Date(t.createdAt as string).toLocaleDateString()} · {t.type as string}</p>
                         </div>
                         <span className={`ml-3 shrink-0 font-semibold ${t.type === "payment" ? "text-red-500" : "text-emerald-500"}`}>
-                          {t.type === "payment" ? "-" : "+"}${(t.amount as number).toFixed(2)}
+                          {t.type === "payment" ? "-" : "+"}{formatCurrency(t.amount as number)}
                         </span>
                       </div>
                     ))}

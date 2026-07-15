@@ -10,6 +10,7 @@ import StatusBadge from "@/Components/Booking/StatusBadge"
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal"
 import { bookingAPI, type BookingItem } from "@/lib/api/Guest/booking-api"
 import { exportToCSV } from "@/lib/utils/csv-export"
+import { formatCurrency } from "@/lib/currency"
 
 type BookingRecord = BookingItem & Record<string, unknown>
 
@@ -113,7 +114,7 @@ export default function AdminBookingsPage() {
       header: "Amount",
       accessor: (r) => r.totalAmount,
       render: (r, val) => (
-        <span className="font-semibold text-gray-900">${Number(val).toFixed(2)}</span>
+        <span className="font-semibold text-gray-900">{formatCurrency(Number(val))}</span>
       ),
       align: "right",
       width: "100px",

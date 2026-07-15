@@ -2,17 +2,9 @@
 
 import { headers } from "next/headers"
 import { auth } from "@/lib/auth"
+import { getApiBase } from "@/lib/api-base"
 
-const API_BASE = (() => {
-  const raw =
-    process.env.NEXT_PUBLIC_SERVER_URL ||
-    process.env.NEXT_PUBLIC_API_URL ||
-    process.env.API_BASE_URL ||
-    "http://localhost:5000"
-  const base = raw.replace(/\/$/, "")
-  if (base.endsWith("/api")) return base
-  return `${base}/api`
-})()
+const API_BASE = getApiBase()
 
 export interface AdminDashboardData {
   totalUsers: number
@@ -20,6 +12,7 @@ export interface AdminDashboardData {
   totalBookings: number
   commissionEarned: number
   pendingPayouts: number
+  reportedReviews: number
   recentBookings: Record<string, unknown>[]
   signupTrend: { month: string; signups: number }[]
   bookingStatusData: { name: string; count: number }[]
@@ -33,7 +26,7 @@ export async function getAdminDashboard(): Promise<{
 }> {
   try {
     const headersList = await headers()
-    const tokenRes = await auth.api.getToken({ headers: headersList })
+    const tokenRes = await (auth.api as any).getToken({ headers: headersList })
     if (!tokenRes?.token) return { success: false, message: "Not authenticated" }
 
     const res = await fetch(`${API_BASE}/dashboard/admin`, {

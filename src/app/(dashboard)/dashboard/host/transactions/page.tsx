@@ -6,6 +6,7 @@ import { toast } from "sonner"
 import { ArrowUpDown } from "lucide-react"
 import { ListBox, Pagination, Select, Skeleton } from "@heroui/react"
 import { transactionAPI, type TransactionItem } from "@/lib/api/Guest/transaction-api"
+import { formatCurrency } from "@/lib/currency"
 
 const STATUS_STYLES: Record<string, string> = {
   success: "bg-emerald-50 text-emerald-700 border-emerald-200",
@@ -201,9 +202,9 @@ export default function HostTransactionsPage() {
                   >
                     <td className="whitespace-nowrap px-5 py-3.5 text-gray-700">{new Date(t.createdAt).toLocaleDateString()}</td>
                     <td className="px-5 py-3.5 text-gray-700">{t.description || "—"}</td>
-                    <td className="whitespace-nowrap px-5 py-3.5 font-semibold text-gray-900">${t.amount.toFixed(2)}</td>
-                    <td className="whitespace-nowrap px-5 py-3.5 text-gray-500">${(t.amount * 0.1).toFixed(2)}</td>
-                    <td className="whitespace-nowrap px-5 py-3.5 font-semibold text-emerald-600">${(t.amount * 0.9).toFixed(2)}</td>
+                    <td className="whitespace-nowrap px-5 py-3.5 font-semibold text-gray-900">{formatCurrency(t.amount)}</td>
+                    <td className="whitespace-nowrap px-5 py-3.5 text-gray-500">{formatCurrency(t.amount * 0.1)}</td>
+                    <td className="whitespace-nowrap px-5 py-3.5 font-semibold text-emerald-600">{formatCurrency(t.amount * 0.9)}</td>
                     <td className="whitespace-nowrap px-5 py-3.5">
                       <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${TYPE_STYLES[t.type] || "bg-gray-50 text-gray-700 border-gray-200"}`}>
                         <span className={`h-1.5 w-1.5 rounded-full ${

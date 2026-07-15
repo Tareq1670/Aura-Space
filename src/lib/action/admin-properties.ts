@@ -2,16 +2,9 @@
 
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
+import { getApiBase } from "@/lib/api-base";
 
-const API_BASE = (() => {
-    const raw = process.env.NEXT_PUBLIC_SERVER_URL ||
-                process.env.NEXT_PUBLIC_API_URL ||
-                process.env.API_BASE_URL ||
-                "http://localhost:5000";
-    const base = raw.replace(/\/$/, "");
-    if (base.endsWith("/api")) return base;
-    return `${base}/api`;
-})();
+const API_BASE = getApiBase();
 
 interface ActionResponse {
     success: boolean;
@@ -22,7 +15,7 @@ interface ActionResponse {
 async function getToken(): Promise<string | null> {
     try {
         const headersList = await headers();
-        const tokenResponse = await auth.api.getToken({ headers: headersList });
+        const tokenResponse = await (auth.api as any).getToken({ headers: headersList });
         if (!tokenResponse?.token) {
             console.warn("[getToken] No JWT token found");
             return null;

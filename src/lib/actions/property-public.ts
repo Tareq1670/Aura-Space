@@ -1,15 +1,6 @@
 "use server";
 
-import { headers } from "next/headers";
-
-function getApiBase(): string {
-    const raw = process.env.NEXT_PUBLIC_SERVER_URL ||
-                process.env.NEXT_PUBLIC_API_URL ||
-                "http://localhost:5000";
-    const base = raw.replace(/\/$/, "");
-    if (base.endsWith("/api")) return base;
-    return `${base}/api`;
-}
+import { getApiBase } from "@/lib/api-base";
 
 const API_BASE = getApiBase();
 
@@ -196,4 +187,18 @@ export interface PopularDestination {
 
 export async function getPopularDestinations(): Promise<ApiResponse<PopularDestination[]>> {
     return publicFetch("/properties/cities");
+}
+
+export interface HomepageStats {
+    totalProperties: number;
+    totalFeatured: number;
+    avgRating: number;
+    totalReviews: number;
+    byCategory: Array<{ category: string; count: number; avgPrice: number }>;
+    topCities: Array<{ city: string; country: string; count: number; avgPrice: number }>;
+    priceRange: { min: number; max: number; avg: number };
+}
+
+export async function getHomepageStats(): Promise<ApiResponse<HomepageStats>> {
+    return publicFetch("/properties/stats");
 }

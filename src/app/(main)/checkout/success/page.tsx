@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation"
 import { stripe } from "@/lib/stripe"
+import { formatCurrency } from "@/lib/currency"
 import Link from "next/link"
 
 interface Props {
@@ -67,7 +68,7 @@ export default async function SuccessPage({ searchParams }: Props) {
           {amountTotal && (
             <div className="mb-3 flex justify-between">
               <span className="text-gray-500">Total paid</span>
-              <span className="font-medium">${amountTotal}</span>
+              <span className="font-medium">{amountTotal ? formatCurrency(Number(amountTotal)) : ""}</span>
             </div>
           )}
           {customerEmail && (

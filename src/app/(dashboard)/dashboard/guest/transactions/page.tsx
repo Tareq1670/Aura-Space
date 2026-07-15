@@ -7,6 +7,7 @@ import { CreditCard, Search } from "lucide-react"
 import { Label, ListBox, Pagination, Select, Skeleton } from "@heroui/react"
 import { transactionAPI, type TransactionItem } from "@/lib/api/Guest/transaction-api"
 import StatCard from "@/Components/Dashboard/StatCard"
+import { formatCurrency } from "@/lib/currency"
 
 const STATUS_CONFIG: Record<string, { dot: string; label: string }> = {
   success: { dot: "bg-emerald-500", label: "Success" },
@@ -245,7 +246,7 @@ export default function GuestTransactionsPage() {
                       <td className="whitespace-nowrap px-5 py-3.5 text-gray-700">{new Date(t.createdAt).toLocaleDateString()}</td>
                       <td className="px-5 py-3.5 text-gray-700">{t.description || "—"}</td>
                       <td className={`whitespace-nowrap px-5 py-3.5 font-semibold ${t.type === "refund" ? "text-red-600" : "text-gray-900"}`}>
-                        {t.type === "refund" ? "-" : "+"}${t.amount.toFixed(2)}
+                        {t.type === "refund" ? "-" : "+"}{formatCurrency(t.amount)}
                       </td>
                       <td className="whitespace-nowrap px-5 py-3.5 capitalize text-gray-600">{t.method}</td>
                       <td className="px-5 py-3.5">

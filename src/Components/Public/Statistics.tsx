@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 
 interface StatItem {
@@ -11,7 +11,7 @@ interface StatItem {
     icon: React.ReactNode;
 }
 
-const statsData: StatItem[] = [
+const FALLBACK_STATS: StatItem[] = [
     {
         id: 1,
         value: "12,400+",
@@ -128,8 +128,57 @@ const itemVariants: Variants = {
     },
 };
 
+function getServerUrl(): string {
+    if (typeof window === "undefined") return "http://localhost:5000";
+    return window.location.origin.includes("localhost")
+        ? "http://localhost:5000"
+        : "https://aura-space-server.vercel.app";
+}
+
+async function fetchStats(): Promise<{ totalProperties: number; totalReviews: number; avgRating: number } | null> {
+    try {
+        const res = await fetch(`${getServerUrl()}/api/properties/stats`);
+        if (!res.ok) return null;
+        const body = await res.json();
+        if (body.success && body.data) {
+            return {
+                totalProperties: body.data.totalProperties || 0,
+                totalReviews: body.data.totalReviews || 0,
+                avgRating: body.data.avgRating || 0,
+            };
+        }
+        return null;
+    } catch {
+        return null;
+    }
+}
+
 export default function Statistics() {
     const reduceMotion = useReducedMotion();
+    const [liveStats, setLiveStats] = useState<{ totalProperties: number; totalReviews: number } | null>(null);
+
+    useEffect(() => {
+        fetchStats().then((data) => {
+            if (data) setLiveStats(data);
+        });
+    }, []);
+
+    const statsData: StatItem[] = liveStats
+        ? [
+              {
+                  ...FALLBACK_STATS[0],
+                  value: `${(liveStats.totalProperties / 1000).toFixed(1)}K+`,
+              },
+              {
+                  ...FALLBACK_STATS[1],
+                  value: liveStats.totalReviews > 1000
+                      ? `${(liveStats.totalReviews / 1000).toFixed(1)}K+`
+                      : `${liveStats.totalReviews}+`,
+              },
+              FALLBACK_STATS[2],
+              FALLBACK_STATS[3],
+          ]
+        : FALLBACK_STATS;
 
     return (
         <section className="relative w-full overflow-hidden bg-white py-16 text-slate-950 sm:py-20 lg:py-24">

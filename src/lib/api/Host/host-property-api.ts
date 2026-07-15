@@ -1,47 +1,4 @@
-import { authClient } from "@/lib/auth-client";
-
-const SERVER_URL =
-    process.env.NEXT_PUBLIC_SERVER_URL ||
-    (typeof window !== "undefined"
-        ? window.location.origin.includes("localhost")
-            ? "http://localhost:5000"
-            : "https://aura-space-server.vercel.app"
-        : "http://localhost:5000");
-
-async function getAuthToken(): Promise<string> {
-    try {
-        const { data } = await authClient.token();
-        if (data?.token) return data.token;
-        throw new Error("No token from authClient.token()");
-    } catch (err) {
-        console.error("[getAuthToken] failed:", err);
-        throw new Error("Login required.");
-    }
-}
-
-async function apiFetch<T>(
-    endpoint: string,
-    options: RequestInit = {},
-): Promise<T> {
-    const token = await getAuthToken();
-    const isFormData = options.body instanceof FormData;
-    const res = await fetch(`${SERVER_URL}${endpoint}`, {
-        ...options,
-        headers: {
-            ...(isFormData ? {} : { "Content-Type": "application/json" }),
-            Authorization: `Bearer ${token}`,
-            ...options.headers,
-        },
-    });
-    const contentType = res.headers.get("content-type") || "";
-    const isJson = contentType.includes("application/json");
-    const body = isJson ? await res.json() : await res.text();
-    if (!res.ok) {
-        const message = isJson ? (body.message || body.error || "Something went wrong.") : `HTTP ${res.status}`;
-        throw new Error(message);
-    }
-    return body;
-}
+import { apiClientFetch } from "@/lib/client-fetch"
 
 export interface GetMyPropertiesParams {
     page?: number;
@@ -77,7 +34,7 @@ export const hostPropertyAPI = {
         if (params.category) qs.set("category", params.category);
         if (params.sortBy) qs.set("sort", params.sortBy);
         const query = qs.toString();
-        return apiFetch<{
+        return apiClientFetch<{
             success: boolean;
             data: {
                 properties: PropertyListItem[];
@@ -88,28 +45,28 @@ export const hostPropertyAPI = {
     },
 
     getProperty: (id: string) =>
-        apiFetch<{ success: boolean; data: { property: Record<string, unknown>; host: Record<string, unknown>; relatedProperties: Record<string, unknown>[] } }>(
+        apiClientFetch<{ success: boolean; data: { property: Record<string, unknown>; host: Record<string, unknown>; relatedProperties: Record<string, unknown>[] } }>(
             `/api/properties/${id}`,
         ),
 
     updateProperty: (id: string, data: Record<string, unknown>) =>
-        apiFetch<{ success: boolean; data: Record<string, unknown>; message?: string }>(`/api/properties/${id}`, {
+        apiClientFetch<{ success: boolean; data: Record<string, unknown>; message?: string }>(`/api/properties/${id}`, {
             method: "PUT",
             body: JSON.stringify(data),
         }),
 
     deleteProperty: (id: string) =>
-        apiFetch<{ success: boolean; message: string }>(`/api/properties/${id}`, {
+        apiClientFetch<{ success: boolean; message: string }>(`/api/properties/${id}`, {
             method: "DELETE",
         }),
 
     duplicateProperty: (id: string) =>
-        apiFetch<{ success: boolean; data: { id: string } }>(`/api/properties/${id}/duplicate`, {
+        apiClientFetch<{ success: boolean; data: { id: string } }>(`/api/properties/${id}/duplicate`, {
             method: "POST",
         }),
 
     updatePropertyStatus: (id: string, status: string) =>
-        apiFetch<{ success: boolean; data: { id: string; status: string } }>(`/api/properties/${id}/status`, {
+        apiClientFetch<{ success: boolean; data: { id: string; status: string } }>(`/api/properties/${id}/status`, {
             method: "PUT",
             body: JSON.stringify({ status }),
         }),

@@ -80,7 +80,7 @@ export default function AdminReviewsPage() {
         setDeleteId(null)
         setRefreshKey((k) => k + 1)
       } else {
-        toast.error(res.error || "Failed to delete review")
+        toast.error((res as any).message || res.error || "Failed to delete review")
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to delete")

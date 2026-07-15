@@ -2,12 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { stripe } from "@/lib/stripe"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
-
-const API_BASE = (
-  process.env.NEXT_PUBLIC_SERVER_URL ||
-  process.env.NEXT_PUBLIC_API_URL ||
-  "http://localhost:5000"
-).replace(/\/$/, "") + "/api"
+import { getApiBase } from "@/lib/api-base"
 
 export async function POST(req: NextRequest) {
   try {
@@ -24,21 +19,21 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const session = await auth.api.getSession({
+    const session = await (auth.api as any).getSession({
       headers: await headers(),
     })
     if (!session?.user) {
       return NextResponse.redirect(new URL("/login?redirect=/checkout", req.url))
     }
 
-    const tokenResponse = await auth.api.getToken({
+    const tokenResponse = await (auth.api as any).getToken({
       headers: await headers(),
     })
     if (!tokenResponse?.token) {
       return NextResponse.redirect(new URL("/login?redirect=/checkout", req.url))
     }
 
-    const bookingRes = await fetch(`${API_BASE}/bookings`, {
+    const bookingRes = await fetch(`${getApiBase()}/bookings`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -69,7 +64,7 @@ export async function POST(req: NextRequest) {
       line_items: [
         {
           price_data: {
-            currency: (process.env.STRIPE_CURRENCY || "usd").toLowerCase(),
+            currency: (process.env.NEXT_PUBLIC_STRIPE_CURRENCY || process.env.STRIPE_CURRENCY || "usd").toLowerCase(),
             product_data: {
               name: booking.propertyTitle || "Property Booking",
               images: booking.propertyImage ? [booking.propertyImage] : [],

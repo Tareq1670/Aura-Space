@@ -108,7 +108,7 @@ export default function GuestReviewsPage() {
           setWriteBooking(null)
           setRefreshKey((k) => k + 1)
         } else {
-          toast.error(res.error || "Failed to submit review")
+          toast.error((res as any).message || res.error || "Failed to submit review")
         }
       } else if (showEditModal && editReview) {
         const res = await updateReview(editReview._id, {
@@ -121,7 +121,7 @@ export default function GuestReviewsPage() {
           setEditReview(null)
           setRefreshKey((k) => k + 1)
         } else {
-          toast.error(res.error || "Failed to update review")
+          toast.error((res as any).message || res.error || "Failed to update review")
         }
       }
     } catch (err) {
@@ -141,7 +141,7 @@ export default function GuestReviewsPage() {
         setDeleteId(null)
         setRefreshKey((k) => k + 1)
       } else {
-        toast.error(res.error || "Failed to delete review")
+        toast.error((res as any).message || res.error || "Failed to delete review")
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to delete")
@@ -157,7 +157,7 @@ export default function GuestReviewsPage() {
         toast.success("Review reported for moderation")
         setRefreshKey((k) => k + 1)
       } else {
-        toast.error(res.error || "Failed to report review")
+        toast.error((res as any).message || res.error || "Failed to report review")
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to report")

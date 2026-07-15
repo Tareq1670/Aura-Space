@@ -81,7 +81,7 @@ function mapBackendToFormData(property: any): PropertyFormData {
             serviceFee: property.price?.serviceFee || 0,
             weeklyDiscount: property.price?.weeklyDiscount || 0,
             monthlyDiscount: property.price?.monthlyDiscount || 0,
-            currency: property.price?.currency || "BDT",
+            currency: property.price?.currency || "USD",
         },
         availability: {
             minStay: property.availabilitySettings?.minStay ??

@@ -50,7 +50,7 @@ export default function PropertyDataTable({ properties, onDelete, onDuplicate }:
             accessor: (row) => row.price?.perNight || 0,
             render: (r, val) => (
                 <span className="font-semibold text-gray-900">
-                    {val ? `${r.price?.currency || "BDT"} ${Number(val).toLocaleString()}/night` : "—"}
+                    {val ? `${r.price?.currency || "USD"} ${Number(val).toLocaleString()}/night` : "—"}
                 </span>
             ),
             align: "right",

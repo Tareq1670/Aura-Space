@@ -6,6 +6,9 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { getUnreadCount } from "@/lib/actions/message";
+import { getGuestDashboard } from "@/lib/actions/dashboard-guest";
+import { getHostDashboard } from "@/lib/actions/dashboard-host";
+import { getAdminDashboard } from "@/lib/actions/dashboard-admin";
 import {
     HiSquares2X2,
     HiUser,
@@ -548,6 +551,17 @@ const SidebarInner = ({
                                                         {item.label}
                                                     </span>
                                                 )}
+                                                {showLabels && item.badge ? (
+                                                    <span className={`relative z-10 ml-auto px-1.5 py-0.5 rounded-full text-[10px] font-bold leading-tight ${
+                                                        item.badgeColor === "red"
+                                                            ? "bg-red-500/20 text-red-400"
+                                                            : item.badgeColor === "emerald"
+                                                            ? "bg-emerald-500/20 text-emerald-400"
+                                                            : "bg-violet-500/20 text-violet-400"
+                                                    }`}>
+                                                        {item.badge}
+                                                    </span>
+                                                ) : null}
                                             </Link>
                                         </li>
                                     );
@@ -626,6 +640,9 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [unreadCount, setUnreadCount] = useState(0);
+    const [bookingsCount, setBookingsCount] = useState(0);
+    const [reservationsCount, setReservationsCount] = useState(0);
+    const [reportedCount, setReportedCount] = useState(0);
 
     const rawRole = user?.role ?? "user";
     const role: RoleKey =
@@ -646,13 +663,37 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
         return () => clearInterval(interval);
     }, []);
 
+    useEffect(() => {
+        async function fetchCounts() {
+            if (role === "user") {
+                const res = await getGuestDashboard();
+                if (res.success && res.data) {
+                    setBookingsCount(res.data.totalBookings);
+                }
+            } else if (role === "host") {
+                const res = await getHostDashboard();
+                if (res.success && res.data) {
+                    setReservationsCount(res.data.activeBookings);
+                }
+            } else if (role === "admin") {
+                const res = await getAdminDashboard();
+                if (res.success && res.data) {
+                    setReportedCount(res.data.reportedReviews);
+                }
+            }
+        }
+        fetchCounts();
+    }, [role]);
+
     const navSections = NAV_LINKS[role].map((section) => ({
         ...section,
-        items: section.items.map((item) =>
-            item.label === "Messages"
-                ? { ...item, badge: unreadCount || undefined }
-                : item
-        ),
+        items: section.items.map((item) => {
+            if (item.label === "Messages") return { ...item, badge: unreadCount || undefined };
+            if (role === "user" && item.label === "My Bookings") return { ...item, badge: bookingsCount || undefined };
+            if (role === "host" && item.label === "Reservations") return { ...item, badge: reservationsCount || undefined };
+            if (role === "admin" && item.label === "Reported Content") return { ...item, badge: reportedCount || undefined };
+            return item;
+        }),
     }));
     const currentRole = roleConfig[role];
 

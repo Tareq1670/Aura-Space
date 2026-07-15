@@ -2,43 +2,27 @@ import { NextRequest, NextResponse } from "next/server";
 
 const publicRoutes = [
     "/",
-    "/spaces",
-    "/space",
     "/listings",
-    "/search",
     "/about",
     "/contact",
-    "/help",
-    "/terms",
+    "/faq",
+    "/how-it-works",
     "/privacy",
+    "/terms",
+    "/support",
+    "/community",
     "/unauthorized",
-    "/categories",
-    "/locations",
 ];
 
 const authRoutes = [
     "/login",
     "/register",
-    "/forgot-password",
-    "/reset-password",
-    "/verify-email",
 ];
 
 const protectedRoutes = [
     "/dashboard",
-    "/profile",
-    "/bookings",
-    "/wishlist",
-    "/favorites",
-    "/messages",
-    "/notifications",
-    "/settings",
     "/checkout",
     "/payment",
-    "/reviews/create",
-    "/reviews/edit",
-    "/host",
-    "/admin",
 ];
 
 function matchesRoute(pathname: string, routes: string[]) {

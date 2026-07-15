@@ -148,7 +148,7 @@ export default function MessagesContent({ role }: MessagesContentProps) {
   }, [activeId, scrollToBottom])
 
   useEffect(() => {
-    pollingRef.current = setInterval(() => {
+    function pollData() {
       getConversations(1, 50).then((res) => {
         if (res.success) {
           const data = res.data as { conversations?: Conversation[] }
@@ -172,9 +172,30 @@ export default function MessagesContent({ role }: MessagesContentProps) {
           }
         }).catch(() => {})
       }
-    }, 5000)
+    }
+
+    pollingRef.current = setInterval(pollData, 10000)
+
+    function handleVisibilityChange() {
+      if (document.hidden) {
+        if (pollingRef.current) {
+          clearInterval(pollingRef.current)
+          pollingRef.current = null
+        }
+      } else {
+        pollData()
+        pollingRef.current = setInterval(pollData, 10000)
+      }
+    }
+
+    document.addEventListener("visibilitychange", handleVisibilityChange)
+
     return () => {
-      if (pollingRef.current) clearInterval(pollingRef.current)
+      if (pollingRef.current) {
+        clearInterval(pollingRef.current)
+        pollingRef.current = null
+      }
+      document.removeEventListener("visibilitychange", handleVisibilityChange)
     }
   }, [activeId, scrollToBottom])
 
@@ -214,7 +235,7 @@ export default function MessagesContent({ role }: MessagesContentProps) {
         }
         scrollToBottom()
       } else {
-        toast.error(res.error || "Failed to send message")
+        toast.error((res as any).message || res.error || "Failed to send message")
       }
     } catch {
       toast.error("Failed to send message")

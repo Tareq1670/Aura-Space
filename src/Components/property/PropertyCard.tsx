@@ -22,7 +22,7 @@ export default function PropertyCard({ property, onDelete, onDuplicate, onStatus
         : "/placeholder-property.svg";
     const locationStr = [p.location?.city, p.location?.country].filter(Boolean).join(", ") || "Location not set";
     const priceStr = p.price?.perNight
-        ? `${p.price.currency || "BDT"} ${p.price.perNight.toLocaleString()}/night`
+        ? `${p.price.currency || "USD"} ${p.price.perNight.toLocaleString()}/night`
         : "Price not set";
 
     return (

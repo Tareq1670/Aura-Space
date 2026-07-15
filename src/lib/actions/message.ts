@@ -1,5 +1,7 @@
 "use server"
 
+import { getApiBase, getAuthHeaders } from "@/lib/api-base"
+
 interface ApiResponse<T> {
   success: boolean
   data?: T
@@ -7,30 +9,13 @@ interface ApiResponse<T> {
   statusCode?: number
 }
 
-async function getApiBase(): Promise<string> {
-  return (process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5000") + "/api"
-}
-
-async function getSessionToken(): Promise<string> {
-  const { auth } = await import("@/lib/auth")
-  const { headers } = await import("next/headers")
-  const headersList = await headers()
-  const tokenResponse = await auth.api.getToken({ headers: headersList })
-  if (tokenResponse?.token) return tokenResponse.token
-  throw new Error("No session token found. Please login again.")
-}
-
-async function getAuthHeaders(): Promise<Record<string, string>> {
-  const token = await getSessionToken()
-  return { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
-}
-
 export async function startConversation(participantId: string, bookingId?: string, propertyId?: string): Promise<ApiResponse<unknown>> {
   try {
-    const [API_BASE, headers] = await Promise.all([getApiBase(), getAuthHeaders()])
+    const API_BASE = getApiBase()
+    const authHeaders = await getAuthHeaders()
     const res = await fetch(`${API_BASE}/conversations`, {
       method: "POST",
-      headers,
+      headers: authHeaders,
       body: JSON.stringify({ participantId, bookingId, propertyId }),
       cache: "no-store",
     })
@@ -44,10 +29,11 @@ export async function startConversation(participantId: string, bookingId?: strin
 
 export async function sendMessage(conversationId: string, content: string): Promise<ApiResponse<unknown>> {
   try {
-    const [API_BASE, headers] = await Promise.all([getApiBase(), getAuthHeaders()])
+    const API_BASE = getApiBase()
+    const authHeaders = await getAuthHeaders()
     const res = await fetch(`${API_BASE}/messages`, {
       method: "POST",
-      headers,
+      headers: authHeaders,
       body: JSON.stringify({ conversationId, content }),
       cache: "no-store",
     })
@@ -61,10 +47,11 @@ export async function sendMessage(conversationId: string, content: string): Prom
 
 export async function getConversations(page = 1, limit = 20): Promise<ApiResponse<unknown>> {
   try {
-    const [API_BASE, headers] = await Promise.all([getApiBase(), getAuthHeaders()])
+    const API_BASE = getApiBase()
+    const authHeaders = await getAuthHeaders()
     const res = await fetch(`${API_BASE}/conversations?page=${page}&limit=${limit}`, {
       method: "GET",
-      headers,
+      headers: authHeaders,
       cache: "no-store",
     })
     const result = await res.json()
@@ -77,10 +64,11 @@ export async function getConversations(page = 1, limit = 20): Promise<ApiRespons
 
 export async function getMessages(conversationId: string, page = 1, limit = 50): Promise<ApiResponse<unknown>> {
   try {
-    const [API_BASE, headers] = await Promise.all([getApiBase(), getAuthHeaders()])
+    const API_BASE = getApiBase()
+    const authHeaders = await getAuthHeaders()
     const res = await fetch(`${API_BASE}/messages/${conversationId}?page=${page}&limit=${limit}`, {
       method: "GET",
-      headers,
+      headers: authHeaders,
       cache: "no-store",
     })
     const result = await res.json()
@@ -93,10 +81,11 @@ export async function getMessages(conversationId: string, page = 1, limit = 50):
 
 export async function markAsRead(messageId: string): Promise<ApiResponse<unknown>> {
   try {
-    const [API_BASE, headers] = await Promise.all([getApiBase(), getAuthHeaders()])
+    const API_BASE = getApiBase()
+    const authHeaders = await getAuthHeaders()
     const res = await fetch(`${API_BASE}/messages/${messageId}/read`, {
       method: "PUT",
-      headers,
+      headers: authHeaders,
       cache: "no-store",
     })
     const result = await res.json()
@@ -109,10 +98,11 @@ export async function markAsRead(messageId: string): Promise<ApiResponse<unknown
 
 export async function markAllAsRead(conversationId: string): Promise<ApiResponse<unknown>> {
   try {
-    const [API_BASE, headers] = await Promise.all([getApiBase(), getAuthHeaders()])
+    const API_BASE = getApiBase()
+    const authHeaders = await getAuthHeaders()
     const res = await fetch(`${API_BASE}/conversations/${conversationId}/read-all`, {
       method: "PUT",
-      headers,
+      headers: authHeaders,
       cache: "no-store",
     })
     const result = await res.json()
@@ -125,10 +115,11 @@ export async function markAllAsRead(conversationId: string): Promise<ApiResponse
 
 export async function getUnreadCount(): Promise<ApiResponse<unknown>> {
   try {
-    const [API_BASE, headers] = await Promise.all([getApiBase(), getAuthHeaders()])
+    const API_BASE = getApiBase()
+    const authHeaders = await getAuthHeaders()
     const res = await fetch(`${API_BASE}/messages/unread-count`, {
       method: "GET",
-      headers,
+      headers: authHeaders,
       cache: "no-store",
     })
     const result = await res.json()

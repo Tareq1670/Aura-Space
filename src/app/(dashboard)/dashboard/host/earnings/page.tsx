@@ -8,6 +8,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { Pagination, Skeleton } from "@heroui/react"
 import StatCard from "@/Components/Dashboard/StatCard"
 import { transactionAPI, type TransactionItem } from "@/lib/api/Guest/transaction-api"
+import { formatCurrency } from "@/lib/currency"
 
 const STATUS_STYLES: Record<string, string> = {
   success: "bg-emerald-50 text-emerald-700 border-emerald-200",
@@ -199,8 +200,8 @@ export default function HostEarningsPage() {
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis dataKey="name" tick={{ fontSize: 12 }} stroke="#9ca3af" />
-              <YAxis tick={{ fontSize: 12 }} stroke="#9ca3af" tickFormatter={(v) => `$${v}`} />
-              <Tooltip formatter={(v: any) => [`$${Number(v || 0).toFixed(2)}`, "Earnings"]} />
+              <YAxis tick={{ fontSize: 12 }} stroke="#9ca3af" tickFormatter={(v) => formatCurrency(v)} />
+              <Tooltip formatter={(v: any) => [formatCurrency(Number(v || 0)), "Earnings"]} />
               <Line type="monotone" dataKey="earnings" stroke="#7c3aed" strokeWidth={2} dot={{ fill: "#7c3aed", r: 3 }} />
             </LineChart>
           </ResponsiveContainer>
@@ -235,7 +236,7 @@ export default function HostEarningsPage() {
                     className="transition-colors hover:bg-violet-50/30"
                   >
                     <td className="whitespace-nowrap px-5 py-3.5 text-gray-700">{new Date(p.createdAt).toLocaleDateString()}</td>
-                    <td className="whitespace-nowrap px-5 py-3.5 font-semibold text-gray-900">${p.amount.toFixed(2)}</td>
+                    <td className="whitespace-nowrap px-5 py-3.5 font-semibold text-gray-900">{formatCurrency(p.amount)}</td>
                     <td className="px-5 py-3.5">
                       <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${STATUS_STYLES[p.status] || "bg-gray-50 text-gray-700 border-gray-200"}`}>
                         <span className={`h-1.5 w-1.5 rounded-full ${
@@ -324,9 +325,9 @@ export default function HostEarningsPage() {
                   >
                     <td className="whitespace-nowrap px-5 py-3.5 text-gray-700">{new Date(t.createdAt).toLocaleDateString()}</td>
                     <td className="px-5 py-3.5 text-gray-700">{t.description || "—"}</td>
-                    <td className="whitespace-nowrap px-5 py-3.5 font-semibold text-gray-900">${t.amount.toFixed(2)}</td>
-                    <td className="whitespace-nowrap px-5 py-3.5 text-gray-500">${(t.amount * 0.1).toFixed(2)}</td>
-                    <td className="whitespace-nowrap px-5 py-3.5 font-semibold text-emerald-600">${(t.amount * 0.9).toFixed(2)}</td>
+                    <td className="whitespace-nowrap px-5 py-3.5 font-semibold text-gray-900">{formatCurrency(t.amount)}</td>
+                    <td className="whitespace-nowrap px-5 py-3.5 text-gray-500">{formatCurrency(t.amount * 0.1)}</td>
+                    <td className="whitespace-nowrap px-5 py-3.5 font-semibold text-emerald-600">{formatCurrency(t.amount * 0.9)}</td>
                     <td className="whitespace-nowrap px-5 py-3.5 capitalize text-gray-600">{t.type}</td>
                     <td className="px-5 py-3.5">
                       <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${STATUS_STYLES[t.status] || "bg-gray-50 text-gray-700 border-gray-200"}`}>
@@ -407,7 +408,7 @@ export default function HostEarningsPage() {
                 </button>
               </div>
               <p className="mb-6 text-sm text-gray-500">
-                Available balance: <span className="font-semibold text-gray-900">${availableBalance.toFixed(2)}</span>
+                Available balance: <span className="font-semibold text-gray-900">{formatCurrency(availableBalance)}</span>
               </p>
               <div className="flex gap-3">
                 <button onClick={() => setShowRequestModal(false)} className="flex-1 rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50">Cancel</button>

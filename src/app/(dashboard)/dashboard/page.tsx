@@ -6,11 +6,13 @@ export const dynamic = "force-dynamic";
 export default async function DashboardPage() {
     const session = await requireAuth();
 
-    if (session.user.role === "admin") {
+    const role = (session.user as Record<string, unknown>).role as string;
+
+    if (role === "admin") {
         redirect("/dashboard/admin/main");
     }
 
-    if (session.user.role === "host") {
+    if (role === "host") {
         redirect("/dashboard/host/main");
     }
 

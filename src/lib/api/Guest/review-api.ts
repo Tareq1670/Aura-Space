@@ -1,43 +1,4 @@
-const SERVER_URL =
-  typeof window !== "undefined"
-    ? window.location.origin.includes("localhost")
-      ? process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5000"
-      : process.env.NEXT_PUBLIC_SERVER_URL || "https://aura-space-server.vercel.app"
-    : process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5000"
-
-async function getAuthToken(): Promise<string> {
-  try {
-    const { authClient } = await import("@/lib/auth-client")
-    const tokenResponse = await authClient.token()
-    if (tokenResponse?.data?.token) return tokenResponse.data.token
-    throw new Error("No token from authClient.token()")
-  } catch {
-    throw new Error("Login required.")
-  }
-}
-
-async function apiFetch<T>(endpoint: string, options?: RequestInit): Promise<T> {
-  const token = await getAuthToken()
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
-  }
-
-  const res = await fetch(`${SERVER_URL}${endpoint}`, {
-    ...options,
-    headers: { ...headers, ...(options?.headers as Record<string, string>) },
-  })
-
-  const contentType = res.headers.get("content-type") || ""
-  const body = contentType.includes("application/json") ? await res.json() : await res.text()
-
-  if (!res.ok) {
-    const message = body?.message || body?.error || `Request failed (${res.status})`
-    throw new Error(message)
-  }
-
-  return body
-}
+import { apiClientFetch } from "@/lib/client-fetch"
 
 export interface ReviewRecord {
   _id: string
@@ -84,7 +45,7 @@ export const reviewAPI = {
     if (params?.page) query.set("page", String(params.page))
     if (params?.limit) query.set("limit", String(params.limit))
     const qs = query.toString()
-    const res = await apiFetch<{ success: boolean; data: { reviews: ReviewRecord[]; pending: PendingBooking[]; pagination: Pagination } }>(
+    const res = await apiClientFetch<{ success: boolean; data: { reviews: ReviewRecord[]; pending: PendingBooking[]; pagination: Pagination } }>(
       `/api/reviews/my-reviews${qs ? `?${qs}` : ""}`,
     )
     return res.data
@@ -97,7 +58,7 @@ export const reviewAPI = {
     if (params?.propertyId) query.set("propertyId", params.propertyId)
     if (params?.rating) query.set("rating", String(params.rating))
     const qs = query.toString()
-    const res = await apiFetch<{ success: boolean; data: { reviews: ReviewRecord[]; stats: ReviewStats; pagination: Pagination } }>(
+    const res = await apiClientFetch<{ success: boolean; data: { reviews: ReviewRecord[]; stats: ReviewStats; pagination: Pagination } }>(
       `/api/reviews/host-reviews${qs ? `?${qs}` : ""}`,
     )
     return res.data
@@ -108,7 +69,7 @@ export const reviewAPI = {
     if (params?.page) query.set("page", String(params.page))
     if (params?.limit) query.set("limit", String(params.limit))
     const qs = query.toString()
-    const res = await apiFetch<{ success: boolean; data: { reviews: ReviewRecord[]; pagination: Pagination } }>(
+    const res = await apiClientFetch<{ success: boolean; data: { reviews: ReviewRecord[]; pagination: Pagination } }>(
       `/api/reviews/property/${propertyId}${qs ? `?${qs}` : ""}`,
     )
     return res.data
@@ -122,7 +83,7 @@ export const reviewAPI = {
     if (params?.rating) query.set("rating", String(params.rating))
     if (params?.propertyId) query.set("propertyId", params.propertyId)
     const qs = query.toString()
-    const res = await apiFetch<{ success: boolean; data: { reviews: ReviewRecord[]; pagination: Pagination } }>(
+    const res = await apiClientFetch<{ success: boolean; data: { reviews: ReviewRecord[]; pagination: Pagination } }>(
       `/api/admin/reviews${qs ? `?${qs}` : ""}`,
     )
     return res.data

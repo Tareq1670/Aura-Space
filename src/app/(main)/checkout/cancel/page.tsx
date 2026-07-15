@@ -1,6 +1,16 @@
 import Link from "next/link"
 
-export default function CancelPage() {
+interface Props {
+  searchParams: Promise<{ propertyId?: string; checkIn?: string; checkOut?: string; guests?: string }>
+}
+
+export default async function CancelPage({ searchParams }: Props) {
+  const params = await searchParams
+  const hasParams = params.propertyId || params.checkIn || params.checkOut || params.guests
+  const retryHref = hasParams
+    ? `/checkout?propertyId=${params.propertyId}&checkIn=${params.checkIn}&checkOut=${params.checkOut}&guests=${params.guests}`
+    : "/checkout"
+
   return (
     <div className="flex min-h-[60vh] items-center justify-center px-4">
       <div className="w-full max-w-lg text-center">
@@ -19,7 +29,7 @@ export default function CancelPage() {
 
         <div className="flex flex-col gap-3">
           <Link
-            href="/checkout"
+            href={retryHref}
             className="rounded-lg bg-emerald-600 px-6 py-3 text-white font-semibold transition hover:bg-emerald-700"
           >
             Try Again

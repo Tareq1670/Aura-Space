@@ -9,6 +9,7 @@ import BookingCard from "@/Components/Booking/BookingCard"
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal"
 import { bookingAPI, type BookingItem } from "@/lib/api/Guest/booking-api"
 import { startConversation } from "@/lib/actions/message"
+import { formatCurrency } from "@/lib/currency"
 
 const TABS = ["All", "Upcoming", "Completed", "Cancelled"]
 const STATUS_MAP: Record<string, string | undefined> = {
@@ -67,7 +68,7 @@ export default function GuestBookingsPage() {
         toast.success("Conversation started with host")
         router.push("/dashboard/guest/messages")
       } else {
-        toast.error(res.error || "Failed to start conversation")
+        toast.error((res as any).message || res.error || "Failed to start conversation")
       }
     } catch {
       toast.error("Something went wrong")
@@ -211,7 +212,7 @@ export default function GuestBookingsPage() {
                 <div className="flex justify-between"><span className="text-gray-500">Check-in</span><span>{new Date(detail.checkIn).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}</span></div>
                 <div className="flex justify-between"><span className="text-gray-500">Check-out</span><span>{new Date(detail.checkOut).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}</span></div>
                 <div className="flex justify-between"><span className="text-gray-500">Guests</span><span>{detail.numberOfGuests}</span></div>
-                <div className="flex justify-between"><span className="text-gray-500">Total</span><span className="font-semibold">${Number(detail.totalAmount).toFixed(2)}</span></div>
+                <div className="flex justify-between"><span className="text-gray-500">Total</span><span className="font-semibold">{formatCurrency(Number(detail.totalAmount))}</span></div>
                 {detail.specialRequest && <div className="border-t pt-3"><span className="text-gray-500">Special request:</span><p className="mt-1 text-gray-700">{detail.specialRequest}</p></div>}
                 {detail.cancellationReason && <div className="border-t pt-3"><span className="text-gray-500">Cancellation reason:</span><p className="mt-1 text-gray-700">{detail.cancellationReason}</p></div>}
               </div>

@@ -10,6 +10,7 @@ import StatusBadge from "@/Components/Booking/StatusBadge"
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal"
 import { bookingAPI, type BookingItem } from "@/lib/api/Guest/booking-api"
 import { startConversation } from "@/lib/actions/message"
+import { formatCurrency } from "@/lib/currency"
 
 const TABS = ["Pending", "Confirmed", "Completed", "Cancelled"]
 const STATUS_MAP: Record<string, string | undefined> = {
@@ -105,7 +106,7 @@ export default function HostReservationsPage() {
       new Date(b.checkIn).toLocaleDateString(),
       new Date(b.checkOut).toLocaleDateString(),
       String(b.numberOfGuests || ""),
-      `$${Number(b.totalAmount).toFixed(2)}`,
+      `${formatCurrency(Number(b.totalAmount))}`,
       b.status,
       b.specialRequest ? `"${b.specialRequest.replace(/"/g, '""')}"` : "",
     ])
@@ -130,7 +131,7 @@ export default function HostReservationsPage() {
         toast.success("Conversation started with " + (booking.guest?.name || "guest"))
         router.push("/dashboard/host/messages")
       } else {
-        toast.error(res.error || "Failed to start conversation")
+        toast.error((res as any).message || res.error || "Failed to start conversation")
       }
     } catch {
       toast.error("Something went wrong")
@@ -274,7 +275,7 @@ export default function HostReservationsPage() {
                       </div>
                       <p className="mt-0.5 text-sm text-gray-500">{b.propertyTitle}</p>
                     </div>
-                    <span className="whitespace-nowrap font-semibold text-gray-900">${Number(b.totalAmount).toFixed(2)}</span>
+                    <span className="whitespace-nowrap font-semibold text-gray-900">{formatCurrency(Number(b.totalAmount))}</span>
                   </div>
 
                   <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-600">
@@ -316,6 +317,29 @@ export default function HostReservationsPage() {
                         className="rounded-lg border border-red-200 px-4 py-1.5 text-xs font-semibold text-red-600 transition hover:bg-red-50 active:scale-[0.97]"
                       >
                         Reject
+                      </button>
+                    </div>
+                  )}
+
+                  {b.status === "confirmed" && (
+                    <div className="mt-3 flex gap-2">
+                      <button
+                        onClick={async () => {
+                          try {
+                            const res = await bookingAPI.completeBooking(b._id);
+                            if (res.success) {
+                              toast.success("Booking marked as completed");
+                              setRefreshKey(k => k + 1);
+                            } else {
+                              toast.error(res.message || "Failed to complete");
+                            }
+                          } catch (err: any) {
+                            toast.error(err.message || "Failed to complete");
+                          }
+                        }}
+                        className="rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:from-blue-600 hover:to-blue-700 active:scale-[0.97]"
+                      >
+                        Mark as Completed
                       </button>
                     </div>
                   )}

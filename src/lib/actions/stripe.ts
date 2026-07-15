@@ -3,15 +3,7 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { stripe } from "@/lib/stripe";
-
-function getApiBase(): string {
-    const raw = process.env.NEXT_PUBLIC_SERVER_URL ||
-                process.env.NEXT_PUBLIC_API_URL ||
-                "http://localhost:5000";
-    const base = raw.replace(/\/$/, "");
-    if (base.endsWith("/api")) return base;
-    return `${base}/api`;
-}
+import { getApiBase, getSessionToken } from "@/lib/api-base";
 
 const API_BASE = getApiBase();
 
@@ -19,9 +11,7 @@ export async function createCheckoutSession(bookingId: string): Promise<string> 
     const headersList = await headers();
     const origin = headersList.get("origin") || "http://localhost:3000";
 
-    const tokenResponse = await auth.api.getToken({ headers: headersList });
-    const token = tokenResponse?.token;
-    if (!token) throw new Error("No session token found. Please login again.");
+    const token = await getSessionToken();
 
     const authHeaders: Record<string, string> = {
         "Content-Type": "application/json",
@@ -45,7 +35,7 @@ export async function createCheckoutSession(bookingId: string): Promise<string> 
     }
 
     // Get user session to prefill name and email in Stripe Checkout
-    const userSession = await auth.api.getSession({ headers: headersList });
+    const userSession = await (auth.api as any).getSession({ headers: headersList });
     const userEmail = userSession?.user?.email;
     const userName = userSession?.user?.name;
 

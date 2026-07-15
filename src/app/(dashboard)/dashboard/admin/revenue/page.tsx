@@ -8,6 +8,7 @@ import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tool
 import { Label, ListBox, Select, Skeleton } from "@heroui/react"
 import StatCard from "@/Components/Dashboard/StatCard"
 import { transactionAPI, type TransactionItem } from "@/lib/api/Guest/transaction-api"
+import { formatCurrency } from "@/lib/currency"
 
 const PIE_COLORS = ["#7c3aed", "#3b82f6", "#f59e0b", "#059669", "#ef4444", "#ec4899"]
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -242,8 +243,8 @@ export default function AdminRevenuePage() {
               <LineChart data={displayedData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                 <XAxis dataKey="name" tick={{ fontSize: 12 }} stroke="#9ca3af" />
-                <YAxis tick={{ fontSize: 12 }} stroke="#9ca3af" tickFormatter={(v) => `$${v}`} />
-                <Tooltip formatter={(v: any) => [`$${Number(v || 0).toFixed(2)}`, "Revenue"]} />
+                <YAxis tick={{ fontSize: 12 }} stroke="#9ca3af" tickFormatter={(v) => formatCurrency(v)} />
+                <Tooltip formatter={(v: any) => [formatCurrency(Number(v || 0)), "Revenue"]} />
                 <Line type="monotone" dataKey="revenue" stroke="#7c3aed" strokeWidth={2} dot={{ fill: "#7c3aed", r: 3 }} />
               </LineChart>
             </ResponsiveContainer>
@@ -275,7 +276,7 @@ export default function AdminRevenuePage() {
                 >
                   {PIE_COLORS.slice(0, 4).map((c, i) => <Cell key={i} fill={c} />)}
                 </Pie>
-                <Tooltip formatter={(v: any) => [`$${Number(v || 0).toFixed(2)}`, "Amount"]} />
+                <Tooltip formatter={(v: any) => [formatCurrency(Number(v || 0)), "Amount"]} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -318,7 +319,7 @@ export default function AdminRevenuePage() {
                       <p className="text-xs text-gray-500">{h.count} transactions</p>
                     </div>
                   </div>
-                  <span className="text-sm font-semibold text-gray-900">${h.earnings.toLocaleString()}</span>
+                  <span className="text-sm font-semibold text-gray-900">{formatCurrency(h.earnings)}</span>
                 </motion.div>
               ))
             )}
@@ -352,7 +353,7 @@ export default function AdminRevenuePage() {
                     }`}>{i + 1}</span>
                     <p className="text-sm font-medium text-gray-900">{p.name}</p>
                   </div>
-                  <span className="text-sm font-semibold text-gray-900">${p.earnings.toLocaleString()}</span>
+                  <span className="text-sm font-semibold text-gray-900">{formatCurrency(p.earnings)}</span>
                 </motion.div>
               ))
             )}

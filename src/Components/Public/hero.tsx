@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade } from "swiper/modules";
@@ -21,8 +21,9 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import Image from "next/image";
 
-import { sliderData, heroStats } from "./hero-data";
+import { sliderData } from "./hero-data";
 import { HeroSearchBar } from "./hero-search-bar";
+import { getHomepageStats } from "@/lib/actions/property-public";
 
 const AUTOPLAY_DELAY = 6000;
 const PREVIEW_COUNT = 4;
@@ -96,6 +97,13 @@ const shimmerAnimation = {
     initial: { backgroundPosition: "-200% 0" },
     animate: { backgroundPosition: "200% 0", transition: shimmerTransition },
 };
+
+const FALLBACK_HERO_STATS = [
+    { value: "12K+", label: "Properties", icon: "🏠" },
+    { value: "500+", label: "Cities", icon: "🌍" },
+    { value: "98%", label: "Satisfaction", icon: "⭐" },
+    { value: "24/7", label: "Support", icon: "💬" },
+];
 
 interface SearchState {
     location: string;
@@ -203,6 +211,7 @@ export default function Hero() {
         checkIn: null,
         guests: "2",
     });
+    const [heroStats, setHeroStats] = useState(FALLBACK_HERO_STATS);
 
     const mouseX = useMotionValue(0.5);
     const mouseY = useMotionValue(0.5);
@@ -285,6 +294,26 @@ export default function Hero() {
 
     const goToSlide = useCallback((index: number) => {
         swiperRef.current?.slideToLoop(index);
+    }, []);
+
+    useEffect(() => {
+        let cancelled = false;
+        getHomepageStats().then((res) => {
+            if (cancelled || !res.success || !res.data) return;
+            const d = res.data;
+            const fmt = (n: number) => n >= 1000 ? `${Math.floor(n / 1000)}K+` : `${n}+`;
+            setHeroStats([
+                { value: fmt(d.totalProperties), label: "Properties", icon: "🏠" },
+                { value: `${d.topCities.length}+`, label: "Cities", icon: "🌍" },
+                {
+                    value: d.avgRating > 0 ? `${Math.round((d.avgRating / 5) * 100)}%` : "98%",
+                    label: "Satisfaction",
+                    icon: "⭐",
+                },
+                { value: "24/7", label: "Support", icon: "💬" },
+            ]);
+        });
+        return () => { cancelled = true; };
     }, []);
 
     return (

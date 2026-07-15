@@ -1,42 +1,4 @@
-import { authClient } from "@/lib/auth-client";
-
-const SERVER_URL =
-    process.env.NEXT_PUBLIC_SERVER_URL ||
-    (typeof window !== "undefined"
-        ? window.location.origin.includes("localhost")
-            ? "http://localhost:5000"
-            : "https://aura-space-server.vercel.app"
-        : "http://localhost:5000");
-
-async function getAuthToken(): Promise<string> {
-    try {
-        const { data } = await authClient.token();
-        if (data?.token) return data.token;
-        throw new Error("No token from authClient.token()");
-    } catch {
-        throw new Error("Login required.");
-    }
-}
-
-async function apiFetch<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-    const token = await getAuthToken();
-    const res = await fetch(`${SERVER_URL}${endpoint}`, {
-        ...options,
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-            ...options.headers,
-        },
-    });
-    const contentType = res.headers.get("content-type") || "";
-    const isJson = contentType.includes("application/json");
-    const body = isJson ? await res.json() : await res.text();
-    if (!res.ok) {
-        const message = isJson ? (body.message || body.error || "Something went wrong.") : `HTTP ${res.status}`;
-        throw new Error(message);
-    }
-    return body;
-}
+import { apiClientFetch } from "@/lib/client-fetch"
 
 export interface WishlistItem {
     _id: string;
@@ -76,9 +38,9 @@ export interface GetListsResponse {
 
 export async function getWishlist(listName?: string): Promise<GetWishlistResponse> {
     const qs = listName ? `?listName=${encodeURIComponent(listName)}` : "";
-    return apiFetch<GetWishlistResponse>(`/api/wishlist${qs}`, { method: "GET", cache: "no-store" });
+    return apiClientFetch<GetWishlistResponse>(`/api/wishlist${qs}`, { method: "GET", cache: "no-store" });
 }
 
 export async function getLists(): Promise<GetListsResponse> {
-    return apiFetch<GetListsResponse>("/api/wishlist/lists", { method: "GET", cache: "no-store" });
+    return apiClientFetch<GetListsResponse>("/api/wishlist/lists", { method: "GET", cache: "no-store" });
 }

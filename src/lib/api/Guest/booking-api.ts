@@ -1,47 +1,4 @@
-import { authClient } from "@/lib/auth-client";
-
-const SERVER_URL =
-    process.env.NEXT_PUBLIC_SERVER_URL ||
-    (typeof window !== "undefined"
-        ? window.location.origin.includes("localhost")
-            ? "http://localhost:5000"
-            : "https://aura-space-server.vercel.app"
-        : "http://localhost:5000");
-
-async function getAuthToken(): Promise<string> {
-    try {
-        const { data } = await authClient.token();
-        if (data?.token) return data.token;
-        throw new Error("No token from authClient.token()");
-    } catch (err) {
-        console.error("[getAuthToken] failed:", err);
-        throw new Error("Login required.");
-    }
-}
-
-async function apiFetch<T>(
-    endpoint: string,
-    options: RequestInit = {},
-): Promise<T> {
-    const token = await getAuthToken();
-    const isFormData = options.body instanceof FormData;
-    const res = await fetch(`${SERVER_URL}${endpoint}`, {
-        ...options,
-        headers: {
-            ...(isFormData ? {} : { "Content-Type": "application/json" }),
-            Authorization: `Bearer ${token}`,
-            ...options.headers,
-        },
-    });
-    const contentType = res.headers.get("content-type") || "";
-    const isJson = contentType.includes("application/json");
-    const body = isJson ? await res.json() : await res.text();
-    if (!res.ok) {
-        const message = isJson ? (body.message || body.error || "Something went wrong.") : `HTTP ${res.status}`;
-        throw new Error(message);
-    }
-    return body;
-}
+import { apiClientFetch } from "@/lib/client-fetch";
 
 export interface GetBookingsParams {
     page?: number;
@@ -97,7 +54,7 @@ export const bookingAPI = {
         if (params.status) qs.set("status", params.status);
         if (params.search) qs.set("search", params.search);
         const query = qs.toString();
-        return apiFetch<{
+        return apiClientFetch<{
             success: boolean;
             data: { bookings: BookingItem[]; pagination: PaginationInfo };
         }>(`/api/bookings/my-bookings${query ? `?${query}` : ""}`);
@@ -110,14 +67,14 @@ export const bookingAPI = {
         if (params.status) qs.set("status", params.status);
         if (params.propertyId) qs.set("propertyId", params.propertyId);
         const query = qs.toString();
-        return apiFetch<{
+        return apiClientFetch<{
             success: boolean;
             data: { bookings: BookingItem[]; pagination: PaginationInfo };
         }>(`/api/bookings/host-reservations${query ? `?${query}` : ""}`);
     },
 
     getBookingDetail: (id: string) =>
-        apiFetch<{ success: boolean; data: BookingItem }>(
+        apiClientFetch<{ success: boolean; data: BookingItem }>(
             `/api/bookings/${id}`,
         ),
 
@@ -131,32 +88,32 @@ export const bookingAPI = {
         if (params.hostId) qs.set("hostId", params.hostId);
         if (params.propertyId) qs.set("propertyId", params.propertyId);
         const query = qs.toString();
-        return apiFetch<{
+        return apiClientFetch<{
             success: boolean;
             data: { bookings: BookingItem[]; pagination: PaginationInfo };
         }>(`/api/admin/bookings${query ? `?${query}` : ""}`);
     },
 
     confirmBooking: (id: string) =>
-        apiFetch<{ success: boolean; message: string; data: { id: string; status: string } }>(
+        apiClientFetch<{ success: boolean; message: string; data: { id: string; status: string } }>(
             `/api/bookings/${id}/confirm`,
             { method: "PUT" },
         ),
 
     cancelBooking: (id: string, reason?: string) =>
-        apiFetch<{ success: boolean; message: string; data: { id: string; status: string } }>(
+        apiClientFetch<{ success: boolean; message: string; data: { id: string; status: string } }>(
             `/api/bookings/${id}/cancel`,
             { method: "PUT", body: JSON.stringify({ reason }) },
         ),
 
     completeBooking: (id: string) =>
-        apiFetch<{ success: boolean; message: string; data: { id: string; status: string } }>(
+        apiClientFetch<{ success: boolean; message: string; data: { id: string; status: string } }>(
             `/api/bookings/${id}/complete`,
             { method: "PUT" },
         ),
 
     forceCancelBooking: (id: string, reason?: string) =>
-        apiFetch<{ success: boolean; message: string; data: { id: string; status: string } }>(
+        apiClientFetch<{ success: boolean; message: string; data: { id: string; status: string } }>(
             `/api/admin/bookings/${id}/force-cancel`,
             { method: "PUT", body: JSON.stringify({ reason }) },
         ),

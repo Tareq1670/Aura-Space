@@ -1,5 +1,7 @@
 import { notFound, redirect } from "next/navigation"
 import { requireAuth } from "@/lib/route-guards"
+import { getApiBase } from "@/lib/api-base"
+import { formatCurrency } from "@/lib/currency"
 import { CheckoutPaymentWrapper } from "@/Components/Checkout/CheckoutPaymentWrapper"
 
 interface PageProps {
@@ -15,15 +17,9 @@ export default async function CheckoutPage({ searchParams }: PageProps) {
 
   await requireAuth()
 
-  const SERVER_URL = (
-    process.env.NEXT_PUBLIC_SERVER_URL ||
-    process.env.NEXT_PUBLIC_API_URL ||
-    "http://localhost:5000"
-  ).replace(/\/$/, "")
-
   let property: Record<string, any> | null = null
   try {
-    const res = await fetch(`${SERVER_URL}/api/properties/${propertyId}`, {
+    const res = await fetch(`${getApiBase()}/properties/${propertyId}`, {
       cache: "no-store",
     })
     if (res.ok) {
@@ -111,22 +107,22 @@ export default async function CheckoutPage({ searchParams }: PageProps) {
 
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">${pricePerNight} x {nights} nights</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span className="text-gray-600">{formatCurrency(pricePerNight)} x {nights} nights</span>
+                  <span>{formatCurrency(subtotal)}</span>
                 </div>
                 {cleaningFee > 0 && (
                   <div className="flex justify-between">
                     <span className="text-gray-600">Cleaning fee</span>
-                    <span>${cleaningFee.toFixed(2)}</span>
+                    <span>{formatCurrency(cleaningFee)}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
                   <span className="text-gray-600">Service fee</span>
-                  <span>${serviceFee.toFixed(2)}</span>
+                  <span>{formatCurrency(serviceFee)}</span>
                 </div>
                 <div className="flex justify-between border-t pt-3 text-base font-semibold">
                   <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span>{formatCurrency(total)}</span>
                 </div>
               </div>
             </div>

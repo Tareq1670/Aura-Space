@@ -1,10 +1,4 @@
-import { authClient } from "@/lib/auth-client"
-
-const API_BASE = (
-  process.env.NEXT_PUBLIC_SERVER_URL ||
-  process.env.NEXT_PUBLIC_API_URL ||
-  "http://localhost:5000"
-).replace(/\/$/, "") + "/api"
+import { apiClientFetch } from "@/lib/client-fetch"
 
 export interface PayoutMethod {
   id: string
@@ -19,14 +13,7 @@ export interface PayoutMethod {
 }
 
 export async function getPayoutMethod(): Promise<{ success: boolean; data: PayoutMethod | null }> {
-  const { data: tokenData } = await authClient.token()
-  const token = tokenData?.token
-  if (!token) throw new Error("Authentication required")
-
-  const res = await fetch(`${API_BASE}/payments/payout-method`, {
-    headers: { Authorization: `Bearer ${token}` },
-  })
-  return res.json()
+  return apiClientFetch<{ success: boolean; data: PayoutMethod | null }>("/api/payments/payout-method")
 }
 
 export async function savePayoutMethod(body: {
@@ -37,17 +24,8 @@ export async function savePayoutMethod(body: {
   swiftCode?: string
   bankAddress?: string
 }): Promise<{ success: boolean; message: string }> {
-  const { data: tokenData } = await authClient.token()
-  const token = tokenData?.token
-  if (!token) throw new Error("Authentication required")
-
-  const res = await fetch(`${API_BASE}/payments/payout-method`, {
+  return apiClientFetch<{ success: boolean; message: string }>("/api/payments/payout-method", {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
     body: JSON.stringify(body),
   })
-  return res.json()
 }
