@@ -302,7 +302,7 @@ export default function WishlistPage() {
                                                         src={prop.images[0]}
                                                         alt={prop.title}
                                                         className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                                                        onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder-property.jpg"; }}
+                                                        onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder-property.svg"; }}
                                                     />
                                                 ) : (
                                                     <div className="flex h-full items-center justify-center text-gray-300">

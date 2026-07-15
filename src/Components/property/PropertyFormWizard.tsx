@@ -173,7 +173,7 @@ export default function PropertyFormWizard({ propertyId }: PropertyFormWizardPro
             resetForm();
             setTimeout(() => {
                 if (newId) {
-                    router.push(`/items/${newId}`);
+                    router.push(`/listings/${newId}`);
                 } else {
                     router.push("/dashboard");
                 }

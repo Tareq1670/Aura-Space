@@ -19,7 +19,7 @@ export default function PropertyCard({ property, onDelete, onDuplicate, onStatus
     const isActive = p.status === "active";
     const coverImage = Array.isArray(p.images) && p.images.length > 0
         ? p.images[0]
-        : "/placeholder-property.jpg";
+        : "/placeholder-property.svg";
     const locationStr = [p.location?.city, p.location?.country].filter(Boolean).join(", ") || "Location not set";
     const priceStr = p.price?.perNight
         ? `${p.price.currency || "BDT"} ${p.price.perNight.toLocaleString()}/night`
@@ -39,7 +39,7 @@ export default function PropertyCard({ property, onDelete, onDuplicate, onStatus
                     alt={p.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
-                        (e.target as HTMLImageElement).src = "/placeholder-property.jpg";
+                        (e.target as HTMLImageElement).src = "/placeholder-property.svg";
                     }}
                 />
                 <div className="absolute top-3 left-3">
@@ -47,7 +47,7 @@ export default function PropertyCard({ property, onDelete, onDuplicate, onStatus
                 </div>
                 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
                     <Link
-                        href={`/items/${p.id}`}
+                        href={`/listings/${p.id}`}
                         target="_blank"
                         className="flex items-center justify-center w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full shadow-sm hover:bg-white transition-colors"
                         title="View live listing"

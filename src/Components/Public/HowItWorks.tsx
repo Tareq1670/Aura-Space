@@ -622,7 +622,7 @@ export default function HowItWorks() {
                                     }
                                 >
                                     <Link
-                                        href="/dashboard/properties/add"
+                                        href="/dashboard/host/items/add"
                                         className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.07] px-6 py-2.5 text-[11px] font-extrabold uppercase tracking-[0.14em] text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.12]"
                                     >
                                         List Property

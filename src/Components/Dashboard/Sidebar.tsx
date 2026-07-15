@@ -278,6 +278,16 @@ const NAV_LINKS: Record<RoleKey, NavSection[]> = {
             ],
         },
         {
+            section: "Communication",
+            items: [
+                {
+                    label: "Messages",
+                    href: "/dashboard/admin/messages",
+                    icon: HiChatBubbleLeftRight,
+                },
+            ],
+        },
+        {
             section: "Finance",
             items: [
                 {

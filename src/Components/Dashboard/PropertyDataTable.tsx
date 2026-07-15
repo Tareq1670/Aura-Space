@@ -20,11 +20,11 @@ export default function PropertyDataTable({ properties, onDelete, onDuplicate }:
             accessor: (row) => row.images?.[0] || "",
             render: (row, val) => (
                 <img
-                    src={String(val) || "/placeholder-property.jpg"}
+                    src={String(val) || "/placeholder-property.svg"}
                     alt={row.title}
                     className="w-12 h-9 rounded-lg object-cover bg-gray-100"
                     onError={(e) => {
-                        (e.target as HTMLImageElement).src = "/placeholder-property.jpg";
+                        (e.target as HTMLImageElement).src = "/placeholder-property.svg";
                     }}
                 />
             ),
@@ -106,7 +106,7 @@ export default function PropertyDataTable({ properties, onDelete, onDuplicate }:
                         <Copy className="w-4 h-4" />
                     </button>
                     <Link
-                        href={`/items/${row.id}`}
+                        href={`/listings/${row.id}`}
                         target="_blank"
                         className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-50 transition-colors"
                         title="View live listing"

@@ -94,7 +94,7 @@ const services: ServiceCard[] = [
                 />
             </svg>
         ),
-        href: "/dashboard/properties/add",
+        href: "/dashboard/host/items/add",
         variant: "text",
         span: "",
     },
