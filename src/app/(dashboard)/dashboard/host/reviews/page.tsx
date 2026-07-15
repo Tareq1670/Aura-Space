@@ -245,7 +245,7 @@ export default function HostReviewsPage() {
                       fontSize: 12,
                       boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
                     }}
-                    formatter={(value: number) => [value, "Reviews"]}
+                    formatter={(value) => [value ?? 0, "Reviews"]}
                   />
                   <Bar dataKey="count" fill="#8b5cf6" radius={[0, 6, 6, 0]} animationBegin={300} animationDuration={800} />
                 </BarChart>
@@ -278,7 +278,7 @@ export default function HostReviewsPage() {
                       fontSize: 12,
                       boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
                     }}
-                    formatter={(value: number) => [value, "Reviews"]}
+                    formatter={(value) => [value ?? 0, "Reviews"]}
                   />
                   <Line
                     type="monotone"

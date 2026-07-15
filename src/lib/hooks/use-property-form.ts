@@ -18,16 +18,14 @@ function deepMerge(
     const result = { ...base };
     for (const key of Object.keys(override) as (keyof PropertyFormData)[]) {
         if (NESTED_KEYS.has(key)) {
-            result[key] = {
+            (result as Record<string, unknown>)[key] = {
                 ...(base[key] as object),
                 ...(override[key] as object),
             } as PropertyFormData[typeof key];
         } else {
-            // Arrays and primitives — use new value or fall back to base
-            result[key] =
-                override[key] !== undefined
-                    ? override[key]
-                    : base[key];
+            if (override[key] !== undefined) {
+                (result as Record<string, unknown>)[key] = override[key];
+            }
         }
     }
     return result;

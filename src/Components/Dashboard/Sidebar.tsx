@@ -649,6 +649,7 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
 
     const sidebarProps = {
         user,
+        role,
         currentRole,
         navSections: filteredSections,
         isMinimized,

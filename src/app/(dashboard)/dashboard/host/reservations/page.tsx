@@ -46,6 +46,7 @@ export default function HostReservationsPage() {
   const [dateFrom, setDateFrom] = useState("")
   const [dateTo, setDateTo] = useState("")
   const limit = 10
+  const [refreshKey, setRefreshKey] = useState(0)
 
   useEffect(() => {
     let mounted = true
@@ -68,7 +69,7 @@ export default function HostReservationsPage() {
       }
     })()
     return () => { mounted = false }
-  }, [page, tab])
+  }, [page, tab, refreshKey])
   const filtered = useMemo(() => {
     let result = bookings
     if (search.trim()) {
@@ -126,7 +127,7 @@ export default function HostReservationsPage() {
         toast.success(actionType === "confirm" ? "Reservation confirmed" : "Reservation cancelled")
         setActionId(null)
         setActionType(null)
-        fetchReservations()
+        setRefreshKey(k => k + 1)
       } else {
         toast.error("Action failed")
       }
