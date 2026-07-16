@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Access Denied",
+  description: "You don't have permission to access this page. If you believe this is a mistake, please contact support.",
+};
 
 export default function UnauthorizedPage() {
     return (

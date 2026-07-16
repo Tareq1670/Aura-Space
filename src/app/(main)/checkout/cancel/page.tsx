@@ -1,4 +1,10 @@
+import type { Metadata } from "next"
 import Link from "next/link"
+
+export const metadata: Metadata = {
+  title: "Payment Cancelled",
+  description: "Your payment was cancelled. You can retry the booking whenever you're ready on AuraSpace.",
+}
 
 interface Props {
   searchParams: Promise<{ propertyId?: string; checkIn?: string; checkOut?: string; guests?: string }>

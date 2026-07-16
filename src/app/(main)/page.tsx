@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import Hero from "@/Components/Public/hero";
+
+export const metadata: Metadata = {
+  title: "Home",
+  description: "Discover and book premium event spaces, venues, and properties for every occasion with AuraSpace.",
+};
 
 const FeaturedSpaces = dynamic(() => import("@/Components/Public/FeaturedSpaces"), { ssr: true });
 const BrandPartners = dynamic(() => import("@/Components/Public/BrandPartners"), { ssr: true });

@@ -14,7 +14,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AuraSpace",
+  title: {
+    default: "AuraSpace",
+    template: "%s | AuraSpace",
+  },
   description: "Book premium event spaces and properties with AuraSpace",
 };
 

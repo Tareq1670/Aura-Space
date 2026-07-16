@@ -1,4 +1,10 @@
+import type { Metadata } from "next"
 import { redirect } from "next/navigation"
+
+export const metadata: Metadata = {
+  title: "Processing Payment",
+  description: "Processing your payment confirmation. Please wait while we verify your booking on AuraSpace.",
+}
 import { stripe } from "@/lib/stripe"
 
 interface Props {

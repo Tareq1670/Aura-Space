@@ -1,4 +1,10 @@
+import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
+
+export const metadata: Metadata = {
+  title: "Checkout",
+  description: "Complete your booking and secure your event space reservation with AuraSpace.",
+}
 import { requireAuth } from "@/lib/route-guards"
 import { getApiBase } from "@/lib/api-base"
 import { formatCurrency } from "@/lib/currency"

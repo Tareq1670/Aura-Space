@@ -1,4 +1,10 @@
+import type { Metadata } from "next"
 import { redirect } from "next/navigation"
+
+export const metadata: Metadata = {
+  title: "Booking Successful",
+  description: "Your booking has been confirmed. View your reservation details on AuraSpace.",
+}
 import { stripe } from "@/lib/stripe"
 import { formatCurrency } from "@/lib/currency"
 import Link from "next/link"

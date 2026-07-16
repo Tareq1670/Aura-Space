@@ -9,6 +9,7 @@ import { getWishlist, getLists } from "@/lib/api/Guest/wishlist-api";
 import { removeFromWishlist } from "@/lib/actions/wishlist";
 import WishlistButton from "@/Components/Wishlist/WishlistButton";
 import type { WishlistItem } from "@/lib/api/Guest/wishlist-api";
+import { formatCurrency } from "@/lib/currency";
 
 type SortKey = "date-desc" | "date-asc" | "price-asc" | "price-desc" | "rating-desc";
 
