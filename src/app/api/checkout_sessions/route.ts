@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { stripe } from "@/lib/stripe"
+import { getStripeServer } from "@/lib/stripe"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import { getApiBase, getAuthHeaders, getSessionToken } from "@/lib/api-base"
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
 
     const booking = bookingData?.data?.booking || bookingData?.data
 
-    const checkoutSession = await stripe.checkout.sessions.create({
+    const checkoutSession = await getStripeServer().checkout.sessions.create({
       mode: "payment",
       payment_method_types: ["card"],
       line_items: [

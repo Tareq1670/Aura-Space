@@ -1,9 +1,15 @@
 import "server-only"
 import Stripe from "stripe"
 
-const key = process.env.STRIPE_SECRET_KEY
-if (!key) {
-  throw new Error("STRIPE_SECRET_KEY is not set. Stripe payments will not work.")
-}
+let _stripe: Stripe | null = null
 
-export const stripe = new Stripe(key)
+export function getStripeServer(): Stripe {
+  if (!_stripe) {
+    const key = process.env.STRIPE_SECRET_KEY
+    if (!key) {
+      throw new Error("STRIPE_SECRET_KEY is not set. Stripe payments will not work.")
+    }
+    _stripe = new Stripe(key)
+  }
+  return _stripe
+}

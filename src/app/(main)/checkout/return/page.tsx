@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Processing Payment",
   description: "Processing your payment confirmation. Please wait while we verify your booking on AuraSpace.",
 }
-import { stripe } from "@/lib/stripe"
+import { getStripeServer } from "@/lib/stripe"
 
 interface Props {
   searchParams: Promise<{ session_id?: string }>
@@ -20,7 +20,7 @@ export default async function ReturnPage({ searchParams }: Props) {
 
   let session
   try {
-    session = await stripe.checkout.sessions.retrieve(session_id)
+    session = await getStripeServer().checkout.sessions.retrieve(session_id)
   } catch {
     redirect("/")
   }

@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Booking Successful",
   description: "Your booking has been confirmed. View your reservation details on AuraSpace.",
 }
-import { stripe } from "@/lib/stripe"
+import { getStripeServer } from "@/lib/stripe"
 import { formatCurrency } from "@/lib/currency"
 import Link from "next/link"
 
@@ -23,11 +23,11 @@ export default async function SuccessPage({ searchParams }: Props) {
   let session;
   try {
     if (session_id) {
-      session = await stripe.checkout.sessions.retrieve(session_id, {
+      session = await getStripeServer().checkout.sessions.retrieve(session_id, {
         expand: ["line_items", "payment_intent"],
       })
     } else if (payment_intent) {
-      const pi = await stripe.paymentIntents.retrieve(payment_intent)
+      const pi = await getStripeServer().paymentIntents.retrieve(payment_intent)
       if (pi.status !== "succeeded") redirect("/")
       session = {
         id: pi.id,

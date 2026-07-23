@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import { stripe } from "@/lib/stripe";
+import { getStripeServer } from "@/lib/stripe";
 import { getApiBase, getSessionToken } from "@/lib/api-base";
 
 const API_BASE = getApiBase();
@@ -42,6 +42,7 @@ export async function createCheckoutSession(bookingId: string): Promise<string> 
     // Find or create a Stripe Customer for this user to prefill their details
     let customerId: string | undefined;
     if (userEmail) {
+        const stripe = getStripeServer();
         const existing = await stripe.customers.list({ email: userEmail, limit: 1 });
         if (existing.data.length > 0) {
             customerId = existing.data[0].id;
@@ -55,6 +56,7 @@ export async function createCheckoutSession(bookingId: string): Promise<string> 
         }
     }
 
+    const stripe = getStripeServer();
     const session = await stripe.checkout.sessions.create({
         ui_mode: "embedded_page",
         ...(customerId ? { customer: customerId } : { customer_email: userEmail }),
