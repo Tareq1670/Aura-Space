@@ -61,7 +61,7 @@ export default function AIChatPage() {
       const res = await sendChatMessage(msg, conversationId)
       if (res.success && res.data) {
         setMessages((prev) => [...prev, { role: "assistant", content: res.data!.reply }])
-        setConversationId(res.data.conversationId)
+        setConversationId(res.data.conversationId ?? undefined)
         setSuggestions(res.data.suggestions || [])
         loadConversations()
       } else {

@@ -29,11 +29,19 @@ export default function AIChatWidget() {
   const [suggestions, setSuggestions] = useState<string[]>([])
   const [showRetryBtn, setShowRetryBtn] = useState(false)
   const [lastFailedMessage, setLastFailedMessage] = useState<string | null>(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-  const { data: session, isPending } = authClient.useSession()
 
-  const isLoggedIn = !!session
+  useEffect(() => {
+    let cancelled = false
+    authClient.getSession().then((res) => {
+      if (!cancelled && res?.data?.user) {
+        setIsLoggedIn(true)
+      }
+    }).catch(() => {})
+    return () => { cancelled = true }
+  }, [])
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -166,7 +174,7 @@ export default function AIChatWidget() {
               </div>
             </div>
 
-            {!isPending && !isLoggedIn && (
+            {!isLoggedIn && (
               <div className="px-4 py-2 bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 flex items-center gap-2">
                 <LogIn className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
                 <p className="text-xs text-amber-700 dark:text-amber-300">
@@ -179,92 +187,86 @@ export default function AIChatWidget() {
               </div>
             )}
 
-            {isPending ? (
-              <div className="flex-1 flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-violet-500 animate-pulse" />
-              </div>
-            ) : (
-              <>
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                  {messages.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-full text-center">
-                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center mb-3">
-                        <Sparkles className="w-6 h-6 text-white" />
-                      </div>
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">Hi there!</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-4 max-w-[260px]">
-                        I can help you find properties, answer booking questions, or guide you around the platform.
-                      </p>
-                      <div className="grid grid-cols-2 gap-2 w-full max-w-[300px]">
-                        {QUICK_ACTIONS.map((action) => (
-                          <button
-                            key={action}
-                            onClick={() => handleQuickAction(action)}
-                            className="p-2.5 rounded-xl text-xs text-left bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-violet-50 hover:text-violet-600 dark:hover:bg-violet-900/30 transition-colors border border-gray-200 dark:border-gray-700"
-                          >
-                            {action}
-                          </button>
-                        ))}
-                      </div>
+            <>
+              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                {messages.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center h-full text-center">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center mb-3">
+                      <Sparkles className="w-6 h-6 text-white" />
                     </div>
-                  ) : (
-                    messages.map((msg, i) => (
-                      <AIChatMessage key={i} role={msg.role} content={msg.content} />
-                    ))
-                  )}
-                  {isLoading && <AIChatMessage role="assistant" content="" isTyping />}
-                  <div ref={messagesEndRef} />
-                </div>
-
-                {showRetryBtn && (
-                  <div className="mx-4 mb-2 flex justify-center">
-                    <button
-                      onClick={handleRetry}
-                      className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 text-xs font-medium hover:bg-violet-200 dark:hover:bg-violet-900/50 transition-colors"
-                    >
-                      <RotateCw className="w-3.5 h-3.5" />
-                      Try again
-                    </button>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">Hi there!</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-4 max-w-[260px]">
+                      I can help you find properties, answer booking questions, or guide you around the platform.
+                    </p>
+                    <div className="grid grid-cols-2 gap-2 w-full max-w-[300px]">
+                      {QUICK_ACTIONS.map((action) => (
+                        <button
+                          key={action}
+                          onClick={() => handleQuickAction(action)}
+                          className="p-2.5 rounded-xl text-xs text-left bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-violet-50 hover:text-violet-600 dark:hover:bg-violet-900/30 transition-colors border border-gray-200 dark:border-gray-700"
+                        >
+                          {action}
+                        </button>
+                      ))}
+                    </div>
                   </div>
+                ) : (
+                  messages.map((msg, i) => (
+                    <AIChatMessage key={i} role={msg.role} content={msg.content} />
+                  ))
                 )}
+                {isLoading && <AIChatMessage role="assistant" content="" isTyping />}
+                <div ref={messagesEndRef} />
+              </div>
 
-                {suggestions.length > 0 && !isLoading && (
-                  <div className="px-4 pb-2 flex flex-wrap gap-2">
-                    {suggestions.map((s, i) => (
-                      <button
-                        key={i}
-                        onClick={() => handleSuggestion(s)}
-                        className="text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-violet-50 hover:text-violet-600 dark:hover:bg-violet-900/30 dark:hover:text-violet-400 transition-colors border border-gray-200 dark:border-gray-700"
-                      >
-                        {s}
-                      </button>
-                    ))}
-                  </div>
-                )}
-
-                <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="flex gap-2">
-                    <input
-                      ref={inputRef}
-                      type="text"
-                      value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      onKeyDown={handleKeyDown}
-                      placeholder="Ask me anything..."
-                      className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500"
-                      disabled={isLoading}
-                    />
-                    <button
-                      onClick={handleSend}
-                      disabled={!input.trim() || isLoading}
-                      className="px-3 py-2.5 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-500 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-violet-500/25 transition-all"
-                    >
-                      <Send className="w-4 h-4" />
-                    </button>
-                  </div>
+              {showRetryBtn && (
+                <div className="mx-4 mb-2 flex justify-center">
+                  <button
+                    onClick={handleRetry}
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 text-xs font-medium hover:bg-violet-200 dark:hover:bg-violet-900/50 transition-colors"
+                  >
+                    <RotateCw className="w-3.5 h-3.5" />
+                    Try again
+                  </button>
                 </div>
-              </>
-            )}
+              )}
+
+              {suggestions.length > 0 && !isLoading && (
+                <div className="px-4 pb-2 flex flex-wrap gap-2">
+                  {suggestions.map((s, i) => (
+                    <button
+                      key={i}
+                      onClick={() => handleSuggestion(s)}
+                      className="text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-violet-50 hover:text-violet-600 dark:hover:bg-violet-900/30 dark:hover:text-violet-400 transition-colors border border-gray-200 dark:border-gray-700"
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex gap-2">
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Ask me anything..."
+                    className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500"
+                    disabled={isLoading}
+                  />
+                  <button
+                    onClick={handleSend}
+                    disabled={!input.trim() || isLoading}
+                    className="px-3 py-2.5 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-500 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-violet-500/25 transition-all"
+                  >
+                    <Send className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </>
           </motion.div>
         )}
       </AnimatePresence>
