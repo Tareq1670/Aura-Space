@@ -120,11 +120,14 @@ export default function AIChatPage() {
           </div>
           <div className="flex-1 overflow-y-auto p-2 space-y-1">
             {conversations.map((c) => (
-              <button
+              <div
                 key={c.conversationId}
+                role="button"
+                tabIndex={0}
                 onClick={() => loadConversation(c.conversationId)}
+                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") loadConversation(c.conversationId) }}
                 className={cn(
-                  "w-full p-3 rounded-xl text-left text-sm transition-colors group flex items-center justify-between",
+                  "w-full p-3 rounded-xl text-left text-sm transition-colors group flex items-center justify-between cursor-pointer",
                   conversationId === c.conversationId
                     ? "bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300"
                     : "hover:bg-gray-100 dark:hover:bg-gray-700/50 text-gray-700 dark:text-gray-300"
@@ -140,7 +143,7 @@ export default function AIChatPage() {
                 >
                   <Trash2 className="w-3 h-3" />
                 </button>
-              </button>
+              </div>
             ))}
             {conversations.length === 0 && (
               <p className="text-xs text-gray-400 text-center py-8">No conversations yet</p>

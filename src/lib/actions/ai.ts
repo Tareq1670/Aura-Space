@@ -82,13 +82,19 @@ export async function getRecommendations(preferences?: {
 export async function sendChatMessage(
   message: string,
   conversationId?: string
-): Promise<ApiResponse<{ reply: string; conversationId: string; suggestions: string[] }>> {
+): Promise<ApiResponse<{ reply: string; conversationId: string | null; suggestions: string[] }>> {
   try {
     const API_BASE = getApiBase()
-    const authHeaders = await getAuthHeaders()
+    let headers: Record<string, string> = { "Content-Type": "application/json" }
+    try {
+      const authHeaders = await getAuthHeaders()
+      headers = authHeaders
+    } catch {
+      // Not logged in — send without auth, backend handles guest mode
+    }
     const res = await fetch(`${API_BASE}/ai/chat`, {
       method: "POST",
-      headers: authHeaders,
+      headers,
       body: JSON.stringify({ message, conversationId }),
       cache: "no-store",
     })
