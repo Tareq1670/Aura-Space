@@ -77,6 +77,21 @@ export async function updateListName(id: string, listName: string): Promise<Acti
     }
 }
 
+export async function createList(listName: string): Promise<ActionResponse> {
+    try {
+        const headers = await getAuthHeaders();
+        const res = await fetch(`${API_BASE}/wishlist/lists`, {
+            method: "POST",
+            headers,
+            body: JSON.stringify({ listName }),
+            cache: "no-store",
+        });
+        return await handleResponse(res);
+    } catch (error: unknown) {
+        return { success: false, message: error instanceof Error ? error.message : "Network error." };
+    }
+}
+
 export async function removeFromWishlist(id: string): Promise<ActionResponse> {
     try {
         const headers = await getAuthHeaders();

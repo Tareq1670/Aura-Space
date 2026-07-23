@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import type { ReactNode } from "react";
+import ModalPortal from "@/lib/modal-portal";
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -52,9 +53,10 @@ export default function ConfirmModal({
   const v = variants[variant];
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
+    <ModalPortal>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -71,7 +73,7 @@ export default function ConfirmModal({
               stiffness: 300,
             }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl border border-gray-100"
+            className="bg-white rounded-2xl p-8 max-w-md w-full max-h-[85vh] overflow-y-auto shadow-2xl border border-gray-100"
           >
             {icon && (
               <div
@@ -125,5 +127,6 @@ export default function ConfirmModal({
         </motion.div>
       )}
     </AnimatePresence>
+    </ModalPortal>
   );
 }

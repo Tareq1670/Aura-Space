@@ -2,14 +2,15 @@
 
 import { useEffect, useState, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import ModalPortal from "@/lib/modal-portal"
 import { toast } from "sonner"
-import { Flag, Trash2, X, AlertTriangle, Shield, Eye, Download } from "lucide-react"
+import { Flag, Trash2, X, AlertTriangle, Shield, Eye, Download, AlertCircle, RefreshCw } from "lucide-react"
 import DataTable from "@/Components/Dashboard/DataTable"
 import type { Column } from "@/Components/Dashboard/DataTable"
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal"
 import RatingStars from "@/Components/Review/RatingStars"
 import { reviewAPI, type ReviewRecord } from "@/lib/api/Guest/review-api"
-import { deleteReview } from "@/lib/actions/review"
+import { deleteReview, dismissReviewReport } from "@/lib/actions/review"
 import { exportToCSV } from "@/lib/utils/csv-export"
 
 type ReviewRow = ReviewRecord & Record<string, unknown>
@@ -40,15 +41,20 @@ const spring = { type: "spring" as const, stiffness: 260, damping: 22 }
 
 export default function AdminReviewsPage() {
   const [reviews, setReviews] = useState<ReviewRecord[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [reportedFilter, setReportedFilter] = useState("all")
   const [ratingFilter, setRatingFilter] = useState("all")
   const [deleteId, setDeleteId] = useState<string | null>(null)
+  const [dismissId, setDismissId] = useState<string | null>(null)
   const [deleting, setDeleting] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
   const [detailReview, setDetailReview] = useState<ReviewRecord | null>(null)
 
   useEffect(() => {
     let mounted = true
+    setLoading(true)
+    setError(null)
     ;(async () => {
       try {
         const res = await reviewAPI.getAdminReviews({
@@ -60,7 +66,10 @@ export default function AdminReviewsPage() {
         setReviews(res.reviews)
       } catch (err) {
         if (!mounted) return
+        setError(err instanceof Error ? err.message : "Failed to load reviews")
         toast.error(err instanceof Error ? err.message : "Failed to load reviews")
+      } finally {
+        if (mounted) setLoading(false)
       }
     })()
     return () => {
@@ -84,6 +93,25 @@ export default function AdminReviewsPage() {
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to delete")
+    } finally {
+      setDeleting(false)
+    }
+  }
+
+  async function handleDismiss() {
+    if (!dismissId) return
+    setDeleting(true)
+    try {
+      const res = await dismissReviewReport(dismissId)
+      if (res.success) {
+        toast.success("Report dismissed")
+        setDismissId(null)
+        setRefreshKey((k) => k + 1)
+      } else {
+        toast.error((res as any).message || (res as any).error || "Failed to dismiss report")
+      }
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to dismiss")
     } finally {
       setDeleting(false)
     }
@@ -176,6 +204,18 @@ export default function AdminReviewsPage() {
             <Eye className="h-3.5 w-3.5" />
             View
           </button>
+          {r.isReported && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                setDismissId(r._id)
+              }}
+              className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium text-emerald-500 transition-all hover:bg-emerald-50"
+            >
+              <Flag className="h-3.5 w-3.5" />
+              Dismiss
+            </button>
+          )}
           <button
             onClick={(e) => {
               e.stopPropagation()
@@ -187,7 +227,7 @@ export default function AdminReviewsPage() {
           </button>
         </div>
       ),
-      width: "120px",
+      width: "180px",
       sortable: false,
     },
   ]
@@ -309,17 +349,37 @@ export default function AdminReviewsPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <DataTable<ReviewRow>
-            data={reviews as ReviewRow[]}
-            columns={columns}
-            searchPlaceholder="Search comments..."
-            searchFields={["comment", "guest"]}
-            pageSize={15}
-            pageSizeOptions={[10, 15, 25, 50]}
-            emptyMessage="No reviews found"
-            headerGradient
-            onRowClick={(row) => setDetailReview(row)}
-          />
+          {loading ? (
+            <div className="space-y-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="h-16 animate-pulse rounded-xl bg-gray-100" />
+              ))}
+            </div>
+          ) : error ? (
+            <div className="flex min-h-[40vh] flex-col items-center justify-center text-gray-400">
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50">
+                <AlertCircle className="h-7 w-7 text-red-400" />
+              </div>
+              <p className="text-base font-semibold text-gray-900">Failed to load reviews</p>
+              <p className="mt-1 text-sm text-gray-400">{error}</p>
+              <button onClick={() => setRefreshKey(k => k + 1)} className="mt-5 flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-gray-800">
+                <RefreshCw className="h-4 w-4" />
+                Try Again
+              </button>
+            </div>
+          ) : (
+            <DataTable<ReviewRow>
+              data={reviews as ReviewRow[]}
+              columns={columns}
+              searchPlaceholder="Search comments..."
+              searchFields={["comment", "guest"]}
+              pageSize={15}
+              pageSizeOptions={[10, 15, 25, 50]}
+              emptyMessage="No reviews found"
+              headerGradient
+              onRowClick={(row) => setDetailReview(row)}
+            />
+          )}
         </motion.div>
       </div>
 
@@ -334,9 +394,21 @@ export default function AdminReviewsPage() {
         loading={deleting}
       />
 
+      <ConfirmModal
+        isOpen={!!dismissId}
+        onClose={() => setDismissId(null)}
+        onConfirm={handleDismiss}
+        title="Dismiss Report"
+        message="Clear the report flag on this review? The review will remain visible."
+        confirmText="Dismiss"
+        variant="info"
+        loading={deleting}
+      />
+
       {/* Detail Modal */}
-      <AnimatePresence>
-        {detailReview && (
+      <ModalPortal>
+        <AnimatePresence>
+          {detailReview && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -350,9 +422,9 @@ export default function AdminReviewsPage() {
               exit={{ opacity: 0, scale: 0.92, y: 24 }}
               transition={{ type: "spring", stiffness: 300, damping: 26 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl"
+              className="w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-2xl bg-white shadow-2xl"
             >
-              <div className="relative overflow-hidden bg-gradient-to-r from-violet-500 to-indigo-600 px-6 py-5">
+              <div className="relative overflow-hidden bg-gradient-to-r from-violet-500 to-indigo-600 px-6 py-5 shrink-0">
                 <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-30" />
                 <div className="relative flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -466,6 +538,7 @@ export default function AdminReviewsPage() {
           </motion.div>
         )}
       </AnimatePresence>
+      </ModalPortal>
     </div>
   )
 }

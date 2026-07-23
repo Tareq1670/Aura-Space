@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
+import ModalPortal from "@/lib/modal-portal";
 import { ListBox, Select, Skeleton } from "@heroui/react";
 import { toast } from "sonner";
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal";
@@ -1060,8 +1061,9 @@ export default function AdminUsersPage() {
         </motion.div>
 
         {/* Role change modal */}
-        <AnimatePresence>
-          {modalType === "role" && selectedUser && (
+        <ModalPortal>
+          <AnimatePresence>
+            {modalType === "role" && selectedUser && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -1075,7 +1077,7 @@ export default function AdminUsersPage() {
                 exit={{ opacity: 0, scale: 0.92, y: 20 }}
                 transition={{ type: "spring", damping: 25, stiffness: 300 }}
                 onClick={(e) => e.stopPropagation()}
-                className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl border border-gray-100"
+                className="bg-white rounded-2xl p-8 max-w-md w-full max-h-[85vh] overflow-y-auto shadow-2xl border border-gray-100"
               >
                 <div className="w-14 h-14 rounded-2xl bg-violet-50 border border-violet-100 flex items-center justify-center mx-auto mb-5">
                   <svg
@@ -1176,6 +1178,7 @@ export default function AdminUsersPage() {
             </motion.div>
           )}
         </AnimatePresence>
+        </ModalPortal>
 
         {/* Block / Unblock modal */}
         <ConfirmModal

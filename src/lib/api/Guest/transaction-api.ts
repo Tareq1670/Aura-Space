@@ -34,6 +34,8 @@ interface StatsResponse {
     data: {
         totalSpend?: number
         totalEarned?: number
+        thisMonthSpend?: number
+        platformFeePercent?: number
         commissionEarned?: number
         pendingPayouts?: number
     }
@@ -52,6 +54,7 @@ interface Params {
     type?: string
     method?: string
     userId?: string
+    search?: string
 }
 
 function toQuery(params: Params): string {
@@ -62,6 +65,7 @@ function toQuery(params: Params): string {
     if (params.type) q.set("type", params.type)
     if (params.method) q.set("method", params.method)
     if (params.userId) q.set("userId", params.userId)
+    if (params.search) q.set("search", params.search)
     const s = q.toString()
     return s ? `?${s}` : ""
 }

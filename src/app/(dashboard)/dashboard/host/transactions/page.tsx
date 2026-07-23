@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
-import { ArrowUpDown } from "lucide-react"
+import { ArrowUpDown, AlertCircle, RefreshCw } from "lucide-react"
 import { ListBox, Pagination, Select, Skeleton } from "@heroui/react"
 import { transactionAPI, type TransactionItem } from "@/lib/api/Guest/transaction-api"
 import { formatCurrency } from "@/lib/currency"
@@ -56,6 +56,8 @@ const rowVariants = {
 export default function HostTransactionsPage() {
   const [transactions, setTransactions] = useState<TransactionItem[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [feePercent, setFeePercent] = useState(10)
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [typeFilter, setTypeFilter] = useState<string>("")
@@ -64,20 +66,28 @@ export default function HostTransactionsPage() {
 
   useEffect(() => {
     let mounted = true
+    setError(null)
     ;(async () => {
       try {
-        const res = await transactionAPI.getHostTransactions({
-          page, limit,
-          type: typeFilter || undefined,
-          status: statusFilter || undefined,
-        })
+        const [txnRes, statsRes] = await Promise.all([
+          transactionAPI.getHostTransactions({
+            page, limit,
+            type: typeFilter || undefined,
+            status: statusFilter || undefined,
+          }),
+          transactionAPI.getTransactionStats(),
+        ])
         if (!mounted) return
-        if (res.success && res.data) {
-          setTransactions(res.data.transactions)
-          setTotal(res.data.pagination.total)
+        if (txnRes.success && txnRes.data) {
+          setTransactions(txnRes.data.transactions)
+          setTotal(txnRes.data.pagination.total)
+        }
+        if (statsRes.success && statsRes.data && statsRes.data.platformFeePercent) {
+          setFeePercent(statsRes.data.platformFeePercent)
         }
       } catch (err: any) {
         if (!mounted) return
+        setError(err.message || "Failed to load transactions")
         toast.error(err.message || "Failed to load transactions")
       } finally {
         if (mounted) setLoading(false)
@@ -154,7 +164,23 @@ export default function HostTransactionsPage() {
         </div>
       </motion.div>
 
-      {loading ? (
+      {error ? (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="flex flex-col items-center justify-center py-20 text-gray-400"
+        >
+          <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50">
+            <AlertCircle className="h-8 w-8 text-red-400" />
+          </div>
+          <p className="text-lg font-semibold text-gray-900">Failed to load transactions</p>
+          <p className="mt-1 text-sm text-gray-400">{error}</p>
+          <button onClick={() => window.location.reload()} className="mt-6 flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800">
+            <RefreshCw className="h-4 w-4" />
+            Try Again
+          </button>
+        </motion.div>
+      ) : loading ? (
         <div className="space-y-3">
           {[1, 2, 3, 4].map((i) => (
             <Skeleton key={i} className="h-14 rounded-xl" />
@@ -187,7 +213,7 @@ export default function HostTransactionsPage() {
                   <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500">Date</th>
                   <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500">Description</th>
                   <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500">Gross Amount</th>
-                  <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500">Commission (10%)</th>
+                  <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500">Commission ({feePercent}%)</th>
                   <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500">Net Amount</th>
                   <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500">Type</th>
                   <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-gray-500">Status</th>
@@ -203,8 +229,8 @@ export default function HostTransactionsPage() {
                     <td className="whitespace-nowrap px-5 py-3.5 text-gray-700">{new Date(t.createdAt).toLocaleDateString()}</td>
                     <td className="px-5 py-3.5 text-gray-700">{t.description || "—"}</td>
                     <td className="whitespace-nowrap px-5 py-3.5 font-semibold text-gray-900">{formatCurrency(t.amount)}</td>
-                    <td className="whitespace-nowrap px-5 py-3.5 text-gray-500">{formatCurrency(t.amount * 0.1)}</td>
-                    <td className="whitespace-nowrap px-5 py-3.5 font-semibold text-emerald-600">{formatCurrency(t.amount * 0.9)}</td>
+                    <td className="whitespace-nowrap px-5 py-3.5 text-gray-500">{formatCurrency(t.amount * feePercent / 100)}</td>
+                    <td className="whitespace-nowrap px-5 py-3.5 font-semibold text-emerald-600">{formatCurrency(t.amount * (100 - feePercent) / 100)}</td>
                     <td className="whitespace-nowrap px-5 py-3.5">
                       <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${TYPE_STYLES[t.type] || "bg-gray-50 text-gray-700 border-gray-200"}`}>
                         <span className={`h-1.5 w-1.5 rounded-full ${

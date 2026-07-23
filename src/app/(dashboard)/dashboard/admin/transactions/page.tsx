@@ -1,9 +1,9 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
-import { Filter, Search, CheckCircle } from "lucide-react"
+import { Filter, Search, CheckCircle, AlertCircle, RefreshCw, DollarSign, ArrowUpRight, ArrowDownRight } from "lucide-react"
 import { ListBox, Pagination, Select, Skeleton } from "@heroui/react"
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal"
 import { transactionAPI, type TransactionItem } from "@/lib/api/Guest/transaction-api"
@@ -71,6 +71,7 @@ const rowVariants = {
 export default function AdminTransactionsPage() {
   const [transactions, setTransactions] = useState<TransactionItem[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [typeFilter, setTypeFilter] = useState<string>("")
@@ -82,8 +83,19 @@ export default function AdminTransactionsPage() {
   const [refreshKey, setRefreshKey] = useState(0)
   const limit = 20
 
+  const summary = useMemo(() => {
+    const totalVolume = transactions.reduce((s, t) => s + t.amount, 0)
+    const payments = transactions.filter(t => t.type === "payment" && t.status === "success").reduce((s, t) => s + t.amount, 0)
+    const payouts = transactions.filter(t => t.type === "payout" && t.status === "success").reduce((s, t) => s + t.amount, 0)
+    const pendingPayouts = transactions.filter(t => t.type === "payout" && t.status === "pending").reduce((s, t) => s + t.amount, 0)
+    const commissions = transactions.filter(t => t.type === "commission" && t.status === "success").reduce((s, t) => s + t.amount, 0)
+    return { totalVolume, payments, payouts, pendingPayouts, commissions }
+  }, [transactions])
+
   useEffect(() => {
     let mounted = true
+    setLoading(true)
+    setError(null)
     ;(async () => {
       try {
         const res = await transactionAPI.getAdminTransactions({
@@ -91,21 +103,26 @@ export default function AdminTransactionsPage() {
           type: typeFilter || undefined,
           status: statusFilter || undefined,
           method: methodFilter || undefined,
+          search: search || undefined,
         })
         if (!mounted) return
         if (res.success && res.data) {
           setTransactions(res.data.transactions)
           setTotal(res.data.pagination.total)
+        } else {
+          setError("Failed to load transactions")
+          toast.error("Failed to load transactions")
         }
       } catch (err: any) {
         if (!mounted) return
+        setError(err.message || "Failed to load transactions")
         toast.error(err.message || "Failed to load transactions")
       } finally {
         if (mounted) setLoading(false)
       }
     })()
     return () => { mounted = false }
-  }, [page, typeFilter, statusFilter, methodFilter, refreshKey])
+  }, [page, typeFilter, statusFilter, methodFilter, search, refreshKey])
   async function handleProcessPayout() {
     if (!processId) return
     setProcessing(true)
@@ -124,13 +141,6 @@ export default function AdminTransactionsPage() {
       setProcessing(false)
     }
   }
-
-  const filtered = search
-    ? transactions.filter((t) =>
-        t.transactionId?.toLowerCase().includes(search.toLowerCase()) ||
-        t.userId?.toLowerCase().includes(search.toLowerCase())
-      )
-    : transactions
 
   const totalPages = Math.max(1, Math.ceil(total / limit))
 
@@ -240,13 +250,59 @@ export default function AdminTransactionsPage() {
         </div>
       </motion.div>
 
+      {!loading && !error && (
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.12 }}
+          className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5"
+        >
+          <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+            <p className="text-xs font-medium text-gray-400 uppercase tracking-wider">Total Volume</p>
+            <p className="mt-1 text-lg font-bold text-gray-900">{formatCurrency(summary.totalVolume)}</p>
+          </div>
+          <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+            <p className="text-xs font-medium text-gray-400 uppercase tracking-wider">Payments</p>
+            <p className="mt-1 text-lg font-bold text-emerald-600">{formatCurrency(summary.payments)}</p>
+          </div>
+          <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+            <p className="text-xs font-medium text-gray-400 uppercase tracking-wider">Payouts</p>
+            <p className="mt-1 text-lg font-bold text-gray-900">{formatCurrency(summary.payouts)}</p>
+          </div>
+          <div className="rounded-xl border border-amber-100 bg-white p-4 shadow-sm">
+            <p className="text-xs font-medium text-amber-500 uppercase tracking-wider">Pending Payouts</p>
+            <p className="mt-1 text-lg font-bold text-amber-600">{formatCurrency(summary.pendingPayouts)}</p>
+          </div>
+          <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+            <p className="text-xs font-medium text-gray-400 uppercase tracking-wider">Commissions</p>
+            <p className="mt-1 text-lg font-bold text-violet-600">{formatCurrency(summary.commissions)}</p>
+          </div>
+        </motion.div>
+      )}
+
       {loading ? (
         <div className="space-y-3">
           {[1, 2, 3, 4, 5].map((i) => (
             <Skeleton key={i} className="h-14 rounded-xl" />
           ))}
         </div>
-      ) : filtered.length === 0 ? (
+      ) : error ? (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="flex flex-col items-center justify-center py-20 text-gray-400"
+        >
+          <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50">
+            <AlertCircle className="h-8 w-8 text-red-400" />
+          </div>
+          <p className="text-lg font-semibold text-gray-900">Failed to load transactions</p>
+          <p className="mt-1 text-sm text-gray-400">{error}</p>
+          <button onClick={() => setRefreshKey(k => k + 1)} className="mt-6 flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800">
+            <RefreshCw className="h-4 w-4" />
+            Try Again
+          </button>
+        </motion.div>
+      ) : transactions.length === 0 ? (
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -284,7 +340,7 @@ export default function AdminTransactionsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
-                {filtered.map((t) => (
+                {transactions.map((t) => (
                   <motion.tr
                     key={t._id}
                     variants={rowVariants}

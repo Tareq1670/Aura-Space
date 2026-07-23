@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import ModalPortal from "@/lib/modal-portal"
 import { toast } from "sonner"
-import { DollarSign, TrendingUp, Clock, Wallet, X } from "lucide-react"
+import { DollarSign, TrendingUp, Clock, Wallet, X, AlertCircle, RefreshCw } from "lucide-react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import { Pagination, Skeleton } from "@heroui/react"
 import StatCard from "@/Components/Dashboard/StatCard"
@@ -36,7 +37,8 @@ const rowVariants = {
 
 export default function HostEarningsPage() {
   const [loading, setLoading] = useState(true)
-  const [stats, setStats] = useState({ totalEarned: 0, totalSpend: 0, commissionEarned: 0, pendingPayouts: 0 })
+  const [error, setError] = useState<string | null>(null)
+  const [stats, setStats] = useState({ totalEarned: 0, totalSpend: 0, commissionEarned: 0, pendingPayouts: 0, platformFeePercent: 10 })
   const [payouts, setPayouts] = useState<TransactionItem[]>([])
   const [payoutPage, setPayoutPage] = useState(1)
   const [payoutTotal, setPayoutTotal] = useState(0)
@@ -67,13 +69,14 @@ export default function HostEarningsPage() {
 
   useEffect(() => {
     let mounted = true
+    setError(null)
+    setLoading(true)
     ;(async () => {
       try {
-        const [statsRes, payoutRes, txnRes, allRes] = await Promise.all([
+        const [statsRes, payoutRes, txnRes] = await Promise.all([
           transactionAPI.getTransactionStats(),
           transactionAPI.getPayoutHistory({ page: payoutPage, limit }),
           transactionAPI.getHostTransactions({ page: txnPage, limit }),
-          transactionAPI.getHostTransactions({ page: 1, limit: 500 }),
         ])
         if (!mounted) return
         if (statsRes.success && statsRes.data) setStats(statsRes.data as any)
@@ -85,11 +88,9 @@ export default function HostEarningsPage() {
           setTransactions(txnRes.data.transactions)
           setTxnTotal(txnRes.data.pagination.total)
         }
-        if (allRes.success && allRes.data?.transactions) {
-          setChartData(buildChartData(allRes.data.transactions))
-        }
       } catch (err: any) {
         if (!mounted) return
+        setError(err.message || "Failed to load earnings")
         toast.error(err.message || "Failed to load earnings")
       } finally {
         if (mounted) setLoading(false)
@@ -97,6 +98,22 @@ export default function HostEarningsPage() {
     })()
     return () => { mounted = false }
   }, [payoutPage, txnPage, refreshKey])
+
+  useEffect(() => {
+    let mounted = true
+    ;(async () => {
+      try {
+        const allRes = await transactionAPI.getHostTransactions({ page: 1, limit: 500 })
+        if (!mounted) return
+        if (allRes.success && allRes.data?.transactions) {
+          setChartData(buildChartData(allRes.data.transactions))
+        }
+      } catch {
+        if (!mounted) return
+      }
+    })()
+    return () => { mounted = false }
+  }, [refreshKey])
 
   async function handleRequestPayout() {
     setRequesting(true)
@@ -116,9 +133,26 @@ export default function HostEarningsPage() {
     }
   }
 
+  const feePercent = stats.platformFeePercent || 10
   const availableBalance = stats.totalEarned - stats.pendingPayouts
   const payoutTotalPages = Math.max(1, Math.ceil(payoutTotal / limit))
   const txnTotalPages = Math.max(1, Math.ceil(txnTotal / limit))
+
+  if (error) {
+    return (
+      <div className="flex min-h-[60vh] flex-col items-center justify-center text-gray-400">
+        <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50">
+          <AlertCircle className="h-8 w-8 text-red-400" />
+        </div>
+        <p className="text-lg font-semibold text-gray-900">Failed to load earnings</p>
+        <p className="mt-1 text-sm text-gray-400">{error}</p>
+        <button onClick={() => window.location.reload()} className="mt-6 flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800">
+          <RefreshCw className="h-4 w-4" />
+          Try Again
+        </button>
+      </div>
+    )
+  }
 
   if (loading) {
     return (
@@ -141,6 +175,8 @@ export default function HostEarningsPage() {
       </div>
     )
   }
+
+  const hasChartData = chartData.some((d) => d.earnings > 0)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-violet-50/40 p-6 lg:p-8">
@@ -183,30 +219,32 @@ export default function HostEarningsPage() {
         </motion.div>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.18, type: "spring", stiffness: 80, damping: 18 }}
-        className="mb-8 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
-      >
-        <h2 className="mb-4 text-lg font-semibold text-gray-900">Monthly Earnings Trend</h2>
+      {hasChartData && (
         <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ delay: 0.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="h-64 origin-left"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.18, type: "spring", stiffness: 80, damping: 18 }}
+          className="mb-8 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
         >
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="name" tick={{ fontSize: 12 }} stroke="#9ca3af" />
-              <YAxis tick={{ fontSize: 12 }} stroke="#9ca3af" tickFormatter={(v) => formatCurrency(v)} />
-              <Tooltip formatter={(v: any) => [formatCurrency(Number(v || 0)), "Earnings"]} />
-              <Line type="monotone" dataKey="earnings" stroke="#7c3aed" strokeWidth={2} dot={{ fill: "#7c3aed", r: 3 }} />
-            </LineChart>
-          </ResponsiveContainer>
+          <h2 className="mb-4 text-lg font-semibold text-gray-900">Monthly Earnings Trend</h2>
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ delay: 0.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="h-64 origin-left"
+          >
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="name" tick={{ fontSize: 12 }} stroke="#9ca3af" />
+                <YAxis tick={{ fontSize: 12 }} stroke="#9ca3af" tickFormatter={(v) => formatCurrency(v)} />
+                <Tooltip formatter={(v: any) => [formatCurrency(Number(v || 0)), "Earnings"]} />
+                <Line type="monotone" dataKey="earnings" stroke="#7c3aed" strokeWidth={2} dot={{ fill: "#7c3aed", r: 3 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </motion.div>
         </motion.div>
-      </motion.div>
+      )}
 
       <motion.div
         initial={{ opacity: 0, y: 24 }}
@@ -326,8 +364,8 @@ export default function HostEarningsPage() {
                     <td className="whitespace-nowrap px-5 py-3.5 text-gray-700">{new Date(t.createdAt).toLocaleDateString()}</td>
                     <td className="px-5 py-3.5 text-gray-700">{t.description || "—"}</td>
                     <td className="whitespace-nowrap px-5 py-3.5 font-semibold text-gray-900">{formatCurrency(t.amount)}</td>
-                    <td className="whitespace-nowrap px-5 py-3.5 text-gray-500">{formatCurrency(t.amount * 0.1)}</td>
-                    <td className="whitespace-nowrap px-5 py-3.5 font-semibold text-emerald-600">{formatCurrency(t.amount * 0.9)}</td>
+                    <td className="whitespace-nowrap px-5 py-3.5 text-gray-500">{formatCurrency(t.amount * feePercent / 100)}</td>
+                    <td className="whitespace-nowrap px-5 py-3.5 font-semibold text-emerald-600">{formatCurrency(t.amount * (100 - feePercent) / 100)}</td>
                     <td className="whitespace-nowrap px-5 py-3.5 capitalize text-gray-600">{t.type}</td>
                     <td className="px-5 py-3.5">
                       <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${STATUS_STYLES[t.status] || "bg-gray-50 text-gray-700 border-gray-200"}`}>
@@ -385,8 +423,9 @@ export default function HostEarningsPage() {
         </div>
       </motion.div>
 
-      <AnimatePresence>
-        {showRequestModal && (
+      <ModalPortal>
+        <AnimatePresence>
+          {showRequestModal && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -399,7 +438,7 @@ export default function HostEarningsPage() {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 10 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md rounded-2xl border border-gray-100 bg-white p-6 shadow-2xl"
+              className="w-full max-w-md max-h-[85vh] overflow-y-auto rounded-2xl border border-gray-100 bg-white p-6 shadow-2xl"
             >
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-lg font-bold text-gray-900">Request Withdrawal</h2>
@@ -424,6 +463,7 @@ export default function HostEarningsPage() {
           </motion.div>
         )}
       </AnimatePresence>
+      </ModalPortal>
     </div>
   )
 }

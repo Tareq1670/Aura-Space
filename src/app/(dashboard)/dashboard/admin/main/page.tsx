@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { toast } from "sonner"
-import { Users, CalendarCheck, DollarSign, Activity, Building, MapPin } from "lucide-react"
+import { Users, CalendarCheck, DollarSign, Activity, Building, Flag, AlertCircle, RefreshCw } from "lucide-react"
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, LineChart, Line, type PieLabelRenderProps,
@@ -26,10 +26,12 @@ const quickLinks = [
 
 export default function AdminMainPage() {
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [data, setData] = useState<AdminDashboardData | null>(null)
 
   useEffect(() => {
     let mounted = true
+    setError(null)
     ;(async () => {
       setLoading(true)
       try {
@@ -38,10 +40,12 @@ export default function AdminMainPage() {
         if (res.success && res.data) {
           setData(res.data)
         } else {
+          setError(res.message || "Failed to load dashboard")
           toast.error(res.message || "Failed to load dashboard")
         }
       } catch {
         if (!mounted) return
+        setError("Failed to load dashboard data")
         toast.error("Failed to load dashboard data")
       } finally {
         if (mounted) setLoading(false)
@@ -49,6 +53,22 @@ export default function AdminMainPage() {
     })()
     return () => { mounted = false }
   }, [])
+
+  if (error) {
+    return (
+      <div className="flex min-h-[60vh] flex-col items-center justify-center text-gray-400">
+        <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50">
+          <AlertCircle className="h-8 w-8 text-red-400" />
+        </div>
+        <p className="text-lg font-semibold text-gray-900">Failed to load dashboard</p>
+        <p className="mt-1 text-sm text-gray-400">{error}</p>
+        <button onClick={() => window.location.reload()} className="mt-6 flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800">
+          <RefreshCw className="h-4 w-4" />
+          Try Again
+        </button>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-8 p-6 lg:p-8">
@@ -58,10 +78,17 @@ export default function AdminMainPage() {
       </motion.div>
 
       {loading ? (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="h-28 animate-pulse rounded-2xl bg-gray-100" />
-          ))}
+        <div>
+          <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="h-28 animate-pulse rounded-2xl bg-gray-100" />
+            ))}
+          </div>
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-64 animate-pulse rounded-2xl bg-gray-100" />
+            ))}
+          </div>
         </div>
       ) : data ? (
         <>
@@ -71,6 +98,11 @@ export default function AdminMainPage() {
             <StatCard label="Total Bookings" value={data.totalBookings} gradient="from-emerald-500 to-teal-600" prefix="" formatter={(v) => String(v)} icon={<CalendarCheck className="h-5 w-5 text-white" />} />
             <StatCard label="Platform Revenue" value={data.commissionEarned} gradient="from-amber-500 to-orange-600" icon={<DollarSign className="h-5 w-5 text-white" />} />
             <StatCard label="Pending Payouts" value={data.pendingPayouts} gradient="from-rose-500 to-pink-600" prefix="" formatter={(v) => formatCurrency(v)} icon={<Activity className="h-5 w-5 text-white" />} />
+            {data.reportedReviews > 0 && (
+              <Link href="/dashboard/admin/reports">
+                <StatCard label="Reported Reviews" value={data.reportedReviews} gradient="from-rose-500 to-red-600" prefix="" formatter={(v) => String(v)} icon={<Flag className="h-5 w-5 text-white" />} />
+              </Link>
+            )}
           </div>
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">

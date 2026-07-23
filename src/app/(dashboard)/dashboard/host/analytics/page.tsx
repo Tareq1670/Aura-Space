@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
+import { AlertCircle, RefreshCw } from "lucide-react"
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, CartesianGrid,
 } from "recharts"
@@ -15,9 +16,11 @@ import {
 export default function HostAnalyticsPage() {
   const [data, setData] = useState<HostDashboardData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     let mounted = true
+    setError(null)
     ;(async () => {
       try {
         const res = await getHostDashboard()
@@ -25,16 +28,36 @@ export default function HostAnalyticsPage() {
         if (res.success && res.data) {
           setData(res.data)
         } else {
+          setError(res.message || "Failed to load analytics")
           toast.error(res.message || "Failed to load analytics")
         }
       } catch {
-        if (mounted) toast.error("Failed to load analytics")
+        if (mounted) {
+          setError("Failed to load analytics")
+          toast.error("Failed to load analytics")
+        }
       } finally {
         if (mounted) setLoading(false)
       }
     })()
     return () => { mounted = false }
   }, [])
+
+  if (error) {
+    return (
+      <div className="flex min-h-[60vh] flex-col items-center justify-center text-gray-400">
+        <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50">
+          <AlertCircle className="h-8 w-8 text-red-400" />
+        </div>
+        <p className="text-lg font-semibold text-gray-900">Failed to load analytics</p>
+        <p className="mt-1 text-sm text-gray-400">{error}</p>
+        <button onClick={() => window.location.reload()} className="mt-6 flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800">
+          <RefreshCw className="h-4 w-4" />
+          Try Again
+        </button>
+      </div>
+    )
+  }
 
   if (loading) {
     return (
@@ -58,16 +81,7 @@ export default function HostAnalyticsPage() {
     )
   }
 
-  const monthlyData = data.monthlyIncome?.length
-    ? data.monthlyIncome
-    : Array.from({ length: 6 }).map((_, i) => {
-        const d = new Date()
-        d.setMonth(d.getMonth() - 5 + i)
-        return {
-          month: d.toLocaleDateString("en-US", { month: "short", year: "2-digit" }),
-          income: 0,
-        }
-      })
+  const monthlyData = data.monthlyIncome?.length ? data.monthlyIncome : []
 
   const stats = [
     { icon: Building2, label: "Properties", value: String(data.totalProperties), color: "text-violet-600", bg: "bg-violet-100" },
@@ -114,37 +128,39 @@ export default function HostAnalyticsPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="lg:col-span-2 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm"
-        >
-          <div className="mb-6 flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-slate-400" />
-            <h2 className="text-sm font-extrabold uppercase tracking-wider text-slate-400">Monthly Revenue</h2>
-          </div>
-          <div className="h-72">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={monthlyData}>
-                <defs>
-                  <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#7c3aed" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#7c3aed" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis dataKey="month" tick={{ fontSize: 12, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 12, fill: "#94a3b8" }} axisLine={false} tickLine={false} tickFormatter={(v) => `$${v}`} />
-                <Tooltip
-                  contentStyle={{ borderRadius: 12, border: "1px solid #e2e8f0", boxShadow: "0 4px 20px rgba(0,0,0,0.08)" }}
-                  formatter={(value) => [formatCurrency(Number(value)), "Revenue"]}
-                />
-                <Area type="monotone" dataKey="income" stroke="#7c3aed" strokeWidth={2.5} fill="url(#revenueGradient)" />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        </motion.div>
+        {monthlyData.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="lg:col-span-2 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm"
+          >
+            <div className="mb-6 flex items-center gap-2">
+              <TrendingUp className="h-4 w-4 text-slate-400" />
+              <h2 className="text-sm font-extrabold uppercase tracking-wider text-slate-400">Monthly Revenue</h2>
+            </div>
+            <div className="h-72">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={monthlyData}>
+                  <defs>
+                    <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#7c3aed" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#7c3aed" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                  <XAxis dataKey="month" tick={{ fontSize: 12, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontSize: 12, fill: "#94a3b8" }} axisLine={false} tickLine={false} tickFormatter={(v) => `$${v}`} />
+                  <Tooltip
+                    contentStyle={{ borderRadius: 12, border: "1px solid #e2e8f0", boxShadow: "0 4px 20px rgba(0,0,0,0.08)" }}
+                    formatter={(value) => [formatCurrency(Number(value)), "Revenue"]}
+                  />
+                  <Area type="monotone" dataKey="income" stroke="#7c3aed" strokeWidth={2.5} fill="url(#revenueGradient)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </motion.div>
+        )}
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

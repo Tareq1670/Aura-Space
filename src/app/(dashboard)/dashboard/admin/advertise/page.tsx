@@ -1,10 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
 import { Megaphone, TrendingUp, DollarSign, Users, CheckCircle, ArrowRight, Mail, Loader2, Sparkles, BarChart3, Target, Eye, MousePointerClick } from "lucide-react"
+import { Skeleton } from "@heroui/react"
 import Link from "next/link"
+import { getAdvertiseStats, joinAdvertiseWaitlist, type AdvertiseStats } from "@/lib/actions/dashboard-admin"
+import { formatCurrency } from "@/lib/currency"
 
 const TIERS = [
   {
@@ -12,8 +15,6 @@ const TIERS = [
     price: "$49",
     period: "/ month",
     description: "Boost a single property to the top of search results",
-    reach: "10k–50k",
-    cpc: "$0.50",
     features: [
       "Priority in category search",
       "Featured badge on listing",
@@ -27,8 +28,6 @@ const TIERS = [
     price: "$199",
     period: "/ month",
     description: "Prime placement on the homepage hero section",
-    reach: "50k–200k",
-    cpc: "$1.20",
     features: [
       "Hero banner rotation placement",
       "Custom campaign image",
@@ -43,8 +42,6 @@ const TIERS = [
     price: "$99",
     period: "/ month",
     description: "Stand out within your property category",
-    reach: "20k–100k",
-    cpc: "$0.80",
     features: [
       "Banner in category pages",
       "Category filter priority",
@@ -63,10 +60,31 @@ const BENEFITS = [
 ]
 
 export default function AdminAdvertisePage() {
+  const [loading, setLoading] = useState(true)
+  const [stats, setStats] = useState<AdvertiseStats | null>(null)
   const [email, setEmail] = useState("")
   const [name, setName] = useState("")
   const [submitting, setSubmitting] = useState(false)
   const [subscribed, setSubscribed] = useState(false)
+  const [waitlistCount, setWaitlistCount] = useState(0)
+
+  useEffect(() => {
+    let mounted = true
+    ;(async () => {
+      try {
+        const res = await getAdvertiseStats()
+        if (!mounted) return
+        if (res.success && res.data) {
+          setStats(res.data)
+        }
+      } catch {
+        // stats are optional — page works without them
+      } finally {
+        if (mounted) setLoading(false)
+      }
+    })()
+    return () => { mounted = false }
+  }, [])
 
   async function handleWaitlist(e: React.FormEvent) {
     e.preventDefault()
@@ -75,12 +93,27 @@ export default function AdminAdvertisePage() {
       return
     }
     setSubmitting(true)
-    // Simulate submission — backend endpoint TBD
-    await new Promise((r) => setTimeout(r, 1000))
-    setSubscribed(true)
-    setSubmitting(false)
-    toast.success("You're on the waitlist!")
+    try {
+      const res = await joinAdvertiseWaitlist(name.trim(), email.trim())
+      if (res.success) {
+        setSubscribed(true)
+        if (res.data?.waitlistCount) setWaitlistCount(res.data.waitlistCount)
+        toast.success("You're on the waitlist!")
+      } else {
+        toast.error(res.message || "Failed to join waitlist")
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to join waitlist")
+    } finally {
+      setSubmitting(false)
+    }
   }
+
+  const statItems = stats ? [
+    { icon: TrendingUp, label: "Monthly Active Users", value: stats.monthlyActiveUsers.toLocaleString(), sub: "Non-admin accounts", color: "text-violet-600", bg: "bg-violet-100" },
+    { icon: Eye, label: "Monthly Page Views", value: stats.monthlyPageViews.toLocaleString(), sub: "Property detail pages", color: "text-blue-600", bg: "bg-blue-100" },
+    { icon: DollarSign, label: "Avg. Booking Value", value: formatCurrency(stats.avgBookingValue), sub: "Per reservation", color: "text-emerald-600", bg: "bg-emerald-100" },
+  ] : null
 
   return (
     <div className="space-y-10 p-6 lg:p-8">
@@ -115,30 +148,36 @@ export default function AdminAdvertisePage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {[
-          { icon: TrendingUp, label: "Monthly Active Users", value: "12.4k", sub: "Growing 18% MoM", color: "text-violet-600", bg: "bg-violet-100" },
-          { icon: Eye, label: "Monthly Page Views", value: "89.2k", sub: "Property detail pages", color: "text-blue-600", bg: "bg-blue-100" },
-          { icon: DollarSign, label: "Avg. Booking Value", value: "$320", sub: "Per reservation", color: "text-emerald-600", bg: "bg-emerald-100" },
-        ].map((stat, i) => (
-          <motion.div
-            key={stat.label}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.06 }}
-            className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm"
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">{stat.label}</p>
-                <p className="mt-1 text-2xl font-black text-slate-900">{stat.value}</p>
-                <p className="mt-0.5 text-xs text-slate-500">{stat.sub}</p>
+        {loading ? (
+          [1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-28 rounded-2xl" />
+          ))
+        ) : statItems ? (
+          statItems.map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.06 }}
+              className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">{stat.label}</p>
+                  <p className="mt-1 text-2xl font-black text-slate-900">{stat.value}</p>
+                  <p className="mt-0.5 text-xs text-slate-500">{stat.sub}</p>
+                </div>
+                <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${stat.bg}`}>
+                  <stat.icon className={`h-5 w-5 ${stat.color}`} />
+                </div>
               </div>
-              <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${stat.bg}`}>
-                <stat.icon className={`h-5 w-5 ${stat.color}`} />
-              </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          ))
+        ) : (
+          <div className="col-span-3 rounded-2xl border border-slate-100 bg-white p-6 text-center shadow-sm">
+            <p className="text-sm text-slate-400">Unable to load platform stats</p>
+          </div>
+        )}
       </div>
 
       {/* Benefits */}
@@ -204,10 +243,6 @@ export default function AdminAdvertisePage() {
                   <span className="text-3xl font-black text-slate-900">{tier.price}</span>
                   <span className="text-sm text-slate-400">{tier.period}</span>
                 </div>
-                <div className="mt-3 flex items-center gap-4 text-xs text-slate-500">
-                  <span>Reach: <strong className="text-slate-700">{tier.reach}</strong></span>
-                  <span>CPC: <strong className="text-slate-700">{tier.cpc}</strong></span>
-                </div>
               </div>
               <ul className="mt-5 space-y-2.5 border-t border-slate-100 pt-5">
                 {tier.features.map((feature) => (
@@ -264,7 +299,7 @@ export default function AdminAdvertisePage() {
               <div className="mt-4 flex items-center gap-3 text-xs text-slate-500">
                 <div className="flex items-center gap-1.5">
                   <Users className="h-3.5 w-3.5" />
-                  <span><strong className="text-slate-700">47</strong> on waitlist</span>
+                  <span><strong className="text-slate-700">{waitlistCount || 0}</strong> on waitlist</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Sparkles className="h-3.5 w-3.5" />

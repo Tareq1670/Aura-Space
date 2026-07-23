@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import ModalPortal from "@/lib/modal-portal"
 import { Select, ListBox, Skeleton } from "@heroui/react"
 import { toast } from "sonner"
 import DataTable from "@/Components/Dashboard/DataTable"
@@ -672,7 +673,8 @@ export default function AdminPropertiesPage() {
                 loading={processing}
             />
 
-            <AnimatePresence>
+            <ModalPortal>
+              <AnimatePresence>
                 {!!rejectId && (
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -687,7 +689,7 @@ export default function AdminPropertiesPage() {
                             exit={{ opacity: 0, scale: 0.92, y: 20 }}
                             transition={{ type: "spring", damping: 25, stiffness: 300 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full max-w-md rounded-2xl border border-gray-100 bg-white p-8 shadow-2xl"
+                            className="w-full max-w-md max-h-[85vh] overflow-y-auto rounded-2xl border border-gray-100 bg-white p-8 shadow-2xl"
                         >
                             <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-red-100 bg-red-50">
                                 <svg className="h-7 w-7 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -731,6 +733,7 @@ export default function AdminPropertiesPage() {
                     </motion.div>
                 )}
             </AnimatePresence>
+            </ModalPortal>
 
             <ConfirmModal
                 isOpen={!!deleteId}
@@ -743,7 +746,8 @@ export default function AdminPropertiesPage() {
                 loading={processing}
             />
 
-            <AnimatePresence>
+            <ModalPortal>
+              <AnimatePresence>
                 {detailsModalOpen && selectedProperty && (
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -758,7 +762,7 @@ export default function AdminPropertiesPage() {
                             exit={{ opacity: 0, scale: 0.92, y: 20 }}
                             transition={{ type: "spring", damping: 25, stiffness: 300 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full max-w-2xl rounded-2xl border border-gray-100 bg-white shadow-2xl"
+                            className="w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl border border-gray-100 bg-white shadow-2xl"
                         >
                             <div className="relative">
                                 <div className="h-48 overflow-hidden rounded-t-2xl bg-gray-100">
@@ -846,6 +850,7 @@ export default function AdminPropertiesPage() {
                     </motion.div>
                 )}
             </AnimatePresence>
+            </ModalPortal>
         </div>
     )
 }

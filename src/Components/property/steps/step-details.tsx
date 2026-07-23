@@ -3,8 +3,10 @@
 
 import { motion } from "framer-motion";
 import { PropertyFormData } from "@/lib/actions/property";
-import { Minus, Plus, BedDouble, Bath, Users, Bed } from "lucide-react";
+import { Minus, Plus, BedDouble, Bath, Users, Bed, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
+import { useState } from "react";
+import AIDescriptionGenerator from "@/Components/property/AIDescriptionGenerator";
 
 interface StepDetailsProps {
     formData: PropertyFormData;
@@ -100,6 +102,7 @@ export default function StepDetails({
     updateFormData,
     errors,
 }: StepDetailsProps) {
+    const [aiGeneratorOpen, setAiGeneratorOpen] = useState(false);
     return (
         <motion.div
             initial={{ opacity: 0, x: 30 }}
@@ -183,6 +186,14 @@ export default function StepDetails({
                         {formData.description.length}/2000
                     </span>
                 </div>
+                <button
+                    type="button"
+                    onClick={() => setAiGeneratorOpen(true)}
+                    className="mt-2 px-4 py-2 rounded-xl text-sm font-medium bg-gradient-to-r from-violet-500 to-indigo-500 text-white hover:shadow-lg hover:shadow-violet-500/25 transition-all flex items-center gap-2"
+                >
+                    <Sparkles className="w-4 h-4" />
+                    Generate with AI
+                </button>
             </motion.div>
 
             {/* Counters */}
@@ -237,6 +248,27 @@ export default function StepDetails({
                     }
                 />
             </motion.div>
+
+            <AIDescriptionGenerator
+                isOpen={aiGeneratorOpen}
+                onClose={() => setAiGeneratorOpen(false)}
+                formData={{
+                    title: formData.title,
+                    propertyType: formData.propertyType,
+                    placeType: formData.placeType,
+                    city: formData.location?.city,
+                    country: formData.location?.country,
+                    bedrooms: formData.bedrooms,
+                    bathrooms: formData.bathrooms,
+                    maxGuests: formData.maxGuests,
+                    beds: formData.beds,
+                    amenities: formData.amenities,
+                }}
+                onApply={(description) => {
+                    updateFormData({ description });
+                    setAiGeneratorOpen(false);
+                }}
+            />
         </motion.div>
     );
 }

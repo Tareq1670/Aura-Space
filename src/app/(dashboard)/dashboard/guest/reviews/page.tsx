@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import ModalPortal from "@/lib/modal-portal"
 import { toast } from "sonner"
 import { Star, Edit3, X, PenLine, Sparkles, Quote, MessageSquareText } from "lucide-react"
 import ReviewCard from "@/Components/Review/ReviewCard"
@@ -435,8 +436,9 @@ export default function GuestReviewsPage() {
       </div>
 
       {/* Write / Edit Modal */}
-      <AnimatePresence>
-        {(showWriteModal || showEditModal) && (
+      <ModalPortal>
+        <AnimatePresence>
+          {(showWriteModal || showEditModal) && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -453,10 +455,10 @@ export default function GuestReviewsPage() {
               exit={{ opacity: 0, scale: 0.92, y: 24 }}
               transition={{ type: "spring", stiffness: 300, damping: 26 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl"
+              className="w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-2xl bg-white shadow-2xl"
             >
               {/* Modal header */}
-              <div className="relative overflow-hidden bg-gradient-to-r from-violet-500 to-indigo-600 px-6 py-5">
+              <div className="relative overflow-hidden bg-gradient-to-r from-violet-500 to-indigo-600 px-6 py-5 shrink-0">
                 <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-30" />
                 <div className="relative flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -546,6 +548,7 @@ export default function GuestReviewsPage() {
           </motion.div>
         )}
       </AnimatePresence>
+      </ModalPortal>
 
       <ConfirmModal
         isOpen={!!deleteId}

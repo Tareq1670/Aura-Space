@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import ModalPortal from "@/lib/modal-portal"
 import { toast } from "sonner"
 import { Star, MessageSquare, TrendingUp, X, Reply, Sparkles, BarChart3, LineChart } from "lucide-react"
 import {
@@ -425,8 +426,9 @@ export default function HostReviewsPage() {
       </div>
 
       {/* Reply Modal */}
-      <AnimatePresence>
-        {replyId && (
+      <ModalPortal>
+        <AnimatePresence>
+          {replyId && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -440,9 +442,9 @@ export default function HostReviewsPage() {
               exit={{ opacity: 0, scale: 0.92, y: 24 }}
               transition={{ type: "spring", stiffness: 300, damping: 26 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl"
+              className="w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-2xl bg-white shadow-2xl"
             >
-              <div className="relative overflow-hidden bg-gradient-to-r from-emerald-500 to-teal-600 px-6 py-5">
+              <div className="relative overflow-hidden bg-gradient-to-r from-emerald-500 to-teal-600 px-6 py-5 shrink-0">
                 <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-30" />
                 <div className="relative flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -493,6 +495,7 @@ export default function HostReviewsPage() {
           </motion.div>
         )}
       </AnimatePresence>
+      </ModalPortal>
     </div>
   )
 }

@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
-import { DollarSign, TrendingUp, Clock, Users, Trophy, Building2 } from "lucide-react"
+import { DollarSign, TrendingUp, Clock, Users, Trophy, Building2, ArrowUp, ArrowDown } from "lucide-react"
 import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
-import { Label, ListBox, Select, Skeleton } from "@heroui/react"
+import { Select, Label, ListBox, Skeleton } from "@heroui/react"
 import StatCard from "@/Components/Dashboard/StatCard"
-import { transactionAPI, type TransactionItem } from "@/lib/api/Guest/transaction-api"
+import { getAdminRevenue, type AdminRevenueData } from "@/lib/actions/dashboard-admin"
 import { formatCurrency } from "@/lib/currency"
 
 const PIE_COLORS = ["#7c3aed", "#3b82f6", "#f59e0b", "#059669", "#ef4444", "#ec4899"]
@@ -42,87 +42,21 @@ const listRowVariants = {
   }),
 }
 
-interface TopHost { userId: string; earnings: number; count: number }
-interface TopProp { name: string; earnings: number }
-
 export default function AdminRevenuePage() {
   const [loading, setLoading] = useState(true)
-  const [stats, setStats] = useState({ totalEarned: 0, commissionEarned: 0, pendingPayouts: 0, totalSpend: 0 })
+  const [data, setData] = useState<AdminRevenueData | null>(null)
   const [chartPeriod, setChartPeriod] = useState<string>("monthly")
-  const [revenueData, setRevenueData] = useState<{ name: string; revenue: number; bookings: number }[]>([])
-  const [topHosts, setTopHosts] = useState<TopHost[]>([])
-  const [topProperties, setTopProperties] = useState<TopProp[]>([])
-
-  const extractProperty = (desc: string): string | null => {
-    const match = desc.match(/at\s+(.+)/i) || desc.match(/for\s+(.+)/i)
-    return match ? match[1].trim() : null
-  }
-
-  const aggregateData = (txns: TransactionItem[]) => {
-    const monthRev: Record<number, number> = {}
-    const monthBooking: Record<number, number> = {}
-    const hostMap: Record<string, { earnings: number; count: number }> = {}
-    const propMap: Record<string, number> = {}
-
-    const now = new Date()
-
-    txns.forEach((t) => {
-      const d = new Date(t.createdAt)
-      if (d.getFullYear() !== now.getFullYear()) return
-
-      monthRev[d.getMonth()] = (monthRev[d.getMonth()] || 0) + (t.type === "payout" ? 0 : t.amount)
-      if (t.type === "payment" || t.type === "commission") {
-        monthBooking[d.getMonth()] = (monthBooking[d.getMonth()] || 0) + 1
-      }
-
-      if (t.userId) {
-        hostMap[t.userId] = hostMap[t.userId] || { earnings: 0, count: 0 }
-        hostMap[t.userId].earnings += t.amount
-        if (t.type === "payment") hostMap[t.userId].count++
-      }
-
-      if (t.description) {
-        const prop = extractProperty(t.description)
-        if (prop) {
-          propMap[prop] = (propMap[prop] || 0) + t.amount
-        }
-      }
-    })
-
-    const rev = MONTHS.map((name, i) => ({
-      name,
-      revenue: monthRev[i] || 0,
-      bookings: monthBooking[i] || 0,
-    }))
-
-    const hosts = Object.entries(hostMap)
-      .map(([userId, v]) => ({ userId, earnings: v.earnings, count: v.count }))
-      .sort((a, b) => b.earnings - a.earnings)
-      .slice(0, 5)
-
-    const props = Object.entries(propMap)
-      .map(([name, earnings]) => ({ name, earnings }))
-      .sort((a, b) => b.earnings - a.earnings)
-      .slice(0, 5)
-
-    return { revenueData: rev, topHosts: hosts, topProperties: props }
-  }
 
   useEffect(() => {
     let mounted = true
     ;(async () => {
       try {
-        const [statsRes, txnRes] = await Promise.all([
-          transactionAPI.getTransactionStats(),
-          transactionAPI.getAdminTransactions({ page: 1, limit: 500 }),
-        ])
+        const res = await getAdminRevenue()
         if (!mounted) return
-        if (statsRes.success && statsRes.data) setStats(statsRes.data as any)
-        if (txnRes.success && txnRes.data?.transactions) {
-          const agg = aggregateData(txnRes.data.transactions)
-          setRevenueData(agg.revenueData)
-          setTopHosts(agg.topHosts)
-          setTopProperties(agg.topProperties)
+        if (res.success && res.data) {
+          setData(res.data)
+        } else {
+          toast.error(res.message || "Failed to load revenue data")
         }
       } catch (err: any) {
         if (!mounted) return
@@ -136,16 +70,18 @@ export default function AdminRevenuePage() {
 
   const period = chartPeriod || "monthly"
 
-  const displayedData = period === "yearly"
-    ? [{ name: "This Year", revenue: revenueData.reduce((s, d) => s + d.revenue, 0), bookings: revenueData.reduce((s, d) => s + d.bookings, 0) }]
-    : period === "quarterly"
-      ? [
-          { name: "Q1", revenue: revenueData.slice(0, 3).reduce((s, d) => s + d.revenue, 0), bookings: revenueData.slice(0, 3).reduce((s, d) => s + d.bookings, 0) },
-          { name: "Q2", revenue: revenueData.slice(3, 6).reduce((s, d) => s + d.revenue, 0), bookings: revenueData.slice(3, 6).reduce((s, d) => s + d.bookings, 0) },
-          { name: "Q3", revenue: revenueData.slice(6, 9).reduce((s, d) => s + d.revenue, 0), bookings: revenueData.slice(6, 9).reduce((s, d) => s + d.bookings, 0) },
-          { name: "Q4", revenue: revenueData.slice(9, 12).reduce((s, d) => s + d.revenue, 0), bookings: revenueData.slice(9, 12).reduce((s, d) => s + d.bookings, 0) },
-        ]
-      : revenueData
+  const displayedData: { name: string; revenue: number; bookings: number }[] = data
+    ? period === "yearly"
+      ? [{ name: "This Year", revenue: data.revenueByMonth.reduce((s, d) => s + d.revenue, 0), bookings: data.revenueByMonth.reduce((s, d) => s + d.bookings, 0) }]
+      : period === "quarterly"
+        ? [
+            { name: "Q1", revenue: data.revenueByMonth.slice(0, 3).reduce((s, d) => s + d.revenue, 0), bookings: data.revenueByMonth.slice(0, 3).reduce((s, d) => s + d.bookings, 0) },
+            { name: "Q2", revenue: data.revenueByMonth.slice(3, 6).reduce((s, d) => s + d.revenue, 0), bookings: data.revenueByMonth.slice(3, 6).reduce((s, d) => s + d.bookings, 0) },
+            { name: "Q3", revenue: data.revenueByMonth.slice(6, 9).reduce((s, d) => s + d.revenue, 0), bookings: data.revenueByMonth.slice(6, 9).reduce((s, d) => s + d.bookings, 0) },
+            { name: "Q4", revenue: data.revenueByMonth.slice(9, 12).reduce((s, d) => s + d.revenue, 0), bookings: data.revenueByMonth.slice(9, 12).reduce((s, d) => s + d.bookings, 0) },
+          ]
+        : data.revenueByMonth.map((d) => ({ name: d.month, revenue: d.revenue, bookings: d.bookings }))
+    : []
 
   if (loading) {
     return (
@@ -169,6 +105,16 @@ export default function AdminRevenuePage() {
     )
   }
 
+  if (!data) {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center p-6">
+        <p className="text-gray-400">No revenue data available</p>
+      </div>
+    )
+  }
+
+  const { summary } = data
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-violet-50/40 p-6 lg:p-8">
       <motion.div
@@ -188,16 +134,16 @@ export default function AdminRevenuePage() {
         className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
       >
         <motion.div variants={cardVariants}>
-          <StatCard icon={<DollarSign className="h-5 w-5" />} label="Total Revenue" value={stats.totalSpend} gradient="from-emerald-600 to-emerald-500" />
+          <StatCard icon={<DollarSign className="h-5 w-5" />} label="Total Revenue" value={summary.totalRevenue} gradient="from-emerald-600 to-emerald-500" />
         </motion.div>
         <motion.div variants={cardVariants}>
-          <StatCard icon={<TrendingUp className="h-5 w-5" />} label="Commission Earned" value={stats.commissionEarned} gradient="from-blue-600 to-blue-500" />
+          <StatCard icon={<TrendingUp className="h-5 w-5" />} label="Commission Earned" value={summary.commissionEarned} gradient="from-blue-600 to-blue-500" />
         </motion.div>
         <motion.div variants={cardVariants}>
-          <StatCard icon={<Clock className="h-5 w-5" />} label="Pending Payouts" value={stats.pendingPayouts} gradient="from-amber-500 to-orange-500" />
+          <StatCard icon={<Clock className="h-5 w-5" />} label="Pending Payouts" value={summary.pendingPayouts} gradient="from-amber-500 to-orange-500" />
         </motion.div>
         <motion.div variants={cardVariants}>
-          <StatCard icon={<Users className="h-5 w-5" />} label="Total Revenue (Gross)" value={stats.totalSpend + stats.commissionEarned} gradient="from-purple-600 to-purple-500" />
+          <StatCard icon={<DollarSign className="h-5 w-5" />} label="This Month" value={summary.thisMonthRevenue} gradient="from-purple-600 to-purple-500" />
         </motion.div>
       </motion.div>
 
@@ -233,6 +179,19 @@ export default function AdminRevenuePage() {
               </Select.Popover>
             </Select>
           </div>
+          <div className="mb-4 flex items-center gap-4 text-sm">
+            <div className="flex items-center gap-1.5">
+              {summary.revenueGrowth >= 0 ? (
+                <ArrowUp className="h-4 w-4 text-emerald-500" />
+              ) : (
+                <ArrowDown className="h-4 w-4 text-red-500" />
+              )}
+              <span className={summary.revenueGrowth >= 0 ? "text-emerald-600 font-semibold" : "text-red-600 font-semibold"}>
+                {summary.revenueGrowth >= 0 ? "+" : ""}{summary.revenueGrowth}%
+              </span>
+              <span className="text-gray-400">vs last month</span>
+            </div>
+          </div>
           <motion.div
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
@@ -263,10 +222,10 @@ export default function AdminRevenuePage() {
               <PieChart>
                 <Pie
                   data={[
-                    { name: "Bookings", value: stats.totalSpend },
-                    { name: "Commission", value: stats.commissionEarned },
-                    { name: "Payouts", value: stats.pendingPayouts },
-                    { name: "Other", value: Math.max(0, (stats.totalSpend + stats.commissionEarned) - stats.pendingPayouts) },
+                    { name: "Bookings", value: summary.totalRevenue },
+                    { name: "Commission", value: summary.commissionEarned },
+                    { name: "Pending Payouts", value: summary.pendingPayouts },
+                    { name: "Net Revenue", value: Math.max(0, summary.netRevenue) },
                   ]}
                   cx="50%" cy="50%"
                   innerRadius={60}
@@ -295,10 +254,10 @@ export default function AdminRevenuePage() {
             <h2 className="text-lg font-semibold text-gray-900">Top Earning Hosts</h2>
           </div>
           <div className="space-y-3">
-            {topHosts.length === 0 ? (
+            {data.topHosts.length === 0 ? (
               <p className="py-6 text-center text-sm text-gray-400">No host data available</p>
             ) : (
-              topHosts.map((h, i) => (
+              data.topHosts.map((h, i) => (
                 <motion.div
                   key={h.userId}
                   custom={i}
@@ -315,7 +274,7 @@ export default function AdminRevenuePage() {
                       "bg-violet-100 text-violet-700"
                     }`}>{i + 1}</span>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">Host #{h.userId.slice(-6)}</p>
+                      <p className="text-sm font-medium text-gray-900">{h.name}</p>
                       <p className="text-xs text-gray-500">{h.count} transactions</p>
                     </div>
                   </div>
@@ -332,10 +291,10 @@ export default function AdminRevenuePage() {
             <h2 className="text-lg font-semibold text-gray-900">Top Earning Properties</h2>
           </div>
           <div className="space-y-3">
-            {topProperties.length === 0 ? (
+            {data.topProperties.length === 0 ? (
               <p className="py-6 text-center text-sm text-gray-400">No property data available</p>
             ) : (
-              topProperties.map((p, i) => (
+              data.topProperties.map((p, i) => (
                 <motion.div
                   key={p.name}
                   custom={i}

@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 };
 
 const FeaturedSpaces = dynamic(() => import("@/Components/Public/FeaturedSpaces"), { ssr: true });
+const AIRecommendations = dynamic(() => import("@/Components/Public/AIRecommendations"));
 const BrandPartners = dynamic(() => import("@/Components/Public/BrandPartners"), { ssr: true });
 const OurServices = dynamic(() => import("@/Components/Public/OurServices"), { ssr: true });
 const HowItWorks = dynamic(() => import("@/Components/Public/HowItWorks"), { ssr: true });
@@ -22,6 +23,7 @@ export default function Home() {
     <div>
       <Hero />
       <FeaturedSpaces />
+      <AIRecommendations />
       <BrandPartners />
       <OurServices />
       <HowItWorks />

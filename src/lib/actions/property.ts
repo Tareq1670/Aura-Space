@@ -369,7 +369,6 @@ export async function uploadPropertyImages(files: File[]) {
         files.forEach((file) => formData.append("images", file));
 
         const url = `${API_BASE}/properties/upload-images`;
-        console.log(`[Upload] POST ${url}`);
 
         const res = await fetch(url, {
             method: "POST",

@@ -6,7 +6,7 @@ import { Label, ListBox, Pagination, Select, Skeleton, Input } from "@heroui/rea
 import { toast } from "sonner";
 import Link from "next/link";
 import { getWishlist, getLists } from "@/lib/api/Guest/wishlist-api";
-import { removeFromWishlist } from "@/lib/actions/wishlist";
+import { removeFromWishlist, createList } from "@/lib/actions/wishlist";
 import WishlistButton from "@/Components/Wishlist/WishlistButton";
 import type { WishlistItem } from "@/lib/api/Guest/wishlist-api";
 import { formatCurrency } from "@/lib/currency";
@@ -80,17 +80,28 @@ export default function WishlistPage() {
         }
     }, []);
 
-    const handleCreateList = useCallback(() => {
-        if (!newListName.trim()) return;
-        setLists((prev) => {
-            if (prev.includes(newListName.trim())) return prev;
-            return [...prev, newListName.trim()];
-        });
-        setActiveList(newListName.trim());
-        setNewListName("");
-        setShowCreateList(false);
-        toast.success(`List "${newListName.trim()}" created`);
-    }, [newListName]);
+    const handleCreateList = useCallback(async () => {
+        const name = newListName.trim();
+        if (!name) return;
+        if (lists.includes(name)) {
+            toast.error(`List "${name}" already exists`);
+            return;
+        }
+        try {
+            const res = await createList(name);
+            if (res.success) {
+                setLists((prev) => [...prev, name]);
+                setActiveList(name);
+                setNewListName("");
+                setShowCreateList(false);
+                toast.success(`List "${name}" created`);
+            } else {
+                toast.error(res.message || "Failed to create list");
+            }
+        } catch {
+            toast.error("Failed to create list");
+        }
+    }, [newListName, lists]);
 
     const handleShare = useCallback(async () => {
         const url = window.location.href;
