@@ -361,39 +361,3 @@ export async function deleteProperty(id: string) {
     });
 }
 
-// Image upload — uses FormData, handled separately
-export async function uploadPropertyImages(files: File[]) {
-    try {
-        const token = await getSessionToken();
-        const formData = new FormData();
-        files.forEach((file) => formData.append("images", file));
-
-        const url = `${API_BASE}/properties/upload-images`;
-
-        const res = await fetch(url, {
-            method: "POST",
-            // Don't set Content-Type — browser sets it with boundary for FormData
-            headers: { Authorization: `Bearer ${token}` },
-            body: formData,
-        });
-
-        const result = await res.json();
-
-        if (!res.ok) {
-            return {
-                success: false,
-                error: result?.message || "Upload failed",
-            };
-        }
-
-        return {
-            success: true,
-            data: result.data as { urls: string[]; count: number },
-        };
-    } catch (err: unknown) {
-        return {
-            success: false,
-            error: err instanceof Error ? err.message : "Upload error",
-        };
-    }
-}

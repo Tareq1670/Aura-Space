@@ -1,16 +1,15 @@
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
 export const imageUploader = async (image: File) => {
     const formData = new FormData();
     formData.append("image", image);
-    const res = await fetch(
-        `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_KEY}`,
-        {
-            method: "POST",
-            body: formData,
-        },
-    );
+    const res = await fetch(`${API_BASE}/api/upload/local`, {
+        method: "POST",
+        body: formData,
+    });
     const result = await res.json();
-    if (!result.success) {
-        throw new Error("Image upload failed. Please try again.");
+    if (!result.success || !result.data?.url) {
+        throw new Error(result.message || "Image upload failed");
     }
-    return result.data;
+    return { display_url: result.data.url, url: result.data.url };
 };

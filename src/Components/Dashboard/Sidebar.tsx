@@ -35,6 +35,7 @@ import {
     HiFlag,
     HiMegaphone,
     HiPresentationChartLine,
+    HiDocumentText,
 } from "react-icons/hi2";
 import { authClient } from "@/lib/auth-client";
 
@@ -107,6 +108,11 @@ const NAV_LINKS: Record<RoleKey, NavSection[]> = {
                     href: "/dashboard/guest/reviews",
                     icon: HiStar,
                 },
+                {
+                    label: "My Blogs",
+                    href: "/dashboard/guest/blogs",
+                    icon: HiDocumentText,
+                },
             ],
         },
         {
@@ -177,6 +183,11 @@ const NAV_LINKS: Record<RoleKey, NavSection[]> = {
                     icon: HiClipboardDocumentList,
                     badge: 5,
                     badgeColor: "violet",
+                },
+                {
+                    label: "My Blogs",
+                    href: "/dashboard/host/blogs",
+                    icon: HiDocumentText,
                 },
             ],
         },
@@ -288,6 +299,11 @@ const NAV_LINKS: Record<RoleKey, NavSection[]> = {
                     label: "Advertisements",
                     href: "/dashboard/admin/advertise",
                     icon: HiMegaphone,
+                },
+                {
+                    label: "Blog Management",
+                    href: "/dashboard/admin/blogs",
+                    icon: HiDocumentText,
                 },
             ],
         },
