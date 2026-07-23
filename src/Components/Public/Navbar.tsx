@@ -16,12 +16,14 @@ interface NavRoute {
 const publicRoutes: NavRoute[] = [
   { label: "Home", href: "/" },
   { label: "Explore Places", href: "/listings" },
+  { label: "Blog", href: "/blogs" },
   { label: "Contact Us", href: "/contact" },
 ];
 
 const guestRoutes: NavRoute[] = [
   { label: "Home", href: "/" },
   { label: "Explore Places", href: "/listings" },
+  { label: "Blog", href: "/blogs" },
   { label: "My Trips", href: "/dashboard/guest/bookings", highlight: true },
   { label: "About Us", href: "/about" },
   { label: "Contact Us", href: "/contact" },
@@ -31,6 +33,7 @@ const guestRoutes: NavRoute[] = [
 const hostRoutes: NavRoute[] = [
   { label: "Home", href: "/" },
   { label: "Explore Places", href: "/listings" },
+  { label: "Blog", href: "/blogs" },
   { label: "List Your Space", href: "/dashboard/host/items/add", highlight: true },
   { label: "About Us", href: "/about" },
   { label: "Contact Us", href: "/contact" },
@@ -40,6 +43,7 @@ const hostRoutes: NavRoute[] = [
 const adminRoutes: NavRoute[] = [
   { label: "Home", href: "/" },
   { label: "Explore Places", href: "/listings" },
+  { label: "Blog", href: "/blogs" },
   { label: "Overview", href: "/dashboard/admin/main", highlight: true },
   { label: "Approvals", href: "/dashboard/admin/properties", highlight: true },
   { label: "About Us", href: "/about" },

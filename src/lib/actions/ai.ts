@@ -98,9 +98,16 @@ export async function sendChatMessage(
       body: JSON.stringify({ message, conversationId }),
       cache: "no-store",
     })
-    const result = await res.json()
-    if (!res.ok) return { success: false, error: result.message || "Failed to send message", statusCode: res.status }
-    return { success: true, data: result.data ?? result }
+    const contentType = res.headers.get("content-type")
+    const isJson = contentType?.includes("application/json")
+    const result = isJson ? await res.json() : await res.text()
+    if (!res.ok) {
+      const errorMsg = isJson
+        ? result?.message || result?.error || `HTTP ${res.status}`
+        : typeof result === "string" ? result : `HTTP ${res.status}`
+      return { success: false, error: errorMsg, statusCode: res.status }
+    }
+    return { success: true, data: isJson ? (result.data ?? result) : result }
   } catch (err: unknown) {
     return { success: false, error: err instanceof Error ? err.message : "Failed to send message" }
   }
