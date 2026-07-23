@@ -363,7 +363,7 @@ export default function FAQSection() {
 
                             <p className="mt-3 text-sm leading-[1.8] text-slate-500">
                                 AuraSpace keeps premium booking simple,
-                                transparent, and reliable for guests, hosts, and
+                                transparent and reliable for guests, hosts, and
                                 event organizers.
                             </p>
 
