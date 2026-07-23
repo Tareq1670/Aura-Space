@@ -65,7 +65,7 @@ export async function createCheckoutSession(bookingId: string): Promise<string> 
                 price_data: {
                     currency: (process.env.NEXT_PUBLIC_STRIPE_CURRENCY || "usd").toLowerCase(),
                     product_data: {
-                        name: booking.propertyTitle || "StayEase Booking",
+                        name: booking.propertyTitle || "AuraSpace Booking",
                         images: booking.propertyImage ? [booking.propertyImage] : [],
                     },
                     unit_amount: Math.round(booking.totalAmount * 100),
