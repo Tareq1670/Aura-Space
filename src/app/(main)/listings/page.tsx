@@ -1,82 +1,28 @@
 "use client";
 
-import React, { useEffect, useState, useCallback, Suspense } from "react";
+import { useCallback, useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
-import {
-    Select,
-    ListBox,
-    Skeleton,
-    Pagination,
-    InputGroup,
-} from "@heroui/react";
-import { motion, AnimatePresence } from "framer-motion";
+import { ListBox, Pagination, Select, Skeleton } from "@heroui/react";
+import { motion } from "framer-motion";
+import { X } from "lucide-react";
 import { getPublicProperties } from "@/lib/actions/property-public";
 import type { PublicProperty, PaginationInfo } from "@/lib/actions/property-public";
-
-const CATEGORIES = [
-    { key: "", label: "All Categories" },
-    { key: "villa", label: "Villa" },
-    { key: "suite", label: "Suite" },
-    { key: "cabin", label: "Cabin" },
-    { key: "event", label: "Event" },
-    { key: "estate", label: "Estate" },
-    { key: "resort", label: "Resort" },
-    { key: "apartment", label: "Apartment" },
-];
-
-const SORT_OPTIONS = [
-    { key: "", label: "Latest" },
-    { key: "price-asc", label: "Price: Low to High" },
-    { key: "price-desc", label: "Price: High to Low" },
-    { key: "rating-desc", label: "Top Rated" },
-    { key: "popular", label: "Most Popular" },
-    { key: "featured", label: "Featured" },
-];
-
-const AMENITIES_LIST: { value: string; label: string }[] = [
-    { value: "wifi", label: "Wi-Fi" },
-    { value: "pool", label: "Pool" },
-    { value: "air_conditioning", label: "AC" },
-    { value: "parking", label: "Parking" },
-    { value: "gym", label: "Gym" },
-    { value: "kitchen", label: "Kitchen" },
-    { value: "washer", label: "Washer" },
-    { value: "pet-friendly", label: "Pet Friendly" },
-];
-
-const RATING_OPTIONS = [
-    { key: "", label: "Any Rating" },
-    { key: "4", label: "4+ Stars" },
-    { key: "3", label: "3+ Stars" },
-    { key: "2", label: "2+ Stars" },
-];
-
-function StarRating({ rating, count }: { rating: number; count: number }) {
-    return (
-        <div className="flex items-center gap-1">
-            <div className="flex items-center gap-0.5">
-                {Array.from({ length: 5 }).map((_, i) => (
-                    <svg
-                        key={i}
-                        className={`h-3 w-3 ${i < Math.round(rating) ? "text-amber-400" : "text-slate-200"}`}
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                    >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                ))}
-            </div>
-            <span className="text-[11px] font-semibold text-slate-500">({count})</span>
-        </div>
-    );
-}
+import PropertyCard from "@/Components/Public/PropertyCard";
+import {
+    AMENITIES_LIST,
+    CATEGORIES,
+    FiltersDrawer,
+    FiltersSidebar,
+    SORT_OPTIONS,
+    hasActiveFilters,
+} from "@/Components/Public/ListingsFilters";
+import type { FilterField, ListingsFilterState } from "@/Components/Public/ListingsFilters";
 
 function PropertyCardSkeleton() {
     return (
-        <div className="rounded-2xl border border-slate-100 bg-white overflow-hidden">
+        <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white">
             <Skeleton className="aspect-[4/3] w-full rounded-none" />
-            <div className="p-4 space-y-3">
+            <div className="space-y-3 p-4">
                 <Skeleton className="h-4 w-3/4 rounded-lg" />
                 <Skeleton className="h-3 w-1/2 rounded-lg" />
                 <div className="flex items-center justify-between">
@@ -95,6 +41,12 @@ function useDebounce<T>(value: T, delay: number): T {
         return () => clearTimeout(timer);
     }, [value, delay]);
     return debounced;
+}
+
+interface FilterChip {
+    key: string;
+    label: string;
+    onClear: () => void;
 }
 
 function ListingsContent() {
@@ -119,6 +71,17 @@ function ListingsContent() {
     const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
 
     const debouncedSearch = useDebounce(search, 400);
+
+    const filterState: ListingsFilterState = {
+        search,
+        category,
+        minPrice,
+        maxPrice,
+        minRating,
+        guests,
+        amenities,
+        sort,
+    };
 
     const buildParams = useCallback(() => {
         const params: Record<string, string> = {};
@@ -157,6 +120,33 @@ function ListingsContent() {
         fetchData();
     }, [buildParams]);
 
+    const updateFilter = useCallback((field: FilterField, value: string) => {
+        switch (field) {
+            case "search":
+                setSearch(value);
+                break;
+            case "sort":
+                setSort(value);
+                break;
+            case "category":
+                setCategory(value);
+                break;
+            case "minPrice":
+                setMinPrice(value);
+                break;
+            case "maxPrice":
+                setMaxPrice(value);
+                break;
+            case "minRating":
+                setMinRating(value);
+                break;
+            case "guests":
+                setGuests(value);
+                break;
+        }
+        setPage(1);
+    }, []);
+
     const clearFilters = () => {
         setSearch("");
         setCategory("");
@@ -176,14 +166,68 @@ function ListingsContent() {
         setPage(1);
     };
 
-    const hasActiveFilters =
-        search || category || minPrice || maxPrice || minRating || guests || amenities.length > 0 || sort;
+    const activeFilterCount =
+        [search, category, minPrice, maxPrice, minRating, guests, sort].filter(Boolean).length +
+        (amenities.length > 0 ? 1 : 0);
+
+    const chips: FilterChip[] = [];
+    if (search) chips.push({ key: "search", label: `Search: ${search}`, onClear: () => { setSearch(""); setPage(1); } });
+    if (category) {
+        const label = CATEGORIES.find((c) => c.key === category)?.label ?? category;
+        chips.push({ key: "category", label: `Category: ${label}`, onClear: () => { setCategory(""); setPage(1); } });
+    }
+    if (minPrice || maxPrice) {
+        chips.push({
+            key: "price",
+            label: `Price: ${minPrice || "0"} – ${maxPrice || "∞"}`,
+            onClear: () => { setMinPrice(""); setMaxPrice(""); setPage(1); },
+        });
+    }
+    if (minRating) {
+        chips.push({ key: "rating", label: `${minRating}+ stars`, onClear: () => { setMinRating(""); setPage(1); } });
+    }
+    if (guests) {
+        chips.push({ key: "guests", label: `${guests} guests max`, onClear: () => { setGuests(""); setPage(1); } });
+    }
+    if (amenities.length > 0) {
+        const labels = amenities
+            .map((a) => AMENITIES_LIST.find((x) => x.value === a)?.label ?? a)
+            .join(", ");
+        chips.push({
+            key: "amenities",
+            label: labels.length > 28 ? `Amenities: ${amenities.length}` : labels,
+            onClear: () => { setAmenities([]); setPage(1); },
+        });
+    }
+    if (sort) {
+        const label = SORT_OPTIONS.find((s) => s.key === sort)?.label ?? sort;
+        chips.push({ key: "sort", label: `Sort: ${label}`, onClear: () => { setSort(""); setPage(1); } });
+    }
 
     return (
         <div className="min-h-screen bg-slate-50/30">
-            <div className="border-b border-slate-200/80 bg-white shadow-sm">
-                <div className="container mx-auto flex items-center justify-between px-4 py-2.5 sm:px-6 lg:px-8">
-                    <div className="flex items-center gap-3">
+            <header className="border-b border-slate-200/80 bg-white shadow-sm">
+                <div className="container mx-auto flex flex-wrap items-center justify-between gap-4 px-4 py-5 sm:px-6 lg:px-8">
+                    <div>
+                        <h1 className="text-2xl font-black leading-tight tracking-[-0.025em] text-slate-900 sm:text-3xl">
+                            Explore{" "}
+                            <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-clip-text text-transparent">
+                                Stays
+                            </span>
+                        </h1>
+                        <p className="mt-1 text-sm text-slate-500">
+                            {pagination ? (
+                                <>
+                                    <span className="font-semibold text-slate-700">{pagination.total}</span>{" "}
+                                    properties found
+                                </>
+                            ) : (
+                                "Searching properties..."
+                            )}
+                        </p>
+                    </div>
+
+                    <div className="flex items-center gap-2.5">
                         <button
                             onClick={() => setMobileFiltersOpen(true)}
                             className="flex h-9 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50/80 px-3 text-xs font-bold uppercase tracking-wider text-slate-600 transition-colors hover:bg-slate-100 lg:hidden"
@@ -192,231 +236,83 @@ function ListingsContent() {
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
                             </svg>
                             Filters
+                            {activeFilterCount > 0 && (
+                                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-indigo-600 text-[9px] font-bold text-white">
+                                    {activeFilterCount}
+                                </span>
+                            )}
                         </button>
-                        {pagination && (
-                            <span className="text-sm text-slate-500">
-                                <span className="font-semibold text-slate-700">{pagination.total}</span> properties
+
+                        <div className="hidden items-center gap-2 lg:flex">
+                            <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">
+                                Sort
                             </span>
-                        )}
+                            <Select
+                                aria-label="Sort properties"
+                                placeholder="Latest"
+                                selectedKey={sort}
+                                onSelectionChange={(key) => updateFilter("sort", key ? String(key) : "")}
+                                className="w-44"
+                            >
+                                <Select.Trigger className="h-9 rounded-xl border-slate-200 bg-slate-50/80 text-xs font-bold uppercase tracking-wider text-slate-600">
+                                    <Select.Value />
+                                    <Select.Indicator />
+                                </Select.Trigger>
+                                <Select.Popover className="z-50 rounded-xl border border-slate-200 bg-white p-1 shadow-xl">
+                                    <ListBox>
+                                        {SORT_OPTIONS.map((opt) => (
+                                            <ListBox.Item
+                                                key={opt.key || "latest"}
+                                                id={opt.key || "latest"}
+                                                textValue={opt.label}
+                                                className="cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-indigo-50 hover:text-indigo-700 data-[selected]:bg-indigo-50 data-[selected]:text-indigo-700"
+                                            >
+                                                {opt.label}
+                                                <ListBox.ItemIndicator />
+                                            </ListBox.Item>
+                                        ))}
+                                    </ListBox>
+                                </Select.Popover>
+                            </Select>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </header>
+
+            {chips.length > 0 && (
+                <div className="border-b border-slate-100 bg-white/60">
+                    <div className="container mx-auto flex flex-wrap items-center gap-2 px-4 py-3 sm:px-6 lg:px-8">
+                        {chips.map((chip) => (
+                            <button
+                                key={chip.key}
+                                onClick={chip.onClear}
+                                className="inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-indigo-50/70 px-3 py-1.5 text-xs font-medium text-indigo-700 transition-colors hover:bg-indigo-100"
+                            >
+                                {chip.label}
+                                <X className="h-3 w-3" aria-hidden="true" />
+                            </button>
+                        ))}
+                        <button
+                            onClick={clearFilters}
+                            className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-slate-500 transition-colors hover:text-rose-600"
+                        >
+                            Clear all
+                        </button>
+                    </div>
+                </div>
+            )}
 
             <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
                 <div className="flex gap-6 lg:gap-8">
-                    <aside className="hidden w-72 shrink-0 lg:block">
-                        <div className="sticky top-24 space-y-6">
-                            <InputGroup className="w-full">
-                                <InputGroup.Prefix>
-                                    <svg className="h-4 w-4 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                                    </svg>
-                                </InputGroup.Prefix>
-                                <InputGroup.Input
-                                    aria-label="Search properties"
-                                    placeholder="Search by title or country..."
-                                    value={search}
-                                    onChange={(e) => {
-                                        setSearch(e.target.value);
-                                        setPage(1);
-                                    }}
-                                />
-                            </InputGroup>
+                    <FiltersSidebar
+                        state={filterState}
+                        showSort={false}
+                        onFieldChange={updateFilter}
+                        onToggleAmenity={toggleAmenity}
+                        onClear={clearFilters}
+                    />
 
-                            <div>
-                                <h3 className="mb-3 text-[11px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Sort By</h3>
-                                <Select
-                                    aria-label="Sort"
-                                    placeholder="Latest"
-                                    selectedKey={sort}
-                                    onSelectionChange={(key) => { setSort(key ? String(key) : ""); setPage(1); }}
-                                    className="w-full"
-                                >
-                                    <Select.Trigger><Select.Value /><Select.Indicator /></Select.Trigger>
-                                    <Select.Popover className="z-50 rounded-xl border border-slate-200 bg-white p-1 shadow-xl">
-                                        <ListBox>
-                                            {SORT_OPTIONS.map((opt) => (
-                                                <ListBox.Item
-                                                    key={opt.key || "latest"} id={opt.key || "latest"} textValue={opt.label}
-                                                    className="cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-indigo-50 hover:text-indigo-700 data-[selected]:bg-indigo-50 data-[selected]:text-indigo-700"
-                                                >
-                                                    {opt.label}
-                                                    <ListBox.ItemIndicator />
-                                                </ListBox.Item>
-                                            ))}
-                                        </ListBox>
-                                    </Select.Popover>
-                                </Select>
-                            </div>
-
-                            <hr className="border-slate-100" />
-
-                            <div>
-                                <h3 className="mb-3 text-[11px] font-extrabold uppercase tracking-[0.16em] text-slate-400">
-                                    Category
-                                </h3>
-                                <Select
-                                    aria-label="Category"
-                                    placeholder="All Categories"
-                                    selectedKey={category}
-                                    onSelectionChange={(key) => {
-                                        setCategory(key ? String(key) : "");
-                                        setPage(1);
-                                    }}
-                                    className="w-full"
-                                >
-                                    <Select.Trigger>
-                                        <Select.Value />
-                                        <Select.Indicator />
-                                    </Select.Trigger>
-                                    <Select.Popover className="z-50 rounded-xl border border-slate-200 bg-white p-1 shadow-xl">
-                                        <ListBox>
-                                            {CATEGORIES.map((cat) => (
-                                                <ListBox.Item
-                                                    key={cat.key || "all"}
-                                                    id={cat.key || "all"}
-                                                    textValue={cat.label}
-                                                    className="cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-indigo-50 hover:text-indigo-700 data-[selected]:bg-indigo-50 data-[selected]:text-indigo-700"
-                                                >
-                                                    {cat.label}
-                                                    <ListBox.ItemIndicator />
-                                                </ListBox.Item>
-                                            ))}
-                                        </ListBox>
-                                    </Select.Popover>
-                                </Select>
-                            </div>
-
-                            <div>
-                                <h3 className="mb-3 text-[11px] font-extrabold uppercase tracking-[0.16em] text-slate-400">
-                                    Price Range
-                                </h3>
-                                <div className="flex items-center gap-2">
-                                    <div className="relative flex h-10 flex-1 items-center rounded-xl border border-slate-200 bg-white shadow-sm">
-                                        <span className="pl-3 text-xs text-slate-400">$</span>
-                                        <input
-                                            aria-label="Min price"
-                                            type="number"
-                                            placeholder="Min"
-                                            value={minPrice}
-                                            onChange={(e) => {
-                                                setMinPrice(e.target.value);
-                                                setPage(1);
-                                            }}
-                                            className="h-full w-full border-0 bg-transparent px-2 text-sm font-medium text-slate-700 outline-none placeholder:text-slate-400"
-                                        />
-                                    </div>
-                                    <span className="text-slate-300">—</span>
-                                    <div className="relative flex h-10 flex-1 items-center rounded-xl border border-slate-200 bg-white shadow-sm">
-                                        <span className="pl-3 text-xs text-slate-400">$</span>
-                                        <input
-                                            aria-label="Max price"
-                                            type="number"
-                                            placeholder="Max"
-                                            value={maxPrice}
-                                            onChange={(e) => {
-                                                setMaxPrice(e.target.value);
-                                                setPage(1);
-                                            }}
-                                            className="h-full w-full border-0 bg-transparent px-2 text-sm font-medium text-slate-700 outline-none placeholder:text-slate-400"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <h3 className="mb-3 text-[11px] font-extrabold uppercase tracking-[0.16em] text-slate-400">
-                                    Min Rating
-                                </h3>
-                                <Select
-                                    aria-label="Minimum rating"
-                                    placeholder="Any Rating"
-                                    selectedKey={minRating}
-                                    onSelectionChange={(key) => {
-                                        setMinRating(key ? String(key) : "");
-                                        setPage(1);
-                                    }}
-                                    className="w-full"
-                                >
-                                    <Select.Trigger>
-                                        <Select.Value />
-                                        <Select.Indicator />
-                                    </Select.Trigger>
-                                    <Select.Popover className="z-50 rounded-xl border border-slate-200 bg-white p-1 shadow-xl">
-                                        <ListBox>
-                                            {RATING_OPTIONS.map((opt) => (
-                                                <ListBox.Item
-                                                    key={opt.key || "any"}
-                                                    id={opt.key || "any"}
-                                                    textValue={opt.label}
-                                                    className="cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-indigo-50 hover:text-indigo-700 data-[selected]:bg-indigo-50 data-[selected]:text-indigo-700"
-                                                >
-                                                    {opt.label}
-                                                    <ListBox.ItemIndicator />
-                                                </ListBox.Item>
-                                            ))}
-                                        </ListBox>
-                                    </Select.Popover>
-                                </Select>
-                            </div>
-
-                            <div>
-                                <h3 className="mb-3 text-[11px] font-extrabold uppercase tracking-[0.16em] text-slate-400">
-                                    Max Guests
-                                </h3>
-                                <input
-                                    aria-label="Max guests"
-                                    type="number"
-                                    placeholder="Any"
-                                    value={guests}
-                                    onChange={(e) => {
-                                        setGuests(e.target.value);
-                                        setPage(1);
-                                    }}
-                                    className="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 outline-none placeholder:text-slate-400 transition-colors focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 shadow-sm"
-                                />
-                            </div>
-
-                            <div>
-                                <h3 className="mb-3 text-[11px] font-extrabold uppercase tracking-[0.16em] text-slate-400">
-                                    Amenities
-                                </h3>
-                                <div className="space-y-2">
-                                    {AMENITIES_LIST.map((amenity) => (
-                                        <label
-                                            key={amenity.value}
-                                            className="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 transition-colors hover:bg-slate-50"
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                checked={amenities.includes(amenity.value)}
-                                                onChange={() => toggleAmenity(amenity.value)}
-                                                className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
-                                            />
-                                            <span className="text-sm font-medium text-slate-700">
-                                                {amenity.label}
-                                            </span>
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {hasActiveFilters && (
-                                <button
-                                    onClick={clearFilters}
-                                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-600 transition-colors hover:bg-slate-50 hover:text-rose-600"
-                                >
-                                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                    Clear Filters
-                                </button>
-                            )}
-                        </div>
-                    </aside>
-
-                    <div className="flex-1 min-w-0">
-
+                    <div className="min-w-0 flex-1" aria-live="polite" aria-busy={loading}>
                         {loading ? (
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                                 {Array.from({ length: 8 }).map((_, i) => (
@@ -430,11 +326,11 @@ function ListingsContent() {
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                                     </svg>
                                 </div>
-                                <h3 className="text-lg font-bold text-slate-900">No properties found</h3>
+                                <h2 className="text-lg font-bold text-slate-900">No properties found</h2>
                                 <p className="mt-1 text-sm text-slate-500">
                                     Try adjusting your filters or search terms.
                                 </p>
-                                {hasActiveFilters && (
+                                {hasActiveFilters(filterState) && (
                                     <button
                                         onClick={clearFilters}
                                         className="mt-4 rounded-full bg-indigo-600 px-6 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-indigo-600/20 transition-colors hover:bg-indigo-700"
@@ -453,61 +349,7 @@ function ListingsContent() {
                                             animate={{ opacity: 1, y: 0 }}
                                             transition={{ duration: 0.4, delay: index * 0.04 }}
                                         >
-                                            <Link href={`/listings/${prop.id}`} className="group block h-full">
-                                                <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:shadow-md hover:border-indigo-200">
-                                                    <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
-                                                        <img
-                                                            src={prop.images?.[0] || "/placeholder-property.svg"}
-                                                            alt={prop.title}
-                                                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                                            loading="lazy"
-                                                            onError={(e) => {
-                                                                (e.target as HTMLImageElement).src = "/placeholder-property.svg";
-                                                            }}
-                                                        />
-                                                        <div className="absolute left-2.5 top-2.5 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-slate-700 backdrop-blur-sm">
-                                                            {prop.category}
-                                                        </div>
-                                                        {prop.isFeatured && (
-                                                            <div className="absolute right-2.5 top-2.5 inline-flex items-center gap-1 rounded-full bg-amber-400/90 px-2 py-0.5 text-[9px] font-bold text-amber-900 backdrop-blur-sm">
-                                                                <svg className="h-2.5 w-2.5" fill="currentColor" viewBox="0 0 20 20">
-                                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                                </svg>
-                                                                Featured
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                    <div className="flex flex-1 flex-col p-4">
-                                                        <h3 className="text-sm font-bold leading-snug text-slate-900 line-clamp-1">
-                                                            {prop.title}
-                                                        </h3>
-                                                        <p className="mt-0.5 text-xs text-slate-500">
-                                                            {prop.location?.city}
-                                                            {prop.location?.city && prop.location?.country ? ", " : ""}
-                                                            {prop.location?.country}
-                                                        </p>
-                                                        <div className="mt-1 flex items-center gap-1">
-                                                            <svg className="h-3 w-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                                                            </svg>
-                                                            <span className="text-xs text-slate-400 line-clamp-1">
-                                                                {prop.location?.address || ""}
-                                                            </span>
-                                                        </div>
-
-                                                        <div className="mt-auto pt-3">
-                                                            <div className="flex items-center justify-between">
-                                                                <span className="text-base font-bold text-slate-900">
-                                                                    ${prop.price?.perNight}{" "}
-                                                                    <span className="text-xs font-normal text-slate-400">/ night</span>
-                                                                </span>
-                                                                <StarRating rating={prop.rating} count={prop.reviewCount} />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </Link>
+                                            <PropertyCard property={prop} priority={index < 4} />
                                         </motion.div>
                                     ))}
                                 </div>
@@ -560,186 +402,14 @@ function ListingsContent() {
                 </div>
             </div>
 
-            <AnimatePresence>
-                {mobileFiltersOpen && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 bg-black/50 lg:hidden"
-                        onClick={() => setMobileFiltersOpen(false)}
-                    >
-                        <motion.div
-                            initial={{ x: "100%" }}
-                            animate={{ x: 0 }}
-                            exit={{ x: "100%" }}
-                            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                            onClick={(e) => e.stopPropagation()}
-                            className="absolute right-0 top-0 h-full w-80 max-w-[85vw] overflow-y-auto bg-white p-6 shadow-xl"
-                        >
-                            <div className="mb-6 flex items-center justify-between">
-                                <h2 className="text-sm font-extrabold uppercase tracking-wider text-slate-700">
-                                    Filters
-                                </h2>
-                                <button
-                                    onClick={() => setMobileFiltersOpen(false)}
-                                    className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-colors hover:bg-slate-200"
-                                >
-                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
-
-                            <div className="space-y-5">
-                                <InputGroup className="w-full">
-                                    <InputGroup.Prefix>
-                                        <svg className="h-4 w-4 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                                        </svg>
-                                    </InputGroup.Prefix>
-                                    <InputGroup.Input
-                                        aria-label="Search properties"
-                                        placeholder="Search by title or country..."
-                                        value={search}
-                                        onChange={(e) => {
-                                            setSearch(e.target.value);
-                                            setPage(1);
-                                        }}
-                                    />
-                                </InputGroup>
-
-                                <div>
-                                    <h3 className="mb-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Sort By</h3>
-                                    <Select
-                                        aria-label="Sort"
-                                        placeholder="Latest"
-                                        selectedKey={sort}
-                                        onSelectionChange={(key) => { setSort(key ? String(key) : ""); setPage(1); }}
-                                        className="w-full"
-                                    >
-                                        <Select.Trigger><Select.Value /><Select.Indicator /></Select.Trigger>
-                                        <Select.Popover className="z-[60] rounded-xl border border-slate-200 bg-white p-1 shadow-xl">
-                                            <ListBox>
-                                                {SORT_OPTIONS.map((opt) => (
-                                                    <ListBox.Item key={opt.key || "latest"} id={opt.key || "latest"} textValue={opt.label}
-                                                        className="cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 data-[selected]:bg-indigo-50 data-[selected]:text-indigo-700"
-                                                    >
-                                                        {opt.label}<ListBox.ItemIndicator />
-                                                    </ListBox.Item>
-                                                ))}
-                                            </ListBox>
-                                        </Select.Popover>
-                                    </Select>
-                                </div>
-
-                                <hr className="border-slate-100" />
-
-                                <div>
-                                    <h3 className="mb-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Category</h3>
-                                    <Select
-                                        aria-label="Category"
-                                        placeholder="All Categories"
-                                        selectedKey={category}
-                                        onSelectionChange={(key) => { setCategory(key ? String(key) : ""); setPage(1); }}
-                                    >
-                                        <Select.Trigger><Select.Value /><Select.Indicator /></Select.Trigger>
-                                        <Select.Popover className="z-[60] rounded-xl border border-slate-200 bg-white p-1 shadow-xl">
-                                            <ListBox>
-                                                {CATEGORIES.map((cat) => (
-                                                    <ListBox.Item key={cat.key || "all"} id={cat.key || "all"} textValue={cat.label}
-                                                        className="cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 data-[selected]:bg-indigo-50 data-[selected]:text-indigo-700"
-                                                    >
-                                                        {cat.label}
-                                                        <ListBox.ItemIndicator />
-                                                    </ListBox.Item>
-                                                ))}
-                                            </ListBox>
-                                        </Select.Popover>
-                                    </Select>
-                                </div>
-
-                                <div>
-                                    <h3 className="mb-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Price Range</h3>
-                                    <div className="flex items-center gap-2">
-                                        <div className="relative flex h-10 flex-1 items-center rounded-xl border border-slate-200 bg-white">
-                                            <span className="pl-3 text-xs text-slate-400">$</span>
-                                            <input aria-label="Min" type="number" placeholder="Min" value={minPrice}
-                                                onChange={(e) => { setMinPrice(e.target.value); setPage(1); }}
-                                                className="h-full w-full border-0 bg-transparent px-2 text-sm font-medium text-slate-700 outline-none placeholder:text-slate-400"
-                                            />
-                                        </div>
-                                        <span className="text-slate-300">—</span>
-                                        <div className="relative flex h-10 flex-1 items-center rounded-xl border border-slate-200 bg-white">
-                                            <span className="pl-3 text-xs text-slate-400">$</span>
-                                            <input aria-label="Max" type="number" placeholder="Max" value={maxPrice}
-                                                onChange={(e) => { setMaxPrice(e.target.value); setPage(1); }}
-                                                className="h-full w-full border-0 bg-transparent px-2 text-sm font-medium text-slate-700 outline-none placeholder:text-slate-400"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h3 className="mb-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Min Rating</h3>
-                                    <Select aria-label="Rating" placeholder="Any Rating" selectedKey={minRating}
-                                        onSelectionChange={(key) => { setMinRating(key ? String(key) : ""); setPage(1); }}
-                                    >
-                                        <Select.Trigger><Select.Value /><Select.Indicator /></Select.Trigger>
-                                        <Select.Popover className="z-[60] rounded-xl border border-slate-200 bg-white p-1 shadow-xl">
-                                            <ListBox>
-                                                {RATING_OPTIONS.map((opt) => (
-                                                    <ListBox.Item key={opt.key || "any"} id={opt.key || "any"} textValue={opt.label}
-                                                        className="cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 data-[selected]:bg-indigo-50 data-[selected]:text-indigo-700"
-                                                    >
-                                                        {opt.label}<ListBox.ItemIndicator />
-                                                    </ListBox.Item>
-                                                ))}
-                                            </ListBox>
-                                        </Select.Popover>
-                                    </Select>
-                                </div>
-
-                                <div>
-                                    <h3 className="mb-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Max Guests</h3>
-                                    <input aria-label="Guests" type="number" placeholder="Any" value={guests}
-                                        onChange={(e) => { setGuests(e.target.value); setPage(1); }}
-                                        className="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 outline-none placeholder:text-slate-400 transition-colors focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20"
-                                    />
-                                </div>
-
-                                <div>
-                                    <h3 className="mb-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Amenities</h3>
-                                    <div className="space-y-2">
-                                        {AMENITIES_LIST.map((amenity) => (
-                                            <label key={amenity.value} className="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-slate-50">
-                                                <input type="checkbox" checked={amenities.includes(amenity.value)}
-                                                    onChange={() => toggleAmenity(amenity.value)}
-                                                    className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
-                                                />
-                                                <span className="text-sm font-medium text-slate-700">{amenity.label}</span>
-                                            </label>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="mt-6 flex gap-3">
-                                <button onClick={() => { clearFilters(); setMobileFiltersOpen(false); }}
-                                    className="flex-1 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-600 transition-colors hover:bg-slate-50"
-                                >
-                                    Clear All
-                                </button>
-                                <button onClick={() => setMobileFiltersOpen(false)}
-                                    className="flex-1 rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-indigo-600/20 transition-colors hover:bg-indigo-700"
-                                >
-                                    Apply
-                                </button>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            <FiltersDrawer
+                open={mobileFiltersOpen}
+                onClose={() => setMobileFiltersOpen(false)}
+                state={filterState}
+                onFieldChange={updateFilter}
+                onToggleAmenity={toggleAmenity}
+                onClearFilters={clearFilters}
+            />
         </div>
     );
 }

@@ -79,11 +79,18 @@ export function hasActiveFilters(state: ListingsFilterState): boolean {
 interface FilterFieldsProps {
     state: ListingsFilterState;
     variant: "sidebar" | "drawer";
+    showSort?: boolean;
     onFieldChange: (field: FilterField, value: string) => void;
     onToggleAmenity: (amenity: string) => void;
 }
 
-function FilterFields({ state, variant, onFieldChange, onToggleAmenity }: FilterFieldsProps) {
+function FilterFields({
+    state,
+    variant,
+    showSort = true,
+    onFieldChange,
+    onToggleAmenity,
+}: FilterFieldsProps) {
     const labelClass =
         variant === "sidebar"
             ? "mb-3 text-[11px] font-extrabold uppercase tracking-[0.16em] text-slate-400"
@@ -149,9 +156,9 @@ function FilterFields({ state, variant, onFieldChange, onToggleAmenity }: Filter
                 />
             </InputGroup>
 
-            {renderSelect("Sort By", "Sort", "sort", SORT_OPTIONS, "Latest")}
+            {showSort && renderSelect("Sort By", "Sort", "sort", SORT_OPTIONS, "Latest")}
 
-            <hr className="border-slate-100" />
+            {showSort && <hr className="border-slate-100" />}
 
             {renderSelect("Category", "Category", "category", CATEGORIES, "All Categories")}
 
@@ -225,6 +232,7 @@ function FilterFields({ state, variant, onFieldChange, onToggleAmenity }: Filter
 
 interface FiltersSidebarProps {
     state: ListingsFilterState;
+    showSort?: boolean;
     onFieldChange: (field: FilterField, value: string) => void;
     onToggleAmenity: (amenity: string) => void;
     onClear: () => void;
@@ -233,6 +241,7 @@ interface FiltersSidebarProps {
 
 export function FiltersSidebar({
     state,
+    showSort = true,
     onFieldChange,
     onToggleAmenity,
     onClear,
@@ -244,6 +253,7 @@ export function FiltersSidebar({
                 <FilterFields
                     state={state}
                     variant="sidebar"
+                    showSort={showSort}
                     onFieldChange={onFieldChange}
                     onToggleAmenity={onToggleAmenity}
                 />
