@@ -1,6 +1,31 @@
 @import "tailwindcss";
 @import "@heroui/styles";
 
+/* ========== Design Tokens (Tailwind v4 @theme) ========== */
+@theme {
+  /* Brand palette — indigo is the brand core, violet is the accent */
+  --color-brand-50: #eef2ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-200: #c7d2fe;
+  --color-brand-300: #a5b4fc;
+  --color-brand-400: #818cf8;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+  --color-brand-800: #3730a3;
+  --color-brand-900: #312e81;
+  --color-brand-950: #1e1b4b;
+
+  /* Typography — consistent small-caps labels and hierarchy sizes */
+  --text-eyebrow: 0.6875rem;
+  --tracking-eyebrow: 0.16em;
+  --text-label: 0.75rem;
+
+  /* Radii — consistent component shapes */
+  --radius-btn: 0.75rem;
+  --radius-card: 1rem;
+}
+
 /* ========== Hero Swiper Fixes ========== */
 section .swiper {
   position: absolute !important;
@@ -29,22 +54,40 @@ section .swiper-slide-prev {
 /* ========== Brand Scrollbar ========== */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(99, 102, 241, 0.6) transparent;
+  scrollbar-color: color-mix(in srgb, var(--color-brand-500) 60%, transparent) transparent;
 }
 
 /* ========== Selection Color ========== */
 ::selection {
-  background: rgba(99, 102, 241, 0.85);
+  background: color-mix(in srgb, var(--color-brand-500) 85%, transparent);
   color: rgb(255, 255, 255);
 }
 
 /* ========== Keyboard Focus ========== */
 *:focus-visible {
-  outline: 2px solid #6366f1;
+  outline: 2px solid var(--color-brand-500);
   outline-offset: 2px;
 }
 
 body {
   color: #0f172a;
   background-color: #ffffff;
+}
+
+/* ========== Reduced Motion ========== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Keep functional feedback visible (loading spinners) */
+  .animate-spin {
+    animation-duration: 1s !important;
+    animation-iteration-count: infinite !important;
+  }
 }
