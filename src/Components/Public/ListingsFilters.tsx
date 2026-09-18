@@ -1,9 +1,11 @@
 "use client";
 
+import React, { useEffect, useRef } from "react";
 import { InputGroup, ListBox, Select } from "@heroui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { getCurrencySymbol } from "@/lib/currency";
 import { cn } from "@/lib/utils/cn";
+import Button from "@/Components/ui/Button";
 
 export const CATEGORIES = [
     { key: "", label: "All Categories" },
@@ -93,8 +95,8 @@ function FilterFields({
 }: FilterFieldsProps) {
     const labelClass =
         variant === "sidebar"
-            ? "mb-3 text-[11px] font-extrabold uppercase tracking-[0.16em] text-slate-400"
-            : "mb-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-slate-400";
+            ? "mb-3 text-xs font-bold uppercase tracking-wider text-slate-500"
+            : "mb-2 text-[11px] font-bold uppercase tracking-wider text-slate-500";
     const popoverClass =
         variant === "sidebar"
             ? "z-50 rounded-xl border border-slate-200 bg-white p-1 shadow-xl"
@@ -117,9 +119,9 @@ function FilterFields({
                 onSelectionChange={(key) => onFieldChange(field, key ? String(key) : "")}
                 className="w-full"
             >
-                <Select.Trigger>
+                <Select.Trigger className="flex h-10 w-full items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 shadow-sm outline-none transition-colors hover:border-indigo-300 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 data-[placeholder]:text-slate-400">
                     <Select.Value />
-                    <Select.Indicator />
+                    <Select.Indicator className="shrink-0" />
                 </Select.Trigger>
                 <Select.Popover className={popoverClass}>
                     <ListBox>
@@ -165,7 +167,7 @@ function FilterFields({
             <div>
                 <h3 className={labelClass}>Price Range</h3>
                 <div className="flex items-center gap-2">
-                    <div className="relative flex h-10 flex-1 items-center rounded-xl border border-slate-200 bg-white shadow-sm">
+                    <div className="relative flex h-10 flex-1 items-center rounded-xl border border-slate-200 bg-white shadow-sm transition-colors focus-within:border-indigo-400 focus-within:ring-2 focus-within:ring-indigo-400/20">
                         <span className="pl-3 text-xs text-slate-400">{currencySymbol}</span>
                         <input
                             aria-label="Min price"
@@ -177,7 +179,7 @@ function FilterFields({
                         />
                     </div>
                     <span className="text-slate-300">—</span>
-                    <div className="relative flex h-10 flex-1 items-center rounded-xl border border-slate-200 bg-white shadow-sm">
+                    <div className="relative flex h-10 flex-1 items-center rounded-xl border border-slate-200 bg-white shadow-sm transition-colors focus-within:border-indigo-400 focus-within:ring-2 focus-within:ring-indigo-400/20">
                         <span className="pl-3 text-xs text-slate-400">{currencySymbol}</span>
                         <input
                             aria-label="Max price"
@@ -259,15 +261,18 @@ export function FiltersSidebar({
                 />
 
                 {hasActiveFilters(state) && (
-                    <button
+                    <Button
                         onClick={onClear}
-                        className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-600 transition-colors hover:bg-slate-50 hover:text-rose-600"
+                        variant="ghost"
+                        fullWidth
+                        leftIcon={
+                            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        }
                     >
-                        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
                         Clear Filters
-                    </button>
+                    </Button>
                 )}
             </div>
         </aside>
@@ -291,6 +296,44 @@ export function FiltersDrawer({
     onToggleAmenity,
     onClearFilters,
 }: FiltersDrawerProps) {
+    const panelRef = useRef<HTMLDivElement>(null);
+    const closeBtnRef = useRef<HTMLButtonElement>(null);
+
+    useEffect(() => {
+        if (!open) return;
+        const prevOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        closeBtnRef.current?.focus();
+
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === "Escape") onClose();
+        };
+        window.addEventListener("keydown", onKey);
+        return () => {
+            document.body.style.overflow = prevOverflow;
+            window.removeEventListener("keydown", onKey);
+        };
+    }, [open, onClose]);
+
+    const trapFocus = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.key !== "Tab") return;
+        const panel = panelRef.current;
+        if (!panel) return;
+        const focusables = panel.querySelectorAll<HTMLElement>(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        );
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+        }
+    };
+
     return (
         <AnimatePresence>
             {open && (
@@ -302,18 +345,24 @@ export function FiltersDrawer({
                     onClick={onClose}
                 >
                     <motion.div
+                        ref={panelRef}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="filters-drawer-title"
                         initial={{ x: "100%" }}
                         animate={{ x: 0 }}
                         exit={{ x: "100%" }}
                         transition={{ type: "spring", damping: 25, stiffness: 300 }}
                         onClick={(e) => e.stopPropagation()}
-                        className="absolute right-0 top-0 h-full w-80 max-w-[85vw] overflow-y-auto bg-white p-6 shadow-xl"
+                        onKeyDown={trapFocus}
+                        className="absolute right-0 top-0 h-full w-80 max-w-[85vw] overflow-y-auto bg-white p-6 shadow-xl outline-none"
                     >
                         <div className="mb-6 flex items-center justify-between">
-                            <h2 className="text-sm font-extrabold uppercase tracking-wider text-slate-700">
+                            <h2 id="filters-drawer-title" className="text-sm font-extrabold uppercase tracking-wider text-slate-700">
                                 Filters
                             </h2>
                             <button
+                                ref={closeBtnRef}
                                 onClick={onClose}
                                 aria-label="Close filters"
                                 className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-colors hover:bg-slate-200"
@@ -334,21 +383,24 @@ export function FiltersDrawer({
                         </div>
 
                         <div className="mt-6 flex gap-3">
-                            <button
+                            <Button
+                                variant="secondary"
+                                className="flex-1"
+                                leftIcon={
+                                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                }
                                 onClick={() => {
                                     onClearFilters();
                                     onClose();
                                 }}
-                                className="flex-1 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-600 transition-colors hover:bg-slate-50"
                             >
                                 Clear All
-                            </button>
-                            <button
-                                onClick={onClose}
-                                className="flex-1 rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-indigo-600/20 transition-colors hover:bg-indigo-700"
-                            >
+                            </Button>
+                            <Button className="flex-1" onClick={onClose}>
                                 Done
-                            </button>
+                            </Button>
                         </div>
                     </motion.div>
                 </motion.div>
