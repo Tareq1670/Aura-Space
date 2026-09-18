@@ -3,6 +3,7 @@
 import React, { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Button, { buttonClasses } from "@/Components/ui/Button";
 import {
     motion,
     useInView,
@@ -360,7 +361,7 @@ const SupportPage = () => {
                     >
                         <motion.h1
                             variants={itemVariants}
-                            className="text-[40px] font-black leading-[1.05] tracking-[-0.035em] text-white sm:text-6xl md:text-[72px] lg:text-7xl"
+                            className="text-5xl font-black leading-display tracking-tight text-white sm:text-6xl md:text-7xl lg:text-7xl"
                         >
                             How can we{" "}
                             <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-fuchsia-300 bg-clip-text text-transparent">
@@ -370,7 +371,7 @@ const SupportPage = () => {
 
                         <motion.p
                             variants={itemVariants}
-                            className="mx-auto mt-6 max-w-2xl text-lg leading-[1.8] text-white/60 sm:text-xl"
+                            className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/75 sm:text-xl"
                         >
                             Get instant answers, personalized support, and
                             expert guidance for all your AuraSpace needs.
@@ -387,7 +388,7 @@ const SupportPage = () => {
                                         : "border-white/10 hover:border-white/20 hover:bg-white/[0.08]"
                                 }`}
                             >
-                                <div className="pointer-events-none absolute left-6 text-white/30 transition-colors group-focus-within:text-indigo-300">
+                                <div className="pointer-events-none absolute left-6 text-white/75 transition-colors group-focus-within:text-indigo-300">
                                     <HiOutlineSearch className="h-6 w-6" />
                                 </div>
                                 <input
@@ -399,20 +400,20 @@ const SupportPage = () => {
                                     }
                                     onFocus={() => setIsSearchFocused(true)}
                                     onBlur={() => setIsSearchFocused(false)}
-                                    className="h-16 w-full rounded-2xl border-none bg-transparent pl-16 pr-32 text-base font-medium text-white placeholder:text-white/30 focus:outline-none focus:ring-0 sm:h-20 sm:text-lg"
+                                    className="h-16 w-full rounded-2xl border-none bg-transparent pl-16 pr-32 text-base font-medium text-white placeholder:text-white/75 focus:outline-none focus:ring-0 sm:h-20 sm:text-lg"
                                 />
                                 <div className="absolute right-4 flex items-center gap-2">
                                     {searchQuery && (
                                         <button
                                             onClick={() => setSearchQuery("")}
-                                            className="rounded-full bg-white/10 p-2 text-white/60 transition-all hover:bg-white/20 hover:text-white"
+                                            className="rounded-full bg-white/10 p-2 text-white/75 transition-all hover:bg-white/20 hover:text-white"
                                         >
                                             <HiOutlineX className="h-5 w-5" />
                                         </button>
                                     )}
-                                    <button className="hidden rounded-xl bg-white px-5 py-2.5 text-sm font-bold text-slate-950 shadow-lg transition-transform hover:scale-105 sm:block">
+                                    <Button className="hidden sm:inline-flex" variant="secondary">
                                         Search
-                                    </button>
+                                    </Button>
                                 </div>
                             </div>
                         </motion.div>
@@ -423,15 +424,15 @@ const SupportPage = () => {
                         >
                             <Link
                                 href="#contact"
-                                className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-white px-8 text-sm font-extrabold uppercase tracking-[0.16em] text-slate-950 shadow-[0_10px_40px_rgba(255,255,255,0.2)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_14px_50px_rgba(255,255,255,0.3)]"
+                                className={buttonClasses({ variant: "secondary", size: "lg" })}
                             >
                                 Contact Support
-                                <HiOutlineArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                                <HiOutlineArrowRight className="h-5 w-5" />
                             </Link>
 
                             <Link
                                 href="#ticket"
-                                className="group inline-flex h-14 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[0.06] px-8 text-sm font-extrabold uppercase tracking-[0.16em] text-white backdrop-blur-md transition-all duration-300 hover:border-white/40 hover:bg-white/[0.12]"
+                                className={buttonClasses({ variant: "secondary", size: "lg" })}
                             >
                                 Submit Ticket
                                 <HiOutlinePaperAirplane className="h-5 w-5" />
@@ -478,7 +479,7 @@ const SupportPage = () => {
                                 >
                                     {category.icon}
                                 </div>
-                                <h3 className="text-lg font-black tracking-[-0.02em] text-slate-950">
+                                <h3 className="text-lg font-black tracking-tight text-slate-950">
                                     {category.title}
                                 </h3>
                                 <p className="mt-2 text-sm leading-relaxed text-slate-500">
@@ -505,7 +506,7 @@ const SupportPage = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[46px]"
+                            className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
                         >
                             Quick answers
                         </motion.h2>
@@ -565,7 +566,7 @@ const SupportPage = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl"
+                            className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl"
                         >
                             By the numbers
                         </motion.h2>
@@ -627,10 +628,10 @@ const SupportPage = () => {
                                 <div className="mb-3 text-indigo-500">
                                     {stat.icon}
                                 </div>
-                                <div className="text-3xl font-black tracking-[-0.02em] text-slate-950 sm:text-4xl">
+                                <div className="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
                                     {stat.value}
                                 </div>
-                                <div className="mt-2 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                                <div className="mt-2 text-xs font-bold uppercase tracking-eyebrow text-slate-500">
                                     {stat.label}
                                 </div>
                             </motion.div>
@@ -653,7 +654,7 @@ const SupportPage = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[46px]"
+                            className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
                         >
                             Contact us directly
                         </motion.h2>
@@ -694,9 +695,9 @@ const SupportPage = () => {
                                 <div className="mt-4 text-sm font-bold text-slate-900">
                                     {method.value}
                                 </div>
-                                <button className="mt-5 w-full rounded-xl bg-slate-950 py-3 text-xs font-bold uppercase tracking-wider text-white transition-all hover:bg-slate-800">
+                                <Button variant="primary" fullWidth className="mt-5">
                                     {method.action}
-                                </button>
+                                </Button>
                             </motion.div>
                         ))}
                     </motion.div>
@@ -721,7 +722,7 @@ const SupportPage = () => {
                                     <h3 className="text-2xl font-black leading-tight">
                                         Submit a support ticket
                                     </h3>
-                                    <p className="mt-4 text-sm leading-relaxed text-white/60">
+                                    <p className="mt-4 text-sm leading-relaxed text-white/75">
                                         Can&apos;t find what you&apos;re looking
                                         for? Send us a message and our team will
                                         get back to you as soon as possible.
@@ -758,10 +759,14 @@ const SupportPage = () => {
                                 >
                                     <div className="grid gap-5 sm:grid-cols-2">
                                         <div>
-                                            <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                                            <label
+                                                htmlFor="support-name"
+                                                className="mb-2 block text-xs font-bold uppercase tracking-eyebrow text-slate-500"
+                                            >
                                                 Full Name
                                             </label>
                                             <input
+                                                id="support-name"
                                                 type="text"
                                                 required
                                                 value={formData.name}
@@ -776,10 +781,14 @@ const SupportPage = () => {
                                             />
                                         </div>
                                         <div>
-                                            <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                                            <label
+                                                htmlFor="support-email"
+                                                className="mb-2 block text-xs font-bold uppercase tracking-eyebrow text-slate-500"
+                                            >
                                                 Email Address
                                             </label>
                                             <input
+                                                id="support-email"
                                                 type="email"
                                                 required
                                                 value={formData.email}
@@ -797,10 +806,14 @@ const SupportPage = () => {
 
                                     <div className="grid gap-5 sm:grid-cols-2">
                                         <div>
-                                            <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                                            <label
+                                                htmlFor="support-category"
+                                                className="mb-2 block text-xs font-bold uppercase tracking-eyebrow text-slate-500"
+                                            >
                                                 Category
                                             </label>
                                             <select
+                                                id="support-category"
                                                 value={formData.category}
                                                 onChange={(e) =>
                                                     setFormData({
@@ -832,10 +845,14 @@ const SupportPage = () => {
                                             </select>
                                         </div>
                                         <div>
-                                            <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                                            <label
+                                                htmlFor="support-priority"
+                                                className="mb-2 block text-xs font-bold uppercase tracking-eyebrow text-slate-500"
+                                            >
                                                 Priority
                                             </label>
                                             <select
+                                                id="support-priority"
                                                 value={formData.priority}
                                                 onChange={(e) =>
                                                     setFormData({
@@ -858,10 +875,14 @@ const SupportPage = () => {
                                     </div>
 
                                     <div>
-                                        <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                                        <label
+                                            htmlFor="support-subject"
+                                            className="mb-2 block text-xs font-bold uppercase tracking-eyebrow text-slate-500"
+                                        >
                                             Subject
                                         </label>
                                         <input
+                                            id="support-subject"
                                             type="text"
                                             required
                                             value={formData.subject}
@@ -877,10 +898,14 @@ const SupportPage = () => {
                                     </div>
 
                                     <div>
-                                        <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                                        <label
+                                            htmlFor="support-message"
+                                            className="mb-2 block text-xs font-bold uppercase tracking-eyebrow text-slate-500"
+                                        >
                                             Message
                                         </label>
                                         <textarea
+                                            id="support-message"
                                             required
                                             rows={5}
                                             value={formData.message}
@@ -895,10 +920,11 @@ const SupportPage = () => {
                                         />
                                     </div>
 
-                                    <button
+                                    <Button
                                         type="submit"
+                                        fullWidth
+                                        size="lg"
                                         disabled={isSubmitting}
-                                        className="flex h-14 w-full items-center justify-center gap-2 rounded-xl bg-slate-950 text-sm font-extrabold uppercase tracking-[0.16em] text-white shadow-lg transition-all hover:bg-slate-800 disabled:opacity-70"
                                     >
                                         {isSubmitting ? (
                                             <>
@@ -911,7 +937,7 @@ const SupportPage = () => {
                                                 <HiOutlinePaperAirplane className="h-5 w-5" />
                                             </>
                                         )}
-                                    </button>
+                                    </Button>
                                 </form>
                             </div>
                         </div>
@@ -930,7 +956,7 @@ const SupportPage = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[46px]"
+                            className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
                         >
                             Common questions
                         </motion.h2>
@@ -993,7 +1019,7 @@ const SupportPage = () => {
                                             className="overflow-hidden"
                                         >
                                             <div className="px-6 pb-6">
-                                                <p className="text-[15px] leading-[1.75] text-slate-600">
+                                                <p className="text-base leading-relaxed text-slate-600">
                                                     {faq.answer}
                                                 </p>
                                             </div>
@@ -1025,7 +1051,7 @@ const SupportPage = () => {
                                 <div className="flex-1">
                                     <div className="mb-4 flex items-center justify-center gap-2 lg:justify-start">
                                         <HiOutlineExclamationCircle className="h-5 w-5" />
-                                        <span className="text-[10px] font-bold uppercase tracking-[0.2em]">
+                                        <span className="text-xs font-bold uppercase tracking-eyebrow">
                                             Emergency Support
                                         </span>
                                     </div>
@@ -1039,13 +1065,13 @@ const SupportPage = () => {
                                     </p>
                                 </div>
                                 <div className="flex flex-col gap-3 sm:flex-row">
-                                    <button className="inline-flex h-14 items-center justify-center gap-2 rounded-full bg-white px-8 text-sm font-extrabold uppercase tracking-[0.16em] text-rose-600 shadow-lg transition-all hover:scale-[1.02]">
+                                    <Button variant="secondary" size="lg">
                                         <HiOutlinePhone className="h-5 w-5" />
                                         Emergency Line
-                                    </button>
-                                    <button className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-white/30 bg-white/10 px-8 text-sm font-extrabold uppercase tracking-[0.16em] text-white backdrop-blur-md transition-all hover:bg-white/20">
+                                    </Button>
+                                    <Button variant="secondary" size="lg">
                                         Report Issue
-                                    </button>
+                                    </Button>
                                 </div>
                             </div>
                         </motion.div>
@@ -1064,7 +1090,7 @@ const SupportPage = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl"
+                            className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl"
                         >
                             What our users say
                         </motion.h2>
@@ -1094,7 +1120,7 @@ const SupportPage = () => {
                                         ),
                                     )}
                                 </div>
-                                <p className="text-[15px] leading-relaxed text-slate-700">
+                                <p className="text-base leading-relaxed text-slate-700">
                                     &ldquo;{testimonial.content}&rdquo;
                                 </p>
                                 <div className="mt-6 flex items-center gap-4 border-t border-slate-200 pt-6">
@@ -1137,13 +1163,13 @@ const SupportPage = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.05] tracking-[-0.03em] text-white sm:text-5xl md:text-6xl"
+                            className="text-3xl font-black leading-display tracking-tight text-white sm:text-5xl md:text-6xl"
                         >
                             Still have questions?
                         </motion.h2>
                         <motion.p
                             variants={itemVariants}
-                            className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/60"
+                            className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/75"
                         >
                             Our team is ready to help you with any issue, any
                             time.
@@ -1154,14 +1180,14 @@ const SupportPage = () => {
                         >
                             <Link
                                 href="#contact"
-                                className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-white px-10 text-sm font-extrabold uppercase tracking-[0.16em] text-slate-950 shadow-[0_14px_40px_rgba(255,255,255,0.2)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_18px_50px_rgba(255,255,255,0.3)]"
+                                className={buttonClasses({ variant: "secondary", size: "lg" })}
                             >
                                 Contact Now
-                                <HiOutlineArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                                <HiOutlineArrowRight className="h-5 w-5" />
                             </Link>
                             <Link
                                 href="#"
-                                className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[0.06] px-10 text-sm font-extrabold uppercase tracking-[0.16em] text-white backdrop-blur-md transition-all hover:border-white/40 hover:bg-white/[0.12]"
+                                className={buttonClasses({ variant: "secondary", size: "lg" })}
                             >
                                 Browse Articles
                             </Link>

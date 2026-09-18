@@ -9,6 +9,7 @@ import { toast } from "sonner"
 import DataTable from "@/Components/Dashboard/DataTable"
 import type { Column } from "@/Components/Dashboard/DataTable"
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal"
+import Button from "@/Components/ui/Button"
 import { exportToCSV } from "@/lib/utils/csv-export"
 import {
     getAdminProperties,
@@ -522,12 +523,13 @@ export default function AdminPropertiesPage() {
                         <h1 className="text-2xl font-bold text-gray-900">Properties</h1>
                         <p className="mt-1 text-sm text-gray-500">Manage all properties across the platform</p>
                     </div>
-                    <button
+                    <Button
                         onClick={handleExport}
-                        className="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+                        variant="secondary"
+                        size="sm"
                     >
                         Export CSV
-                    </button>
+                    </Button>
                 </div>
 
                 <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
@@ -604,7 +606,7 @@ export default function AdminPropertiesPage() {
                     className="mb-6 rounded-2xl border border-amber-200 bg-amber-50/50 p-4"
                 >
                     <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-amber-800">
-                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-200 text-[10px] font-bold text-amber-700">
+                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-200 text-xs font-bold text-amber-700">
                             {pendingProperties.length}
                         </span>
                         Pending Approval
@@ -630,18 +632,20 @@ export default function AdminPropertiesPage() {
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <button
+                                    <Button
                                         onClick={() => setApproveId(p.id)}
-                                        className="rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-emerald-600"
+                                        variant="success"
+                                        size="sm"
                                     >
                                         Approve
-                                    </button>
-                                    <button
+                                    </Button>
+                                    <Button
                                         onClick={() => { setRejectId(p.id); setRejectReason("") }}
-                                        className="rounded-lg border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-600 transition hover:bg-red-50"
+                                        variant="danger"
+                                        size="sm"
                                     >
                                         Reject
-                                    </button>
+                                    </Button>
                                 </div>
                             </div>
                         ))}
@@ -712,23 +716,24 @@ export default function AdminPropertiesPage() {
                                 {rejectReason.length}/500 characters
                             </p>
                             <div className="flex gap-3">
-                                <button
+                                <Button
                                     onClick={() => { setRejectId(null); setRejectReason("") }}
                                     disabled={processing}
-                                    className="flex-1 rounded-xl border border-gray-200 bg-gray-50 py-2.5 text-sm font-semibold text-gray-600 transition hover:bg-gray-100 disabled:opacity-50"
+                                    variant="secondary"
+                                    className="flex-1"
                                 >
                                     Cancel
-                                </button>
-                                <button
+                                </Button>
+                                <Button
                                     onClick={handleReject}
                                     disabled={processing || !rejectReason.trim() || rejectReason.trim().length < 5}
-                                    className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-red-500 to-red-600 py-2.5 text-sm font-semibold text-white shadow-lg shadow-red-500/25 transition disabled:opacity-50"
+                                    isLoading={processing}
+                                    loadingText="Rejecting..."
+                                    variant="danger"
+                                    className="flex-1"
                                 >
-                                    {processing && (
-                                        <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                                    )}
                                     Reject
-                                </button>
+                                </Button>
                             </div>
                         </motion.div>
                     </motion.div>

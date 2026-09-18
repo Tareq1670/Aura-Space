@@ -24,6 +24,7 @@ import {
     Pencil,
 } from "lucide-react";
 import Image from "next/image";
+import { buttonClasses } from "@/Components/ui/Button";
 
 interface StepPreviewProps {
     formData: PropertyFormData;
@@ -49,7 +50,10 @@ function SectionHeader({
                 whileTap={{ scale: 0.95 }}
                 type="button"
                 onClick={() => goToStep(step)}
-                className="flex items-center gap-1.5 text-sm font-medium text-rose-500 hover:text-rose-600 transition-colors"
+                className={buttonClasses({
+                    variant: "ghost",
+                    size: "sm",
+                })}
             >
                 <Pencil className="w-3.5 h-3.5" />
                 Edit
@@ -95,7 +99,7 @@ export default function StepPreview({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.1 }}
-                    className="text-gray-500 dark:text-gray-400"
+                    className="text-gray-500 dark:text-gray-500"
                 >
                     Here&apos;s a summary of your listing. Review everything
                     before publishing.
@@ -175,7 +179,7 @@ export default function StepPreview({
                         </span>
                     )}
                 </div>
-                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-500 text-sm leading-relaxed">
                     {formData.description || "No description provided"}
                 </p>
             </motion.div>
@@ -198,7 +202,7 @@ export default function StepPreview({
                         <p className="text-gray-800 dark:text-gray-200 font-medium">
                             {formData.location.address}
                         </p>
-                        <p className="text-gray-500 dark:text-gray-400 text-sm">
+                        <p className="text-gray-500 dark:text-gray-500 text-sm">
                             {[
                                 formData.location.city,
                                 formData.location.state,
@@ -312,7 +316,7 @@ export default function StepPreview({
                         {currency.symbol}
                         {formData.pricing.perNight}
                     </span>
-                    <span className="text-lg font-normal text-gray-400 ml-2">
+                    <span className="text-lg font-normal text-gray-500 ml-2">
                         / night
                     </span>
                 </div>
@@ -451,7 +455,7 @@ export default function StepPreview({
                             </div>
                         ))}
                     </div>
-                    <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 pt-2">
+                    <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-500 pt-2">
                         <div className="flex items-center gap-1.5">
                             <Clock className="w-4 h-4" />
                             Check-in: {formData.houseRules.checkInTime}

@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 import { getStripeServer } from "@/lib/stripe"
 import { formatCurrency } from "@/lib/currency"
 import Link from "next/link"
+import { buttonClasses } from "@/Components/ui/Button"
 
 interface Props {
   searchParams: Promise<{ session_id?: string; payment_intent?: string }>
@@ -93,7 +94,7 @@ export default async function SuccessPage({ searchParams }: Props) {
           </p>
           <Link
             href={propertyId ? `/listings/${propertyId}` : "/dashboard/guest/reviews"}
-            className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-2 text-xs font-semibold text-white shadow-md transition hover:shadow-lg"
+            className={buttonClasses({ variant: "primary", size: "sm", className: "mt-3" })}
           >
             <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
@@ -105,13 +106,13 @@ export default async function SuccessPage({ searchParams }: Props) {
         <div className="flex flex-col gap-3">
           <Link
             href="/dashboard/guest/bookings"
-            className="rounded-lg bg-emerald-600 px-6 py-3 text-white font-semibold transition hover:bg-emerald-700"
+            className={buttonClasses({ variant: "success", size: "md" })}
           >
             View My Bookings
           </Link>
           <Link
             href="/"
-            className="rounded-lg border border-gray-300 px-6 py-3 font-semibold text-gray-700 transition hover:bg-gray-50"
+            className={buttonClasses({ variant: "secondary", size: "md" })}
           >
             Back to Home
           </Link>

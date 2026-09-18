@@ -6,6 +6,7 @@ import { toast } from "sonner"
 import { Filter, Search, CheckCircle, AlertCircle, RefreshCw } from "lucide-react"
 import { ListBox, Pagination, Select, Skeleton } from "@heroui/react"
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal"
+import Button from "@/Components/ui/Button"
 import { transactionAPI, type TransactionItem } from "@/lib/api/Guest/transaction-api"
 import { formatCurrency } from "@/lib/currency"
 
@@ -298,10 +299,9 @@ export default function AdminTransactionsPage() {
           </div>
           <p className="text-lg font-semibold text-gray-900">Failed to load transactions</p>
           <p className="mt-1 text-sm text-gray-400">{error}</p>
-          <button onClick={() => setRefreshKey(k => k + 1)} className="mt-6 flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800">
-            <RefreshCw className="h-4 w-4" />
+          <Button onClick={() => setRefreshKey(k => k + 1)} variant="primary" className="mt-6" leftIcon={<RefreshCw className="h-4 w-4" />}>
             Try Again
-          </button>
+          </Button>
         </motion.div>
       ) : transactions.length === 0 ? (
         <motion.div
@@ -378,7 +378,7 @@ export default function AdminTransactionsPage() {
                       {t.type === "payout" && t.status === "pending" && (
                         <button
                           onClick={() => setProcessId(t.transactionId)}
-                          className="inline-flex items-center gap-1 rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-all hover:from-emerald-600 hover:to-emerald-700 active:scale-[0.97]"
+                          className="inline-flex items-center gap-1 rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 px-3 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:from-emerald-600 hover:to-emerald-700 active:scale-[0.97] touch-44"
                         >
                           <CheckCircle className="h-3 w-3" />
                           Process

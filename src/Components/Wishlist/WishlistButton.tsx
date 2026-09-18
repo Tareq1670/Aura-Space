@@ -18,7 +18,7 @@ export default function WishlistButton({ propertyId, initialSaved = false, onTog
     const [loading, setLoading] = useState(false);
 
     const sizeClasses = {
-        sm: "w-8 h-8",
+        sm: "w-8 h-8 touch-44",
         md: "w-10 h-10",
         lg: "w-12 h-12",
     };

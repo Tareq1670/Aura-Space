@@ -21,6 +21,9 @@
   --tracking-eyebrow: 0.16em;
   --text-label: 0.75rem;
 
+  /* Line-height scale — display (tight headings) through loose (body) */
+  --leading-display: 1.1;
+
   /* Radii — consistent component shapes */
   --radius-btn: 0.75rem;
   --radius-card: 1rem;
@@ -67,6 +70,29 @@ section .swiper-slide-prev {
 *:focus-visible {
   outline: 2px solid var(--color-brand-500);
   outline-offset: 2px;
+}
+
+/* ========== Touch Target Size (44px min hit area) ========== */
+@utility touch-44 {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -8px;
+    border-radius: inherit;
+  }
+}
+
+/* Accessible labels keep the default cursor + bg (no color-only disabled) */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
 }
 
 body {

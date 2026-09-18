@@ -147,7 +147,7 @@ export default function FeaturedBlogs() {
                                                 }}
                                             />
                                             {blog.isFeatured && (
-                                                <span className="absolute top-3 right-3 bg-amber-400 text-amber-900 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
+                                                <span className="absolute top-3 right-3 bg-amber-400 text-amber-900 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
                                                     Featured
                                                 </span>
                                             )}
@@ -161,7 +161,7 @@ export default function FeaturedBlogs() {
                                                         .map((tag) => (
                                                             <span
                                                                 key={tag}
-                                                                className="text-[10px] font-medium uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full"
+                                                                className="text-xs font-medium uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full"
                                                             >
                                                                 {tag}
                                                             </span>
@@ -195,7 +195,7 @@ export default function FeaturedBlogs() {
                                                     ) : (
                                                         <div className="w-5 h-5 rounded-full bg-slate-200" />
                                                     )}
-                                                    <span className="text-[11px] text-slate-500 truncate max-w-[60px] sm:max-w-[100px]">
+                                                    <span className="text-xs text-slate-500 truncate max-w-[60px] sm:max-w-[100px]">
                                                         {blog.authorName}
                                                     </span>
                                                 </div>

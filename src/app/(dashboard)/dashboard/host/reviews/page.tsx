@@ -18,6 +18,7 @@ import {
 } from "recharts"
 import ReviewCard from "@/Components/Review/ReviewCard"
 import StatCard from "@/Components/Dashboard/StatCard"
+import Button from "@/Components/ui/Button"
 import { reviewAPI, type ReviewRecord, type ReviewStats } from "@/lib/api/Guest/review-api"
 import { replyToReview } from "@/lib/actions/review"
 
@@ -314,7 +315,7 @@ export default function HostReviewsPage() {
                     setRatingFilter(opt.value)
                     setPage(1)
                   }}
-                  className={`rounded-lg px-3.5 py-1.5 text-xs font-medium transition-all ${
+                  className={`rounded-lg px-3.5 py-2 text-xs font-medium transition-all touch-44 ${
                     ratingFilter === opt.value
                       ? "bg-gradient-to-r from-violet-500 to-indigo-600 text-white shadow-sm"
                       : "bg-gray-50 text-gray-500 hover:bg-gray-100"
@@ -395,7 +396,7 @@ export default function HostReviewsPage() {
                 <button
                   disabled={page === 1}
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-medium text-gray-500 transition-all hover:border-violet-200 hover:text-violet-600 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-medium text-gray-500 transition-all hover:border-violet-200 hover:text-violet-600 disabled:opacity-40 disabled:cursor-not-allowed touch-44"
                 >
                   Previous
                 </button>
@@ -403,7 +404,7 @@ export default function HostReviewsPage() {
                   <button
                     key={p}
                     onClick={() => setPage(p)}
-                    className={`flex h-9 w-9 items-center justify-center rounded-xl text-xs font-medium transition-all ${
+                    className={`flex h-9 w-9 items-center justify-center rounded-xl text-xs font-medium transition-all touch-44 ${
                       p === page
                         ? "bg-gradient-to-br from-violet-500 to-indigo-600 text-white shadow-md"
                         : "border border-gray-200 bg-white text-gray-500 hover:border-violet-200 hover:text-violet-600"
@@ -415,7 +416,7 @@ export default function HostReviewsPage() {
                 <button
                   disabled={page === totalPages}
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-medium text-gray-500 transition-all hover:border-violet-200 hover:text-violet-600 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-medium text-gray-500 transition-all hover:border-violet-200 hover:text-violet-600 disabled:opacity-40 disabled:cursor-not-allowed touch-44"
                 >
                   Next
                 </button>
@@ -453,7 +454,7 @@ export default function HostReviewsPage() {
                   </div>
                   <button
                     onClick={() => setReplyId(null)}
-                    className="rounded-lg p-1.5 text-white/60 transition-colors hover:bg-white/15 hover:text-white"
+                    className="rounded-lg p-1.5 text-white/60 transition-colors hover:bg-white/15 hover:text-white touch-44"
                   >
                     <X className="h-5 w-5" />
                   </button>
@@ -470,25 +471,24 @@ export default function HostReviewsPage() {
                 />
 
                 <div className="flex gap-3">
-                  <button
+                  <Button
                     onClick={() => setReplyId(null)}
-                    className="flex-1 rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-gray-500 transition-all hover:bg-gray-50 hover:text-gray-700"
+                    variant="secondary"
+                    className="flex-1"
                   >
                     Cancel
-                  </button>
-                  <motion.button
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.98 }}
+                  </Button>
+                  <Button
                     onClick={() => handleReply(replyId)}
                     disabled={replying || !replyText.trim()}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/15 transition-all hover:shadow-xl disabled:opacity-40"
+                    isLoading={replying}
+                    loadingText="Posting..."
+                    variant="success"
+                    className="flex-1"
+                    leftIcon={<Sparkles className="h-4 w-4" />}
                   >
-                    {replying && (
-                      <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white" />
-                    )}
-                    <Sparkles className="h-4 w-4" />
                     Post Reply
-                  </motion.button>
+                  </Button>
                 </div>
               </div>
             </motion.div>

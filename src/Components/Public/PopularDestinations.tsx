@@ -70,14 +70,14 @@ export default function PopularDestinations() {
                         className="mb-3 inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50/80 px-4 py-1.5"
                     >
                         <span className="h-1.5 w-1.5 rounded-full bg-indigo-500" />
-                        <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-indigo-600">
+                        <span className="text-xs font-bold uppercase tracking-eyebrow text-indigo-600">
                             Explore Destinations
                         </span>
                     </motion.div>
 
                     <motion.h2
                         variants={itemVariants}
-                        className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[44px]"
+                        className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
                     >
                         Popular{" "}
                         <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-clip-text text-transparent">
@@ -87,7 +87,7 @@ export default function PopularDestinations() {
 
                     <motion.p
                         variants={itemVariants}
-                        className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-slate-500 sm:text-[15px]"
+                        className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-slate-500 sm:text-base"
                     >
                         Discover our most sought-after locations worldwide, each offering unique experiences and premium accommodations.
                     </motion.p>
@@ -140,7 +140,7 @@ export default function PopularDestinations() {
                                                     {dest.country}
                                                 </p>
                                             )}
-                                            <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-white/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-sm">
+                                            <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-white/20 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-sm">
                                                 <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                                                 </svg>

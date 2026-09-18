@@ -176,11 +176,12 @@ export default function DataTable<T extends Record<string, unknown>>({
                             Rows:
                         </span>
                         <select
+                            aria-label="Rows per page"
                             value={pageSize}
                             onChange={(e) =>
                                 handlePageSizeChange(Number(e.target.value))
                             }
-                            className="px-2 py-1.5 text-xs bg-white border border-gray-200 rounded-lg text-gray-700 outline-none cursor-pointer hover:border-violet-300 focus:border-violet-400 focus:ring-2 focus:ring-violet-100 transition-all"
+                            className="px-2 py-2 text-xs bg-white border border-gray-200 rounded-lg text-gray-700 outline-none cursor-pointer hover:border-violet-300 focus:border-violet-400 focus:ring-2 focus:ring-violet-100 transition-all"
                         >
                             {pageSizeOptions.map((size) => (
                                 <option key={size} value={size}>
@@ -206,9 +207,39 @@ export default function DataTable<T extends Record<string, unknown>>({
                                 {columns.map((col) => (
                                     <th
                                         key={col.key}
+                                        role={
+                                            col.sortable !== false
+                                                ? "button"
+                                                : undefined
+                                        }
+                                        tabIndex={
+                                            col.sortable !== false ? 0 : undefined
+                                        }
+                                        aria-sort={
+                                            col.sortable !== false
+                                                ? sortField === col.key
+                                                    ? sortDir === "asc"
+                                                        ? "ascending"
+                                                        : "descending"
+                                                    : "none"
+                                                : undefined
+                                        }
                                         onClick={() =>
                                             col.sortable !== false &&
                                             handleSort(col.key)
+                                        }
+                                        onKeyDown={
+                                            col.sortable !== false
+                                                ? (e) => {
+                                                      if (
+                                                          e.key === "Enter" ||
+                                                          e.key === " "
+                                                      ) {
+                                                          e.preventDefault();
+                                                          handleSort(col.key);
+                                                      }
+                                                  }
+                                                : undefined
                                         }
                                         className={`px-5 py-3.5 text-xs font-semibold uppercase tracking-wider whitespace-nowrap border-b border-gray-100 transition-colors ${
                                             col.sortable !== false
@@ -228,7 +259,7 @@ export default function DataTable<T extends Record<string, unknown>>({
                                             {col.header}
                                             {col.sortable !== false &&
                                                 sortField === col.key && (
-                                                    <span className="text-violet-500 text-[10px]">
+                                                    <span className="text-violet-500 text-xs">
                                                         {sortDir === "asc"
                                                             ? "▲"
                                                             : "▼"}
@@ -276,6 +307,25 @@ export default function DataTable<T extends Record<string, unknown>>({
                                                 delay: i * 0.02,
                                             }}
                                             onClick={() => onRowClick?.(row)}
+                                            tabIndex={
+                                                onRowClick ? 0 : undefined
+                                            }
+                                            onKeyDown={
+                                                onRowClick
+                                                    ? (e) => {
+                                                          if (
+                                                              e.key === "Enter" ||
+                                                              e.key === " "
+                                                          ) {
+                                                              e.preventDefault();
+                                                              onRowClick(row);
+                                                          }
+                                                      }
+                                                    : undefined
+                                            }
+                                            aria-label={
+                                                onRowClick ? "Open row" : undefined
+                                            }
                                             className={`border-b border-gray-50 transition-colors hover:bg-violet-50/30 ${
                                                 onRowClick
                                                     ? "cursor-pointer"

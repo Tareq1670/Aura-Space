@@ -9,6 +9,7 @@ import Link from "next/link";
 import { getWishlist, getLists } from "@/lib/api/Guest/wishlist-api";
 import { removeFromWishlist, createList } from "@/lib/actions/wishlist";
 import WishlistButton from "@/Components/Wishlist/WishlistButton";
+import Button, { buttonClasses } from "@/Components/ui/Button";
 import type { WishlistItem } from "@/lib/api/Guest/wishlist-api";
 
 type SortKey = "date-desc" | "date-asc" | "price-asc" | "price-desc" | "rating-desc";
@@ -162,18 +163,19 @@ export default function WishlistPage() {
                         <h1 className="text-2xl font-bold text-gray-900">My Wishlist</h1>
                         <p className="mt-1 text-sm text-gray-500">{items.length} saved {items.length === 1 ? "property" : "properties"}</p>
                     </div>
-                    <button
+                    <Button
                         onClick={handleShare}
-                        className="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+                        variant="secondary"
+                        size="sm"
                     >
                         Share
-                    </button>
+                    </Button>
                 </div>
 
                 <div className="mt-4 flex flex-wrap items-center gap-2">
                     <button
                         onClick={() => { setActiveList(null); setPage(1); }}
-                        className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
+                        className={`rounded-full px-4 py-2 text-sm font-medium transition touch-44 ${
                             activeList === null
                                 ? "bg-emerald-500 text-white shadow-sm"
                                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
@@ -185,7 +187,7 @@ export default function WishlistPage() {
                         <button
                             key={list}
                             onClick={() => { setActiveList(list); setPage(1); }}
-                            className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
+                            className={`rounded-full px-4 py-2 text-sm font-medium transition touch-44 ${
                                 activeList === list
                                     ? "bg-emerald-500 text-white shadow-sm"
                                     : "bg-gray-100 text-gray-600 hover:bg-gray-200"
@@ -196,7 +198,7 @@ export default function WishlistPage() {
                     ))}
                     <button
                         onClick={() => setShowCreateList(!showCreateList)}
-                        className="rounded-full border border-dashed border-gray-300 px-4 py-1.5 text-sm font-medium text-gray-500 transition hover:border-emerald-400 hover:text-emerald-600"
+                        className="rounded-full border border-dashed border-gray-300 px-4 py-2 text-sm font-medium text-gray-500 transition hover:border-emerald-400 hover:text-emerald-600 touch-44"
                     >
                         + New List
                     </button>
@@ -218,18 +220,20 @@ export default function WishlistPage() {
                                 onKeyDown={(e) => { if (e.key === "Enter") handleCreateList(); }}
                                 className="w-64"
                             />
-                            <button
+                            <Button
                                 onClick={handleCreateList}
-                                className="rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-600"
+                                variant="success"
+                                size="sm"
                             >
                                 Create
-                            </button>
-                            <button
+                            </Button>
+                            <Button
                                 onClick={() => { setShowCreateList(false); setNewListName(""); }}
-                                className="rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-semibold text-gray-600 transition hover:bg-gray-50"
+                                variant="secondary"
+                                size="sm"
                             >
                                 Cancel
-                            </button>
+                            </Button>
                         </motion.div>
                     )}
                 </AnimatePresence>
@@ -287,7 +291,7 @@ export default function WishlistPage() {
                     <p className="mt-1 text-sm text-gray-500">Save properties you love and come back to them anytime.</p>
                     <Link
                         href="/listings"
-                        className="mt-6 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition hover:shadow-emerald-500/40"
+                        className={buttonClasses({ variant: "success", size: "md", className: "mt-6" })}
                     >
                         Browse Properties
                     </Link>
@@ -335,7 +339,7 @@ export default function WishlistPage() {
                                                 </div>
                                                 {item.listName && (
                                                     <div className="absolute bottom-2 left-2">
-                                                        <span className="rounded-full bg-white/80 px-2.5 py-0.5 text-[10px] font-medium text-gray-600 backdrop-blur-sm">
+                                                        <span className="rounded-full bg-white/80 px-2.5 py-0.5 text-xs font-medium text-gray-600 backdrop-blur-sm">
                                                             {item.listName}
                                                         </span>
                                                     </div>
@@ -368,20 +372,18 @@ export default function WishlistPage() {
                                             <div className="mt-3 flex items-center gap-2">
                                                 <Link
                                                     href={`/checkout?propertyId=${item.propertyId}`}
-                                                    className="flex-1 rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 py-2 text-center text-xs font-semibold text-white shadow-sm transition hover:from-emerald-600 hover:to-emerald-700"
+                                                    className={buttonClasses({ variant: "success", size: "sm", className: "flex-1" })}
                                                 >
                                                     Book Now
                                                 </Link>
-                                                <button
+                                                <Button
                                                     onClick={() => handleRemove(item._id)}
-                                                    className="rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-500 transition hover:bg-red-50 hover:text-red-500"
+                                                    variant="secondary"
+                                                    size="sm"
+                                                    isLoading={removingId === item._id}
                                                 >
-                                                    {removingId === item._id ? (
-                                                        <span className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600" />
-                                                    ) : (
-                                                        "Remove"
-                                                    )}
-                                                </button>
+                                                    Remove
+                                                </Button>
                                             </div>
                                         </div>
                                     </motion.div>

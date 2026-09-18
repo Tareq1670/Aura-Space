@@ -9,6 +9,7 @@ import { authClient } from "@/lib/auth-client"
 import { getRecommendations, type RecommendationItem } from "@/lib/actions/ai"
 import { getFeaturedProperties, type PublicProperty } from "@/lib/actions/property-public"
 import { cn } from "@/lib/utils/cn"
+import Button from "@/Components/ui/Button"
 
 export default function AIRecommendations() {
   const [recommendations, setRecommendations] = useState<RecommendationItem[]>([])
@@ -103,14 +104,15 @@ export default function AIRecommendations() {
                 : "Discover our most popular stays"}
             </p>
           </div>
-          <button
+          <Button
             onClick={fetchRecommendations}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/30 transition-colors disabled:opacity-50"
+            variant="ghost"
+            size="sm"
           >
             <RefreshCw className={cn("w-4 h-4", loading && "animate-spin")} />
             Refresh
-          </button>
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

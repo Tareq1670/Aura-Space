@@ -24,6 +24,7 @@ import Image from "next/image";
 import { sliderData } from "./hero-data";
 import { HeroSearchBar } from "./hero-search-bar";
 import { getHomepageStats } from "@/lib/actions/property-public";
+import { buttonClasses } from "@/Components/ui/Button";
 
 const AUTOPLAY_DELAY = 6000;
 const PREVIEW_COUNT = 4;
@@ -398,7 +399,7 @@ export default function Hero() {
                                     variants={tagAnimation} initial="hidden" animate="visible" exit="exit"
                                 >
                                     <motion.span
-                                        className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.08] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-indigo-300 backdrop-blur-xl sm:px-3.5 sm:py-1.5"
+                                        className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.08] px-3 py-1 text-xs font-bold uppercase tracking-eyebrow text-indigo-300 backdrop-blur-xl sm:px-3.5 sm:py-1.5"
                                         whileHover={{ scale: 1.05, borderColor: "rgba(129,140,248,0.4)", backgroundColor: "rgba(255,255,255,0.12)" }}
                                         transition={{ type: "spring", stiffness: 400, damping: 17 }}
                                     >
@@ -414,7 +415,7 @@ export default function Hero() {
 
                             <AnimatePresence mode="wait">
                                 <motion.div key={`title-${activeIndex}`} variants={titleAnimation} initial="hidden" animate="visible" exit="exit" style={{ perspective: 800 }}>
-                                    <h1 className="text-[clamp(1.75rem,7vw,3rem)] font-black leading-[1.06] tracking-[-0.035em] text-white sm:text-4xl md:text-5xl lg:text-[3.35rem]">
+                                    <h1 className="text-3xl font-black leading-display tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
                                         <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>{currentSlide.title}</motion.span><br />
                                         <motion.span
                                             className="bg-gradient-to-r from-indigo-300 via-violet-200 to-fuchsia-300 bg-clip-text text-transparent"
@@ -429,7 +430,7 @@ export default function Hero() {
                             </AnimatePresence>
 
                             <AnimatePresence mode="wait">
-                                <motion.p key={`subtitle-${activeIndex}`} variants={subtitleAnimation} initial="hidden" animate="visible" exit="exit" className="max-w-lg text-[13px] leading-relaxed text-slate-200/90 sm:text-[15px]">
+                                <motion.p key={`subtitle-${activeIndex}`} variants={subtitleAnimation} initial="hidden" animate="visible" exit="exit" className="max-w-lg text-sm leading-relaxed text-slate-200/90 sm:text-base">
                                     {currentSlide.subtitle}
                                 </motion.p>
                             </AnimatePresence>
@@ -444,8 +445,7 @@ export default function Hero() {
                                     type="button"
                                     onClick={() => router.push("/listings")}
                                     variants={magneticHover} initial="rest" whileHover="hover" whileTap="tap"
-                                    className="relative overflow-hidden rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.14em] text-white shadow-lg shadow-indigo-950/40 sm:px-6 sm:py-2.5 sm:text-xs"
-                                    style={{ backgroundSize: "200% 100%" }}
+                                    className={buttonClasses({ variant: "primary", size: "sm", className: "relative overflow-hidden uppercase tracking-eyebrow" })}
                                 >
                                     <motion.span
                                         className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
@@ -466,7 +466,7 @@ export default function Hero() {
                                 <motion.button
                                     type="button" onClick={scrollToNextSection}
                                     variants={magneticHover} initial="rest" whileHover="hover" whileTap="tap"
-                                    className="hidden rounded-full border border-white/25 bg-white/[0.03] px-6 py-2.5 text-xs font-bold uppercase tracking-[0.15em] text-white backdrop-blur-sm transition-colors hover:bg-white/[0.08] sm:inline-flex"
+                                    className={buttonClasses({ variant: "primary", size: "md", className: "hidden uppercase tracking-eyebrow sm:inline-flex" })}
                                 >
                                     <span className="flex items-center gap-2">
                                         <motion.span animate={{ rotate: [0, 360] }} transition={{ duration: 8, repeat: Infinity, ease: "linear" }} className="inline-block" aria-hidden="true">✦</motion.span>
@@ -488,7 +488,7 @@ export default function Hero() {
                                             <motion.div className="text-xs font-extrabold leading-none text-white sm:text-sm" whileHover={{ color: "rgb(165, 180, 252)", transition: { duration: 0.2 } }}>
                                                 {stat.value}
                                             </motion.div>
-                                            <div className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400 transition-colors group-hover:text-slate-300">{stat.label}</div>
+                                            <div className="mt-0.5 text-xs font-bold uppercase tracking-eyebrow text-slate-500 transition-colors group-hover:text-slate-400">{stat.label}</div>
                                         </div>
                                     </motion.div>
                                 ))}
@@ -535,12 +535,12 @@ export default function Hero() {
                                                             initial={{ opacity: 0, y: 10, scale: 0.8 }}
                                                             animate={{ opacity: 1, y: 0, scale: 1 }}
                                                             transition={{ delay: 0.2, type: "spring", stiffness: 400, damping: 17 }}
-                                                            className="mb-1 inline-flex rounded-full bg-indigo-600/90 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white"
+                                                            className="mb-1 inline-flex rounded-full bg-indigo-600/90 px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-white"
                                                         >
                                                             {slide.tag}
                                                         </motion.span>
                                                     )}
-                                                    <p className={`line-clamp-2 font-bold uppercase tracking-[0.11em] text-white ${isActive ? "text-[11px]" : "text-[9px]"}`}>{slide.highlight}</p>
+                                                    <p className={`line-clamp-2 font-bold uppercase tracking-eyebrow text-white ${isActive ? "text-xs" : "text-xs"}`}>{slide.highlight}</p>
                                                     {isActive && (
                                                         <motion.div initial={{ width: 0 }} animate={{ width: 28 }} transition={{ duration: 0.4, delay: 0.25, ease: "easeOut" }}
                                                             className="mt-1.5 h-[2px] rounded-full bg-gradient-to-r from-indigo-400 to-violet-400" />
@@ -583,13 +583,13 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
             >
-                <div className="flex items-center gap-1.5 text-[10px] font-bold tracking-wider text-white/60">
+                <div className="flex items-center gap-1.5 text-xs font-bold tracking-wider text-white/80">
                     <motion.span key={activeIndex} className="text-xs text-white"
                         initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
                     >
                         {String(activeIndex + 1).padStart(2, "0")}
                     </motion.span>
-                    <span className="text-white/30">/</span>
+                    <span className="text-white/60">/</span>
                     <span>{String(sliderData.length).padStart(2, "0")}</span>
                 </div>
                 <div className="hidden w-28 items-center gap-1 lg:flex lg:w-32">
@@ -602,7 +602,7 @@ export default function Hero() {
                         onClick={() => swiperRef.current?.slidePrev()}
                         whileHover={{ scale: 1.15, borderColor: "rgba(129,140,248,0.55)", backgroundColor: "rgba(255,255,255,0.12)" }}
                         whileTap={{ scale: 0.88 }}
-                        className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-indigo-950/20 text-white/80 backdrop-blur-md transition-colors"
+                        className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-indigo-950/20 text-white/80 backdrop-blur-md transition-colors"
                     >
                         <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -612,7 +612,7 @@ export default function Hero() {
                         onClick={() => swiperRef.current?.slideNext()}
                         whileHover={{ scale: 1.15, borderColor: "rgba(129,140,248,0.55)", backgroundColor: "rgba(255,255,255,0.12)" }}
                         whileTap={{ scale: 0.88 }}
-                        className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-indigo-950/20 text-white/80 backdrop-blur-md transition-colors"
+                        className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-indigo-950/20 text-white/80 backdrop-blur-md transition-colors"
                     >
                         <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -627,7 +627,7 @@ export default function Hero() {
                 transition={{ opacity: { delay: 1.2, duration: 0.5 }, y: { duration: 2, repeat: Infinity, ease: "easeInOut" } }}
                 whileHover={{ scale: 1.15, borderColor: "rgba(129,140,248,0.5)", backgroundColor: "rgba(255,255,255,0.1)" }}
                 whileTap={{ scale: 0.88 }}
-                className="absolute bottom-5 left-4 z-20 hidden h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/[0.05] text-white/80 backdrop-blur-md transition-colors sm:left-6 lg:flex"
+                className="absolute bottom-5 left-4 z-20 hidden h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/[0.05] text-white/80 backdrop-blur-md transition-colors sm:left-6 lg:flex"
             >
                 <motion.svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14m0 0l6-6m-6 6-6-6" />

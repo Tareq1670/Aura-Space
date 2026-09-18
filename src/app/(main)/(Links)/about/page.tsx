@@ -3,6 +3,7 @@
 import React, { useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { buttonClasses } from "@/Components/ui/Button";
 import {
   motion,
   useInView,
@@ -414,7 +415,7 @@ export default function AboutPage() {
 
             <motion.h1
               variants={itemVariants}
-              className="text-[32px] font-black leading-[1.05] tracking-[-0.035em] text-white sm:text-5xl md:text-[56px] lg:text-6xl"
+              className="text-3xl font-black leading-display tracking-tight text-white sm:text-5xl md:text-6xl lg:text-6xl"
             >
               Where Premium Stays Meet{" "}
               <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-indigo-200 bg-clip-text text-transparent">
@@ -424,7 +425,7 @@ export default function AboutPage() {
 
             <motion.p
               variants={itemVariants}
-              className="mx-auto mt-6 max-w-2xl text-base leading-[1.8] text-white/60 sm:text-lg"
+              className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/60 sm:text-lg"
             >
               AuraSpace is a Bangladesh-based premium booking platform where
               travelers, families, and event organizers discover verified
@@ -449,7 +450,7 @@ export default function AboutPage() {
               >
                 <Link
                   href="/listings"
-                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 to-violet-600 px-7 py-3 text-[11px] font-extrabold uppercase tracking-[0.16em] text-white shadow-[0_12px_30px_rgba(99,102,241,0.25)] transition-all duration-300 hover:from-indigo-600 hover:to-violet-700"
+                  className={buttonClasses({ variant: "primary", size: "lg" })}
                 >
                   Explore Listings
                   <svg
@@ -474,7 +475,7 @@ export default function AboutPage() {
               >
                 <Link
                   href="/contact"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-7 py-3 text-[11px] font-extrabold uppercase tracking-[0.16em] text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.12]"
+                  className={buttonClasses({ variant: "secondary", size: "lg" })}
                 >
                   Get in Touch
                 </Link>
@@ -506,7 +507,7 @@ export default function AboutPage() {
                     {stat.value}
                   </span>
                 </div>
-                <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white/50 sm:text-[11px]">
+                <div className="mt-1 text-xs font-bold uppercase tracking-eyebrow text-white/50 sm:text-xs">
                   {stat.label}
                 </div>
               </motion.div>
@@ -533,14 +534,14 @@ export default function AboutPage() {
           >
             <motion.div variants={itemVariants}>
 
-              <h2 className="mt-5 text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[42px]">
+              <h2 className="mt-5 text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl">
                 Redefining Premium Hospitality in{" "}
                 <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-clip-text text-transparent">
                   Bangladesh
                 </span>
               </h2>
 
-              <p className="mt-5 text-[15px] leading-[1.85] text-slate-500">
+              <p className="mt-5 text-base leading-relaxed text-slate-500">
                 At AuraSpace, we believe booking should be more than just
                 reserving a room — it should be an experience. Our mission is
                 to connect Bangladeshi travelers, families, and event
@@ -548,7 +549,7 @@ export default function AboutPage() {
                 venues, all with the option to customize every detail.
               </p>
 
-              <p className="mt-4 text-[15px] leading-[1.85] text-slate-500">
+              <p className="mt-4 text-base leading-relaxed text-slate-500">
                 Whether you&apos;re booking a luxury resort in Cox&apos;s
                 Bazar, planning a wedding at a garden venue, or organizing a
                 corporate meeting in Dhaka — AuraSpace makes every step
@@ -659,7 +660,7 @@ export default function AboutPage() {
                   </div>
                   <div>
                     <div className="text-xl font-black text-slate-950">4.9★</div>
-                    <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">
+                    <div className="text-xs font-bold uppercase tracking-eyebrow text-slate-400">
                       Guest Rating
                     </div>
                   </div>
@@ -685,7 +686,7 @@ export default function AboutPage() {
 
             <motion.h2
               variants={itemVariants}
-              className="mt-5 text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[42px]"
+              className="mt-5 text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
             >
               Two Core Services,{" "}
               <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-clip-text text-transparent">
@@ -695,7 +696,7 @@ export default function AboutPage() {
 
             <motion.p
               variants={itemVariants}
-              className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-[15px]"
+              className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-base"
             >
               Book premium stays and exclusive event venues — with the option
               to add custom services and make every occasion unforgettable.
@@ -760,23 +761,23 @@ export default function AboutPage() {
                   </motion.div>
 
                   <div className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-indigo-700">
+                    <span className="text-xs font-bold uppercase tracking-eyebrow text-indigo-700">
                       {offering.category}
                     </span>
                   </div>
                 </div>
 
-                <h3 className="mt-5 text-lg font-black leading-tight tracking-[-0.02em] text-slate-950 sm:text-xl">
+                <h3 className="mt-5 text-lg font-black leading-tight tracking-tight text-slate-950 sm:text-xl">
                   {offering.title}
                 </h3>
 
-                <p className="mt-3 text-[13px] leading-[1.75] text-slate-500">
+                <p className="mt-3 text-sm leading-relaxed text-slate-500">
                   {offering.description}
                 </p>
 
                 <ul className="mt-5 space-y-2 border-t border-slate-100 pt-4">
                   {offering.items.map((item) => (
-                    <li key={item} className="flex items-center gap-2 text-[13px] text-slate-600">
+                    <li key={item} className="flex items-center gap-2 text-sm text-slate-600">
                       <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-indigo-50">
                         <svg
                           className="h-2.5 w-2.5 text-indigo-600"
@@ -816,7 +817,7 @@ export default function AboutPage() {
 
             <motion.h2
               variants={itemVariants}
-              className="mt-5 text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[42px]"
+              className="mt-5 text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
             >
               What Makes Us{" "}
               <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-clip-text text-transparent">
@@ -826,7 +827,7 @@ export default function AboutPage() {
 
             <motion.p
               variants={itemVariants}
-              className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-[15px]"
+              className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-base"
             >
               We&apos;re not just another booking site. Here&apos;s what sets
               AuraSpace apart from Airbnb, Booking.com, and traditional hotel
@@ -864,12 +865,12 @@ export default function AboutPage() {
                       {String(i + 1).padStart(2, "0")}
                     </span>
                   </div>
-                  <h3 className="text-base font-black leading-tight tracking-[-0.02em] text-slate-950 sm:text-[17px]">
+                  <h3 className="text-base font-black leading-tight tracking-tight text-slate-950 sm:text-base">
                     {item.title}
                   </h3>
                 </div>
 
-                <p className="mt-4 flex-1 text-[13px] leading-[1.75] text-slate-500">
+                <p className="mt-4 flex-1 text-sm leading-relaxed text-slate-500">
                   {item.description}
                 </p>
               </motion.div>
@@ -893,7 +894,7 @@ export default function AboutPage() {
 
             <motion.h2
               variants={itemVariants}
-              className="mt-5 text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[42px]"
+              className="mt-5 text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
             >
               What We{" "}
               <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-clip-text text-transparent">
@@ -903,7 +904,7 @@ export default function AboutPage() {
 
             <motion.p
               variants={itemVariants}
-              className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-[15px]"
+              className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-base"
             >
               The principles that guide every listing, every booking, and
               every experience on AuraSpace.
@@ -966,11 +967,11 @@ export default function AboutPage() {
                   {value.icon}
                 </motion.div>
 
-                <h3 className="mt-5 text-lg font-black leading-tight tracking-[-0.02em] text-slate-950">
+                <h3 className="mt-5 text-lg font-black leading-tight tracking-tight text-slate-950">
                   {value.title}
                 </h3>
 
-                <p className="mt-2.5 flex-1 text-[13px] leading-[1.75] text-slate-500">
+                <p className="mt-2.5 flex-1 text-sm leading-relaxed text-slate-500">
                   {value.description}
                 </p>
               </motion.div>
@@ -994,7 +995,7 @@ export default function AboutPage() {
 
             <motion.h2
               variants={itemVariants}
-              className="mt-5 text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[42px]"
+              className="mt-5 text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
             >
               Booking Made{" "}
               <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-clip-text text-transparent">
@@ -1004,7 +1005,7 @@ export default function AboutPage() {
 
             <motion.p
               variants={itemVariants}
-              className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-[15px]"
+              className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-base"
             >
               From discovery to check-in, everything happens in four simple
               steps.
@@ -1024,15 +1025,15 @@ export default function AboutPage() {
                 whileHover={reduceMotion ? undefined : { y: -6 }}
                 className="group relative flex h-full flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white p-6 shadow-[0_1px_3px_rgba(15,23,42,0.04)] transition-all duration-500 hover:border-indigo-200 hover:shadow-[0_20px_50px_rgba(99,102,241,0.08)]"
               >
-                <span className="bg-gradient-to-br from-indigo-500 to-violet-500 bg-clip-text text-[48px] font-black leading-none tracking-[-0.06em] text-transparent opacity-15 transition-opacity duration-500 group-hover:opacity-30">
+                <span className="bg-gradient-to-br from-indigo-500 to-violet-500 bg-clip-text text-5xl font-black leading-none tracking-tighter text-transparent opacity-15 transition-opacity duration-500 group-hover:opacity-30">
                   {step.step}
                 </span>
 
-                <h3 className="mt-4 text-lg font-black leading-tight tracking-[-0.02em] text-slate-950">
+                <h3 className="mt-4 text-lg font-black leading-tight tracking-tight text-slate-950">
                   {step.title}
                 </h3>
 
-                <p className="mt-2.5 flex-1 text-[13px] leading-[1.75] text-slate-500">
+                <p className="mt-2.5 flex-1 text-sm leading-relaxed text-slate-500">
                   {step.description}
                 </p>
               </motion.div>
@@ -1056,7 +1057,7 @@ export default function AboutPage() {
 
             <motion.h2
               variants={itemVariants}
-              className="mt-5 text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[42px]"
+              className="mt-5 text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
             >
               The AuraSpace{" "}
               <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-clip-text text-transparent">
@@ -1066,7 +1067,7 @@ export default function AboutPage() {
 
             <motion.p
               variants={itemVariants}
-              className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-[15px]"
+              className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-base"
             >
               From a simple idea in Dhaka to a trusted premium booking
               platform serving thousands of guests and hosts across Bangladesh.
@@ -1104,14 +1105,14 @@ export default function AboutPage() {
                         }`}
                       >
                         <span className="h-1.5 w-1.5 rounded-full bg-indigo-500" />
-                        <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-indigo-700">
+                        <span className="text-xs font-bold uppercase tracking-eyebrow text-indigo-700">
                           {milestone.year}
                         </span>
                       </div>
-                      <h3 className="text-lg font-black leading-tight tracking-[-0.02em] text-slate-950 sm:text-xl">
+                      <h3 className="text-lg font-black leading-tight tracking-tight text-slate-950 sm:text-xl">
                         {milestone.title}
                       </h3>
-                      <p className="mt-2.5 text-[13px] leading-[1.75] text-slate-500 sm:text-sm">
+                      <p className="mt-2.5 text-sm leading-relaxed text-slate-500 sm:text-sm">
                         {milestone.description}
                       </p>
                     </div>
@@ -1139,7 +1140,7 @@ export default function AboutPage() {
 
             <motion.h2
               variants={itemVariants}
-              className="mt-5 text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[42px]"
+              className="mt-5 text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
             >
               The AuraSpace{" "}
               <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-clip-text text-transparent">
@@ -1149,7 +1150,7 @@ export default function AboutPage() {
 
             <motion.p
               variants={itemVariants}
-              className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-[15px]"
+              className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-base"
             >
               We back every booking with commitments that protect your
               experience, your payment, and your peace of mind.
@@ -1184,10 +1185,10 @@ export default function AboutPage() {
                     />
                   </svg>
                 </div>
-                <h4 className="text-base font-black leading-tight tracking-[-0.02em] text-slate-950">
+                <h4 className="text-base font-black leading-tight tracking-tight text-slate-950">
                   {item.title}
                 </h4>
-                <p className="mt-2 flex-1 text-[13px] leading-relaxed text-slate-500">
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-500">
                   {item.text}
                 </p>
               </motion.div>
@@ -1213,7 +1214,7 @@ export default function AboutPage() {
 
             <motion.h2
               variants={itemVariants}
-              className="mt-5 text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[42px]"
+              className="mt-5 text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
             >
               What Our{" "}
               <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-clip-text text-transparent">
@@ -1223,7 +1224,7 @@ export default function AboutPage() {
 
             <motion.p
               variants={itemVariants}
-              className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-[15px]"
+              className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-base"
             >
               Real stories from guests, hosts, and event organizers across
               Bangladesh.
@@ -1251,7 +1252,7 @@ export default function AboutPage() {
                   <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179z" />
                 </svg>
 
-                <p className="mt-4 flex-1 text-[14px] leading-[1.8] text-slate-600">
+                <p className="mt-4 flex-1 text-sm leading-relaxed text-slate-600">
                   “{t.quote}”
                 </p>
 
@@ -1269,7 +1270,7 @@ export default function AboutPage() {
                     <div className="text-sm font-black text-slate-950">
                       {t.name}
                     </div>
-                    <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-indigo-600">
+                    <div className="text-xs font-bold uppercase tracking-eyebrow text-indigo-600">
                       {t.role}
                     </div>
                   </div>
@@ -1326,14 +1327,14 @@ export default function AboutPage() {
               </motion.div>
 
               <div className="max-w-2xl">
-                <h3 className="text-2xl font-black leading-tight tracking-[-0.02em] text-white sm:text-3xl lg:text-4xl">
+                <h3 className="text-2xl font-black leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl">
                   Ready to experience{" "}
                   <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-indigo-200 bg-clip-text text-transparent">
                     AuraSpace
                   </span>
                   ?
                 </h3>
-                <p className="mt-4 text-sm leading-relaxed text-white/60 sm:text-[15px]">
+                <p className="mt-4 text-sm leading-relaxed text-white/60 sm:text-base">
                   Join thousands of guests and hosts across Bangladesh who
                   trust AuraSpace for premium stays, exclusive event venues,
                   and customized booking experiences.
@@ -1354,7 +1355,7 @@ export default function AboutPage() {
                 >
                   <Link
                     href="/listings"
-                    className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-[11px] font-extrabold uppercase tracking-[0.16em] text-slate-950 shadow-lg transition-colors duration-300 hover:bg-indigo-50"
+                    className={buttonClasses({ variant: "secondary", size: "lg" })}
                   >
                     Browse Properties
                     <svg
@@ -1379,7 +1380,7 @@ export default function AboutPage() {
                 >
                   <Link
                     href="/dashboard/host/items/add"
-                    className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.07] px-7 py-3 text-[11px] font-extrabold uppercase tracking-[0.16em] text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.12]"
+                    className={buttonClasses({ variant: "secondary", size: "lg" })}
                   >
                     Become a Host
                   </Link>

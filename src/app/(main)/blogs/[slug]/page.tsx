@@ -157,7 +157,7 @@ export default function BlogDetailPage() {
                             {blog.tags.map((tag) => (
                                 <span
                                     key={tag}
-                                    className="text-[10px] font-medium uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full capitalize"
+                                    className="text-xs font-medium uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full capitalize"
                                 >
                                     {tag}
                                 </span>

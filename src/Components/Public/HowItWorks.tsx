@@ -10,6 +10,7 @@ import {
     useTransform,
     type Variants,
 } from "framer-motion";
+import { buttonClasses } from "@/Components/ui/Button";
 
 interface Step {
     id: number;
@@ -284,7 +285,7 @@ function StepCard({
                         {step.icon}
                     </motion.div>
 
-                    <span className="bg-gradient-to-br from-indigo-500 to-violet-500 bg-clip-text text-[48px] font-black leading-none tracking-[-0.06em] text-transparent opacity-8 transition-opacity duration-500 group-hover:opacity-20 sm:text-[56px]">
+                    <span className="bg-gradient-to-br from-indigo-500 to-violet-500 bg-clip-text text-5xl font-black leading-none tracking-tighter text-transparent opacity-8 transition-opacity duration-500 group-hover:opacity-20 sm:text-6xl">
                         {step.step}
                     </span>
                 </div>
@@ -303,23 +304,23 @@ function StepCard({
                                 type: "tween",
                             }}
                         />
-                        <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-indigo-600">
+                        <span className="text-xs font-bold uppercase tracking-eyebrow text-indigo-600">
                             Step {step.step}
                         </span>
                     </div>
 
-                    <h3 className="text-lg font-black leading-tight tracking-[-0.02em] text-slate-900 sm:text-xl">
+                    <h3 className="text-lg font-black leading-tight tracking-tight text-slate-900 sm:text-xl">
                         {step.title}
                     </h3>
 
-                    <p className="mt-2.5 text-[13px] leading-[1.75] text-slate-500">
+                    <p className="mt-2.5 text-sm leading-relaxed text-slate-500">
                         {step.description}
                     </p>
                 </div>
 
                 <div className="mt-5 inline-flex items-center gap-2">
                     <div className="h-px w-5 bg-indigo-300/50 transition-all duration-300 group-hover:w-8 group-hover:bg-indigo-400" />
-                    <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-400 transition-colors duration-300 group-hover:text-indigo-600">
+                    <span className="text-xs font-bold uppercase tracking-eyebrow text-slate-400 transition-colors duration-300 group-hover:text-indigo-600">
                         {step.highlight}
                     </span>
                     <motion.svg
@@ -384,7 +385,7 @@ export default function HowItWorks() {
                 >
                     <motion.h2
                         variants={itemVariants}
-                        className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[44px] lg:text-5xl"
+                        className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl lg:text-5xl"
                     >
                         Book Your{" "}
                         <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-clip-text text-transparent">
@@ -395,7 +396,7 @@ export default function HowItWorks() {
 
                     <motion.p
                         variants={itemVariants}
-                        className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-500 sm:text-[15px]"
+                        className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-500 sm:text-base"
                     >
                         From discovery to checkout, AuraSpace makes booking
                         premium properties and event venues effortless, secure,
@@ -489,7 +490,7 @@ export default function HowItWorks() {
                                         {stat.value}
                                     </span>
                                 </div>
-                                <div className="mt-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400 sm:text-[11px]">
+                                <div className="mt-1 text-xs font-semibold uppercase tracking-eyebrow text-slate-400 sm:text-xs">
                                     {stat.label}
                                 </div>
                             </motion.div>
@@ -546,7 +547,7 @@ export default function HowItWorks() {
                             </motion.div>
 
                             <div className="flex-1">
-                                <h3 className="text-xl font-black leading-tight tracking-[-0.02em] text-white sm:text-2xl">
+                                <h3 className="text-xl font-black leading-tight tracking-tight text-white sm:text-2xl">
                                     Ready to explore premium stays?
                                 </h3>
                                 <p className="mt-2 text-sm leading-relaxed text-white/60">
@@ -575,7 +576,7 @@ export default function HowItWorks() {
                                 >
                                     <Link
                                         href="/listings"
-                                        className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-2.5 text-[11px] font-extrabold uppercase tracking-[0.14em] text-slate-950 shadow-lg transition-colors duration-300 hover:bg-indigo-50"
+                                        className={buttonClasses({ variant: "secondary", size: "md", className: "uppercase tracking-eyebrow" })}
                                     >
                                         Explore Now
                                         <motion.svg
@@ -623,7 +624,7 @@ export default function HowItWorks() {
                                 >
                                     <Link
                                         href="/dashboard/host/items/add"
-                                        className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.07] px-6 py-2.5 text-[11px] font-extrabold uppercase tracking-[0.14em] text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.12]"
+                                        className={buttonClasses({ variant: "primary", size: "md", className: "uppercase tracking-eyebrow" })}
                                     >
                                         List Property
                                     </Link>

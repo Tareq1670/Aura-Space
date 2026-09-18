@@ -9,6 +9,7 @@ import {
     useReducedMotion,
     type Variants,
 } from "framer-motion";
+import { buttonClasses } from "@/Components/ui/Button";
 
 interface FAQItem {
     id: number;
@@ -202,12 +203,12 @@ function FAQAccordionItem({
                                 type: "tween",
                             }}
                         />
-                        <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-indigo-700">
+                        <span className="text-xs font-bold uppercase tracking-eyebrow text-indigo-700">
                             {item.category}
                         </span>
                     </div>
 
-                    <h3 className="text-[15px] font-black leading-snug tracking-[-0.02em] text-slate-950 sm:text-[17px]">
+                    <h3 className="text-base font-black leading-snug tracking-tight text-slate-950 sm:text-base">
                         {item.question}
                     </h3>
                 </div>
@@ -265,7 +266,7 @@ function FAQAccordionItem({
                     >
                         <div className="px-5 pb-5 sm:px-6 sm:pb-6">
                             <div className="border-t border-slate-200 pt-4">
-                                <p className="text-sm leading-[1.8] text-slate-500 sm:text-[15px]">
+                                <p className="text-sm leading-relaxed text-slate-500 sm:text-base">
                                     {item.answer}
                                 </p>
                             </div>
@@ -302,7 +303,7 @@ export default function FAQSection() {
                 >
                     <motion.h2
                         variants={itemVariants}
-                        className="text-[28px] font-black leading-[1.08] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[42px] lg:text-5xl"
+                        className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl lg:text-5xl"
                     >
                         Everything You Need to Know About{" "}
                         <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-clip-text text-transparent">
@@ -312,7 +313,7 @@ export default function FAQSection() {
 
                     <motion.p
                         variants={itemVariants}
-                        className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-slate-500 sm:mt-5 sm:text-[15px]"
+                        className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-slate-500 sm:mt-5 sm:text-base"
                     >
                         Clear answers about booking premium stays, verified
                         listings, secure payments, hosting, guest support, and
@@ -326,7 +327,7 @@ export default function FAQSection() {
                         {categories.map((category) => (
                             <span
                                 key={category}
-                                className="inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500 shadow-sm"
+                                className="inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-bold uppercase tracking-eyebrow text-slate-500 shadow-sm"
                             >
                                 {category}
                             </span>
@@ -352,16 +353,16 @@ export default function FAQSection() {
                         <div className="p-5 sm:p-6">
                             <div className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1">
                                 <span className="h-1.5 w-1.5 rounded-full bg-indigo-500" />
-                                <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-indigo-700">
+                                <span className="text-xs font-bold uppercase tracking-eyebrow text-indigo-700">
                                     Support Center
                                 </span>
                             </div>
 
-                            <h3 className="mt-5 text-[24px] font-black leading-tight tracking-[-0.03em] text-slate-950">
+                            <h3 className="mt-5 text-2xl font-black leading-tight tracking-tight text-slate-950">
                                 Need help with your booking journey?
                             </h3>
 
-                            <p className="mt-3 text-sm leading-[1.8] text-slate-500">
+                            <p className="mt-3 text-sm leading-relaxed text-slate-500">
                                 AuraSpace keeps premium booking simple,
                                 transparent and reliable for guests, hosts, and
                                 event organizers.
@@ -374,7 +375,7 @@ export default function FAQSection() {
                                             {faqItems.length}
                                         </span>
                                     </div>
-                                    <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">
+                                    <div className="mt-1 text-xs font-bold uppercase tracking-eyebrow text-slate-500">
                                         Answers
                                     </div>
                                 </div>
@@ -385,7 +386,7 @@ export default function FAQSection() {
                                             {categories.length}
                                         </span>
                                     </div>
-                                    <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">
+                                    <div className="mt-1 text-xs font-bold uppercase tracking-eyebrow text-slate-500">
                                         Topics
                                     </div>
                                 </div>
@@ -405,7 +406,7 @@ export default function FAQSection() {
                                                 <div className="text-sm font-black text-slate-900">
                                                     {supportItem.title}
                                                 </div>
-                                                <div className="mt-1 text-[13px] leading-relaxed text-slate-500">
+                                                <div className="mt-1 text-sm leading-relaxed text-slate-500">
                                                     {supportItem.text}
                                                 </div>
                                             </div>
@@ -429,7 +430,7 @@ export default function FAQSection() {
                                 >
                                     <Link
                                         href="/listings"
-                                        className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 px-5 py-3 text-[11px] font-extrabold uppercase tracking-[0.15em] text-white shadow-[0_12px_28px_rgba(99,102,241,0.18)] transition-all duration-300 hover:from-indigo-700 hover:to-violet-700"
+                                        className={buttonClasses({ variant: "primary", size: "md", className: "w-full uppercase tracking-eyebrow" })}
                                     >
                                         Browse Listings
                                         <svg
@@ -462,7 +463,7 @@ export default function FAQSection() {
                                 >
                                     <Link
                                         href="/contact"
-                                        className="inline-flex w-full items-center justify-center rounded-full border border-slate-200 bg-white px-5 py-3 text-[11px] font-extrabold uppercase tracking-[0.15em] text-slate-900 transition-all duration-300 hover:border-indigo-200 hover:bg-indigo-50/50 hover:text-indigo-700"
+                                        className={buttonClasses({ variant: "secondary", size: "md", className: "w-full uppercase tracking-eyebrow" })}
                                     >
                                         Contact Support
                                     </Link>

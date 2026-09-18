@@ -8,6 +8,7 @@ import {
     useReducedMotion,
     type Variants,
 } from "framer-motion";
+import { buttonClasses } from "@/Components/ui/Button";
 
 const benefits = [
     "Exclusive premium stay deals",
@@ -105,7 +106,7 @@ export default function NewsletterSubscribe() {
 
                             <motion.h2
                                 variants={itemVariants}
-                                className="text-[28px] font-black leading-[1.1] tracking-[-0.03em] text-white sm:text-4xl md:text-[40px]"
+                                className="text-3xl font-black leading-display tracking-tight text-white sm:text-4xl md:text-5xl"
                             >
                                 Get Curated{" "}
                                 <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-indigo-200 bg-clip-text text-transparent">
@@ -116,7 +117,7 @@ export default function NewsletterSubscribe() {
 
                             <motion.p
                                 variants={itemVariants}
-                                className="mt-4 max-w-md text-sm leading-[1.8] text-white/60 sm:text-[15px]"
+                                className="mt-4 max-w-md text-sm leading-relaxed text-white/60 sm:text-base"
                             >
                                 Subscribe to receive handpicked luxury
                                 properties, exclusive event venue updates,
@@ -149,7 +150,7 @@ export default function NewsletterSubscribe() {
                                                 />
                                             </svg>
                                         </div>
-                                        <p className="text-[13px] font-semibold leading-[1.5] text-white/80">
+                                        <p className="text-sm font-semibold leading-normal text-white/80">
                                             {benefit}
                                         </p>
                                     </motion.div>
@@ -178,10 +179,10 @@ export default function NewsletterSubscribe() {
                                         </div>
 
                                         <div className="min-w-0 flex-1">
-                                            <h3 className="text-xl font-black tracking-[-0.02em] text-slate-950 sm:text-2xl">
+                                            <h3 className="text-xl font-black tracking-tight text-slate-950 sm:text-2xl">
                                                 Join the premium list
                                             </h3>
-                                            <p className="mt-1.5 text-[13px] leading-[1.7] text-slate-500 sm:text-sm">
+                                            <p className="mt-1.5 text-sm leading-relaxed text-slate-500 sm:text-sm">
                                                 No spam. Only curated updates
                                                 and exclusive AuraSpace
                                                 opportunities.
@@ -232,8 +233,7 @@ export default function NewsletterSubscribe() {
                                                     ? undefined
                                                     : { scale: 0.98 }
                                             }
-                                            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 px-5 text-[11px] font-extrabold uppercase tracking-[0.18em] text-white shadow-[0_8px_24px_rgba(99,102,241,0.20)] transition-all duration-300 hover:from-indigo-700 hover:to-violet-700"
-                                            style={{ height: "52px" }}
+                                            className={buttonClasses({ variant: "primary", size: "md", className: "w-full uppercase tracking-eyebrow" })}
                                         >
                                             Subscribe Now
                                             <motion.svg
@@ -289,7 +289,7 @@ export default function NewsletterSubscribe() {
                                                         />
                                                     </svg>
                                                 </div>
-                                                <p className="text-[13px] font-semibold text-emerald-600">
+                                                <p className="text-sm font-semibold text-emerald-600">
                                                     Thank you for subscribing to
                                                     AuraSpace updates.
                                                 </p>
@@ -321,7 +321,7 @@ export default function NewsletterSubscribe() {
                                                         />
                                                     </svg>
                                                 </div>
-                                                <p className="text-[13px] font-semibold text-rose-600">
+                                                <p className="text-sm font-semibold text-rose-600">
                                                     Please enter a valid email
                                                     address.
                                                 </p>

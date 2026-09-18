@@ -420,16 +420,16 @@ const SidebarInner = ({
                                         className="overflow-hidden"
                                     >
                                         <div className="flex items-center gap-1.5">
-                                            <h1 className="text-[15px] font-bold text-white tracking-tight leading-none whitespace-nowrap">
+                                            <h1 className="text-base font-bold text-white tracking-tight leading-none whitespace-nowrap">
                                                 AuraSpace
                                             </h1>
                                             <span
-                                                className={`px-1.5 py-0.5 rounded-md bg-gradient-to-r ${currentRole.gradient} text-[8px] font-bold text-white tracking-wider uppercase whitespace-nowrap shadow-sm`}
+                                                className={`px-1.5 py-0.5 rounded-md bg-gradient-to-r ${currentRole.gradient} text-xs font-bold text-white tracking-wider uppercase whitespace-nowrap shadow-sm`}
                                             >
                                                 {currentRole.label}
                                             </span>
                                         </div>
-                                        <p className="text-[10px] text-white/40 font-medium mt-1 tracking-wider uppercase whitespace-nowrap">
+                                        <p className="text-xs text-white/40 font-medium mt-1 tracking-wider uppercase whitespace-nowrap">
                                             Dashboard
                                         </p>
                                     </motion.div>
@@ -440,7 +440,7 @@ const SidebarInner = ({
                         {inDrawer && (
                             <button
                                 onClick={onClose}
-                                className="w-8 h-8 rounded-lg flex items-center justify-center text-white/40 hover:text-white hover:bg-white/[0.06] transition-colors"
+                                className="w-11 h-11 rounded-lg flex items-center justify-center text-white/40 hover:text-white hover:bg-white/[0.06] transition-colors"
                                 aria-label="Close menu"
                             >
                                 <HiXMark className="w-5 h-5" />
@@ -451,7 +451,7 @@ const SidebarInner = ({
                     {!inDrawer && (
                         <button
                             onClick={onToggleMinimize}
-                            className="mt-4 w-full h-8 rounded-lg flex items-center justify-center gap-1.5 text-xs font-semibold text-white/40 hover:text-violet-300 hover:bg-violet-500/10 border border-white/[0.04] hover:border-violet-500/20 transition-all"
+                            className="mt-4 w-full h-11 rounded-lg flex items-center justify-center gap-1.5 text-xs font-semibold text-white/40 hover:text-violet-300 hover:bg-violet-500/10 border border-white/[0.04] hover:border-violet-500/20 transition-all"
                         >
                             <motion.div
                                 animate={{ rotate: isMinimized ? 180 : 0 }}
@@ -485,6 +485,7 @@ const SidebarInner = ({
                             </div>
                             <input
                                 id="sidebar-search-input"
+                                aria-label="Search dashboard"
                                 type="text"
                                 value={searchQuery}
                                 onChange={(e) => onSearchChange(e.target.value)}
@@ -500,7 +501,7 @@ const SidebarInner = ({
                                     document.getElementById("sidebar-search-input")?.focus();
                                 }, 350);
                             }}
-                            className="w-full h-9 rounded-xl bg-white/[0.04] hover:bg-violet-500/10 border border-white/[0.06] hover:border-violet-500/20 flex items-center justify-center text-white/40 hover:text-violet-300 transition-colors"
+                            className="w-full h-11 rounded-xl bg-white/[0.04] hover:bg-violet-500/10 border border-white/[0.06] hover:border-violet-500/20 flex items-center justify-center text-white/40 hover:text-violet-300 transition-colors"
                             aria-label="Expand and search"
                         >
                             <HiMagnifyingGlass className="w-4 h-4" />
@@ -525,7 +526,7 @@ const SidebarInner = ({
                                         className="overflow-hidden"
                                     >
                                         <div className="flex items-center gap-2 px-3 mb-2">
-                                            <p className="text-[10px] font-bold text-white/30 tracking-[0.15em] uppercase whitespace-nowrap">
+                                            <p className="text-xs font-bold text-white/30 tracking-eyebrow uppercase whitespace-nowrap">
                                                 {section.section}
                                             </p>
                                             <div className="flex-1 h-px bg-gradient-to-r from-white/[0.08] to-transparent" />
@@ -548,7 +549,7 @@ const SidebarInner = ({
                                                 href={item.href}
                                                 onClick={inDrawer ? onClose : undefined}
                                                 className={`relative flex items-center rounded-xl transition-colors duration-200 ${
-                                                    showLabels ? "gap-3 px-3 py-2.5" : "p-2.5 justify-center"
+showLabels ? "gap-3 px-3 py-2.5" : "p-2.5 justify-center touch-44"
                                                 } ${
                                                     active ? "text-white" : "text-white/60 hover:text-white hover:bg-white/[0.04]"
                                                 }`}
@@ -581,7 +582,7 @@ const SidebarInner = ({
                                                     </span>
                                                 )}
                                                 {showLabels && item.badge ? (
-                                                    <span className={`relative z-10 ml-auto px-1.5 py-0.5 rounded-full text-[10px] font-bold leading-tight ${
+                                                    <span className={`relative z-10 ml-auto px-1.5 py-0.5 rounded-full text-xs font-bold leading-tight ${
                                                         item.badgeColor === "red"
                                                             ? "bg-red-500/20 text-red-400"
                                                             : item.badgeColor === "emerald"
@@ -630,7 +631,7 @@ const SidebarInner = ({
                                     </p>
                                     <div className="flex items-center gap-1 mt-0.5">
                                         <span className="w-1 h-1 rounded-full bg-emerald-400" />
-                                        <p className="text-[10px] text-white/50 truncate leading-tight capitalize">
+                                        <p className="text-xs text-white/50 truncate leading-tight capitalize">
                                             {currentRole.label} · Online
                                         </p>
                                     </div>

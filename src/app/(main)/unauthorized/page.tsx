@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { buttonClasses } from "@/Components/ui/Button";
 
 export const metadata: Metadata = {
   title: "Access Denied",
@@ -18,13 +19,13 @@ export default function UnauthorizedPage() {
                 <div className="flex gap-3 justify-center">
                     <Link
                         href="/"
-                        className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-500 text-white font-medium hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+                        className={buttonClasses({ variant: "primary", size: "md" })}
                     >
                         Go Home
                     </Link>
                     <Link
                         href="/contact"
-                        className="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition-all duration-200"
+                        className={buttonClasses({ variant: "secondary", size: "md" })}
                     >
                         Contact Support
                     </Link>

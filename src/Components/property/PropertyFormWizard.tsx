@@ -8,6 +8,7 @@ import { usePropertyForm } from "@/lib/hooks/use-property-form";
 import { createProperty, saveDraft, updateDraft } from "@/lib/actions/property";
 import { stepValidators } from "@/lib/validations/property";
 import { cn } from "@/lib/utils/cn";
+import { buttonClasses } from "@/Components/ui/Button";
 import { ArrowLeft, ArrowRight, Save, Loader2, Rocket, Sparkles, X } from "lucide-react";
 import Link from "next/link";
 import StepPropertyType from "@/Components/property/steps/step-property-type";
@@ -291,7 +292,10 @@ export default function PropertyFormWizard({ propertyId }: PropertyFormWizardPro
                         type="button"
                         onClick={handleSaveDraft}
                         disabled={isSavingDraft}
-                        className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-xl transition-colors disabled:opacity-50"
+                        className={buttonClasses({
+                            variant: "secondary",
+                            size: "sm",
+                        })}
                     >
                         {isSavingDraft ? (
                             <Loader2 className="w-4 h-4 animate-spin" />
@@ -347,12 +351,15 @@ export default function PropertyFormWizard({ propertyId }: PropertyFormWizardPro
                         type="button"
                         onClick={handlePrev}
                         disabled={isFirstStep}
-                        className={cn(
-                            "flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all",
-                            isFirstStep
-                                ? "text-gray-300 dark:text-gray-600 cursor-not-allowed"
-                                : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 underline underline-offset-4"
-                        )}
+                        className={buttonClasses({
+                            variant: "ghost",
+                            size: "md",
+                            className: cn(
+                                isFirstStep
+                                    ? "text-gray-300 dark:text-gray-600 cursor-not-allowed"
+                                    : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 underline underline-offset-4"
+                            ),
+                        })}
                     >
                         <ArrowLeft className="w-4 h-4" />
                         Back
@@ -365,7 +372,10 @@ export default function PropertyFormWizard({ propertyId }: PropertyFormWizardPro
                             type="button"
                             onClick={handlePublish}
                             disabled={isPublishing}
-                            className="flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white rounded-xl font-bold text-sm shadow-lg shadow-rose-500/25 transition-all disabled:opacity-50"
+                            className={buttonClasses({
+                                variant: "danger",
+                                size: "lg",
+                            })}
                         >
                             {isPublishing ? (
                                 <>
@@ -385,7 +395,10 @@ export default function PropertyFormWizard({ propertyId }: PropertyFormWizardPro
                             whileTap={{ scale: 0.98 }}
                             type="button"
                             onClick={handleNext}
-                            className="flex items-center gap-2 px-8 py-3.5 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-rose-500/25 transition-all"
+                            className={buttonClasses({
+                                variant: "danger",
+                                size: "lg",
+                            })}
                         >
                             Next
                             <ArrowRight className="w-4 h-4" />

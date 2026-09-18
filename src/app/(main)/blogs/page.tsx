@@ -144,6 +144,7 @@ function BlogsContent() {
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                         <input
                             type="text"
+                            aria-label="Search blogs"
                             value={search}
                             onChange={(e) => {
                                 setSearch(e.target.value);
@@ -162,6 +163,7 @@ function BlogsContent() {
                         )}
                     </div>
                     <select
+                        aria-label="Sort blogs"
                         value={sort}
                         onChange={(e) => {
                             setSort(e.target.value);
@@ -185,7 +187,7 @@ function BlogsContent() {
                                 setSelectedTag(selectedTag === tag ? "" : tag);
                                 setPage(1);
                             }}
-                            className={`px-3 py-1.5 text-xs font-medium rounded-full border transition-colors capitalize ${
+                            className={`px-3 py-2 text-xs font-medium rounded-full border transition-colors capitalize touch-44 ${
                                 selectedTag === tag
                                     ? "bg-indigo-600 border-indigo-600 text-white"
                                     : "border-slate-200 text-slate-600 hover:bg-slate-100 bg-white"
@@ -197,7 +199,7 @@ function BlogsContent() {
                     {hasFilters && (
                         <button
                             onClick={clearFilters}
-                            className="px-3 py-1.5 text-xs font-medium text-red-600 hover:text-red-700 transition-colors"
+                            className="px-3 py-2 text-xs font-medium text-red-600 hover:text-red-700 transition-colors touch-44"
                         >
                             Clear all
                         </button>
@@ -235,7 +237,7 @@ function BlogsContent() {
                                 <button
                                     onClick={() => setPage((p) => Math.max(1, p - 1))}
                                     disabled={!pagination.hasPrevPage}
-                                    className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                                    className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed touch-44"
                                 >
                                     Previous
                                 </button>
@@ -245,7 +247,7 @@ function BlogsContent() {
                                 <button
                                     onClick={() => setPage((p) => p + 1)}
                                     disabled={!pagination.hasNextPage}
-                                    className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                                    className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed touch-44"
                                 >
                                     Next
                                 </button>

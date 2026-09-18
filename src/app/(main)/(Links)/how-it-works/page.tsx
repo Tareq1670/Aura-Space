@@ -3,6 +3,7 @@
 import React, { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Button, { buttonClasses } from "@/Components/ui/Button";
 import {
     motion,
     useInView,
@@ -425,16 +426,16 @@ function StepCard({ step, index, reduceMotion }: StepCardProps) {
                     >
                         {step.icon}
                     </div>
-                    <div className="text-[11px] font-black uppercase tracking-[0.24em] text-slate-400">
+                    <div className="text-xs font-black uppercase tracking-eyebrow text-slate-400">
                         Step {step.number}
                     </div>
                 </div>
 
-                <h3 className="text-2xl font-black leading-tight tracking-[-0.025em] text-slate-950 sm:text-3xl md:text-[34px]">
+                <h3 className="text-2xl font-black leading-tight tracking-tight text-slate-950 sm:text-3xl md:text-4xl">
                     {step.title}
                 </h3>
 
-                <p className="mt-4 text-[15px] leading-[1.75] text-slate-500 sm:text-base">
+                <p className="mt-4 text-base leading-relaxed text-slate-500 sm:text-base">
                     {step.description}
                 </p>
 
@@ -514,17 +515,17 @@ function FaqAccordion({ faq, index, isOpen, onToggle }: FaqAccordionProps) {
             >
                 <div className="flex items-start gap-3 sm:gap-4">
                     <div
-                        className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[10px] font-black transition-colors duration-300 ${isOpen ? "bg-gradient-to-br from-indigo-500 to-violet-600 text-white" : "bg-slate-100 text-slate-500"}`}
+                        className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs font-black transition-colors duration-300 ${isOpen ? "bg-gradient-to-br from-indigo-500 to-violet-600 text-white" : "bg-slate-100 text-slate-500"}`}
                     >
                         {String(index + 1).padStart(2, "0")}
                     </div>
                     <div className="flex-1">
                         <div
-                            className={`mb-1 text-[9px] font-black uppercase tracking-[0.2em] transition-colors duration-300 ${isOpen ? "text-indigo-600" : "text-slate-400"}`}
+                            className={`mb-1 text-xs font-black uppercase tracking-eyebrow transition-colors duration-300 ${isOpen ? "text-indigo-600" : "text-slate-400"}`}
                         >
                             {faq.category}
                         </div>
-                        <h4 className="text-[15px] font-black leading-snug tracking-[-0.01em] text-slate-950 sm:text-base">
+                        <h4 className="text-base font-black leading-snug tracking-normal text-slate-950 sm:text-base">
                             {faq.q}
                         </h4>
                     </div>
@@ -551,7 +552,7 @@ function FaqAccordion({ faq, index, isOpen, onToggle }: FaqAccordionProps) {
                         className="overflow-hidden"
                     >
                         <div className="px-5 pb-5 pl-16 sm:px-6 sm:pb-6 sm:pl-[74px]">
-                            <p className="text-sm leading-[1.75] text-slate-600">
+                            <p className="text-sm leading-relaxed text-slate-600">
                                 {faq.a}
                             </p>
                         </div>
@@ -657,7 +658,7 @@ const HowItWorks = () => {
                     >
                         <motion.h1
                             variants={itemVariants}
-                            className="text-[34px] font-black leading-[1.05] tracking-[-0.035em] text-white sm:text-5xl md:text-[56px] lg:text-6xl"
+                            className="text-4xl font-black leading-display tracking-tight text-white sm:text-5xl md:text-6xl lg:text-6xl"
                         >
                             From Search to Stay in{" "}
                             <span className="text-white">Six Simple Steps</span>
@@ -665,7 +666,7 @@ const HowItWorks = () => {
 
                         <motion.p
                             variants={itemVariants}
-                            className="mx-auto mt-6 max-w-2xl text-base leading-[1.8] text-white/70 sm:text-lg"
+                            className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/70 sm:text-lg"
                         >
                             A seamless journey designed around you — whether
                             you&apos;re booking a premium stay, listing your
@@ -679,19 +680,20 @@ const HowItWorks = () => {
                         >
                             <Link
                                 href="/listings"
-                                className="group inline-flex h-[54px] items-center justify-center gap-2 rounded-full bg-white px-7 text-[11px] font-extrabold uppercase tracking-[0.18em] text-slate-950 shadow-[0_10px_28px_rgba(255,255,255,0.15)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_14px_36px_rgba(255,255,255,0.25)]"
+                                className={buttonClasses({ variant: "secondary", size: "lg" })}
                             >
                                 Start Exploring
-                                <HiOutlineArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                                <HiOutlineArrowRight className="h-4 w-4" />
                             </Link>
 
-                            <button
+                            <Button
                                 type="button"
-                                className="group inline-flex h-[54px] items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[0.08] px-7 text-[11px] font-extrabold uppercase tracking-[0.18em] text-white backdrop-blur-md transition-all duration-300 hover:border-white/40 hover:bg-white/[0.14]"
+                                variant="secondary"
+                                size="lg"
                             >
                                 <HiOutlinePlay className="h-4 w-4" />
                                 Watch Demo
-                            </button>
+                            </Button>
                         </motion.div>
 
                         <motion.div
@@ -751,7 +753,7 @@ const HowItWorks = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[46px]"
+                            className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
                         >
                             Built for people who value{" "}
                             <span className="text-slate-950">
@@ -761,7 +763,7 @@ const HowItWorks = () => {
 
                         <motion.p
                             variants={itemVariants}
-                            className="mx-auto mt-5 max-w-2xl text-[15px] leading-[1.8] text-slate-500 sm:text-base"
+                            className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-slate-500 sm:text-base"
                         >
                             We&apos;ve reimagined how Bangladesh discovers and
                             books extraordinary spaces. No hidden fees. No
@@ -790,10 +792,10 @@ const HowItWorks = () => {
                                 }
                                 className="rounded-[20px] border border-slate-200 bg-white p-5 text-center shadow-sm transition-all duration-300 hover:border-indigo-200 hover:shadow-md sm:p-6"
                             >
-                                <div className="text-3xl font-black tracking-[-0.02em] text-slate-950 sm:text-4xl">
+                                <div className="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
                                     {stat.value}
                                 </div>
-                                <div className="mt-2 text-[10px] font-black uppercase tracking-[0.16em] text-slate-500 sm:text-[11px]">
+                                <div className="mt-2 text-xs font-black uppercase tracking-eyebrow text-slate-500 sm:text-xs">
                                     {stat.label}
                                 </div>
                             </motion.div>
@@ -816,14 +818,14 @@ const HowItWorks = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[42px]"
+                            className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
                         >
                             Your journey, thoughtfully designed
                         </motion.h2>
 
                         <motion.p
                             variants={itemVariants}
-                            className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-[15px]"
+                            className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-base"
                         >
                             Six intentional steps that turn browsing into
                             unforgettable memories.
@@ -865,14 +867,14 @@ const HowItWorks = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[42px]"
+                            className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
                         >
                             Benefits that make the difference
                         </motion.h2>
 
                         <motion.p
                             variants={itemVariants}
-                            className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-[15px]"
+                            className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-base"
                         >
                             Every feature crafted with intention. Every detail
                             obsessed over.
@@ -911,20 +913,20 @@ const HowItWorks = () => {
                                     </div>
 
                                     <div className="text-right">
-                                        <div className="text-2xl font-black tracking-[-0.02em] text-slate-950">
+                                        <div className="text-2xl font-black tracking-tight text-slate-950">
                                             {benefit.stat}
                                         </div>
-                                        <div className="mt-0.5 text-[9px] font-black uppercase tracking-[0.16em] text-slate-400">
+                                        <div className="mt-0.5 text-xs font-black uppercase tracking-eyebrow text-slate-400">
                                             {benefit.statLabel}
                                         </div>
                                     </div>
                                 </div>
 
-                                <h3 className="relative mt-5 text-lg font-black leading-tight tracking-[-0.02em] text-slate-950 sm:text-xl">
+                                <h3 className="relative mt-5 text-lg font-black leading-tight tracking-tight text-slate-950 sm:text-xl">
                                     {benefit.title}
                                 </h3>
 
-                                <p className="relative mt-3 flex-1 text-[13px] leading-[1.75] text-slate-500">
+                                <p className="relative mt-3 flex-1 text-sm leading-relaxed text-slate-500">
                                     {benefit.description}
                                 </p>
                             </motion.div>
@@ -946,14 +948,14 @@ const HowItWorks = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[42px]"
+                            className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
                         >
                             Choose your path
                         </motion.h2>
 
                         <motion.p
                             variants={itemVariants}
-                            className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-[15px]"
+                            className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-base"
                         >
                             A tailored experience for guests, hosts, and event
                             planners.
@@ -980,7 +982,7 @@ const HowItWorks = () => {
                                 type="button"
                                 onClick={() => setActivePersona(persona.id)}
                                 aria-pressed={activePersona === persona.id}
-                                className={`relative flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-[11px] font-black uppercase tracking-[0.14em] transition-all duration-300 ${
+                                className={`relative flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-xs font-black uppercase tracking-eyebrow transition-all duration-300 ${
                                     activePersona === persona.id
                                         ? "text-white"
                                         : "text-slate-500 hover:text-slate-900"
@@ -1021,10 +1023,10 @@ const HowItWorks = () => {
                                     className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)] sm:p-8 lg:p-10"
                                 >
                                     <div className="mb-8 text-center">
-                                        <h3 className="text-2xl font-black leading-tight tracking-[-0.02em] text-slate-950 sm:text-3xl">
+                                        <h3 className="text-2xl font-black leading-tight tracking-tight text-slate-950 sm:text-3xl">
                                             {currentPersona.title}
                                         </h3>
-                                        <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-slate-500 sm:text-[15px]">
+                                        <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-slate-500 sm:text-base">
                                             {currentPersona.description}
                                         </p>
                                     </div>
@@ -1052,7 +1054,7 @@ const HowItWorks = () => {
                                                     </span>
                                                 </div>
 
-                                                <h4 className="text-sm font-black tracking-[-0.01em] text-slate-950">
+                                                <h4 className="text-sm font-black tracking-normal text-slate-950">
                                                     {step.title}
                                                 </h4>
 
@@ -1093,14 +1095,14 @@ const HowItWorks = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[42px]"
+                            className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
                         >
                             Loved by thousands
                         </motion.h2>
 
                         <motion.p
                             variants={itemVariants}
-                            className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-[15px]"
+                            className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-base"
                         >
                             Real experiences from real people using AuraSpace
                             every day.
@@ -1142,7 +1144,7 @@ const HowItWorks = () => {
                                     ))}
                                 </div>
 
-                                <p className="flex-1 text-[15px] leading-[1.7] text-slate-700">
+                                <p className="flex-1 text-base leading-relaxed text-slate-700">
                                     &ldquo;{testimonial.quote}&rdquo;
                                 </p>
 
@@ -1184,14 +1186,14 @@ const HowItWorks = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[42px]"
+                            className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
                         >
                             Everything you need to know
                         </motion.h2>
 
                         <motion.p
                             variants={itemVariants}
-                            className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-[15px]"
+                            className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-base"
                         >
                             Answers to the most frequently asked questions about
                             how AuraSpace works.
@@ -1230,7 +1232,7 @@ const HowItWorks = () => {
                         <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-indigo-600 shadow-sm">
                             <HiOutlineHeart className="h-5 w-5" />
                         </div>
-                        <h4 className="text-base font-black tracking-[-0.01em] text-slate-950 sm:text-lg">
+                        <h4 className="text-base font-black tracking-normal text-slate-950 sm:text-lg">
                             Still have questions?
                         </h4>
                         <p className="mx-auto mt-2 max-w-md text-sm text-slate-600">
@@ -1239,7 +1241,7 @@ const HowItWorks = () => {
                         </p>
                         <Link
                             href="/contact"
-                            className="mt-4 inline-flex items-center gap-2 rounded-full bg-slate-950 px-5 py-2.5 text-[11px] font-extrabold uppercase tracking-[0.14em] text-white shadow-md transition-all duration-300 hover:bg-slate-800"
+                            className={buttonClasses({ variant: "primary", size: "md", className: "mt-4" })}
                         >
                             Contact Support
                             <HiOutlineArrowRight className="h-3.5 w-3.5" />
@@ -1276,14 +1278,14 @@ const HowItWorks = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.05] tracking-[-0.03em] text-white sm:text-5xl md:text-[56px]"
+                            className="text-3xl font-black leading-display tracking-tight text-white sm:text-5xl md:text-6xl"
                         >
                             Your next great experience awaits
                         </motion.h2>
 
                         <motion.p
                             variants={itemVariants}
-                            className="mx-auto mt-6 max-w-2xl text-base leading-[1.8] text-white/70 sm:text-lg"
+                            className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/70 sm:text-lg"
                         >
                             Join over 50,000 travelers, hosts, and event
                             planners who trust AuraSpace to discover
@@ -1296,15 +1298,15 @@ const HowItWorks = () => {
                         >
                             <Link
                                 href="/listings"
-                                className="group inline-flex h-[56px] items-center justify-center gap-2 rounded-full bg-white px-8 text-[11px] font-extrabold uppercase tracking-[0.18em] text-slate-950 shadow-[0_14px_36px_rgba(255,255,255,0.18)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_18px_42px_rgba(255,255,255,0.28)]"
+                                className={buttonClasses({ variant: "secondary", size: "lg" })}
                             >
                                 Start Booking
-                                <HiOutlineArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                                <HiOutlineArrowRight className="h-4 w-4" />
                             </Link>
 
                             <Link
                                 href="/dashboard/host/items/add"
-                                className="group inline-flex h-[56px] items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[0.08] px-8 text-[11px] font-extrabold uppercase tracking-[0.18em] text-white backdrop-blur-md transition-all duration-300 hover:border-white/40 hover:bg-white/[0.14]"
+                                className={buttonClasses({ variant: "secondary", size: "lg" })}
                             >
                                 Become a Host
                                 <HiOutlineTrendingUp className="h-4 w-4" />
@@ -1346,7 +1348,7 @@ const HowItWorks = () => {
                                     <div className="text-xl font-black text-white sm:text-2xl">
                                         {item.value}
                                     </div>
-                                    <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-white/50">
+                                    <div className="text-xs font-bold uppercase tracking-eyebrow text-white/50">
                                         {item.label}
                                     </div>
                                 </div>

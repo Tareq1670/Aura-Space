@@ -3,6 +3,7 @@
 import React, { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Button, { buttonClasses } from "@/Components/ui/Button";
 import {
     motion,
     useInView,
@@ -463,7 +464,7 @@ const CommunityPage = () => {
                     >
                         <motion.h1
                             variants={itemVariants}
-                            className="text-[40px] font-black leading-[1.05] tracking-[-0.035em] text-white sm:text-6xl md:text-[72px] lg:text-7xl"
+                            className="text-5xl font-black leading-display tracking-tight text-white sm:text-6xl md:text-7xl lg:text-7xl"
                         >
                             Where Travelers{" "}
                             <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-fuchsia-300 bg-clip-text text-transparent">
@@ -473,7 +474,7 @@ const CommunityPage = () => {
 
                         <motion.p
                             variants={itemVariants}
-                            className="mx-auto mt-6 max-w-2xl text-lg leading-[1.8] text-white/60 sm:text-xl"
+                            className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/60 sm:text-xl"
                         >
                             Join a vibrant community of explorers, hosts, and
                             dreamers. Share stories, get insider tips, and make
@@ -486,15 +487,15 @@ const CommunityPage = () => {
                         >
                             <Link
                                 href="#join"
-                                className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-white px-8 text-sm font-extrabold uppercase tracking-[0.16em] text-slate-950 shadow-[0_10px_40px_rgba(255,255,255,0.2)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_14px_50px_rgba(255,255,255,0.3)]"
+                                className={buttonClasses({ variant: "secondary", size: "lg" })}
                             >
                                 Join Community
-                                <HiOutlineArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                                <HiOutlineArrowRight className="h-5 w-5" />
                             </Link>
 
                             <Link
                                 href="#explore"
-                                className="group inline-flex h-14 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[0.06] px-8 text-sm font-extrabold uppercase tracking-[0.16em] text-white backdrop-blur-md transition-all duration-300 hover:border-white/40 hover:bg-white/[0.12]"
+                                className={buttonClasses({ variant: "secondary", size: "lg" })}
                             >
                                 <HiOutlinePlay className="h-5 w-5" />
                                 Watch Video
@@ -570,10 +571,10 @@ const CommunityPage = () => {
                                 >
                                     {stat.icon}
                                 </div>
-                                <div className="text-2xl font-black tracking-[-0.02em] text-slate-950 sm:text-3xl">
+                                <div className="text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
                                     {stat.value}
                                 </div>
-                                <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                                <div className="mt-1 text-xs font-bold uppercase tracking-eyebrow text-slate-500">
                                     {stat.label}
                                 </div>
                             </motion.div>
@@ -593,7 +594,7 @@ const CommunityPage = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[46px]"
+                            className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
                         >
                             More than just{" "}
                             <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
@@ -637,11 +638,11 @@ const CommunityPage = () => {
                                     {feature.icon}
                                 </div>
 
-                                <h3 className="text-xl font-black tracking-[-0.02em] text-slate-950">
+                                <h3 className="text-xl font-black tracking-tight text-slate-950">
                                     {feature.title}
                                 </h3>
 
-                                <p className="mt-3 text-[15px] leading-[1.7] text-slate-500">
+                                <p className="mt-3 text-base leading-relaxed text-slate-500">
                                     {feature.description}
                                 </p>
 
@@ -663,7 +664,7 @@ const CommunityPage = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[46px]"
+                            className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
                         >
                             Featured Groups
                         </motion.h2>
@@ -720,13 +721,15 @@ const CommunityPage = () => {
                                         {group.description}
                                     </p>
 
-                                    <button
+                                    <Button
                                         onClick={() => toggleGroup(group.id)}
-                                        className={`mt-5 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold uppercase tracking-wider transition-all duration-300 ${
+                                        variant={
                                             joinedGroups.includes(group.id)
-                                                ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200"
-                                                : "bg-slate-950 text-white hover:bg-slate-800"
-                                        }`}
+                                                ? "success"
+                                                : "primary"
+                                        }
+                                        fullWidth
+                                        className="mt-5"
                                     >
                                         {joinedGroups.includes(group.id) ? (
                                             <>
@@ -739,7 +742,7 @@ const CommunityPage = () => {
                                                 Join Group
                                             </>
                                         )}
-                                    </button>
+                                    </Button>
                                 </div>
                             </motion.div>
                         ))}
@@ -758,7 +761,7 @@ const CommunityPage = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[46px]"
+                            className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
                         >
                             Stories from our{" "}
                             <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
@@ -804,7 +807,7 @@ const CommunityPage = () => {
                                 </div>
 
                                 <div className="p-6">
-                                    <p className="text-[15px] leading-relaxed text-slate-700">
+                                    <p className="text-base leading-relaxed text-slate-700">
                                         {post.content}
                                     </p>
 
@@ -839,10 +842,13 @@ const CommunityPage = () => {
                             variants={itemVariants}
                             className="text-center"
                         >
-                            <button className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-8 text-sm font-bold uppercase tracking-wider text-slate-950 shadow-sm transition-all duration-300 hover:border-indigo-200 hover:bg-indigo-50/50">
+                            <Button
+                                variant="secondary"
+                                size="lg"
+                            >
                                 Load More Stories
                                 <HiOutlineChevronDown className="h-5 w-5" />
-                            </button>
+                            </Button>
                         </motion.div>
                     </motion.div>
                 </div>
@@ -859,7 +865,7 @@ const CommunityPage = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[46px]"
+                            className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
                         >
                             Join the conversation
                         </motion.h2>
@@ -898,7 +904,7 @@ const CommunityPage = () => {
                                     <div className="absolute bottom-4 left-4 right-4">
                                         <div className="flex items-center gap-2 text-white">
                                             <div className="flex h-10 w-10 flex-col items-center justify-center rounded-xl bg-white/20 backdrop-blur-md">
-                                                <span className="text-[10px] font-bold uppercase">
+                                                <span className="text-xs font-bold uppercase">
                                                     {event.date.split(" ")[0]}
                                                 </span>
                                                 <span className="text-lg font-black leading-none">
@@ -951,9 +957,12 @@ const CommunityPage = () => {
                                         <span className="text-xs font-medium text-slate-500">
                                             Hosted by {event.host}
                                         </span>
-                                        <button className="rounded-full bg-slate-950 px-5 py-2 text-xs font-bold uppercase tracking-wider text-white transition-all hover:bg-slate-800">
+                                        <Button
+                                            variant="primary"
+                                            size="sm"
+                                        >
                                             Register
-                                        </button>
+                                        </Button>
                                     </div>
                                 </div>
                             </motion.div>
@@ -973,7 +982,7 @@ const CommunityPage = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[46px]"
+                            className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
                         >
                             Loved by our{" "}
                             <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
@@ -1014,7 +1023,7 @@ const CommunityPage = () => {
                                     )}
                                 </div>
 
-                                <p className="text-[17px] leading-[1.7] text-slate-700">
+                                <p className="text-base leading-relaxed text-slate-700">
                                     &ldquo;{testimonial.quote}&rdquo;
                                 </p>
 
@@ -1055,7 +1064,7 @@ const CommunityPage = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[46px]"
+                            className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
                         >
                             Moments that matter
                         </motion.h2>
@@ -1103,7 +1112,7 @@ const CommunityPage = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[46px]"
+                            className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
                         >
                             Frequently asked questions
                         </motion.h2>
@@ -1163,7 +1172,7 @@ const CommunityPage = () => {
                                             className="overflow-hidden"
                                         >
                                             <div className="px-6 pb-6">
-                                                <p className="text-[15px] leading-[1.75] text-slate-600">
+                                                <p className="text-base leading-relaxed text-slate-600">
                                                     {faq.a}
                                                 </p>
                                             </div>
@@ -1208,7 +1217,7 @@ const CommunityPage = () => {
 
                         <motion.h2
                             variants={itemVariants}
-                            className="text-3xl font-black leading-[1.05] tracking-[-0.03em] text-white sm:text-5xl md:text-6xl"
+                            className="text-3xl font-black leading-display tracking-tight text-white sm:text-5xl md:text-6xl"
                         >
                             Ready to join our{" "}
                             <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-fuchsia-300 bg-clip-text text-transparent">
@@ -1231,15 +1240,15 @@ const CommunityPage = () => {
                         >
                             <Link
                                 href="/register"
-                                className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-white px-10 text-sm font-extrabold uppercase tracking-[0.16em] text-slate-950 shadow-[0_14px_40px_rgba(255,255,255,0.2)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_18px_50px_rgba(255,255,255,0.3)]"
+                                className={buttonClasses({ variant: "secondary", size: "lg" })}
                             >
                                 Join Now — It&apos;s Free
-                                <HiOutlineArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                                <HiOutlineArrowRight className="h-5 w-5" />
                             </Link>
 
                             <Link
                                 href="/about"
-                                className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[0.06] px-10 text-sm font-extrabold uppercase tracking-[0.16em] text-white backdrop-blur-md transition-all duration-300 hover:border-white/40 hover:bg-white/[0.12]"
+                                className={buttonClasses({ variant: "secondary", size: "lg" })}
                             >
                                 Learn More
                             </Link>
@@ -1253,7 +1262,7 @@ const CommunityPage = () => {
                                 <div className="text-2xl font-black text-white">
                                     50K+
                                 </div>
-                                <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+                                <div className="mt-1 text-xs font-bold uppercase tracking-eyebrow text-white/40">
                                     Members
                                 </div>
                             </div>
@@ -1262,7 +1271,7 @@ const CommunityPage = () => {
                                 <div className="text-2xl font-black text-white">
                                     4.9
                                 </div>
-                                <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+                                <div className="mt-1 text-xs font-bold uppercase tracking-eyebrow text-white/40">
                                     Rating
                                 </div>
                             </div>
@@ -1271,7 +1280,7 @@ const CommunityPage = () => {
                                 <div className="text-2xl font-black text-white">
                                     100%
                                 </div>
-                                <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+                                <div className="mt-1 text-xs font-bold uppercase tracking-eyebrow text-white/40">
                                     Free
                                 </div>
                             </div>

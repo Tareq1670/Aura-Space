@@ -6,6 +6,7 @@ import { toast } from "sonner"
 import { CreditCard, Search, AlertCircle, RefreshCw } from "lucide-react"
 import { Label, ListBox, Pagination, Select, Skeleton } from "@heroui/react"
 import { transactionAPI, type TransactionItem } from "@/lib/api/Guest/transaction-api"
+import Button from "@/Components/ui/Button"
 import StatCard from "@/Components/Dashboard/StatCard"
 import { formatCurrency } from "@/lib/currency"
 
@@ -210,13 +211,14 @@ export default function GuestTransactionsPage() {
           </div>
           <p className="text-lg font-semibold text-gray-900">Failed to load transactions</p>
           <p className="mt-1 text-sm text-gray-400">{error}</p>
-          <button
+          <Button
             onClick={() => window.location.reload()}
-            className="mt-6 flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800"
+            variant="primary"
+            className="mt-6"
+            leftIcon={<RefreshCw className="h-4 w-4" />}
           >
-            <RefreshCw className="h-4 w-4" />
             Try Again
-          </button>
+          </Button>
         </motion.div>
       ) : loading ? (
         <div className="space-y-4">

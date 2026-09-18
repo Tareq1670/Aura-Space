@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import type { ReactNode } from "react";
 import ModalPortal from "@/lib/modal-portal";
+import { buttonClasses } from "@/Components/ui/Button";
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -97,7 +98,10 @@ export default function ConfirmModal({
                 whileTap={{ scale: 0.99 }}
                 onClick={onClose}
                 disabled={loading}
-                className="flex-1 py-2.5 px-5 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl text-gray-600 text-sm font-semibold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className={buttonClasses({
+                  variant: "secondary",
+                  className: "flex-1",
+                })}
               >
                 {cancelText}
               </motion.button>
@@ -107,7 +111,10 @@ export default function ConfirmModal({
                 whileTap={!loading ? { scale: 0.99 } : {}}
                 onClick={onConfirm}
                 disabled={loading}
-                className={`flex-1 py-2.5 px-5 bg-gradient-to-r ${v.gradient} rounded-xl text-white text-sm font-semibold cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shadow-lg ${v.shadow} flex items-center justify-center gap-2 transition-all`}
+                className={buttonClasses({
+                  variant: variant === "danger" ? "danger" : "primary",
+                  className: "flex-1",
+                })}
               >
                 {loading && (
                   <motion.span

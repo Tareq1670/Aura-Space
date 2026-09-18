@@ -16,6 +16,7 @@ import {
     Loader2,
 } from "lucide-react";
 import { getMyBlogs, deleteBlog, type Blog, type PaginationInfo } from "@/lib/actions/blog";
+import Button, { buttonClasses } from "@/Components/ui/Button";
 
 const STATUS_OPTIONS = [
     { value: "", label: "All" },
@@ -126,7 +127,7 @@ export default function BlogListPage({ backLink }: BlogListPageProps) {
                 </div>
                 <Link
                     href={backLink.create}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition-colors"
+                    className={buttonClasses({ variant: "primary" })}
                 >
                     <Plus className="w-4 h-4" />
                     New Blog
@@ -141,7 +142,7 @@ export default function BlogListPage({ backLink }: BlogListPageProps) {
                             setStatusFilter(opt.value);
                             setPage(1);
                         }}
-                        className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+                        className={`px-3 py-2 text-xs font-medium rounded-lg border transition-colors touch-44 ${
                             statusFilter === opt.value
                                 ? "bg-indigo-50 border-indigo-300 text-indigo-700"
                                 : "border-gray-200 text-gray-600 hover:bg-gray-50"
@@ -218,7 +219,7 @@ export default function BlogListPage({ backLink }: BlogListPageProps) {
 
                                     <div className="flex md:hidden items-center gap-2 mt-2 flex-wrap">
                                         <span
-                                            className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium capitalize ${STATUS_STYLES[blog.status] || "bg-gray-50 text-gray-600"}`}
+                                            className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium capitalize ${STATUS_STYLES[blog.status] || "bg-gray-50 text-gray-600"}`}
                                         >
                                             {blog.status}
                                         </span>
@@ -239,7 +240,8 @@ export default function BlogListPage({ backLink }: BlogListPageProps) {
                                         <Link
                                             href={`/blogs/${blog.slug}`}
                                             target="_blank"
-                                            className="flex items-center justify-center w-7 h-7 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+                                            aria-label="View blog"
+                                            className="flex items-center justify-center w-9 h-9 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors touch-44"
                                             title="View"
                                         >
                                             <Eye className="w-3.5 h-3.5" />
@@ -248,14 +250,16 @@ export default function BlogListPage({ backLink }: BlogListPageProps) {
                                             onClick={() =>
                                                 router.push(`${backLink.edit}/${blog.id}`)
                                             }
-                                            className="flex items-center justify-center w-7 h-7 rounded-lg text-indigo-500 hover:text-indigo-700 hover:bg-indigo-50 transition-colors"
+                                            aria-label="Edit blog"
+                                            className="flex items-center justify-center w-9 h-9 rounded-lg text-indigo-500 hover:text-indigo-700 hover:bg-indigo-50 transition-colors touch-44"
                                             title="Edit"
                                         >
                                             <Edit3 className="w-3.5 h-3.5" />
                                         </button>
                                         <button
                                             onClick={() => setDeleteId(blog.id)}
-                                            className="flex items-center justify-center w-7 h-7 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                                            aria-label="Delete blog"
+                                            className="flex items-center justify-center w-9 h-9 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 transition-colors touch-44"
                                             title="Delete"
                                         >
                                             <Trash2 className="w-3.5 h-3.5" />
@@ -266,7 +270,7 @@ export default function BlogListPage({ backLink }: BlogListPageProps) {
                                         <div></div>
 
                                         <span
-                                            className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium capitalize w-fit ${STATUS_STYLES[blog.status] || "bg-gray-50 text-gray-600"}`}
+                                            className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium capitalize w-fit ${STATUS_STYLES[blog.status] || "bg-gray-50 text-gray-600"}`}
                                         >
                                             {blog.status}
                                         </span>
@@ -281,7 +285,7 @@ export default function BlogListPage({ backLink }: BlogListPageProps) {
                                             {blog.readingTime}m
                                         </span>
 
-                                        <span className="text-[11px] lg:text-xs text-gray-400 truncate">
+                                        <span className="text-xs lg:text-xs text-gray-400 truncate">
                                             {formatDate(blog.createdAt)}
                                         </span>
 
@@ -289,7 +293,8 @@ export default function BlogListPage({ backLink }: BlogListPageProps) {
                                             <Link
                                                 href={`/blogs/${blog.slug}`}
                                                 target="_blank"
-                                                className="flex items-center justify-center w-7 h-7 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+                                                aria-label="View blog"
+                                                className="flex items-center justify-center w-9 h-9 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors touch-44"
                                                 title="View"
                                             >
                                                 <Eye className="w-3.5 h-3.5" />
@@ -298,14 +303,16 @@ export default function BlogListPage({ backLink }: BlogListPageProps) {
                                                 onClick={() =>
                                                     router.push(`${backLink.edit}/${blog.id}`)
                                                 }
-                                                className="flex items-center justify-center w-7 h-7 rounded-lg text-indigo-500 hover:text-indigo-700 hover:bg-indigo-50 transition-colors"
+                                                aria-label="Edit blog"
+                                                className="flex items-center justify-center w-9 h-9 rounded-lg text-indigo-500 hover:text-indigo-700 hover:bg-indigo-50 transition-colors touch-44"
                                                 title="Edit"
                                             >
                                                 <Edit3 className="w-3.5 h-3.5" />
                                             </button>
                                             <button
                                                 onClick={() => setDeleteId(blog.id)}
-                                                className="flex items-center justify-center w-7 h-7 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                                                aria-label="Delete blog"
+                                                className="flex items-center justify-center w-9 h-9 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 transition-colors touch-44"
                                                 title="Delete"
                                             >
                                                 <Trash2 className="w-3.5 h-3.5" />
@@ -324,20 +331,22 @@ export default function BlogListPage({ backLink }: BlogListPageProps) {
                             Page {pagination.currentPage} of {pagination.totalPages}
                         </span>
                         <div className="flex items-center gap-2">
-                            <button
+                            <Button
                                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                                 disabled={!pagination.hasPrevPage}
-                                className="px-3 py-1.5 text-xs font-medium rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40"
+                                variant="secondary"
+                                size="sm"
                             >
                                 Previous
-                            </button>
-                            <button
+                            </Button>
+                            <Button
                                 onClick={() => setPage((p) => p + 1)}
                                 disabled={!pagination.hasNextPage}
-                                className="px-3 py-1.5 text-xs font-medium rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40"
+                                variant="secondary"
+                                size="sm"
                             >
                                 Next
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 )}
@@ -367,17 +376,18 @@ export default function BlogListPage({ backLink }: BlogListPageProps) {
                                 This action cannot be undone. The blog will be permanently removed.
                             </p>
                             <div className="flex items-center justify-end gap-2">
-                                <button
+                                <Button
                                     onClick={() => setDeleteId(null)}
                                     disabled={deleting}
-                                    className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors"
+                                    variant="ghost"
+                                    size="sm"
                                 >
                                     Cancel
-                                </button>
-                                <button
+                                </Button>
+                                <Button
                                     onClick={handleDelete}
                                     disabled={deleting}
-                                    className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+                                    variant="danger"
                                 >
                                     {deleting ? (
                                         <Loader2 className="w-4 h-4 animate-spin" />
@@ -385,7 +395,7 @@ export default function BlogListPage({ backLink }: BlogListPageProps) {
                                         <Trash2 className="w-4 h-4" />
                                     )}
                                     Delete
-                                </button>
+                                </Button>
                             </div>
                         </motion.div>
                     </motion.div>

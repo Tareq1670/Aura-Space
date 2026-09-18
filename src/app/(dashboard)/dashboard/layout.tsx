@@ -220,7 +220,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                                     <span className="text-base font-bold text-gray-900 tracking-tight">
                                         AuraSpace
                                     </span>
-                                    <span className="px-1.5 py-0.5 rounded-md bg-gradient-to-r from-violet-500 to-indigo-500 text-[8px] font-bold text-white uppercase">
+                                    <span className="px-1.5 py-0.5 rounded-md bg-gradient-to-r from-violet-500 to-indigo-500 text-xs font-bold text-white uppercase">
                                         {roleLabel}
                                     </span>
                                 </div>
@@ -228,14 +228,14 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                         </div>
 
                         <div className="flex items-center gap-2">
-                            <button className="relative w-10 h-10 rounded-xl bg-white border border-gray-200 shadow-sm flex items-center justify-center text-gray-700 hover:bg-gray-50 hover:text-violet-600 transition-colors">
+                            <button className="relative w-10 h-10 rounded-xl bg-white border border-gray-200 shadow-sm flex items-center justify-center text-gray-700 hover:bg-gray-50 hover:text-violet-600 transition-colors touch-44">
                                 <HiBell className="w-4 h-4" />
                                 <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500 ring-2 ring-white" />
                             </button>
 
                             <button
                                 onClick={() => setSidebarOpen(true)}
-                                className="relative"
+                                className="relative touch-44"
                             >
                                 {user.image ? (
                                     <Image

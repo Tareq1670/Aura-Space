@@ -57,7 +57,7 @@ export default function StepPropertyType({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.1 }}
-                    className="text-gray-500 dark:text-gray-400 mb-6"
+                    className="text-gray-500 dark:text-gray-500 mb-6"
                 >
                     Choose the option that best describes your property
                 </motion.p>
@@ -88,6 +88,7 @@ export default function StepPropertyType({
                                 variants={itemVariants}
                                 whileHover={{ scale: 1.03, y: -2 }}
                                 whileTap={{ scale: 0.97 }}
+                                aria-pressed={isSelected}
                                 onClick={() =>
                                     updateFormData({ propertyType: type.id })
                                 }
@@ -134,7 +135,7 @@ export default function StepPropertyType({
                                 >
                                     {type.label}
                                 </span>
-                                <span className="text-xs text-gray-400 dark:text-gray-500 text-center leading-tight">
+                                <span className="text-xs text-gray-500 dark:text-gray-500 text-center leading-tight">
                                     {type.description}
                                 </span>
                             </motion.button>
@@ -157,7 +158,7 @@ export default function StepPropertyType({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.35 }}
-                    className="text-gray-500 dark:text-gray-400 mb-6"
+                    className="text-gray-500 dark:text-gray-500 mb-6"
                 >
                     Select the arrangement that matches your listing
                 </motion.p>
@@ -187,6 +188,7 @@ export default function StepPropertyType({
                                 variants={itemVariants}
                                 whileHover={{ scale: 1.01 }}
                                 whileTap={{ scale: 0.99 }}
+                                aria-pressed={isSelected}
                                 onClick={() =>
                                     updateFormData({ placeType: type.id })
                                 }
@@ -208,7 +210,7 @@ export default function StepPropertyType({
                                     >
                                         {type.label}
                                     </h4>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                    <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
                                         {type.description}
                                     </p>
                                 </div>

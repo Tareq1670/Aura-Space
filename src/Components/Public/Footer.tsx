@@ -8,6 +8,7 @@ import {
   useReducedMotion,
   type Variants,
 } from "framer-motion";
+import { buttonClasses } from "@/Components/ui/Button";
 
 const exploreLinks = [
   { label: "All Listings", href: "/listings" },
@@ -123,7 +124,7 @@ function LinkColumn({
 }) {
   return (
     <motion.div variants={itemVariants}>
-      <h4 className="mb-4 text-[11px] font-extrabold uppercase tracking-[0.18em] text-white">
+      <h4 className="mb-4 text-xs font-extrabold uppercase tracking-eyebrow text-white">
         {title}
       </h4>
       <ul className="space-y-3">
@@ -131,7 +132,7 @@ function LinkColumn({
           <li key={link.label}>
             <Link
               href={link.href}
-              className="group inline-flex items-center gap-1.5 text-sm text-white/60 transition-colors duration-300 hover:text-white"
+              className="group inline-flex items-center gap-1.5 text-sm text-white/75 transition-colors duration-300 hover:text-white"
             >
               <motion.span
                 className="inline-block h-1 w-1 rounded-full bg-indigo-400 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
@@ -241,12 +242,12 @@ export default function Footer() {
                   />
                 </svg>
               </motion.div>
-              <span className="text-xl font-black tracking-[-0.02em] text-white">
+              <span className="text-xl font-black tracking-tight text-white">
                 Aura<span className="bg-gradient-to-r from-indigo-300 to-violet-300 bg-clip-text text-transparent">Space</span>
               </span>
             </Link>
 
-            <p className="mt-5 max-w-sm text-sm leading-[1.8] text-white/60">
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/75">
               Book premium stays, luxury villas, and exclusive event venues
               from a curated collection of verified properties worldwide.
             </p>
@@ -270,7 +271,7 @@ export default function Footer() {
                 </div>
                 <a
                   href="mailto:hello@auraspace.com"
-                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
+                  className="text-sm text-white/75 transition-colors duration-300 hover:text-white"
                 >
                   hello@auraspace.com
                 </a>
@@ -294,7 +295,7 @@ export default function Footer() {
                 </div>
                 <a
                   href="tel:+1234567890"
-                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
+                  className="text-sm text-white/75 transition-colors duration-300 hover:text-white"
                 >
                   +1 (234) 567-890
                 </a>
@@ -321,7 +322,7 @@ export default function Footer() {
                     />
                   </svg>
                 </div>
-                <p className="text-sm text-white/60">
+                <p className="text-sm text-white/75">
                   Dhaka, Bangladesh
                 </p>
               </li>
@@ -347,10 +348,10 @@ export default function Footer() {
           </div>
 
           <motion.div variants={itemVariants} className="lg:col-span-3">
-            <h4 className="mb-4 text-[11px] font-extrabold uppercase tracking-[0.18em] text-white">
+            <h4 className="mb-4 text-xs font-extrabold uppercase tracking-eyebrow text-white">
               Stay Updated
             </h4>
-            <p className="text-sm leading-[1.7] text-white/60">
+            <p className="text-sm leading-relaxed text-white/75">
               Subscribe to receive curated premium stays and exclusive
               AuraSpace opportunities.
             </p>
@@ -365,7 +366,7 @@ export default function Footer() {
                 }}
                 placeholder="Your email address"
                 aria-label="Email address"
-                className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.06] px-4 text-sm font-medium text-white outline-none transition-all duration-300 placeholder:text-white/40 focus:border-indigo-400/60 focus:bg-white/[0.10] focus:ring-2 focus:ring-indigo-400/20"
+                className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.06] px-4 text-sm font-medium text-white outline-none transition-all duration-300 placeholder:text-white/70 focus:border-indigo-400/60 focus:bg-white/[0.10] focus:ring-2 focus:ring-indigo-400/20"
               />
 
               <motion.button
@@ -376,7 +377,7 @@ export default function Footer() {
                     : { scale: 1.02, boxShadow: "0 12px 28px rgba(99,102,241,0.30)" }
                 }
                 whileTap={reduceMotion ? undefined : { scale: 0.98 }}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-600 px-4 text-[11px] font-extrabold uppercase tracking-[0.16em] text-white shadow-lg shadow-indigo-500/20 transition-all duration-300 hover:from-indigo-600 hover:to-violet-700"
+                className={buttonClasses({ variant: "primary", size: "md", className: "w-full uppercase tracking-eyebrow" })}
               >
                 Subscribe
                 <svg
@@ -421,7 +422,7 @@ export default function Footer() {
           }}
           className="flex flex-col items-center justify-between gap-5 border-t border-white/10 py-6 sm:flex-row sm:py-8"
         >
-          <p className="text-xs text-white/50">
+          <p className="text-xs text-white/75">
             © {currentYear}{" "}
             <span className="font-bold text-white/80">AuraSpace</span>. All
             rights reserved.
@@ -449,14 +450,14 @@ export default function Footer() {
                       }
                 }
                 whileTap={reduceMotion ? undefined : { scale: 0.95 }}
-                className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.06] text-white/60 transition-all duration-300 hover:border-indigo-400/40 hover:bg-indigo-500/10 hover:text-white"
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.06] text-white/75 transition-all duration-300 hover:border-indigo-400/40 hover:bg-indigo-500/10 hover:text-white"
               >
                 {social.icon}
               </motion.a>
             ))}
           </div>
 
-          <div className="flex items-center gap-4 text-xs text-white/40">
+          <div className="flex items-center gap-4 text-xs text-white/70">
             <Link href="/privacy" className="hover:text-white/80 transition-colors duration-300">
               Privacy
             </Link>

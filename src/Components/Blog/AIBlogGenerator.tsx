@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, X, Loader2, Wand2 } from "lucide-react";
 import { toast } from "sonner";
 import { generateBlogWithAI, type AIBlogResponse } from "@/lib/actions/blog";
+import Button from "@/Components/ui/Button";
 import ModalPortal from "@/lib/modal-portal";
 
 interface AIBlogGeneratorProps {
@@ -42,6 +43,15 @@ export default function AIBlogGenerator({ isOpen, onClose, onGenerated }: AIBlog
     const [length, setLength] = useState("medium");
     const [isGenerating, setIsGenerating] = useState(false);
 
+    useEffect(() => {
+        if (!isOpen) return;
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") onClose();
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [isOpen, onClose]);
+
     const handleGenerate = async () => {
         if (!topic.trim() || topic.trim().length < 3) {
             toast.error("Topic must be at least 3 characters.");
@@ -74,6 +84,7 @@ export default function AIBlogGenerator({ isOpen, onClose, onGenerated }: AIBlog
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+                        aria-hidden="true"
                         onClick={(e) => {
                             if (e.target === e.currentTarget) onClose();
                         }}
@@ -84,6 +95,9 @@ export default function AIBlogGenerator({ isOpen, onClose, onGenerated }: AIBlog
                             exit={{ opacity: 0, scale: 0.95, y: 10 }}
                             transition={{ type: "spring", damping: 25, stiffness: 300 }}
                             className="w-full max-w-lg bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden"
+                            role="dialog"
+                            aria-modal="true"
+                            aria-label="AI blog generator"
                         >
                         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
                             <div className="flex items-center gap-2">
@@ -97,7 +111,8 @@ export default function AIBlogGenerator({ isOpen, onClose, onGenerated }: AIBlog
                             </div>
                             <button
                                 onClick={onClose}
-                                className="flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+                                aria-label="Close AI blog generator"
+                                className="flex items-center justify-center w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors touch-44"
                             >
                                 <X className="w-4 h-4" />
                             </button>
@@ -105,10 +120,11 @@ export default function AIBlogGenerator({ isOpen, onClose, onGenerated }: AIBlog
 
                         <div className="p-5 space-y-4">
                             <div>
-                                <label className="block text-xs font-medium text-slate-700 mb-1.5">
+                                <label htmlFor="aiblog-topic" className="block text-xs font-medium text-slate-700 mb-1.5">
                                     Topic <span className="text-red-500">*</span>
                                 </label>
                                 <input
+                                    id="aiblog-topic"
                                     type="text"
                                     value={topic}
                                     onChange={(e) => setTopic(e.target.value)}
@@ -127,7 +143,8 @@ export default function AIBlogGenerator({ isOpen, onClose, onGenerated }: AIBlog
                                             type="button"
                                             onClick={() => setTone(t.value)}
                                             disabled={isGenerating}
-                                            className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+                                            aria-pressed={tone === t.value}
+                                            className={`px-3 py-2 text-xs font-medium rounded-lg border transition-colors touch-44 ${
                                                 tone === t.value
                                                     ? "bg-indigo-50 border-indigo-300 text-indigo-700"
                                                     : "border-slate-200 text-slate-600 hover:bg-slate-50"
@@ -148,7 +165,8 @@ export default function AIBlogGenerator({ isOpen, onClose, onGenerated }: AIBlog
                                             type="button"
                                             onClick={() => setStyle(s.value)}
                                             disabled={isGenerating}
-                                            className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+                                            aria-pressed={style === s.value}
+                                            className={`px-3 py-2 text-xs font-medium rounded-lg border transition-colors touch-44 ${
                                                 style === s.value
                                                     ? "bg-indigo-50 border-indigo-300 text-indigo-700"
                                                     : "border-slate-200 text-slate-600 hover:bg-slate-50"
@@ -169,7 +187,8 @@ export default function AIBlogGenerator({ isOpen, onClose, onGenerated }: AIBlog
                                             type="button"
                                             onClick={() => setLength(l.value)}
                                             disabled={isGenerating}
-                                            className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+                                            aria-pressed={length === l.value}
+                                            className={`px-3 py-2 text-xs font-medium rounded-lg border transition-colors touch-44 ${
                                                 length === l.value
                                                     ? "bg-indigo-50 border-indigo-300 text-indigo-700"
                                                     : "border-slate-200 text-slate-600 hover:bg-slate-50"
@@ -183,17 +202,18 @@ export default function AIBlogGenerator({ isOpen, onClose, onGenerated }: AIBlog
                         </div>
 
                         <div className="flex items-center justify-end gap-2 px-5 py-4 border-t border-slate-100 bg-slate-50">
-                            <button
+                            <Button
                                 onClick={onClose}
                                 disabled={isGenerating}
-                                className="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-800 transition-colors"
+                                variant="ghost"
+                                size="sm"
                             >
                                 Cancel
-                            </button>
-                            <button
+                            </Button>
+                            <Button
                                 onClick={handleGenerate}
                                 disabled={isGenerating || !topic.trim()}
-                                className="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-white text-xs font-medium rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                variant="primary"
                             >
                                 {isGenerating ? (
                                     <>
@@ -206,7 +226,7 @@ export default function AIBlogGenerator({ isOpen, onClose, onGenerated }: AIBlog
                                         Generate
                                     </>
                                 )}
-                            </button>
+                            </Button>
                         </div>
                     </motion.div>
                 </motion.div>

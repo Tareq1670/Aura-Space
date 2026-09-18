@@ -21,7 +21,7 @@ import { authClient } from "@/lib/auth-client";
 import { reviewAPI, type PendingBooking } from "@/lib/api/Guest/review-api";
 import { createReview } from "@/lib/actions/review";
 import RatingStars from "@/Components/Review/RatingStars";
-import Button from "@/Components/ui/Button";
+import Button, { buttonClasses } from "@/Components/ui/Button";
 import PropertyCard from "@/Components/Public/PropertyCard";
 import { formatCurrency } from "@/lib/currency";
 import { Minus, PenLine, Plus, Sparkles, X } from "lucide-react";
@@ -287,7 +287,7 @@ export default function PropertyDetailPage() {
                     <p className="mt-2 text-sm text-slate-500">The property you are looking for does not exist or has been removed.</p>
                     <Link
                         href="/listings"
-                        className="mt-6 inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-indigo-600/20 transition-colors hover:bg-indigo-700"
+                        className={buttonClasses({ variant: "primary", size: "md" })}
                     >
                         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
@@ -403,7 +403,7 @@ export default function PropertyDetailPage() {
                             <div>
                                 <div className="flex flex-wrap items-start justify-between gap-4">
                                     <div>
-                                        <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-indigo-600">
+                                        <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-indigo-600">
                                             {property.category}
                                         </div>
                                         <h1 className="text-2xl font-black text-slate-950 sm:text-3xl lg:text-4xl">
@@ -607,7 +607,7 @@ export default function PropertyDetailPage() {
                                                         <p className="text-sm font-bold text-slate-900">{review.guestName}</p>
                                                         <div className="flex items-center gap-2">
                                                             <RatingStars rating={review.rating} readonly size="sm" />
-                                                            <span className="text-[11px] text-slate-400">{formatDate(review.createdAt)}</span>
+                                                            <span className="text-xs text-slate-400">{formatDate(review.createdAt)}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -653,8 +653,9 @@ export default function PropertyDetailPage() {
 
                                     <div className="mt-4 space-y-3">
                                         <div>
-                                            <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Check-in</label>
+                                            <label htmlFor="booking-check-in" className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Check-in</label>
                                             <input
+                                                id="booking-check-in"
                                                 type="date"
                                                 value={checkIn}
                                                 min={today}
@@ -667,8 +668,9 @@ export default function PropertyDetailPage() {
                                             />
                                         </div>
                                         <div>
-                                            <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Check-out</label>
+                                            <label htmlFor="booking-check-out" className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Check-out</label>
                                             <input
+                                                id="booking-check-out"
                                                 type="date"
                                                 value={checkOut}
                                                 min={getMinCheckOut()}
@@ -690,7 +692,7 @@ export default function PropertyDetailPage() {
                                                     }}
                                                     disabled={guests <= 1}
                                                     aria-label="Decrease guests"
-                                                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition-colors hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-40"
+                                                    className="flex h-11 w-11 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition-colors hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-40"
                                                 >
                                                     <Minus className="h-4 w-4" aria-hidden="true" />
                                                 </button>
@@ -705,7 +707,7 @@ export default function PropertyDetailPage() {
                                                     }}
                                                     disabled={guests >= maxGuests}
                                                     aria-label="Increase guests"
-                                                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition-colors hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-40"
+                                                    className="flex h-11 w-11 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition-colors hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-40"
                                                 >
                                                     <Plus className="h-4 w-4" aria-hidden="true" />
                                                 </button>
@@ -878,7 +880,7 @@ export default function PropertyDetailPage() {
                         <button
                             onClick={() => setLightboxOpen(false)}
                             aria-label="Close image viewer"
-                            className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+                            className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20 touch-44"
                         >
                             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -890,7 +892,7 @@ export default function PropertyDetailPage() {
                                 setLightboxIndex((i) => (i > 0 ? i - 1 : images.length - 1));
                             }}
                             aria-label="Previous image"
-                            className="absolute left-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+                            className="absolute left-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20 touch-44"
                         >
                             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -916,7 +918,7 @@ export default function PropertyDetailPage() {
                                 setLightboxIndex((i) => (i < images.length - 1 ? i + 1 : 0));
                             }}
                             aria-label="Next image"
-                            className="absolute right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+                            className="absolute right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20 touch-44"
                         >
                             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
@@ -1017,7 +1019,7 @@ export default function PropertyDetailPage() {
                                     <button
                                         onClick={() => setShowReviewModal(false)}
                                         aria-label="Close review form"
-                                        className="rounded-lg p-1.5 text-white/60 transition-colors hover:bg-white/15 hover:text-white"
+                                        className="rounded-lg p-1.5 text-white/60 transition-colors hover:bg-white/15 hover:text-white touch-44"
                                     >
                                         <X className="h-5 w-5" />
                                     </button>

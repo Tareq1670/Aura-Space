@@ -69,7 +69,7 @@ export default function ChartCard({
               <button
                 key={t.key}
                 onClick={() => setChartType(t.key)}
-                className={`rounded-md px-2.5 py-1 text-xs font-medium transition-all ${
+                className={`rounded-md px-3 py-2 text-xs font-medium transition-all touch-44 ${
                   chartType === t.key
                     ? "bg-white text-violet-600 shadow-sm"
                     : "text-gray-500 hover:text-gray-700"

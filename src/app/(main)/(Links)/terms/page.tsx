@@ -2,6 +2,7 @@
 
 import React, { useRef, useState, ReactNode } from "react";
 import { motion, useInView, Variants, AnimatePresence } from "framer-motion";
+import Button, { buttonClasses } from "@/Components/ui/Button";
 import {
   HiShieldCheck,
   HiLockClosed,
@@ -138,59 +139,6 @@ const CustomChip = ({ children, icon, className = "" }: CustomChipProps) => (
   </span>
 );
 
-interface CustomButtonProps {
-  children: ReactNode;
-  variant?: "primary" | "secondary" | "bordered";
-  size?: "md" | "lg";
-  className?: string;
-  onClick?: () => void;
-  as?: "button" | "a";
-  href?: string;
-}
-
-const CustomButton = ({
-  children,
-  variant = "primary",
-  size = "md",
-  className = "",
-  onClick,
-  as = "button",
-  href,
-}: CustomButtonProps) => {
-  const baseStyles =
-    "inline-flex items-center justify-center gap-2 font-semibold rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:ring-offset-2 focus:ring-offset-white active:scale-[0.98]";
-
-  const variantStyles = {
-    primary:
-      "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-600/20 hover:shadow-violet-600/35 hover:brightness-110 border border-transparent",
-    secondary:
-      "bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-200",
-    bordered:
-      "bg-transparent hover:bg-gray-100 border border-gray-300 text-gray-600 hover:border-gray-400",
-  };
-
-  const sizeStyles = {
-    md: "px-5 py-2.5 text-sm",
-    lg: "px-7 py-3 text-base",
-  };
-
-  const combinedClasses = `${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`;
-
-  if (as === "a") {
-    return (
-      <a href={href} className={combinedClasses}>
-        {children}
-      </a>
-    );
-  }
-
-  return (
-    <button onClick={onClick} className={combinedClasses}>
-      {children}
-    </button>
-  );
-};
-
 interface SectionHeaderProps {
   badge: string;
   badgeIcon?: ReactNode;
@@ -211,7 +159,7 @@ const SectionHeader = ({ badge, badgeIcon, title, description }: SectionHeaderPr
     <motion.h2
       variants={fadeUpVariants}
       custom={1}
-      className="text-3xl sm:text-4xl lg:text-[2.75rem] font-bold text-gray-900 mb-4 leading-[1.15] tracking-tight"
+      className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight tracking-tight"
     >
       {title}
     </motion.h2>
@@ -760,7 +708,7 @@ const HeroSection = () => {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mb-6 flex justify-center"
         >
-          <span className="text-[11px] font-semibold text-violet-600 tracking-[0.2em] uppercase bg-violet-50 px-3.5 py-1.5 rounded-full border border-violet-200 inline-flex items-center gap-2">
+          <span className="text-xs font-semibold text-violet-600 tracking-eyebrow uppercase bg-violet-50 px-3.5 py-1.5 rounded-full border border-violet-200 inline-flex items-center gap-2">
             <HiClock className="w-3.5 h-3.5" />
             Last Updated — January 15, 2025
           </span>
@@ -770,7 +718,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.75rem] font-bold text-gray-900 mb-6 tracking-tight leading-[1.1]"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 tracking-tight leading-display"
         >
           Terms &{" "}
           <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
@@ -794,25 +742,25 @@ const HeroSection = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="flex flex-wrap gap-4 justify-center"
         >
-          <CustomButton
+          <Button
             size="lg"
-            variant="primary"
             onClick={() =>
               document.getElementById("introduction")?.scrollIntoView({ behavior: "smooth" })
             }
+            rightIcon={<HiArrowRight className="w-4 h-4" />}
           >
-            Read Terms <HiArrowRight className="w-4 h-4" />
-          </CustomButton>
+            Read Terms
+          </Button>
 
-          <CustomButton
+          <Button
             size="lg"
-            variant="bordered"
+            variant="secondary"
             onClick={() =>
               document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
             }
           >
             Contact Legal Team
-          </CustomButton>
+          </Button>
         </motion.div>
 
         <motion.div
@@ -1164,7 +1112,7 @@ const TrustCTA = () => {
             <motion.h2
               variants={fadeUpVariants}
               custom={1}
-              className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-5 tracking-tight leading-[1.1]"
+              className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-5 tracking-tight leading-display"
             >
               Built on Trust & Transparency
             </motion.h2>
@@ -1183,24 +1131,18 @@ const TrustCTA = () => {
               custom={3}
               className="flex flex-col sm:flex-row gap-4 justify-center"
             >
-              <CustomButton
-                size="lg"
-                variant="secondary"
-                className="bg-white hover:bg-gray-100 text-violet-700 font-semibold border-transparent"
-                as="a"
+              <a
+                className={buttonClasses({ variant: "secondary", size: "lg" })}
                 href="mailto:legal@auraspace.com"
               >
                 <HiEnvelope className="w-4 h-4" /> Contact Legal Team
-              </CustomButton>
-              <CustomButton
-                size="lg"
-                variant="bordered"
-                className="border-white/25 text-white hover:bg-white/[0.12]"
-                as="a"
+              </a>
+              <a
+                className={buttonClasses({ variant: "secondary", size: "lg" })}
                 href="/privacy"
               >
                 <HiLockClosed className="w-4 h-4" /> Privacy Policy
-              </CustomButton>
+              </a>
             </motion.div>
 
             <motion.div

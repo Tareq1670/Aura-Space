@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Sparkles, X, Loader2, RefreshCw, Check } from "lucide-react"
 import { generateDescription } from "@/lib/actions/ai"
+import Button from "@/Components/ui/Button"
 import { cn } from "@/lib/utils/cn"
 
 interface AIDescriptionGeneratorProps {
@@ -47,6 +48,15 @@ export default function AIDescriptionGenerator({
   const [description, setDescription] = useState("")
   const [isGenerating, setIsGenerating] = useState(false)
   const [generated, setGenerated] = useState(false)
+
+  useEffect(() => {
+    if (!isOpen) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose()
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [isOpen, onClose])
 
   const handleGenerate = async () => {
     if (!formData.title) return
@@ -97,6 +107,9 @@ export default function AIDescriptionGenerator({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-lg max-h-[80vh] overflow-y-auto"
+            role="dialog"
+            aria-modal="true"
+            aria-label="AI description generator"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
@@ -106,7 +119,8 @@ export default function AIDescriptionGenerator({
               </div>
               <button
                 onClick={onClose}
-                className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                aria-label="Close AI description generator"
+                className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors touch-44"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -128,6 +142,7 @@ export default function AIDescriptionGenerator({
                     <button
                       key={t.value}
                       onClick={() => setTone(t.value)}
+                      aria-pressed={tone === t.value}
                       className={cn(
                         "p-3 rounded-xl border-2 text-left transition-all",
                         tone === t.value
@@ -136,7 +151,7 @@ export default function AIDescriptionGenerator({
                       )}
                     >
                       <div className="text-xs font-semibold text-gray-900 dark:text-white">{t.label}</div>
-                      <div className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">{t.desc}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{t.desc}</div>
                     </button>
                   ))}
                 </div>
@@ -149,6 +164,7 @@ export default function AIDescriptionGenerator({
                     <button
                       key={l.value}
                       onClick={() => setLength(l.value)}
+                      aria-pressed={length === l.value}
                       className={cn(
                         "p-3 rounded-xl border-2 text-left transition-all",
                         length === l.value
@@ -157,16 +173,16 @@ export default function AIDescriptionGenerator({
                       )}
                     >
                       <div className="text-xs font-semibold text-gray-900 dark:text-white">{l.label}</div>
-                      <div className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">{l.desc}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{l.desc}</div>
                     </button>
                   ))}
                 </div>
               </div>
 
-              <button
+              <Button
                 onClick={handleGenerate}
                 disabled={!formData.title || isGenerating}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-500 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-violet-500/25 transition-all flex items-center justify-center gap-2"
+                fullWidth
               >
                 {isGenerating ? (
                   <>
@@ -179,7 +195,7 @@ export default function AIDescriptionGenerator({
                     {generated ? "Regenerate" : "Generate Description"}
                   </>
                 )}
-              </button>
+              </Button>
 
               {description && (
                 <motion.div
@@ -187,31 +203,32 @@ export default function AIDescriptionGenerator({
                   animate={{ opacity: 1, y: 0 }}
                   className="space-y-3"
                 >
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label htmlFor="aidesc-preview" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Preview
                   </label>
                   <textarea
+                    id="aidesc-preview"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     className="w-full min-h-[120px] p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm text-gray-900 dark:text-white resize-none focus:outline-none focus:ring-2 focus:ring-violet-500/50"
                   />
                   <div className="flex justify-end gap-2">
                     {generated && (
-                      <button
+                      <Button
                         onClick={handleGenerate}
-                        className="px-4 py-2 rounded-xl text-sm font-medium text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/30 transition-colors flex items-center gap-1.5"
+                        variant="ghost"
+                        size="sm"
+                        leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
                       >
-                        <RefreshCw className="w-3.5 h-3.5" />
                         Generate Again
-                      </button>
+                      </Button>
                     )}
-                    <button
+                    <Button
                       onClick={() => onApply(description)}
-                      className="px-4 py-2 rounded-xl text-sm font-medium bg-gradient-to-r from-violet-500 to-indigo-500 text-white hover:shadow-lg hover:shadow-violet-500/25 transition-all flex items-center gap-1.5"
+                      leftIcon={<Check className="w-3.5 h-3.5" />}
                     >
-                      <Check className="w-3.5 h-3.5" />
                       Apply Description
-                    </button>
+                    </Button>
                   </div>
                 </motion.div>
               )}

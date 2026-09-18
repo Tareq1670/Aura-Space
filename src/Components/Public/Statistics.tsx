@@ -192,7 +192,7 @@ export default function Statistics() {
                 >
                     <motion.h2
                         variants={itemVariants}
-                        className="text-[28px] font-black leading-[1.08] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[42px] lg:text-5xl"
+                        className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl lg:text-5xl"
                     >
                         Built for{" "}
                         <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
@@ -203,7 +203,7 @@ export default function Statistics() {
 
                     <motion.p
                         variants={itemVariants}
-                        className="mt-4 text-sm leading-relaxed text-slate-500 sm:mt-5 sm:text-[15px]"
+                        className="mt-4 text-sm leading-relaxed text-slate-500 sm:mt-5 sm:text-base"
                     >
                         From luxury suite bookings to curated event experiences,
                         AuraSpace continues to earn trust through premium
@@ -261,11 +261,11 @@ export default function Statistics() {
                                     {stat.icon}
                                 </motion.div>
 
-                                <div className="mt-5 bg-gradient-to-r from-slate-950 via-indigo-700 to-violet-600 bg-clip-text text-3xl font-black tracking-[-0.03em] text-transparent sm:text-4xl">
+                                <div className="mt-5 bg-gradient-to-r from-slate-950 via-indigo-700 to-violet-600 bg-clip-text text-3xl font-black tracking-tight text-transparent sm:text-4xl">
                                     {stat.value}
                                 </div>
 
-                                <h3 className="mt-2 text-sm font-bold uppercase tracking-[0.12em] text-slate-800">
+                                <h3 className="mt-2 text-sm font-bold uppercase tracking-eyebrow text-slate-800">
                                     {stat.label}
                                 </h3>
 

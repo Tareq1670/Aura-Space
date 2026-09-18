@@ -12,6 +12,7 @@ import {
     useTransform,
     type Variants,
 } from "framer-motion";
+import { buttonClasses } from "@/Components/ui/Button";
 
 interface ServiceCard {
     id: string;
@@ -247,14 +248,14 @@ export default function OurServices() {
                                     }
                                     transition={{ duration: 2.5, repeat: Infinity }}
                                 />
-                                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-indigo-600">
+                                <span className="text-xs font-bold uppercase tracking-eyebrow text-indigo-600">
                                     Our Services
                                 </span>
                             </motion.div>
 
                             <motion.h2
                                 variants={headerVariants}
-                                className="text-[26px] font-black leading-[1.08] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[42px] lg:text-5xl"
+                                className="text-2xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl lg:text-5xl"
                             >
                                 Everything You Need for{" "}
                                 <span className="relative inline-block">
@@ -312,7 +313,7 @@ export default function OurServices() {
 
                             <motion.p
                                 variants={headerVariants}
-                                className="mt-4 max-w-xl text-sm leading-relaxed text-slate-500 sm:mt-5 sm:text-[15px]"
+                                className="mt-4 max-w-xl text-sm leading-relaxed text-slate-500 sm:mt-5 sm:text-base"
                             >
                                 AuraSpace brings together premium properties,
                                 smart booking technology, and world-class
@@ -327,7 +328,7 @@ export default function OurServices() {
                         >
                             <Link
                                 href="/listings"
-                                className="group/btn relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-slate-950 px-6 py-3 text-[11px] font-bold uppercase tracking-[0.15em] text-white shadow-lg shadow-slate-900/10 transition-all duration-300 hover:shadow-indigo-500/25"
+                                className={buttonClasses({ variant: "primary", size: "lg", className: "relative overflow-hidden uppercase tracking-eyebrow" })}
                             >
                                 <motion.span
                                     className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-violet-600"
@@ -403,7 +404,7 @@ export default function OurServices() {
                 >
                     <Link
                         href="/listings"
-                        className="group relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-2xl bg-slate-950 px-6 py-3.5 text-[11px] font-bold uppercase tracking-[0.16em] text-white shadow-lg shadow-slate-900/10 transition-all duration-300"
+                        className={buttonClasses({ variant: "primary", size: "lg", className: "group relative w-full overflow-hidden uppercase tracking-eyebrow" })}
                     >
                         <motion.span className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-violet-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                         <span className="relative z-10">View All Services</span>
@@ -522,7 +523,7 @@ function LargeCard({
                     >
                         {service.icon}
                     </motion.div>
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-indigo-50/90 px-3 py-1 text-[9px] font-bold uppercase tracking-wider text-indigo-700 backdrop-blur-sm">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-indigo-50/90 px-3 py-1 text-xs font-bold uppercase tracking-wider text-indigo-700 backdrop-blur-sm">
                         <motion.span
                             className="h-1 w-1 rounded-full bg-indigo-500"
                             animate={
@@ -545,7 +546,7 @@ function LargeCard({
                 </div>
 
                 <motion.h3
-                    className="max-w-lg text-xl font-black leading-tight tracking-[-0.02em] text-slate-950 sm:text-2xl md:text-[28px] lg:text-[32px]"
+                    className="max-w-lg text-xl font-black leading-tight tracking-tight text-slate-950 sm:text-2xl md:text-3xl lg:text-3xl"
                     style={
                         reduceMotion
                             ? {}
@@ -559,7 +560,7 @@ function LargeCard({
                 </motion.h3>
 
                 <motion.p
-                    className="mt-3 max-w-xl flex-1 text-sm leading-relaxed text-slate-500 sm:mt-4 sm:text-[15px]"
+                    className="mt-3 max-w-xl flex-1 text-sm leading-relaxed text-slate-500 sm:mt-4 sm:text-base"
                     style={
                         reduceMotion
                             ? {}
@@ -573,7 +574,7 @@ function LargeCard({
                 </motion.p>
 
                 <motion.div
-                    className="mt-5 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.15em] text-indigo-600 sm:mt-6"
+                    className="mt-5 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-eyebrow text-indigo-600 sm:mt-6"
                     whileHover={reduceMotion ? undefined : { x: 6 }}
                     transition={{ type: "spring", stiffness: 300, damping: 15 }}
                     style={
@@ -737,7 +738,7 @@ function ImageCard({
                 </motion.div>
 
                 <motion.h3
-                    className="text-lg font-black leading-tight tracking-[-0.02em] text-white sm:text-xl md:text-2xl"
+                    className="text-lg font-black leading-tight tracking-tight text-white sm:text-xl md:text-2xl"
                     style={
                         reduceMotion
                             ? {}
@@ -751,7 +752,7 @@ function ImageCard({
                 </motion.h3>
 
                 <motion.p
-                    className="mt-2 max-w-md text-[13px] leading-relaxed text-slate-300 sm:text-sm"
+                    className="mt-2 max-w-md text-sm leading-relaxed text-slate-300 sm:text-sm"
                     style={
                         reduceMotion
                             ? {}
@@ -765,7 +766,7 @@ function ImageCard({
                 </motion.p>
 
                 <motion.div
-                    className="mt-3 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.15em] text-indigo-300 sm:mt-4"
+                    className="mt-3 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-eyebrow text-indigo-300 sm:mt-4"
                     whileHover={reduceMotion ? undefined : { x: 6 }}
                     transition={{ type: "spring", stiffness: 300, damping: 15 }}
                     style={
@@ -899,7 +900,7 @@ function TextCard({
                 </motion.div>
 
                 <motion.h3
-                    className="text-base font-black leading-tight tracking-[-0.02em] text-slate-950 sm:text-lg md:text-xl"
+                    className="text-base font-black leading-tight tracking-tight text-slate-950 sm:text-lg md:text-xl"
                     style={
                         reduceMotion
                             ? {}
@@ -913,7 +914,7 @@ function TextCard({
                 </motion.h3>
 
                 <motion.p
-                    className="mt-2 flex-1 text-[13px] leading-relaxed text-slate-500"
+                    className="mt-2 flex-1 text-sm leading-relaxed text-slate-500"
                     style={
                         reduceMotion
                             ? {}
@@ -927,7 +928,7 @@ function TextCard({
                 </motion.p>
 
                 <motion.div
-                    className="mt-3 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400 transition-colors duration-300 group-hover:text-indigo-600 sm:mt-4"
+                    className="mt-3 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-eyebrow text-slate-400 transition-colors duration-300 group-hover:text-indigo-600 sm:mt-4"
                     whileHover={reduceMotion ? undefined : { x: 6 }}
                     transition={{ type: "spring", stiffness: 300, damping: 15 }}
                     style={

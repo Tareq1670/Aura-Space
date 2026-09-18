@@ -6,6 +6,7 @@ import { motion } from "framer-motion"
 import { toast } from "sonner"
 import { Flag, Trash2, XCircle, Search, RefreshCw } from "lucide-react"
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal"
+import Button from "@/Components/ui/Button"
 import { reviewAPI, type ReviewRecord } from "@/lib/api/Guest/review-api"
 import { deleteReview, dismissReviewReport } from "@/lib/actions/review"
 
@@ -83,13 +84,14 @@ export default function AdminReportsPage() {
               <p className="text-sm text-slate-500">{reviews.length} reported review{reviews.length !== 1 ? "s" : ""}</p>
             </div>
           </div>
-          <button
+          <Button
             onClick={fetchReported}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-600 transition hover:border-rose-300 hover:text-rose-600"
+            variant="secondary"
+            size="sm"
+            leftIcon={<RefreshCw className="h-3.5 w-3.5" />}
           >
-            <RefreshCw className="h-3.5 w-3.5" />
             Refresh
-          </button>
+          </Button>
         </div>
       </motion.div>
 
@@ -141,7 +143,7 @@ export default function AdminReportsPage() {
                       <p className="text-sm font-bold text-slate-900">{review.guest?.name || "Unknown"}</p>
                       <p className="truncate text-xs text-slate-500">{review.propertyTitle || "Unknown property"}</p>
                     </div>
-                    <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-rose-50 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-rose-600">
+                    <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-rose-50 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-rose-600">
                       <Flag className="h-3 w-3" />
                       Reported
                     </span>
@@ -166,21 +168,23 @@ export default function AdminReportsPage() {
 
               <div className="mt-4 flex items-center gap-2 border-t border-slate-50 pt-3">
                 {review.isReported && (
-                  <button
+                  <Button
                     onClick={() => { setActionReview(review); setActionType("dismiss") }}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 px-3 py-1.5 text-xs font-semibold text-emerald-600 transition hover:bg-emerald-50"
+                    variant="success"
+                    size="sm"
+                    leftIcon={<XCircle className="h-3.5 w-3.5" />}
                   >
-                    <XCircle className="h-3.5 w-3.5" />
                     Dismiss Report
-                  </button>
+                  </Button>
                 )}
-                <button
+                <Button
                   onClick={() => { setActionReview(review); setActionType("delete") }}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-600 transition hover:bg-red-50"
+                  variant="danger"
+                  size="sm"
+                  leftIcon={<Trash2 className="h-3.5 w-3.5" />}
                 >
-                  <Trash2 className="h-3.5 w-3.5" />
                   Delete Review
-                </button>
+                </Button>
               </div>
             </motion.div>
           ))}

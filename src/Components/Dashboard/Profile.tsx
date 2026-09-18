@@ -7,7 +7,8 @@ import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { authClient } from "@/lib/auth-client";
 import { userAPI } from "@/lib/api/Guest/api";
 import { imageUploader } from "@/lib/imageUploader";
-import { AlertDialog, Button, Skeleton } from "@heroui/react";
+import Button, { buttonClasses } from "@/Components/ui/Button";
+import { AlertDialog, Skeleton } from "@heroui/react";
 import { toast } from "sonner";
 
 interface UserProfile {
@@ -463,14 +464,14 @@ export default function ProfilePage() {
                     <h2 className="text-xl font-bold text-slate-900 mb-2">
                         Could not load profile
                     </h2>
-                    <button
+                    <Button
+                        className="mt-4"
                         onClick={() =>
                             router.push("/login?redirect=/dashboard/profile")
                         }
-                        className="mt-4 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition"
                     >
                         Go to Login
-                    </button>
+                    </Button>
                 </motion.div>
             </div>
         );
@@ -575,6 +576,7 @@ export default function ProfilePage() {
                                         imageInputRef.current?.click()
                                     }
                                     disabled={isUploadingImage}
+                                    aria-label="Change profile photo"
                                     className="absolute -bottom-1 -right-1 w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white flex items-center justify-center shadow-xl shadow-indigo-600/40 disabled:opacity-60"
                                 >
                                     {isUploadingImage ? (
@@ -605,6 +607,7 @@ export default function ProfilePage() {
                                     type="file"
                                     accept="image/*"
                                     onChange={handleImageUpload}
+                                    aria-label="Profile photo upload"
                                     className="hidden"
                                 />
                             </motion.div>
@@ -616,7 +619,12 @@ export default function ProfilePage() {
                                     whileHover={{ scale: 1.05 }}
                                     onClick={handleRemoveImage}
                                     disabled={isUploadingImage}
-                                    className="mb-2 self-start sm:self-end text-xs text-slate-500 hover:text-rose-500 transition font-semibold"
+                                    className={buttonClasses({
+                                        variant: "ghost",
+                                        size: "sm",
+                                        className:
+                                            "mb-2 self-start sm:self-end",
+                                    })}
                                 >
                                     Remove photo
                                 </motion.button>
@@ -633,7 +641,7 @@ export default function ProfilePage() {
                                 {profile.name}
                             </h2>
                             <span
-                                className={`px-3 py-1 rounded-lg text-[10px] sm:text-xs font-bold uppercase tracking-wider shadow-md ${getRoleBadgeClass(
+                                className={`px-3 py-1 rounded-lg text-xs sm:text-xs font-bold uppercase tracking-wider shadow-md ${getRoleBadgeClass(
                                     profile.role,
                                 )}`}
                             >
@@ -647,7 +655,7 @@ export default function ProfilePage() {
                                         delay: 0.7,
                                         type: "spring",
                                     }}
-                                    className="px-2.5 py-1 rounded-lg text-[10px] sm:text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center gap-1"
+                                    className="px-2.5 py-1 rounded-lg text-xs sm:text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center gap-1"
                                 >
                                     <svg
                                         className="w-3 h-3"
@@ -749,7 +757,10 @@ export default function ProfilePage() {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => setIsEditing(true)}
-                                className="px-4 py-2 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 rounded-xl transition"
+                                className={buttonClasses({
+                                    variant: "ghost",
+                                    size: "sm",
+                                })}
                             >
                                 Edit
                             </motion.button>
@@ -790,7 +801,7 @@ export default function ProfilePage() {
                                         disabled
                                         className="w-full px-4 py-3 rounded-xl border-2 border-slate-100 bg-slate-50/50 text-sm text-slate-400 cursor-not-allowed"
                                     />
-                                    <p className="text-[10px] text-slate-400 mt-1">
+                                    <p className="text-xs text-slate-400 mt-1">
                                         Email cannot be changed.
                                     </p>
                                 </div>
@@ -800,7 +811,9 @@ export default function ProfilePage() {
                                         whileTap={{ scale: 0.98 }}
                                         onClick={handleSaveProfile}
                                         disabled={isSavingProfile}
-                                        className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white text-sm font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition disabled:opacity-50 flex items-center justify-center gap-2"
+                                        className={buttonClasses({
+                                            variant: "primary",
+                                        })}
                                     >
                                         {isSavingProfile ? (
                                             <>
@@ -819,7 +832,9 @@ export default function ProfilePage() {
                                             setEditName(profile.name);
                                         }}
                                         disabled={isSavingProfile}
-                                        className="px-5 py-2.5 border-2 border-slate-200 text-sm font-semibold text-slate-600 rounded-xl hover:bg-slate-50 transition disabled:opacity-50"
+                                        className={buttonClasses({
+                                            variant: "secondary",
+                                        })}
                                     >
                                         Cancel
                                     </motion.button>
@@ -866,7 +881,7 @@ export default function ProfilePage() {
                                         }}
                                         className="p-4 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-50/50 border-2 border-slate-100 transition"
                                     >
-                                        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+                                        <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
                                             {item.label}
                                         </p>
                                         <p className="text-sm font-semibold text-slate-900 break-all">
@@ -919,7 +934,10 @@ export default function ProfilePage() {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => setShowPasswordSection(true)}
-                                className="px-4 py-2 text-sm font-semibold text-amber-600 hover:bg-amber-50 rounded-xl transition"
+                                className={buttonClasses({
+                                    variant: "ghost",
+                                    size: "sm",
+                                })}
                             >
                                 Change
                             </motion.button>
@@ -937,6 +955,7 @@ export default function ProfilePage() {
                             >
                                 {[
                                     {
+                                        id: "current-password-field",
                                         label: "Current Password",
                                         value: currentPassword,
                                         setValue: setCurrentPassword,
@@ -946,6 +965,7 @@ export default function ProfilePage() {
                                         confirm: false,
                                     },
                                     {
+                                        id: "new-password-field",
                                         label: "New Password",
                                         value: newPassword,
                                         setValue: setNewPassword,
@@ -955,6 +975,7 @@ export default function ProfilePage() {
                                         confirm: false,
                                     },
                                     {
+                                        id: "confirm-new-password-field",
                                         label: "Confirm New Password",
                                         value: confirmNewPassword,
                                         setValue: setConfirmNewPassword,
@@ -965,11 +986,15 @@ export default function ProfilePage() {
                                     },
                                 ].map((field) => (
                                     <div key={field.label}>
-                                        <label className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2 block">
+                                        <label
+                                            htmlFor={field.id}
+                                            className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2 block"
+                                        >
                                             {field.label}
                                         </label>
                                         <div className="relative">
                                             <input
+                                                id={field.id}
                                                 type={
                                                     field.show
                                                         ? "text"
@@ -990,6 +1015,12 @@ export default function ProfilePage() {
                                                 onClick={() =>
                                                     field.setShow(!field.show)
                                                 }
+                                                aria-label={
+                                                    field.show
+                                                        ? "Hide password"
+                                                        : "Show password"
+                                                }
+                                                aria-pressed={field.show}
                                                 className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                                             >
                                                 <EyeIcon show={field.show} />
@@ -1038,7 +1069,9 @@ export default function ProfilePage() {
                                         whileTap={{ scale: 0.98 }}
                                         onClick={handleChangePassword}
                                         disabled={isChangingPassword}
-                                        className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white text-sm font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition disabled:opacity-50 flex items-center justify-center gap-2"
+                                        className={buttonClasses({
+                                            variant: "primary",
+                                        })}
                                     >
                                         {isChangingPassword ? (
                                             <>
@@ -1059,7 +1092,9 @@ export default function ProfilePage() {
                                             setConfirmNewPassword("");
                                         }}
                                         disabled={isChangingPassword}
-                                        className="px-5 py-2.5 border-2 border-slate-200 text-sm font-semibold text-slate-600 rounded-xl hover:bg-slate-50 transition disabled:opacity-50"
+                                        className={buttonClasses({
+                                            variant: "secondary",
+                                        })}
                                     >
                                         Cancel
                                     </motion.button>
@@ -1151,120 +1186,144 @@ export default function ProfilePage() {
 
                         <AlertDialog>
                             <Button
-                                variant="danger"
-                                className="shrink-0 px-5 py-2.5 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white text-sm font-semibold rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-rose-500/30"
-                            >
-                                <svg
-                                    className="w-4 h-4"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
+                                    variant="danger"
+                                    className="shrink-0"
                                 >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                                    />
-                                </svg>
-                                Delete Account
-                            </Button>
+                                    <svg
+                                        className="w-4 h-4"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                                        />
+                                    </svg>
+                                    Delete Account
+                                </Button>
                             <AlertDialog.Backdrop>
                                 <AlertDialog.Container>
                                     <AlertDialog.Dialog className="sm:max-w-[440px]">
-                                        <AlertDialog.CloseTrigger />
-                                        <AlertDialog.Header>
-                                            <AlertDialog.Icon status="danger" />
-                                            <AlertDialog.Heading>
-                                                Delete your account permanently?
-                                            </AlertDialog.Heading>
-                                        </AlertDialog.Header>
-                                        <AlertDialog.Body>
-                                            <div className="space-y-4">
-                                                <p className="text-sm text-slate-600 leading-relaxed">
-                                                    This is{" "}
-                                                    <strong className="text-rose-600">
-                                                        permanent and
-                                                        irreversible
-                                                    </strong>
-                                                    . All your data, bookings,
-                                                    and history will be gone
-                                                    forever.
-                                                </p>
-                                                <div>
-                                                    <label className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2 block">
-                                                        Confirm your password
-                                                    </label>
-                                                    <div className="relative">
-                                                        <input
-                                                            type={
-                                                                showDeletePw
-                                                                    ? "text"
-                                                                    : "password"
-                                                            }
-                                                            value={
-                                                                deletePassword
-                                                            }
-                                                            onChange={(e) =>
-                                                                setDeletePassword(
-                                                                    e.target
-                                                                        .value,
-                                                                )
-                                                            }
-                                                            placeholder="Enter your password"
-                                                            disabled={
-                                                                isDeletingAccount
-                                                            }
-                                                            className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 bg-slate-50 text-sm focus:outline-none focus:ring-4 focus:ring-rose-500/20 focus:border-rose-500 transition pr-10"
-                                                        />
-                                                        <button
-                                                            type="button"
-                                                            onClick={() =>
-                                                                setShowDeletePw(
-                                                                    !showDeletePw,
-                                                                )
-                                                            }
-                                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                                                        >
-                                                            <EyeIcon
-                                                                show={
-                                                                    showDeletePw
-                                                                }
-                                                            />
-                                                        </button>
+                                        {({ close }) => (
+                                            <>
+                                                <AlertDialog.CloseTrigger />
+                                                <AlertDialog.Header>
+                                                    <AlertDialog.Icon status="danger" />
+                                                    <AlertDialog.Heading>
+                                                        Delete your account
+                                                        permanently?
+                                                    </AlertDialog.Heading>
+                                                </AlertDialog.Header>
+                                                <AlertDialog.Body>
+                                                    <div className="space-y-4">
+                                                        <p className="text-sm text-slate-600 leading-relaxed">
+                                                            This is{" "}
+                                                            <strong className="text-rose-600">
+                                                                permanent and
+                                                                irreversible
+                                                            </strong>
+                                                            . All your data,
+                                                            bookings, and history
+                                                            will be gone forever.
+                                                        </p>
+                                                        <div>
+                                                            <label
+                                                                htmlFor="confirm-password-field"
+                                                                className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2 block"
+                                                            >
+                                                                Confirm your
+                                                                password
+                                                            </label>
+                                                            <div className="relative">
+                                                                <input
+                                                                    id="confirm-password-field"
+                                                                    type={
+                                                                        showDeletePw
+                                                                            ? "text"
+                                                                            : "password"
+                                                                    }
+                                                                    value={
+                                                                        deletePassword
+                                                                    }
+                                                                    onChange={(e) =>
+                                                                        setDeletePassword(
+                                                                            e.target
+                                                                                .value,
+                                                                        )
+                                                                    }
+                                                                    placeholder="Enter your password"
+                                                                    disabled={
+                                                                        isDeletingAccount
+                                                                    }
+                                                                    className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 bg-slate-50 text-sm focus:outline-none focus:ring-4 focus:ring-rose-500/20 focus:border-rose-500 transition pr-10"
+                                                                />
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() =>
+                                                                        setShowDeletePw(
+                                                                            !showDeletePw,
+                                                                        )
+                                                                    }
+                                                                    aria-label={
+                                                                        showDeletePw
+                                                                            ? "Hide password"
+                                                                            : "Show password"
+                                                                    }
+                                                                    aria-pressed={
+                                                                        showDeletePw
+                                                                    }
+                                                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                                                                >
+                                                                    <EyeIcon
+                                                                        show={
+                                                                            showDeletePw
+                                                                        }
+                                                                    />
+                                                                </button>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </AlertDialog.Body>
-                                        <AlertDialog.Footer>
-                                            <Button
-                                                slot="close"
-                                                variant="tertiary"
-                                                onPress={() => {
-                                                    setDeletePassword("");
-                                                    setShowDeletePw(false);
-                                                }}
-                                            >
-                                                Cancel
-                                            </Button>
-                                            <Button
-                                                variant="danger"
-                                                isDisabled={
-                                                    !deletePassword ||
-                                                    isDeletingAccount
-                                                }
-                                                onPress={handleDeleteAccount}
-                                            >
-                                                {isDeletingAccount ? (
-                                                    <span className="flex items-center gap-2">
-                                                        <Spinner className="w-4 h-4" />
-                                                        Deleting...
-                                                    </span>
-                                                ) : (
-                                                    "Delete Forever"
-                                                )}
-                                            </Button>
-                                        </AlertDialog.Footer>
+                                                </AlertDialog.Body>
+                                                <AlertDialog.Footer>
+                                                    <Button
+                                                        variant="ghost"
+                                                        onClick={() => {
+                                                            close();
+                                                            setDeletePassword(
+                                                                "",
+                                                            );
+                                                            setShowDeletePw(
+                                                                false,
+                                                            );
+                                                        }}
+                                                    >
+                                                        Cancel
+                                                    </Button>
+                                                    <Button
+                                                        variant="danger"
+                                                        disabled={
+                                                            !deletePassword ||
+                                                            isDeletingAccount
+                                                        }
+                                                        onClick={
+                                                            handleDeleteAccount
+                                                        }
+                                                    >
+                                                        {isDeletingAccount ? (
+                                                            <span className="flex items-center gap-2">
+                                                                <Spinner className="w-4 h-4" />
+                                                                Deleting...
+                                                            </span>
+                                                        ) : (
+                                                            "Delete Forever"
+                                                        )}
+                                                    </Button>
+                                                </AlertDialog.Footer>
+                                            </>
+                                        )}
                                     </AlertDialog.Dialog>
                                 </AlertDialog.Container>
                             </AlertDialog.Backdrop>

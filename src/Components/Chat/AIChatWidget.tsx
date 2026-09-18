@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { MessageCircle, X, Send, Sparkles, Trash2, LogIn, RotateCw } from "lucide-react"
 import Link from "next/link"
 import { authClient } from "@/lib/auth-client"
+import Button from "@/Components/ui/Button"
 import AIChatMessage from "@/Components/Chat/AIChatMessage"
 import { sendChatMessage, deleteChatConversation } from "@/lib/actions/ai"
 
@@ -140,6 +141,8 @@ export default function AIChatWidget() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             className="fixed bottom-24 right-6 w-[380px] max-w-[calc(100vw-2rem)] h-[560px] max-h-[calc(100vh-8rem)] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col z-50 overflow-hidden"
+            role="dialog"
+            aria-label="AI chat assistant"
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-violet-500 to-indigo-500">
               <div className="flex items-center gap-2">
@@ -150,8 +153,9 @@ export default function AIChatWidget() {
                 {isLoggedIn && conversationId && (
                   <button
                     onClick={handleDeleteChat}
-                    className="p-1.5 rounded-lg hover:bg-white/20 text-white/80 hover:text-white transition-colors"
+                    className="p-1.5 touch-44 rounded-lg hover:bg-white/20 text-white/80 hover:text-white transition-colors"
                     title="Delete conversation"
+                    aria-label="Delete conversation"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -159,15 +163,17 @@ export default function AIChatWidget() {
                 {isLoggedIn && (
                   <button
                     onClick={handleNewChat}
-                    className="p-1.5 rounded-lg hover:bg-white/20 text-white/80 hover:text-white transition-colors text-xs"
+                    className="p-1.5 touch-44 rounded-lg hover:bg-white/20 text-white/80 hover:text-white transition-colors text-xs"
                     title="New chat"
+                    aria-label="New chat"
                   >
                     <Sparkles className="w-4 h-4" />
                   </button>
                 )}
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-1.5 rounded-lg hover:bg-white/20 text-white/80 hover:text-white transition-colors"
+                  className="p-1.5 touch-44 rounded-lg hover:bg-white/20 text-white/80 hover:text-white transition-colors"
+                  aria-label="Close AI chat"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -221,13 +227,14 @@ export default function AIChatWidget() {
 
               {showRetryBtn && (
                 <div className="mx-4 mb-2 flex justify-center">
-                  <button
+                  <Button
                     onClick={handleRetry}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 text-xs font-medium hover:bg-violet-200 dark:hover:bg-violet-900/50 transition-colors"
+                    variant="ghost"
+                    size="sm"
+                    leftIcon={<RotateCw className="w-3.5 h-3.5" />}
                   >
-                    <RotateCw className="w-3.5 h-3.5" />
                     Try again
-                  </button>
+                  </Button>
                 </div>
               )}
 
@@ -237,7 +244,7 @@ export default function AIChatWidget() {
                     <button
                       key={i}
                       onClick={() => handleSuggestion(s)}
-                      className="text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-violet-50 hover:text-violet-600 dark:hover:bg-violet-900/30 dark:hover:text-violet-400 transition-colors border border-gray-200 dark:border-gray-700"
+                      className="text-xs px-3 py-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-violet-50 hover:text-violet-600 dark:hover:bg-violet-900/30 dark:hover:text-violet-400 transition-colors border border-gray-200 dark:border-gray-700 touch-44"
                     >
                       {s}
                     </button>
@@ -247,7 +254,11 @@ export default function AIChatWidget() {
 
               <div className="p-4 border-t border-gray-200 dark:border-gray-700">
                 <div className="flex gap-2">
+                  <label htmlFor="ai-chat-input" className="sr-only">
+                    Ask the AI assistant
+                  </label>
                   <input
+                    id="ai-chat-input"
                     ref={inputRef}
                     type="text"
                     value={input}
@@ -257,13 +268,15 @@ export default function AIChatWidget() {
                     className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500"
                     disabled={isLoading}
                   />
-                  <button
+                  <Button
                     onClick={handleSend}
                     disabled={!input.trim() || isLoading}
-                    className="px-3 py-2.5 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-500 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-violet-500/25 transition-all"
+                    aria-label="Send message"
+                    variant="primary"
+                    size="sm"
                   >
                     <Send className="w-4 h-4" />
-                  </button>
+                  </Button>
                 </div>
               </div>
             </>
@@ -275,6 +288,8 @@ export default function AIChatWidget() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
+        aria-label={isOpen ? "Close AI chat assistant" : "Open AI chat assistant"}
+        aria-expanded={isOpen}
         className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-gradient-to-r from-violet-500 to-indigo-500 text-white shadow-lg hover:shadow-xl hover:shadow-violet-500/30 flex items-center justify-center z-50 transition-shadow"
       >
         {isOpen ? <X className="w-6 h-6" /> : <MessageCircle className="w-6 h-6" />}

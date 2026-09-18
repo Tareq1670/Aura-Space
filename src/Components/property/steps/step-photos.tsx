@@ -131,7 +131,7 @@ export default function StepPhotos({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.1 }}
-                    className="text-gray-500 dark:text-gray-400"
+                    className="text-gray-500 dark:text-gray-500"
                 >
                     Upload at least 3 photos. The first photo will be your
                     cover image. Drag to reorder.
@@ -158,6 +158,15 @@ export default function StepPhotos({
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
                 onClick={() => !isUploading && fileInputRef.current?.click()}
+                onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        if (!isUploading) fileInputRef.current?.click();
+                    }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label="Upload property photos"
                 className={cn(
                     "relative rounded-2xl border-2 border-dashed p-10 flex flex-col items-center justify-center gap-4 cursor-pointer transition-all min-h-[200px]",
                     isDragging
@@ -181,7 +190,7 @@ export default function StepPhotos({
                 {isUploading ? (
                     <div className="flex flex-col items-center gap-3">
                         <Loader2 className="w-10 h-10 text-rose-500 animate-spin" />
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                        <p className="text-sm font-medium text-gray-600 dark:text-gray-500">
                             Uploading {uploadProgress.done} of{" "}
                             {uploadProgress.total}...
                         </p>
@@ -209,7 +218,7 @@ export default function StepPhotos({
                             <p className="font-semibold text-gray-700 dark:text-gray-200">
                                 Drag & drop your photos here
                             </p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                            <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
                                 or click to browse • JPG, PNG, WebP
                             </p>
                         </div>
@@ -283,11 +292,12 @@ export default function StepPhotos({
                                         whileHover={{ scale: 1.1 }}
                                         whileTap={{ scale: 0.9 }}
                                         type="button"
+                                        aria-label={`Remove photo ${index + 1}`}
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             removePhoto(index);
                                         }}
-                                        className="absolute top-2 right-2 w-8 h-8 bg-white/90 dark:bg-gray-900/90 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50 dark:hover:bg-red-950"
+                                        className="absolute top-2 right-2 w-8 h-8 bg-white/90 dark:bg-gray-900/90 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50 dark:hover:bg-red-950 touch-44"
                                     >
                                         <X className="w-4 h-4 text-gray-700 dark:text-gray-300" />
                                     </motion.button>
@@ -303,8 +313,8 @@ export default function StepPhotos({
                             onClick={() => fileInputRef.current?.click()}
                             className="aspect-[4/3] rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 flex flex-col items-center justify-center gap-2 hover:border-rose-400 dark:hover:border-rose-600 transition-all bg-gray-50 dark:bg-gray-800/30"
                         >
-                            <ImagePlus className="w-6 h-6 text-gray-400" />
-                            <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                            <ImagePlus className="w-6 h-6 text-gray-500" />
+                            <span className="text-xs font-medium text-gray-500 dark:text-gray-500">
                                 Add More
                             </span>
                         </motion.button>

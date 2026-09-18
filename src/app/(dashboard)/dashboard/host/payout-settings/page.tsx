@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
 import { Building2, Landmark, CreditCard, MapPin, Hash, Globe, Save } from "lucide-react"
+import Button from "@/Components/ui/Button"
 import { getPayoutMethod, savePayoutMethod, type PayoutMethod } from "@/lib/api/Host/payout-api"
 
 const inputClass = "w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-700 outline-none transition-all placeholder-gray-400 hover:border-violet-300 focus:border-violet-400 focus:ring-2 focus:ring-violet-100"
@@ -200,14 +201,14 @@ export default function HostPayoutSettingsPage() {
         </div>
 
         <div className="flex items-center justify-end gap-3 border-t border-gray-100 pt-5">
-          <button
+          <Button
             type="submit"
             disabled={saving}
-            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-500 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/30 transition-all hover:from-violet-600 hover:to-indigo-600 disabled:opacity-60"
+            variant="primary"
+            leftIcon={<Save className="h-4 w-4" />}
           >
-            <Save className="h-4 w-4" />
             {saving ? "Saving…" : existing ? "Update Payout Method" : "Save Payout Method"}
-          </button>
+          </Button>
         </div>
       </motion.form>
     </div>

@@ -9,6 +9,7 @@ import { Home, CalendarCheck, DollarSign, TrendingUp, Star, Plus, Bell, ArrowRig
 import StatCard from "@/Components/Dashboard/StatCard"
 import ChartCard from "@/Components/Dashboard/ChartCard"
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal"
+import Button, { buttonClasses } from "@/Components/ui/Button"
 import { bookingAPI, type BookingItem } from "@/lib/api/Guest/booking-api"
 import { getHostDashboard, type HostDashboardData } from "@/lib/actions/dashboard-host"
 
@@ -111,10 +112,10 @@ export default function HostMainPage() {
                             <p className="truncate text-sm font-medium text-gray-900">{b.propertyTitle}</p>
                             <p className="text-xs text-gray-400">{b.guest?.name || "Guest"} · {new Date(b.checkIn).toLocaleDateString()}</p>
                           </div>
-                          <button onClick={() => setConfirmId(b._id)} className="shrink-0 rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-emerald-600">Accept</button>
+                          <Button onClick={() => setConfirmId(b._id)} variant="success" size="sm" className="shrink-0">Accept</Button>
                         </div>
                       ))}
-                      <Link href="/dashboard/host/reservations" className="flex items-center justify-center gap-1 rounded-lg py-2 text-xs font-medium text-violet-600 transition-colors hover:bg-violet-50">
+                      <Link href="/dashboard/host/reservations" className={buttonClasses({ variant: "ghost", size: "sm", className: "w-full" })}>
                         View all requests <ArrowRight className="h-3 w-3" />
                       </Link>
                     </div>
@@ -152,21 +153,21 @@ export default function HostMainPage() {
           <div className="flex flex-wrap gap-4">
             <Link
               href="/dashboard/host/items/add"
-              className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition-all hover:shadow-xl"
+              className={buttonClasses({ variant: "primary", size: "lg" })}
             >
               <Plus className="h-4 w-4" />
               Add Property
             </Link>
             <Link
               href="/dashboard/host/reservations"
-              className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-gray-700 shadow-sm transition-all hover:border-violet-300 hover:text-violet-600"
+              className={buttonClasses({ variant: "secondary", size: "lg" })}
             >
               <CalendarCheck className="h-4 w-4" />
               View Requests
             </Link>
             <Link
               href="/dashboard/host/earnings"
-              className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-gray-700 shadow-sm transition-all hover:border-violet-300 hover:text-violet-600"
+              className={buttonClasses({ variant: "secondary", size: "lg" })}
             >
               <DollarSign className="h-4 w-4" />
               View Earnings

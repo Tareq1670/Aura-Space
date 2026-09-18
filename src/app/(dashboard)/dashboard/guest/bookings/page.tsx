@@ -158,7 +158,7 @@ export default function GuestBookingsPage() {
               <button
                 onClick={() => setPage(Math.max(1, page - 1))}
                 disabled={page <= 1}
-                className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:opacity-40"
+                className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:opacity-40 touch-44"
               >
                 Previous
               </button>
@@ -168,7 +168,7 @@ export default function GuestBookingsPage() {
               <button
                 onClick={() => setPage(Math.min(totalPages, page + 1))}
                 disabled={page >= totalPages}
-                className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:opacity-40"
+                className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:opacity-40 touch-44"
               >
                 Next
               </button>
@@ -207,7 +207,7 @@ export default function GuestBookingsPage() {
               >
                 <div className="mb-4 flex items-start justify-between">
                   <h2 className="text-lg font-bold text-gray-900">{detail.propertyTitle}</h2>
-                  <button onClick={() => setDetail(null)} className="text-gray-400 hover:text-gray-600">&times;</button>
+                  <button onClick={() => setDetail(null)} className="text-gray-400 hover:text-gray-600 touch-44">&times;</button>
                 </div>
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between"><span className="text-gray-500">Status</span><span className="font-semibold capitalize">{detail.status}</span></div>

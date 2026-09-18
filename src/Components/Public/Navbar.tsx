@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import Button, { buttonClasses } from "@/Components/ui/Button";
 
 type UserRole = "guest" | "host" | "admin";
 
@@ -289,7 +290,7 @@ const handleSignOut = async () => {
                         </div>
                       </div>
                       <span
-                        className={`inline-flex items-center gap-1 mt-3 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider border ${roleBadgeStyles[userRole]}`}
+                        className={`inline-flex items-center gap-1 mt-3 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${roleBadgeStyles[userRole]}`}
                       >
                         {roleLabels[userRole]} Account
                       </span>
@@ -330,13 +331,13 @@ const handleSignOut = async () => {
                 <div className="hidden lg:flex items-center gap-3">
                   <Link
                     href="/login"
-                    className="px-4 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-indigo-600 hover:bg-slate-50 transition"
+                    className={buttonClasses({ variant: "ghost", size: "sm" })}
                   >
                     Login
                   </Link>
                   <Link
                     href="/register"
-                    className="px-5 py-2.5 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-600/20 hover:shadow-indigo-600/30 transition-all active:scale-[0.98]"
+                    className={buttonClasses({ variant: "primary", size: "md" })}
                   >
                     Register
                   </Link>
@@ -392,7 +393,7 @@ const handleSignOut = async () => {
                     <p className="text-xs text-slate-500 truncate">{session.user.email}</p>
                   </div>
                   <span
-                    className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${roleBadgeStyles[userRole]}`}
+                    className={`shrink-0 px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider border ${roleBadgeStyles[userRole]}`}
                   >
                     {roleLabels[userRole]}
                   </span>
@@ -444,27 +445,29 @@ const handleSignOut = async () => {
 
             <div className="mt-4 pt-4 border-t border-slate-100">
               {session ? (
-                <button
+                <Button
                   onClick={handleSignOut}
                   disabled={isSigningOut}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold border border-rose-200 bg-rose-50 text-rose-600 hover:bg-rose-100 transition active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
+                  variant="danger"
+                  size="md"
+                  fullWidth
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
                   </svg>
                   {isSigningOut ? "Signing out..." : "Sign Out"}
-                </button>
+                </Button>
               ) : (
                 <div className="grid grid-cols-2 gap-3">
                   <Link
                     href="/login"
-                    className="flex items-center justify-center px-4 py-3 rounded-xl text-sm font-semibold border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition active:scale-[0.98]"
+                    className={buttonClasses({ variant: "secondary", size: "md" })}
                   >
                     Login
                   </Link>
                   <Link
                     href="/register"
-                    className="flex items-center justify-center px-4 py-3 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-600/20 transition active:scale-[0.98]"
+                    className={buttonClasses({ variant: "primary", size: "md" })}
                   >
                     Register
                   </Link>

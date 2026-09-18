@@ -8,6 +8,7 @@ import { toast } from "sonner"
 import { Search, Download, Calendar, MessageCircle } from "lucide-react"
 import StatusBadge from "@/Components/Booking/StatusBadge"
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal"
+import Button from "@/Components/ui/Button"
 import { bookingAPI, type BookingItem } from "@/lib/api/Guest/booking-api"
 import { startConversation } from "@/lib/actions/message"
 import { formatCurrency } from "@/lib/currency"
@@ -174,13 +175,14 @@ export default function HostReservationsPage() {
           <h1 className="text-2xl font-bold text-gray-900">Reservations</h1>
           <p className="mt-1 text-sm text-gray-500">Manage booking requests from guests</p>
         </div>
-        <button
+        <Button
           onClick={handleExportCSV}
-          className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:border-violet-300 hover:text-violet-600 active:scale-[0.97]"
+          variant="secondary"
+          size="sm"
+          leftIcon={<Download className="h-4 w-4" />}
         >
-          <Download className="h-4 w-4" />
           Export CSV
-        </button>
+        </Button>
       </motion.div>
 
       <div className="mb-6">
@@ -294,36 +296,39 @@ export default function HostReservationsPage() {
                   )}
 
                   <div className="mt-3 flex gap-2">
-                    <button
+                    <Button
                       onClick={() => handleContactGuest(b)}
                       disabled={messaging[b._id]}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-violet-200 px-3 py-1.5 text-xs font-semibold text-violet-600 transition hover:bg-violet-50 active:scale-[0.97] disabled:opacity-50"
+                      variant="secondary"
+                      size="sm"
+                      leftIcon={<MessageCircle className="h-3.5 w-3.5" />}
                     >
-                      <MessageCircle className="h-3.5 w-3.5" />
                       {messaging[b._id] ? "..." : "Message"}
-                    </button>
+                    </Button>
                   </div>
 
                   {b.status === "pending" && (
                     <div className="mt-3 flex gap-2">
-                      <button
+                      <Button
                         onClick={() => { setActionId(b._id); setActionType("confirm") }}
-                        className="rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 px-4 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:from-emerald-600 hover:to-emerald-700 active:scale-[0.97]"
+                        variant="success"
+                        size="sm"
                       >
                         Accept
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         onClick={() => { setActionId(b._id); setActionType("cancel") }}
-                        className="rounded-lg border border-red-200 px-4 py-1.5 text-xs font-semibold text-red-600 transition hover:bg-red-50 active:scale-[0.97]"
+                        variant="danger"
+                        size="sm"
                       >
                         Reject
-                      </button>
+                      </Button>
                     </div>
                   )}
 
                   {b.status === "confirmed" && (
                     <div className="mt-3 flex gap-2">
-                      <button
+                      <Button
                         onClick={async () => {
                           try {
                             const res = await bookingAPI.completeBooking(b._id);
@@ -337,10 +342,11 @@ export default function HostReservationsPage() {
                             toast.error(err instanceof Error ? err.message : "Failed to complete");
                           }
                         }}
-                        className="rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:from-blue-600 hover:to-blue-700 active:scale-[0.97]"
+                        variant="primary"
+                        size="sm"
                       >
                         Mark as Completed
-                      </button>
+                      </Button>
                     </div>
                   )}
                 </div>

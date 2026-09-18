@@ -167,7 +167,7 @@ function FeaturedCard({
             />
             <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[1.4fr_0.8fr] lg:gap-8 lg:p-10">
                 <div>
-                    <div className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-indigo-700">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3.5 py-1.5 text-xs font-bold uppercase tracking-eyebrow text-indigo-700">
                         <motion.span
                             className="h-1.5 w-1.5 rounded-full bg-indigo-500"
                             animate={
@@ -185,7 +185,7 @@ function FeaturedCard({
 
                     <div className="mt-5 flex items-center gap-3">
                         <StarRating rating={item.rating} />
-                        <span className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">
+                        <span className="text-xs font-semibold uppercase tracking-eyebrow text-slate-400">
                             Trusted Experience
                         </span>
                     </div>
@@ -195,7 +195,7 @@ function FeaturedCard({
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.7, delay: 0.15 }}
-                        className="mt-5 max-w-2xl text-lg font-medium leading-relaxed text-slate-700 sm:text-xl lg:text-[1.45rem] lg:leading-relaxed"
+                        className="mt-5 max-w-2xl text-lg font-medium leading-relaxed text-slate-700 sm:text-xl lg:text-2xl lg:leading-relaxed"
                     >
                         &ldquo;{item.quote}&rdquo;
                     </motion.p>
@@ -212,7 +212,7 @@ function FeaturedCard({
                             />
                         </div>
                         <div className="min-w-0">
-                            <h3 className="truncate text-base font-black tracking-[-0.02em] text-slate-950">
+                            <h3 className="truncate text-base font-black tracking-tight text-slate-950">
                                 {item.name}
                             </h3>
                             <p className="mt-0.5 text-sm font-medium text-slate-500">
@@ -245,14 +245,14 @@ function FeaturedCard({
                                 <path d="M10.7 8C6.98 8 4 11.08 4 14.8c0 3.28 2.3 5.74 5.46 5.74.22 0 .44-.02.66-.06-.48 1.84-1.8 3.52-4.18 5.02l1.26 2.5c5.7-2.52 9.28-7.08 9.28-13.08C16.48 11.1 14.04 8 10.7 8zm12 0c-3.72 0-6.7 3.08-6.7 6.8 0 3.28 2.3 5.74 5.46 5.74.22 0 .44-.02.66-.06-.48 1.84-1.8 3.52-4.18 5.02l1.26 2.5c5.7-2.52 9.28-7.08 9.28-13.08C28.48 11.1 26.04 8 22.7 8z" />
                             </svg>
                         </div>
-                        <div className="rounded-full border border-indigo-100 bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-indigo-700 shadow-sm">
+                        <div className="rounded-full border border-indigo-100 bg-white px-3 py-1 text-xs font-bold uppercase tracking-eyebrow text-indigo-700 shadow-sm">
                             5-Star Review
                         </div>
                     </div>
 
                     <div className="mt-6 space-y-3">
                         <div className="rounded-2xl border border-white bg-white/90 px-4 py-3 shadow-sm">
-                            <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">
+                            <div className="text-xs font-bold uppercase tracking-eyebrow text-slate-400">
                                 Experience
                             </div>
                             <div className="mt-1 text-sm font-semibold text-slate-800">
@@ -260,7 +260,7 @@ function FeaturedCard({
                             </div>
                         </div>
                         <div className="rounded-2xl border border-white bg-white/90 px-4 py-3 shadow-sm">
-                            <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">
+                            <div className="text-xs font-bold uppercase tracking-eyebrow text-slate-400">
                                 Best For
                             </div>
                             <div className="mt-1 text-sm font-semibold text-slate-800">
@@ -268,7 +268,7 @@ function FeaturedCard({
                             </div>
                         </div>
                         <div className="rounded-2xl border border-white bg-white/90 px-4 py-3 shadow-sm">
-                            <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">
+                            <div className="text-xs font-bold uppercase tracking-eyebrow text-slate-400">
                                 Trust Signal
                             </div>
                             <div className="mt-1 text-sm font-semibold text-slate-800">
@@ -309,7 +309,7 @@ function MarqueeCard({
             <div className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500 transition-transform duration-500 group-hover:scale-x-100" />
 
             <div className="flex items-center justify-between gap-3">
-                <div className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-indigo-700">
+                <div className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1 text-xs font-bold uppercase tracking-eyebrow text-indigo-700">
                     <span className="h-1.5 w-1.5 rounded-full bg-indigo-500" />
                     {item.category}
                 </div>
@@ -343,13 +343,13 @@ function MarqueeCard({
                     />
                 </div>
                 <div className="min-w-0">
-                    <h3 className="truncate text-sm font-black tracking-[-0.02em] text-slate-950">
+                    <h3 className="truncate text-sm font-black tracking-tight text-slate-950">
                         {item.name}
                     </h3>
                     <p className="mt-0.5 truncate text-xs font-medium text-slate-500">
                         {item.role}
                     </p>
-                    <div className="mt-1 flex items-center gap-2 text-[11px] text-slate-400">
+                    <div className="mt-1 flex items-center gap-2 text-xs text-slate-400">
                         <span className="truncate">{item.location}</span>
                     </div>
                 </div>
@@ -373,7 +373,7 @@ export default function Testimonials() {
                 >
                     <motion.h2
                         variants={itemVariants}
-                        className="text-[28px] font-black leading-[1.08] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[42px] lg:text-5xl"
+                        className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl lg:text-5xl"
                     >
                         Trusted by Guests, Hosts{" "}
                         <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
@@ -383,7 +383,7 @@ export default function Testimonials() {
 
                     <motion.p
                         variants={itemVariants}
-                        className="mt-4 text-sm leading-relaxed text-slate-500 sm:mt-5 sm:text-[15px]"
+                        className="mt-4 text-sm leading-relaxed text-slate-500 sm:mt-5 sm:text-base"
                     >
                         Discover how AuraSpace creates refined stays, elevated
                         venues, and memorable experiences for modern travelers
@@ -442,13 +442,13 @@ export default function Testimonials() {
                     transition={{ duration: 0.65, delay: 0.15 }}
                     className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:mt-10"
                 >
-                    <div className="rounded-full border border-slate-200 bg-white px-4 py-2 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-600 shadow-sm">
+                    <div className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-bold uppercase tracking-eyebrow text-slate-600 shadow-sm">
                         4.9/5 Average Rating
                     </div>
-                    <div className="rounded-full border border-indigo-100 bg-indigo-50 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.14em] text-indigo-700 shadow-sm">
+                    <div className="rounded-full border border-indigo-100 bg-indigo-50 px-4 py-2 text-xs font-bold uppercase tracking-eyebrow text-indigo-700 shadow-sm">
                         Premium Verified Listings
                     </div>
-                    <div className="rounded-full border border-violet-100 bg-violet-50 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.14em] text-violet-700 shadow-sm">
+                    <div className="rounded-full border border-violet-100 bg-violet-50 px-4 py-2 text-xs font-bold uppercase tracking-eyebrow text-violet-700 shadow-sm">
                         Trusted Worldwide
                     </div>
                 </motion.div>

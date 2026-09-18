@@ -75,8 +75,9 @@ export default function StepPricing({
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.15 }}
                 >
-                    <label className={labelClass}>Currency</label>
+                    <label htmlFor="pricing-currency" className={labelClass}>Currency</label>
                     <select
+                        id="pricing-currency"
                         value={formData.pricing.currency}
                         onChange={(e) =>
                             updateNestedField("pricing", {
@@ -103,16 +104,17 @@ export default function StepPricing({
             >
                 <div className="flex items-center gap-2 mb-4">
                     <DollarSign className="w-5 h-5 text-rose-500" />
-                    <h3 className="font-bold text-lg text-gray-900">
+                    <label htmlFor="pricing-per-night" className="font-bold text-lg text-gray-900">
                         Price per night
-                    </h3>
+                    </label>
                 </div>
                 <div className="relative max-w-sm">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-gray-400">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-gray-500">
                         {selectedCurrency.symbol}
                     </span>
                     <input
                         type="number"
+                        id="pricing-per-night"
                         value={formData.pricing.perNight ?? ""}
                         onChange={(e) =>
                             updateNestedField("pricing", {
@@ -147,13 +149,14 @@ export default function StepPricing({
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                        <label className={labelClass}>Cleaning Fee</label>
+                        <label htmlFor="pricing-cleaning" className={labelClass}>Cleaning Fee</label>
                         <div className="relative">
-                            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">
+                            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">
                                 {selectedCurrency.symbol}
                             </span>
                             <input
                                 type="number"
+                                id="pricing-cleaning"
                                 value={formData.pricing.cleaningFee ?? ""}
                                 onChange={(e) =>
                                     updateNestedField("pricing", {
@@ -167,13 +170,14 @@ export default function StepPricing({
                         </div>
                     </div>
                     <div>
-                        <label className={labelClass}>Service Fee</label>
+                        <label htmlFor="pricing-service" className={labelClass}>Service Fee</label>
                         <div className="relative">
-                            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">
+                            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">
                                 {selectedCurrency.symbol}
                             </span>
                             <input
                                 type="number"
+                                id="pricing-service"
                                 value={formData.pricing.serviceFee ?? ""}
                                 onChange={(e) =>
                                     updateNestedField("pricing", {
@@ -205,12 +209,13 @@ export default function StepPricing({
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                        <label className={labelClass}>
+                        <label htmlFor="pricing-weekly-discount" className={labelClass}>
                             Weekly Discount (%)
                         </label>
                         <div className="relative">
                             <input
                                 type="number"
+                                id="pricing-weekly-discount"
                                 value={
                                     formData.pricing.weeklyDiscount ?? ""
                                 }
@@ -226,18 +231,19 @@ export default function StepPricing({
                                 max={90}
                                 className={inputClass}
                             />
-                            <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">
+                            <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">
                                 %
                             </span>
                         </div>
                     </div>
                     <div>
-                        <label className={labelClass}>
+                        <label htmlFor="pricing-monthly-discount" className={labelClass}>
                             Monthly Discount (%)
                         </label>
                         <div className="relative">
                             <input
                                 type="number"
+                                id="pricing-monthly-discount"
                                 value={
                                     formData.pricing.monthlyDiscount ?? ""
                                 }
@@ -253,7 +259,7 @@ export default function StepPricing({
                                 max={90}
                                 className={inputClass}
                             />
-                            <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 font-semibold">
+                            <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">
                                 %
                             </span>
                         </div>

@@ -135,11 +135,11 @@ export default function AdminHostsPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   {host.banned ? (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-red-600">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-red-600">
                       <Ban className="h-3 w-3" /> Banned
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-600">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-emerald-600">
                       <CheckCircle className="h-3 w-3" /> Active
                     </span>
                   )}

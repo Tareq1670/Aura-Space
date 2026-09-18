@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import Image from "next/image"
 import RatingStars from "@/Components/Review/RatingStars"
+import Button from "@/Components/ui/Button"
 import { Star, MessageSquare, Flag, Edit3, Trash2, Reply, Clock } from "lucide-react"
 
 export interface ReviewItem {
@@ -122,7 +123,7 @@ export default function ReviewCard({
                   {review.guest?.name || "Anonymous"}
                 </p>
                 {!isHost && (
-                  <span className="shrink-0 rounded-full bg-violet-50 px-2 py-0.5 text-[10px] font-medium text-violet-600">
+                  <span className="shrink-0 rounded-full bg-violet-50 px-2 py-0.5 text-xs font-medium text-violet-600">
                     Guest
                   </span>
                 )}
@@ -160,7 +161,7 @@ export default function ReviewCard({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.12 }}
-          className="mt-3.5 text-sm leading-[1.7] text-gray-600"
+          className="mt-3.5 text-sm leading-relaxed text-gray-600"
         >
           {review.comment}
         </motion.p>
@@ -197,40 +198,45 @@ export default function ReviewCard({
           className="mt-4 flex items-center gap-1 border-t border-gray-100 pt-3.5"
         >
           {!isHost && onEdit && (
-            <button
+            <Button
               onClick={() => onEdit(review)}
-              className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-gray-400 transition-all hover:bg-violet-50 hover:text-violet-600"
+              variant="ghost"
+              size="sm"
+              leftIcon={<Edit3 className="h-3.5 w-3.5" />}
             >
-              <Edit3 className="h-3.5 w-3.5" />
               Edit
-            </button>
+            </Button>
           )}
           {!isHost && onDelete && (
-            <button
+            <Button
               onClick={() => onDelete(review._id)}
-              className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-gray-400 transition-all hover:bg-red-50 hover:text-red-500"
+              variant="ghost"
+              size="sm"
+              leftIcon={<Trash2 className="h-3.5 w-3.5" />}
             >
-              <Trash2 className="h-3.5 w-3.5" />
               Delete
-            </button>
+            </Button>
           )}
           {isHost && onReply && (
-            <button
+            <Button
               onClick={() => onReply(review._id)}
-              className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-gray-400 transition-all hover:bg-emerald-50 hover:text-emerald-600"
+              variant="ghost"
+              size="sm"
+              leftIcon={<MessageSquare className="h-3.5 w-3.5" />}
             >
-              <MessageSquare className="h-3.5 w-3.5" />
               Reply
-            </button>
+            </Button>
           )}
           {!isHost && onReport && !review.isReported && (
-            <button
+            <Button
               onClick={() => onReport(review._id)}
-              className="ml-auto flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-gray-400 transition-all hover:bg-amber-50 hover:text-amber-600"
+              variant="ghost"
+              size="sm"
+              className="ml-auto"
+              leftIcon={<Flag className="h-3.5 w-3.5" />}
             >
-              <Flag className="h-3.5 w-3.5" />
               Report
-            </button>
+            </Button>
           )}
           {review.isReported && (
             <motion.span

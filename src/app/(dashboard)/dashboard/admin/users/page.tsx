@@ -7,6 +7,7 @@ import ModalPortal from "@/lib/modal-portal";
 import { ListBox, Select, Skeleton } from "@heroui/react";
 import { toast } from "sonner";
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal";
+import Button from "@/Components/ui/Button";
 import DataTable from "@/Components/Dashboard/DataTable";
 import type { Column } from "@/Components/Dashboard/DataTable";
 import {
@@ -492,7 +493,7 @@ export default function AdminUsersPage() {
                   {u.name as string}
                 </p>
                 {isSelf(u.id as string) && (
-                  <span className="px-1.5 py-0.5 text-[10px] font-bold bg-violet-100 text-violet-600 rounded-md">
+                  <span className="px-1.5 py-0.5 text-xs font-bold bg-violet-100 text-violet-600 rounded-md">
                     YOU
                   </span>
                 )}
@@ -876,14 +877,12 @@ export default function AdminUsersPage() {
             </svg>
           </div>
           <p className="text-red-500 text-sm font-medium">{error}</p>
-          <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+          <Button
             onClick={fetchUsers}
-            className="px-5 py-2.5 bg-gradient-to-r from-violet-500 to-indigo-600 text-white text-sm font-semibold rounded-xl shadow-lg shadow-violet-500/25 cursor-pointer"
+            variant="primary"
           >
             Try Again
-          </motion.button>
+          </Button>
         </div>
       </div>
     );
@@ -912,27 +911,27 @@ export default function AdminUsersPage() {
             </p>
           </div>
 
-          <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+          <Button
             onClick={fetchUsers}
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:border-violet-200 transition-all cursor-pointer shadow-sm"
+            variant="secondary"
+            leftIcon={
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                />
+              </svg>
+            }
           >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-              />
-            </svg>
             Refresh
-          </motion.button>
+          </Button>
         </motion.div>
 
         {/* Stat cards */}
@@ -1038,27 +1037,28 @@ export default function AdminUsersPage() {
                   </Select.Popover>
                 </Select>
 
-                <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
+                <Button
                   onClick={handleExport}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-500 to-indigo-600 text-white text-xs font-semibold rounded-xl shadow-md shadow-violet-500/20 cursor-pointer hover:shadow-lg hover:shadow-violet-500/30 transition-all"
+                  variant="primary"
+                  size="sm"
+                  leftIcon={
+                    <svg
+                      className="w-3.5 h-3.5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      />
+                    </svg>
+                  }
                 >
-                  <svg
-                    className="w-3.5 h-3.5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
                   Export
-                </motion.button>
+                </Button>
               </div>
             }
           />
@@ -1146,37 +1146,22 @@ export default function AdminUsersPage() {
                 </div>
 
                 <div className="flex gap-3">
-                  <motion.button
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.99 }}
+                  <Button
                     onClick={closeModal}
                     disabled={actionLoading}
-                    className="flex-1 py-2.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl text-gray-600 text-sm font-semibold cursor-pointer disabled:opacity-50 transition-all"
+                    variant="secondary"
+                    className="flex-1"
                   >
                     Cancel
-                  </motion.button>
-                  <motion.button
-                    whileHover={!actionLoading ? { scale: 1.01 } : {}}
-                    whileTap={!actionLoading ? { scale: 0.99 } : {}}
+                  </Button>
+                  <Button
                     onClick={handleRoleChange}
-                    disabled={
-                      actionLoading || selectedRole === selectedUser.role
-                    }
-                    className="flex-1 py-2.5 bg-gradient-to-r from-violet-500 to-indigo-600 rounded-xl text-white text-sm font-semibold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-violet-500/25 flex items-center justify-center gap-2 transition-all"
+                    disabled={actionLoading || selectedRole === selectedUser.role}
+                    isLoading={actionLoading}
+                    className="flex-1"
                   >
-                    {actionLoading && (
-                      <motion.span
-                        animate={{ rotate: 360 }}
-                        transition={{
-                          duration: 1,
-                          repeat: Infinity,
-                          ease: "linear",
-                        }}
-                        className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
-                      />
-                    )}
                     Update Role
-                  </motion.button>
+                  </Button>
                 </div>
               </motion.div>
             </motion.div>

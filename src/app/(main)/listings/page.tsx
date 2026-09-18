@@ -250,7 +250,7 @@ function ListingsContent() {
             <header className="border-b border-slate-200/80 bg-white shadow-sm">
                 <div className="container mx-auto flex flex-wrap items-center justify-between gap-4 px-4 py-5 sm:px-6 lg:px-8">
                     <div>
-                        <h1 className="text-2xl font-black leading-tight tracking-[-0.025em] text-slate-900 sm:text-3xl">
+                        <h1 className="text-2xl font-black leading-tight tracking-tight text-slate-900 sm:text-3xl">
                             Explore{" "}
                             <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-clip-text text-transparent">
                                 Stays
@@ -283,7 +283,7 @@ function ListingsContent() {
                             </svg>
                             Filters
                             {activeFilterCount > 0 && (
-                                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-indigo-600 text-[9px] font-bold text-white">
+                                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-indigo-600 text-xs font-bold text-white">
                                     {activeFilterCount}
                                 </span>
                             )}
@@ -310,7 +310,7 @@ function ListingsContent() {
                             <button
                                 key={chip.key}
                                 onClick={chip.onClear}
-                                className="inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-indigo-50/70 px-3 py-1.5 text-xs font-medium text-indigo-700 transition-colors hover:bg-indigo-100"
+                                className="inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-indigo-50/70 px-3 py-2 text-xs font-medium text-indigo-700 transition-colors hover:bg-indigo-100 touch-44"
                             >
                                 {chip.label}
                                 <X className="h-3 w-3" aria-hidden="true" />
@@ -318,7 +318,7 @@ function ListingsContent() {
                         ))}
                         <button
                             onClick={clearFilters}
-                            className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-slate-500 transition-colors hover:text-rose-600"
+                            className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-slate-500 transition-colors hover:text-rose-600 touch-44"
                         >
                             Clear all
                         </button>

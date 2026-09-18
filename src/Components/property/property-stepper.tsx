@@ -80,7 +80,7 @@ export default function PropertyStepper({
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => goToStep(index)}
-                            className="relative z-10 flex flex-col items-center gap-2 group"
+                            className="relative z-10 flex flex-col items-center gap-2 group touch-44"
                         >
                             <div
                                 className={cn(

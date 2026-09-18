@@ -15,6 +15,7 @@ import {
     Shield,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
+import { buttonClasses } from "@/Components/ui/Button";
 import { useState } from "react";
 
 interface StepHouseRulesProps {
@@ -61,7 +62,7 @@ function ToggleRule({
                     <p className="font-semibold text-gray-800 dark:text-gray-200">
                         {label}
                     </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <p className="text-sm text-gray-500 dark:text-gray-500">
                         {description}
                     </p>
                 </div>
@@ -70,6 +71,8 @@ function ToggleRule({
                 type="button"
                 whileTap={{ scale: 0.95 }}
                 onClick={() => onChange(!checked)}
+                aria-pressed={checked}
+                aria-label={label}
                 className={cn(
                     "relative w-14 h-8 rounded-full transition-colors duration-200 flex-shrink-0",
                     checked
@@ -140,7 +143,7 @@ export default function StepHouseRules({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.1 }}
-                    className="text-gray-500 dark:text-gray-400"
+                    className="text-gray-500 dark:text-gray-500"
                 >
                     Clear rules help set expectations for guests and protect
                     your property.
@@ -156,7 +159,7 @@ export default function StepHouseRules({
             >
                 <ToggleRule
                     icon={
-                        <Cigarette className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        <Cigarette className="w-5 h-5 text-gray-600 dark:text-gray-500" />
                     }
                     label="Smoking allowed"
                     description="Guests can smoke inside the property"
@@ -169,7 +172,7 @@ export default function StepHouseRules({
                 />
                 <ToggleRule
                     icon={
-                        <PawPrint className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        <PawPrint className="w-5 h-5 text-gray-600 dark:text-gray-500" />
                     }
                     label="Pets allowed"
                     description="Guests can bring their pets"
@@ -182,7 +185,7 @@ export default function StepHouseRules({
                 />
                 <ToggleRule
                     icon={
-                        <PartyPopper className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        <PartyPopper className="w-5 h-5 text-gray-600 dark:text-gray-500" />
                     }
                     label="Parties & events allowed"
                     description="Guests can host events at the property"
@@ -210,8 +213,9 @@ export default function StepHouseRules({
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                        <label className={labelClass}>Check-in time</label>
+                        <label htmlFor="rules-checkin" className={labelClass}>Check-in time</label>
                         <select
+                            id="rules-checkin"
                             value={formData.houseRules.checkInTime}
                             onChange={(e) =>
                                 updateNestedField("houseRules", {
@@ -233,10 +237,11 @@ export default function StepHouseRules({
                         )}
                     </div>
                     <div>
-                        <label className={labelClass}>
+                        <label htmlFor="rules-checkout" className={labelClass}>
                             Check-out time
                         </label>
                         <select
+                            id="rules-checkout"
                             value={formData.houseRules.checkOutTime}
                             onChange={(e) =>
                                 updateNestedField("houseRules", {
@@ -275,8 +280,9 @@ export default function StepHouseRules({
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                        <label className={labelClass}>From</label>
+                        <label htmlFor="rules-quiet-from" className={labelClass}>From</label>
                         <select
+                            id="rules-quiet-from"
                             value={formData.houseRules.quietHoursStart}
                             onChange={(e) =>
                                 updateNestedField("houseRules", {
@@ -293,8 +299,9 @@ export default function StepHouseRules({
                         </select>
                     </div>
                     <div>
-                        <label className={labelClass}>To</label>
+                        <label htmlFor="rules-quiet-to" className={labelClass}>To</label>
                         <select
+                            id="rules-quiet-to"
                             value={formData.houseRules.quietHoursEnd}
                             onChange={(e) =>
                                 updateNestedField("houseRules", {
@@ -326,9 +333,13 @@ export default function StepHouseRules({
                         Additional Rules
                     </h3>
                 </div>
+                <label htmlFor="rules-additional" className={labelClass}>
+                    Additional rule
+                </label>
                 <div className="flex gap-2">
                     <input
                         type="text"
+                        id="rules-additional"
                         value={newRule}
                         onChange={(e) => setNewRule(e.target.value)}
                         onKeyDown={(e) =>
@@ -341,9 +352,14 @@ export default function StepHouseRules({
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         type="button"
+                        aria-label="Add additional rule"
                         onClick={addRule}
                         disabled={!newRule.trim()}
-                        className="px-4 py-3.5 bg-rose-500 hover:bg-rose-600 disabled:bg-gray-300 dark:disabled:bg-gray-700 text-white rounded-xl transition-colors flex-shrink-0"
+                        className={buttonClasses({
+                            variant: "outline",
+                            size: "sm",
+                            className: "flex-shrink-0",
+                        })}
                     >
                         <Plus className="w-5 h-5" />
                     </motion.button>
@@ -370,10 +386,11 @@ export default function StepHouseRules({
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
                                     type="button"
+                                    aria-label={`Remove rule ${index + 1}`}
                                     onClick={() => removeRule(index)}
-                                    className="w-7 h-7 rounded-full hover:bg-red-100 dark:hover:bg-red-950/30 flex items-center justify-center transition-colors"
+                                    className="w-7 h-7 rounded-full hover:bg-red-100 dark:hover:bg-red-950/30 flex items-center justify-center transition-colors touch-44"
                                 >
-                                    <X className="w-4 h-4 text-gray-400 hover:text-red-500" />
+                                    <X className="w-4 h-4 text-gray-500 hover:text-red-500" />
                                 </motion.button>
                             </motion.div>
                         )

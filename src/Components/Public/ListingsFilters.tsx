@@ -96,7 +96,7 @@ function FilterFields({
     const labelClass =
         variant === "sidebar"
             ? "mb-3 text-xs font-bold uppercase tracking-wider text-slate-500"
-            : "mb-2 text-[11px] font-bold uppercase tracking-wider text-slate-500";
+            : "mb-2 text-xs font-bold uppercase tracking-wider text-slate-500";
     const popoverClass =
         variant === "sidebar"
             ? "z-50 rounded-xl border border-slate-200 bg-white p-1 shadow-xl"
@@ -365,7 +365,7 @@ export function FiltersDrawer({
                                 ref={closeBtnRef}
                                 onClick={onClose}
                                 aria-label="Close filters"
-                                className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-colors hover:bg-slate-200"
+                                className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-colors hover:bg-slate-200 touch-44"
                             >
                                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />

@@ -95,7 +95,7 @@ export default function PropertyDataTable({ properties, onDelete, onDuplicate }:
                 <div className="flex items-center gap-1">
                     <Link
                         href={`/dashboard/host/items/edit/${row.id}`}
-                        className="p-1.5 rounded-lg text-violet-600 hover:bg-violet-50 transition-colors"
+                        className="p-1.5 rounded-lg text-violet-600 hover:bg-violet-50 transition-colors touch-44"
                         title="Edit"
                     >
                         <Edit className="w-4 h-4" />
@@ -103,7 +103,7 @@ export default function PropertyDataTable({ properties, onDelete, onDuplicate }:
                     <button
                         type="button"
                         onClick={() => onDuplicate(row.id)}
-                        className="p-1.5 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors"
+                        className="p-1.5 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors touch-44"
                         title="Duplicate"
                     >
                         <Copy className="w-4 h-4" />
@@ -111,7 +111,7 @@ export default function PropertyDataTable({ properties, onDelete, onDuplicate }:
                     <Link
                         href={`/listings/${row.id}`}
                         target="_blank"
-                        className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-50 transition-colors"
+                        className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-50 transition-colors touch-44"
                         title="View live listing"
                     >
                         <ExternalLink className="w-4 h-4" />
@@ -119,7 +119,7 @@ export default function PropertyDataTable({ properties, onDelete, onDuplicate }:
                     <button
                         type="button"
                         onClick={() => onDelete(row.id)}
-                        className="p-1.5 rounded-lg text-red-500 hover:bg-red-50 transition-colors"
+                        className="p-1.5 rounded-lg text-red-500 hover:bg-red-50 transition-colors touch-44"
                         title="Delete"
                     >
                         <Trash2 className="w-4 h-4" />

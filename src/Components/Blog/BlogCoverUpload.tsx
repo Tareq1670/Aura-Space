@@ -60,9 +60,18 @@ export default function BlogCoverUpload({ value, onChange, className }: BlogCove
 
     return (
         <div className={className}>
-            <label className="block text-xs font-medium text-slate-700 mb-1.5">Cover Image</label>
+            <label htmlFor="blog-cover-image" className="block text-xs font-medium text-slate-700 mb-1.5">Cover Image</label>
             <div
+                role="button"
+                tabIndex={0}
+                aria-label="Upload cover image"
                 onClick={() => !isUploading && inputRef.current?.click()}
+                onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        if (!isUploading) inputRef.current?.click();
+                    }
+                }}
                 onDragOver={(e) => {
                     e.preventDefault();
                     setIsDragging(true);
@@ -78,6 +87,7 @@ export default function BlogCoverUpload({ value, onChange, className }: BlogCove
                 }`}
             >
                 <input
+                    id="blog-cover-image"
                     ref={inputRef}
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
@@ -107,7 +117,8 @@ export default function BlogCoverUpload({ value, onChange, className }: BlogCove
                         </div>
                         <button
                             onClick={handleRemove}
-                            className="absolute top-2 right-2 flex items-center justify-center w-7 h-7 bg-white/90 backdrop-blur-sm rounded-full shadow-sm hover:bg-white transition-colors"
+                            aria-label="Remove cover image"
+                            className="absolute top-2 right-2 flex items-center justify-center w-7 h-7 bg-white/90 backdrop-blur-sm rounded-full shadow-sm hover:bg-white transition-colors touch-44"
                         >
                             <X className="w-3.5 h-3.5 text-slate-600" />
                         </button>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Button from "@/Components/ui/Button";
 
 export default function ErrorPage({
     error,
@@ -21,12 +22,9 @@ export default function ErrorPage({
                 <p className="text-gray-500 mb-6">
                     An unexpected error occurred. Please try again.
                 </p>
-                <button
-                    onClick={reset}
-                    className="px-6 py-3 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-500 text-white font-medium hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
-                >
+                <Button variant="primary" size="lg" onClick={reset}>
                     Try Again
-                </button>
+                </Button>
             </div>
         </div>
     );

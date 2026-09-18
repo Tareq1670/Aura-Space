@@ -18,6 +18,7 @@ import {
 import BlogEditor from "@/Components/Blog/BlogEditor";
 import BlogCoverUpload from "@/Components/Blog/BlogCoverUpload";
 import AIBlogGenerator from "@/Components/Blog/AIBlogGenerator";
+import { buttonClasses } from "@/Components/ui/Button";
 import type { AIBlogResponse } from "@/lib/actions/blog";
 
 const TAG_SUGGESTIONS = [
@@ -208,7 +209,10 @@ export default function BlogFormPage({ blogId, backLink }: BlogFormPageProps) {
                         whileHover={{ scale: 1.03 }}
                         whileTap={{ scale: 0.97 }}
                         onClick={() => setAiOpen(true)}
-                        className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white text-xs sm:text-sm font-semibold rounded-lg sm:rounded-xl shadow-lg shadow-indigo-500/30 transition-all shrink-0"
+                        className={buttonClasses({
+                            variant: "primary",
+                            className: "shrink-0",
+                        })}
                     >
                         <Sparkles className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
                         AI Generate
@@ -241,10 +245,11 @@ export default function BlogFormPage({ blogId, backLink }: BlogFormPageProps) {
 
                             <div className="space-y-5">
                                 <div>
-                                    <label className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2 block">
+                                    <label htmlFor="blog-title" className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2 block">
                                         Title <span className="text-red-500">*</span>
                                     </label>
                                     <input
+                                        id="blog-title"
                                         type="text"
                                         value={title}
                                         onChange={(e) => setTitle(e.target.value)}
@@ -315,10 +320,11 @@ export default function BlogFormPage({ blogId, backLink }: BlogFormPageProps) {
                             <div className="grid sm:grid-cols-2 gap-5 sm:gap-6">
                                 {/* Excerpt */}
                                 <div className="sm:col-span-2 lg:col-span-1">
-                                    <label className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2 block">
+                                    <label htmlFor="blog-excerpt" className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2 block">
                                         Excerpt
                                     </label>
                                     <textarea
+                                        id="blog-excerpt"
                                         value={excerpt}
                                         onChange={(e) => setExcerpt(e.target.value)}
                                         placeholder="Brief summary (auto-generated if left empty)"
@@ -333,7 +339,7 @@ export default function BlogFormPage({ blogId, backLink }: BlogFormPageProps) {
 
                                 {/* Tags */}
                                 <div className="sm:col-span-2 lg:col-span-1">
-                                    <label className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2 block">
+                                    <label htmlFor="blog-tags" className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2 block">
                                         Tags
                                     </label>
                                     <div className="flex flex-wrap gap-1.5 mb-3 min-h-[28px]">
@@ -345,7 +351,8 @@ export default function BlogFormPage({ blogId, backLink }: BlogFormPageProps) {
                                                 {tag}
                                                 <button
                                                     onClick={() => removeTag(tag)}
-                                                    className="text-indigo-400 hover:text-indigo-600 leading-none"
+                                                    aria-label={`Remove tag ${tag}`}
+                                                    className="text-indigo-400 hover:text-indigo-600 leading-none touch-44"
                                                 >
                                                     &times;
                                                 </button>
@@ -354,6 +361,7 @@ export default function BlogFormPage({ blogId, backLink }: BlogFormPageProps) {
                                     </div>
                                     <div className="relative">
                                         <input
+                                            id="blog-tags"
                                             type="text"
                                             value={tagInput}
                                             onChange={(e) => setTagInput(e.target.value)}
@@ -364,14 +372,14 @@ export default function BlogFormPage({ blogId, backLink }: BlogFormPageProps) {
                                     </div>
                                     {TAG_SUGGESTIONS.filter((t) => !tags.includes(t)).length > 0 && (
                                         <div className="flex flex-wrap gap-1.5 mt-3">
-                                            <span className="text-[11px] text-slate-400 font-medium uppercase tracking-wider self-center mr-1">
+                                            <span className="text-xs text-slate-400 font-medium uppercase tracking-wider self-center mr-1">
                                                 Suggest:
                                             </span>
                                             {TAG_SUGGESTIONS.filter((t) => !tags.includes(t)).slice(0, 6).map((tag) => (
                                                 <button
                                                     key={tag}
                                                     onClick={() => addTag(tag)}
-                                                    className="px-2.5 py-1 text-[11px] font-medium text-slate-500 border border-slate-200 rounded-full hover:bg-slate-50 hover:border-indigo-300 hover:text-indigo-600 capitalize transition-colors"
+                                                    className="px-2.5 py-2 text-xs font-medium text-slate-500 border border-slate-200 rounded-full hover:bg-slate-50 hover:border-indigo-300 hover:text-indigo-600 capitalize transition-colors touch-44"
                                                 >
                                                     + {tag}
                                                 </button>
@@ -397,7 +405,9 @@ export default function BlogFormPage({ blogId, backLink }: BlogFormPageProps) {
                         whileTap={{ scale: 0.98 }}
                         onClick={() => handleSubmit("draft")}
                         disabled={saving}
-                        className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 border-2 border-slate-200 text-xs sm:text-sm font-semibold text-slate-600 rounded-lg sm:rounded-xl hover:bg-slate-50 transition disabled:opacity-50"
+                        className={buttonClasses({
+                            variant: "secondary",
+                        })}
                     >
                         <Save className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
                         Save Draft
@@ -407,7 +417,9 @@ export default function BlogFormPage({ blogId, backLink }: BlogFormPageProps) {
                         whileTap={{ scale: 0.98 }}
                         onClick={() => handleSubmit("published")}
                         disabled={saving}
-                        className="flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white text-xs sm:text-sm font-semibold rounded-lg sm:rounded-xl shadow-lg shadow-indigo-600/30 transition disabled:opacity-50"
+                        className={buttonClasses({
+                            variant: "primary",
+                        })}
                     >
                         {saving ? (
                             <Loader2 className="w-3.5 sm:w-4 h-3.5 sm:h-4 animate-spin" />

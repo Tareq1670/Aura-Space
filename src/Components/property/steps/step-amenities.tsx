@@ -48,7 +48,7 @@ export default function StepAmenities({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.1 }}
-                    className="text-gray-500 dark:text-gray-400"
+                    className="text-gray-500 dark:text-gray-500"
                 >
                     Select all amenities available at your property. You can
                     always add more later.
@@ -92,6 +92,7 @@ export default function StepAmenities({
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.97 }}
                                         type="button"
+                                        aria-pressed={isSelected}
                                         onClick={() =>
                                             toggleAmenity(amenity.id)
                                         }
@@ -116,7 +117,7 @@ export default function StepAmenities({
                                                 "w-5 h-5 flex-shrink-0",
                                                 isSelected
                                                     ? "text-rose-600 dark:text-rose-400"
-                                                    : "text-gray-500 dark:text-gray-400"
+                                                    : "text-gray-500 dark:text-gray-500"
                                             )}
                                         />
                                         <span

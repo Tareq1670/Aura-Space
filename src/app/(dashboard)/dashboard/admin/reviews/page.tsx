@@ -9,6 +9,7 @@ import { Flag, Trash2, X, AlertTriangle, Shield, Eye, Download, AlertCircle, Ref
 import DataTable from "@/Components/Dashboard/DataTable"
 import type { Column } from "@/Components/Dashboard/DataTable"
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal"
+import Button from "@/Components/ui/Button"
 import RatingStars from "@/Components/Review/RatingStars"
 import { reviewAPI, type ReviewRecord } from "@/lib/api/Guest/review-api"
 import { deleteReview, dismissReviewReport } from "@/lib/actions/review"
@@ -17,7 +18,7 @@ import { exportToCSV } from "@/lib/utils/csv-export"
 type ReviewRow = ReviewRecord & Record<string, unknown>
 
 const FILTER_BTN = (active: boolean) =>
-  `rounded-lg px-3.5 py-1.5 text-xs font-medium transition-all ${
+  `rounded-lg px-3.5 py-2 text-xs font-medium transition-all touch-44 ${
     active
       ? "bg-gradient-to-r from-violet-500 to-indigo-600 text-white shadow-sm"
       : "bg-gray-50 text-gray-500 hover:bg-gray-100"
@@ -204,7 +205,7 @@ export default function AdminReviewsPage() {
               e.stopPropagation()
               setDetailReview(r)
             }}
-            className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium text-violet-600 transition-all hover:bg-violet-50"
+            className="flex items-center gap-1 rounded-lg px-2.5 py-2 text-xs font-medium touch-44 text-violet-600 transition-all hover:bg-violet-50"
           >
             <Eye className="h-3.5 w-3.5" />
             View
@@ -215,7 +216,7 @@ export default function AdminReviewsPage() {
                 e.stopPropagation()
                 setDismissId(r._id)
               }}
-              className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium text-emerald-500 transition-all hover:bg-emerald-50"
+              className="flex items-center gap-1 rounded-lg px-2.5 py-2 text-xs font-medium touch-44 text-emerald-500 transition-all hover:bg-emerald-50"
             >
               <Flag className="h-3.5 w-3.5" />
               Dismiss
@@ -226,7 +227,7 @@ export default function AdminReviewsPage() {
               e.stopPropagation()
               setDeleteId(r._id)
             }}
-            className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium text-red-500 transition-all hover:bg-red-50"
+            className="flex items-center gap-1 rounded-lg px-2.5 py-2 text-xs font-medium touch-44 text-red-500 transition-all hover:bg-red-50"
           >
             <Trash2 className="h-3.5 w-3.5" />
           </button>
@@ -335,17 +336,16 @@ export default function AdminReviewsPage() {
             </div>
           </div>
 
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+          <Button
             onClick={() =>
               exportToCSV(reviews as ReviewRow[], csvExportColumns, "reviews-export")
             }
-            className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-medium text-gray-500 transition-all hover:border-violet-200 hover:text-violet-600 hover:shadow-sm"
+            variant="secondary"
+            size="sm"
+            leftIcon={<Download className="h-3.5 w-3.5" />}
           >
-            <Download className="h-3.5 w-3.5" />
             Export CSV
-          </motion.button>
+          </Button>
         </motion.div>
 
         {/* Table */}
@@ -367,10 +367,9 @@ export default function AdminReviewsPage() {
               </div>
               <p className="text-base font-semibold text-gray-900">Failed to load reviews</p>
               <p className="mt-1 text-sm text-gray-400">{error}</p>
-              <button onClick={() => setRefreshKey(k => k + 1)} className="mt-5 flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-gray-800">
-                <RefreshCw className="h-4 w-4" />
+              <Button onClick={() => setRefreshKey(k => k + 1)} variant="primary" className="mt-5" leftIcon={<RefreshCw className="h-4 w-4" />}>
                 Try Again
-              </button>
+              </Button>
             </div>
           ) : (
             <DataTable<ReviewRow>
@@ -438,7 +437,7 @@ export default function AdminReviewsPage() {
                   </div>
                   <button
                     onClick={() => setDetailReview(null)}
-                    className="rounded-lg p-1.5 text-white/60 transition-colors hover:bg-white/15 hover:text-white"
+                    className="rounded-lg p-1.5 text-white/60 transition-colors hover:bg-white/15 hover:text-white touch-44"
                   >
                     <X className="h-5 w-5" />
                   </button>
@@ -522,24 +521,24 @@ export default function AdminReviewsPage() {
                   transition={{ delay: 0.3 }}
                   className="mt-5 flex gap-3"
                 >
-                  <button
+                  <Button
                     onClick={() => setDetailReview(null)}
-                    className="flex-1 rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-gray-500 transition-all hover:bg-gray-50 hover:text-gray-700"
+                    variant="secondary"
+                    className="flex-1"
                   >
                     Close
-                  </button>
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                  </Button>
+                  <Button
                     onClick={() => {
                       setDeleteId(detailReview._id)
                       setDetailReview(null)
                     }}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-red-500 to-rose-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-red-500/15 transition-all hover:shadow-xl"
+                    variant="danger"
+                    className="flex-1"
+                    leftIcon={<Trash2 className="h-4 w-4" />}
                   >
-                    <Trash2 className="h-4 w-4" />
                     Delete
-                  </motion.button>
+                  </Button>
                 </motion.div>
               </div>
             </motion.div>

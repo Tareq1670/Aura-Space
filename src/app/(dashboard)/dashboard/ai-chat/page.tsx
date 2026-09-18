@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { Send, Trash2, Plus, MessageSquare, Bot } from "lucide-react"
 import { toast } from "sonner"
 import AIChatMessage from "@/Components/Chat/AIChatMessage"
+import Button from "@/Components/ui/Button"
 import { sendChatMessage, getChatHistory, deleteChatConversation, type ChatConversationSummary } from "@/lib/actions/ai"
 import { cn } from "@/lib/utils/cn"
 
@@ -110,13 +111,13 @@ export default function AIChatPage() {
           className="border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex flex-col flex-shrink-0"
         >
           <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-            <button
+            <Button
               onClick={handleNewChat}
-              className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-500 text-white text-sm font-medium hover:shadow-lg hover:shadow-violet-500/25 transition-all flex items-center justify-center gap-2"
+              fullWidth
+              leftIcon={<Plus className="w-4 h-4" />}
             >
-              <Plus className="w-4 h-4" />
               New Chat
-            </button>
+            </Button>
           </div>
           <div className="flex-1 overflow-y-auto p-2 space-y-1">
             {conversations.map((c) => (
@@ -200,7 +201,11 @@ export default function AIChatPage() {
 
         <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
           <div className="flex gap-2 max-w-4xl mx-auto">
+            <label htmlFor="ai-chat-input-page" className="sr-only">
+              Ask the AI assistant
+            </label>
             <input
+              id="ai-chat-input-page"
               ref={inputRef}
               type="text"
               value={input}
@@ -210,14 +215,13 @@ export default function AIChatPage() {
               className="flex-1 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500"
               disabled={isLoading}
             />
-            <button
+            <Button
               onClick={handleSend}
               disabled={!input.trim() || isLoading}
-              className="px-4 py-3 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-500 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-violet-500/25 transition-all flex items-center gap-2"
+              leftIcon={<Send className="w-4 h-4" />}
             >
-              <Send className="w-4 h-4" />
               <span className="hidden sm:inline text-sm">Send</span>
-            </button>
+            </Button>
           </div>
         </div>
       </div>

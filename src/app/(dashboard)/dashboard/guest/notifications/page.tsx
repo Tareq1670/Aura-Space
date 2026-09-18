@@ -168,7 +168,7 @@ export default function GuestNotificationsPage() {
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-bold text-slate-900">{n.title}</p>
                   <p className="mt-0.5 text-sm text-slate-500 line-clamp-1">{n.description}</p>
-                  <p className="mt-1 text-[10px] font-medium text-slate-400">
+                  <p className="mt-1 text-xs font-medium text-slate-400">
                     {new Date(n.time).toLocaleDateString("en-US", {
                       month: "short", day: "numeric",
                       hour: "numeric", minute: "2-digit",

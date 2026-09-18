@@ -6,6 +6,7 @@ import { loadStripe } from "@stripe/stripe-js"
 import { Skeleton } from "@heroui/react"
 import { apiClientFetch } from "@/lib/client-fetch"
 import { createCheckoutSession } from "@/lib/actions/stripe"
+import Button from "@/Components/ui/Button"
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
@@ -72,16 +73,17 @@ export function CheckoutPaymentWrapper({ propertyId, checkIn, checkOut, guests, 
         <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
           {error}
         </div>
-        <button
+        <Button
+          variant="success"
+          className="mt-3 w-full"
           onClick={() => {
             started.current = false
             setError(null)
             setBookingId(null)
           }}
-          className="mt-3 w-full rounded-lg bg-emerald-600 px-6 py-3 text-white font-semibold transition hover:bg-emerald-700"
         >
           Try Again
-        </button>
+        </Button>
       </div>
     )
   }

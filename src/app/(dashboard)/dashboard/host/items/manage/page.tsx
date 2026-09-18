@@ -10,6 +10,7 @@ import { hostPropertyAPI, type PropertyListItem } from "@/lib/api/Host/host-prop
 import PropertyCard from "@/Components/property/PropertyCard";
 import PropertyDataTable from "@/Components/Dashboard/PropertyDataTable";
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal";
+import Button from "@/Components/ui/Button";
 import { cn } from "@/lib/utils/cn";
 
 function SkeletonCard() {
@@ -195,14 +196,14 @@ export default function ManagePropertiesPage() {
                             </p>
                         )}
                     </div>
-                    <button
+                    <Button
                         type="button"
                         onClick={() => router.push("/dashboard/host/items/add")}
-                        className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white rounded-xl font-semibold text-sm shadow-lg shadow-rose-500/20 transition-all active:scale-[0.97]"
+                        variant="primary"
+                        leftIcon={<Plus className="w-4 h-4" />}
                     >
-                        <Plus className="w-4 h-4" />
-                        <span>Add New Property</span>
-                    </button>
+                        Add New Property
+                    </Button>
                 </motion.div>
 
                 {/* Filters */}
@@ -293,7 +294,7 @@ export default function ManagePropertiesPage() {
                                 type="button"
                                 onClick={() => setViewMode("grid")}
                                 className={cn(
-                                    "flex items-center justify-center size-7 rounded-lg text-sm transition-all mx-0.5",
+                                    "flex items-center justify-center size-7 rounded-lg text-sm transition-all mx-0.5 touch-44",
                                     viewMode === "grid"
                                         ? "bg-white text-violet-600 shadow-sm"
                                         : "text-gray-400 hover:text-gray-600"
@@ -306,7 +307,7 @@ export default function ManagePropertiesPage() {
                                 type="button"
                                 onClick={() => setViewMode("table")}
                                 className={cn(
-                                    "flex items-center justify-center size-7 rounded-lg text-sm transition-all mx-0.5",
+                                    "flex items-center justify-center size-7 rounded-lg text-sm transition-all mx-0.5 touch-44",
                                     viewMode === "table"
                                         ? "bg-white text-violet-600 shadow-sm"
                                         : "text-gray-400 hover:text-gray-600"
@@ -356,13 +357,13 @@ export default function ManagePropertiesPage() {
                         </div>
                         <h3 className="text-lg font-semibold text-gray-900 mb-1">Failed to load properties</h3>
                         <p className="text-sm text-gray-400 mb-6 max-w-sm">{error}</p>
-                        <button
+                        <Button
                             type="button"
                             onClick={fetchProperties}
-                            className="px-5 py-2.5 bg-violet-50 text-violet-700 rounded-xl text-sm font-medium hover:bg-violet-100 transition-all active:scale-[0.97]"
+                            variant="ghost"
                         >
                             Try Again
-                        </button>
+                        </Button>
                     </motion.div>
                 ) : properties.length === 0 ? (
                     <motion.div
@@ -380,14 +381,14 @@ export default function ManagePropertiesPage() {
                                 : "Create your first property listing to get started."}
                         </p>
                         {!search && !statusFilter && !categoryFilter && (
-                            <button
+                            <Button
                                 type="button"
                                 onClick={() => router.push("/dashboard/host/items/add")}
-                                className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-rose-500 to-pink-600 text-white rounded-xl font-semibold text-sm shadow-lg shadow-rose-500/20 transition-all active:scale-[0.97]"
+                                variant="primary"
+                                leftIcon={<Plus className="w-4 h-4" />}
                             >
-                                <Plus className="w-4 h-4" />
                                 Add New Property
-                            </button>
+                            </Button>
                         )}
                     </motion.div>
                 ) : (
@@ -434,7 +435,7 @@ export default function ManagePropertiesPage() {
                                     type="button"
                                     onClick={() => setPage((p) => Math.max(1, p - 1))}
                                     disabled={page <= 1}
-                                    className="px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                                    className="px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all touch-44"
                                 >
                                     Previous
                                 </button>
@@ -444,7 +445,7 @@ export default function ManagePropertiesPage() {
                                         type="button"
                                         onClick={() => setPage(p)}
                                         className={cn(
-                                            "px-3 py-1.5 text-sm rounded-lg font-medium transition-all",
+                                            "px-3 py-2 text-sm rounded-lg font-medium transition-all touch-44",
                                             p === page
                                                 ? "bg-violet-600 text-white shadow-sm"
                                                 : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
@@ -457,7 +458,7 @@ export default function ManagePropertiesPage() {
                                     type="button"
                                     onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                                     disabled={page >= totalPages}
-                                    className="px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                                    className="px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all touch-44"
                                 >
                                     Next
                                 </button>

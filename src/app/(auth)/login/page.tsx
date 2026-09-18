@@ -5,12 +5,12 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
     Form,
-    Button,
     TextField,
     Label,
     Input,
     FieldError,
 } from "@heroui/react";
+import Button from "@/Components/ui/Button";
 import { authClient } from "@/lib/auth-client";
 
 interface GlobalMessage {
@@ -313,6 +313,12 @@ function LoginForm() {
                                         onClick={() =>
                                             setShowPassword(!showPassword)
                                         }
+                                        aria-label={
+                                            showPassword
+                                                ? "Hide password"
+                                                : "Show password"
+                                        }
+                                        aria-pressed={showPassword}
                                         className="absolute inset-y-0 right-3 flex items-center text-slate-400 hover:text-indigo-600 transition"
                                     >
                                         {showPassword ? (
@@ -371,36 +377,27 @@ function LoginForm() {
 
                             <Button
                                 type="submit"
-                                isDisabled={isLoading}
-                                className={`w-full py-3 h-11 mt-3 font-semibold text-sm rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all active:scale-[0.98] ${
-                                    isLoading
-                                        ? "bg-indigo-400 cursor-not-allowed text-white shadow-none"
-                                        : "bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-600/20 hover:shadow-indigo-600/30"
-                                }`}
+                                disabled={isLoading}
+                                isLoading={isLoading}
+                                loadingText="Signing in..."
+                                rightIcon={
+                                    <svg
+                                        className="w-4 h-4"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        strokeWidth="2.5"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M14 5l7 7m0 0l-7 7m7-7H3"
+                                        />
+                                    </svg>
+                                }
+                                className="w-full mt-3"
                             >
-                                {isLoading ? (
-                                    <>
-                                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                        Signing in...
-                                    </>
-                                ) : (
-                                    <>
-                                        Sign In
-                                        <svg
-                                            className="w-4 h-4"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                            strokeWidth="2.5"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                d="M14 5l7 7m0 0l-7 7m7-7H3"
-                                            />
-                                        </svg>
-                                    </>
-                                )}
+                                Sign In
                             </Button>
                         </Form>
                     </div>

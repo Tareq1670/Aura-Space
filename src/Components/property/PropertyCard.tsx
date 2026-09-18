@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils/cn";
 import StatusBadge from "@/Components/property/StatusBadge";
+import { buttonClasses } from "@/Components/ui/Button";
 import type { PropertyListItem } from "@/lib/api/Host/host-property-api";
 
 interface PropertyCardProps {
@@ -52,7 +53,7 @@ export default function PropertyCard({ property, onDelete, onDuplicate, onStatus
                     <Link
                         href={`/listings/${p.id}`}
                         target="_blank"
-                        className="flex items-center justify-center w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full shadow-sm hover:bg-white transition-colors"
+                        className="flex items-center justify-center w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full shadow-sm hover:bg-white transition-colors touch-44"
                         title="View live listing"
                     >
                         <ExternalLink className="w-4 h-4 text-gray-600" />
@@ -77,10 +78,10 @@ export default function PropertyCard({ property, onDelete, onDuplicate, onStatus
                 <div className="flex items-center gap-1.5 pt-3 border-t border-gray-50">
                     <Link
                         href={`/dashboard/host/items/edit/${p.id}`}
-                        className={cn(
-                            "flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium",
-                            "bg-violet-50 text-violet-700 hover:bg-violet-100 transition-colors"
-                        )}
+                        className={buttonClasses({
+                            variant: "outline",
+                            size: "sm",
+                        })}
                     >
                         <Edit className="w-3.5 h-3.5" />
                         Edit
@@ -88,7 +89,7 @@ export default function PropertyCard({ property, onDelete, onDuplicate, onStatus
                     <button
                         type="button"
                         onClick={() => onDuplicate(p.id)}
-                        className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors"
+                        className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors touch-44"
                         title="Duplicate property"
                     >
                         <Copy className="w-3.5 h-3.5" />
@@ -97,7 +98,7 @@ export default function PropertyCard({ property, onDelete, onDuplicate, onStatus
                         type="button"
                         onClick={() => onStatusToggle(p.id, p.status)}
                         className={cn(
-                            "flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors",
+                            "flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors touch-44",
                             isActive
                                 ? "bg-green-50 text-green-700 hover:bg-green-100"
                                 : "bg-gray-50 text-gray-600 hover:bg-gray-100"
@@ -109,7 +110,7 @@ export default function PropertyCard({ property, onDelete, onDuplicate, onStatus
                     <button
                         type="button"
                         onClick={() => onDelete(p.id)}
-                        className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-red-50 text-red-600 hover:bg-red-100 transition-colors ml-auto"
+                        className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium bg-red-50 text-red-600 hover:bg-red-100 transition-colors ml-auto touch-44"
                         title="Delete property"
                     >
                         <Trash2 className="w-3.5 h-3.5" />

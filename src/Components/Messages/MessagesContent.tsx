@@ -5,6 +5,7 @@ import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import { toast } from "sonner"
 import { Search, Send, ArrowLeft, Check, CheckCheck, Clock } from "lucide-react"
+import Button, { buttonClasses } from "@/Components/ui/Button"
 import { useSession } from "@/lib/auth-client"
 import {
   getConversations,
@@ -279,8 +280,12 @@ export default function MessagesContent({ role }: MessagesContentProps) {
                 <p className="mt-0.5 text-xs text-gray-400">{unreadCount} unread</p>
               )}
               <div className="relative mt-3">
+                <label htmlFor="conversation-search" className="sr-only">
+                  Search conversations
+                </label>
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                 <input
+                  id="conversation-search"
                   type="text"
                   placeholder="Search conversations..."
                   value={search}
@@ -318,6 +323,7 @@ export default function MessagesContent({ role }: MessagesContentProps) {
                     <button
                       key={conv._id}
                       onClick={() => handleSelect(conv)}
+                      aria-current={isActive ? "true" : undefined}
                       className={`flex w-full items-center gap-3 border-b border-gray-50 px-4 py-3.5 text-left transition-colors hover:bg-violet-50/40 ${
                         isActive ? "bg-violet-50" : ""
                       }`}
@@ -371,7 +377,8 @@ export default function MessagesContent({ role }: MessagesContentProps) {
             <div className="flex items-center gap-3 border-b border-gray-100 px-4 py-3">
               <button
                 onClick={handleBack}
-                className="flex h-9 w-9 items-center justify-center rounded-xl text-gray-500 transition-colors hover:bg-gray-100 lg:hidden"
+                aria-label="Back to conversations"
+                className="flex h-11 w-11 items-center justify-center rounded-xl text-gray-500 transition-colors hover:bg-gray-100 lg:hidden"
               >
                 <ArrowLeft className="h-5 w-5" />
               </button>
@@ -426,7 +433,7 @@ export default function MessagesContent({ role }: MessagesContentProps) {
                             {msg.content}
                           </div>
                           <div className={`mt-1 flex items-center gap-1 px-1 ${isMine ? "justify-end" : "justify-start"}`}>
-                            <span className="text-[10px] text-gray-400">{formatTime(msg.createdAt)}</span>
+                            <span className="text-xs text-gray-400">{formatTime(msg.createdAt)}</span>
                             {isMine && (
                               msg.isRead
                                 ? <CheckCheck className="h-3 w-3 text-blue-500" />
@@ -456,7 +463,11 @@ export default function MessagesContent({ role }: MessagesContentProps) {
                   ))}
                   <button
                     onClick={() => setShowQuickReplies(false)}
-                    className="w-full rounded-xl px-3 py-1.5 text-xs text-gray-400 transition-colors hover:text-gray-600"
+                    className={buttonClasses({
+                      variant: "ghost",
+                      size: "sm",
+                      className: "w-full",
+                    })}
                   >
                     Close suggestions
                   </button>
@@ -464,7 +475,11 @@ export default function MessagesContent({ role }: MessagesContentProps) {
               )}
               <div className="flex items-end gap-2">
                 <div className="relative flex-1">
+                  <label htmlFor="message-composer" className="sr-only">
+                    Type a message
+                  </label>
                   <textarea
+                    id="message-composer"
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
                     onKeyDown={handleKeyDown}
@@ -479,17 +494,19 @@ export default function MessagesContent({ role }: MessagesContentProps) {
                     }}
                   />
                 </div>
-                <button
+                <Button
                   onClick={handleSend}
                   disabled={!inputText.trim() || sending}
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-r from-violet-500 to-indigo-600 text-white shadow-lg shadow-violet-500/20 transition-all hover:shadow-xl disabled:opacity-50"
+                  aria-label="Send message"
+                  variant="primary"
+                  size="sm"
                 >
                   {sending ? (
                     <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                   ) : (
                     <Send className="h-4 w-4" />
                   )}
-                </button>
+                </Button>
               </div>
             </div>
           </motion.div>

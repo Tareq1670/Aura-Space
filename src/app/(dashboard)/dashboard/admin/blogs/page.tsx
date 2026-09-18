@@ -19,6 +19,7 @@ import {
     toggleFeatureBlog,
     adminDeleteBlog,
 } from "@/lib/action/admin-blog";
+import Button from "@/Components/ui/Button";
 import type { Blog, PaginationInfo } from "@/lib/actions/blog";
 
 const STATUS_OPTIONS = [
@@ -198,7 +199,7 @@ export default function AdminBlogsPage() {
                                 setStatusFilter(opt.value);
                                 setPage(1);
                             }}
-                            className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+                            className={`px-3 py-2 text-xs font-medium rounded-lg border transition-colors touch-44 ${
                                 statusFilter === opt.value
                                     ? "bg-indigo-50 border-indigo-300 text-indigo-700"
                                     : "border-gray-200 text-gray-600 hover:bg-gray-50"
@@ -213,7 +214,7 @@ export default function AdminBlogsPage() {
                             setFeaturedFilter(e.target.value);
                             setPage(1);
                         }}
-                        className="px-3 py-1.5 text-xs font-medium border border-gray-200 rounded-lg bg-white text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        className="px-3 py-2 text-xs font-medium border border-gray-200 rounded-lg bg-white text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     >
                         <option value="">All</option>
                         <option value="true">Featured</option>
@@ -300,7 +301,7 @@ export default function AdminBlogsPage() {
                                             </span>
                                         </div>
                                         <span
-                                            className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium capitalize ${STATUS_STYLES[blog.status] || "bg-gray-50 text-gray-600"}`}
+                                            className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium capitalize ${STATUS_STYLES[blog.status] || "bg-gray-50 text-gray-600"}`}
                                         >
                                             {blog.status}
                                         </span>
@@ -317,7 +318,7 @@ export default function AdminBlogsPage() {
                                         <button
                                             onClick={() => handleToggleFeatured(blog.id)}
                                             disabled={featuredLoading === blog.id}
-                                            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium transition-colors ${
+                                            className={`inline-flex items-center gap-1 px-2.5 py-2 rounded-full text-xs font-medium transition-colors touch-44 ${
                                                 blog.isFeatured
                                                     ? "bg-amber-50 text-amber-700 hover:bg-amber-100"
                                                     : "bg-gray-100 text-gray-500 hover:bg-gray-200"
@@ -338,7 +339,7 @@ export default function AdminBlogsPage() {
                                                 href={`/blogs/${blog.slug}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="flex items-center justify-center w-7 h-7 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+                                                className="flex items-center justify-center w-7 h-7 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors touch-44"
                                                 title="View"
                                             >
                                                 <Eye className="w-3.5 h-3.5" />
@@ -346,7 +347,7 @@ export default function AdminBlogsPage() {
                                             <button
                                                 onClick={() => handleToggleFeatured(blog.id)}
                                                 disabled={featuredLoading === blog.id}
-                                                className={`flex items-center justify-center w-7 h-7 rounded-lg transition-colors ${
+                                                className={`flex items-center justify-center w-7 h-7 rounded-lg transition-colors touch-44 ${
                                                     blog.isFeatured
                                                         ? "text-amber-500 hover:text-amber-700 hover:bg-amber-50"
                                                         : "text-gray-400 hover:text-amber-500 hover:bg-amber-50"
@@ -363,7 +364,7 @@ export default function AdminBlogsPage() {
                                             </button>
                                             <button
                                                 onClick={() => setDeleteId(blog.id)}
-                                                className="flex items-center justify-center w-7 h-7 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                                                className="flex items-center justify-center w-7 h-7 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 transition-colors touch-44"
                                                 title="Delete"
                                             >
                                                 <Trash2 className="w-3.5 h-3.5" />
@@ -387,13 +388,13 @@ export default function AdminBlogsPage() {
                                             ) : (
                                                 <div className="w-4 lg:w-5 h-4 lg:h-5 rounded-full bg-gray-200 shrink-0" />
                                             )}
-                                            <span className="text-[11px] lg:text-xs text-gray-500 truncate max-w-[40px] lg:max-w-none">
+                                            <span className="text-xs lg:text-xs text-gray-500 truncate max-w-[40px] lg:max-w-none">
                                                 {blog.authorName}
                                             </span>
                                         </div>
 
                                         <span
-                                            className={`inline-flex items-center px-1.5 lg:px-2.5 py-0.5 rounded-full text-[10px] lg:text-[11px] font-medium capitalize w-fit ${STATUS_STYLES[blog.status] || "bg-gray-50 text-gray-600"}`}
+                                            className={`inline-flex items-center px-1.5 lg:px-2.5 py-0.5 rounded-full text-xs lg:text-xs font-medium capitalize w-fit ${STATUS_STYLES[blog.status] || "bg-gray-50 text-gray-600"}`}
                                         >
                                             {blog.status}
                                         </span>
@@ -406,7 +407,7 @@ export default function AdminBlogsPage() {
                                         <button
                                             onClick={() => handleToggleFeatured(blog.id)}
                                             disabled={featuredLoading === blog.id}
-                                            className={`inline-flex items-center gap-1 px-1.5 lg:px-2.5 py-1 rounded-full text-[10px] lg:text-[11px] font-medium transition-colors ${
+                                            className={`inline-flex items-center gap-1 px-1.5 lg:px-2.5 py-2 rounded-full text-xs lg:text-xs font-medium transition-colors touch-44 ${
                                                 blog.isFeatured
                                                     ? "bg-amber-50 text-amber-700 hover:bg-amber-100"
                                                     : "bg-gray-100 text-gray-500 hover:bg-gray-200"
@@ -423,7 +424,7 @@ export default function AdminBlogsPage() {
                                             <span className="hidden lg:inline">{blog.isFeatured ? "Featured" : "Feature"}</span>
                                         </button>
 
-                                        <span className="text-[11px] lg:text-xs text-gray-400 truncate">
+                                        <span className="text-xs lg:text-xs text-gray-400 truncate">
                                             {formatDate(blog.createdAt)}
                                         </span>
 
@@ -432,7 +433,7 @@ export default function AdminBlogsPage() {
                                                 href={`/blogs/${blog.slug}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="flex items-center justify-center w-7 h-7 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+                                                className="flex items-center justify-center w-7 h-7 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors touch-44"
                                                 title="View"
                                             >
                                                 <Eye className="w-3.5 h-3.5" />
@@ -440,7 +441,7 @@ export default function AdminBlogsPage() {
                                             <button
                                                 onClick={() => handleToggleFeatured(blog.id)}
                                                 disabled={featuredLoading === blog.id}
-                                                className={`flex items-center justify-center w-7 h-7 rounded-lg transition-colors ${
+                                                className={`flex items-center justify-center w-7 h-7 rounded-lg transition-colors touch-44 ${
                                                     blog.isFeatured
                                                         ? "text-amber-500 hover:text-amber-700 hover:bg-amber-50"
                                                         : "text-gray-400 hover:text-amber-500 hover:bg-amber-50"
@@ -457,7 +458,7 @@ export default function AdminBlogsPage() {
                                             </button>
                                             <button
                                                 onClick={() => setDeleteId(blog.id)}
-                                                className="flex items-center justify-center w-7 h-7 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                                                className="flex items-center justify-center w-7 h-7 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 transition-colors touch-44"
                                                 title="Delete"
                                             >
                                                 <Trash2 className="w-3.5 h-3.5" />
@@ -479,14 +480,14 @@ export default function AdminBlogsPage() {
                             <button
                                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                                 disabled={!pagination.hasPrevPage}
-                                className="px-3 py-1.5 text-xs font-medium rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40"
+                                className="px-3 py-2 text-xs font-medium rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 touch-44"
                             >
                                 Previous
                             </button>
                             <button
                                 onClick={() => setPage((p) => p + 1)}
                                 disabled={!pagination.hasNextPage}
-                                className="px-3 py-1.5 text-xs font-medium rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40"
+                                className="px-3 py-2 text-xs font-medium rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 touch-44"
                             >
                                 Next
                             </button>
@@ -520,25 +521,25 @@ export default function AdminBlogsPage() {
                                 undone.
                             </p>
                             <div className="flex items-center justify-end gap-2">
-                                <button
+                                <Button
                                     onClick={() => setDeleteId(null)}
                                     disabled={deleting}
-                                    className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors"
+                                    variant="ghost"
+                                    size="sm"
                                 >
                                     Cancel
-                                </button>
-                                <button
+                                </Button>
+                                <Button
                                     onClick={handleDelete}
                                     disabled={deleting}
-                                    className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+                                    isLoading={deleting}
+                                    loadingText="Deleting"
+                                    variant="danger"
+                                    size="sm"
+                                    leftIcon={<Trash2 className="w-4 h-4" />}
                                 >
-                                    {deleting ? (
-                                        <Loader2 className="w-4 h-4 animate-spin" />
-                                    ) : (
-                                        <Trash2 className="w-4 h-4" />
-                                    )}
                                     Delete
-                                </button>
+                                </Button>
                             </div>
                         </motion.div>
                     </motion.div>

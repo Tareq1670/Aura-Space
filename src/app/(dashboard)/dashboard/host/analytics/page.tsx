@@ -9,6 +9,7 @@ import {
 } from "recharts"
 import { getHostDashboard, type HostDashboardData } from "@/lib/actions/dashboard-host"
 import { formatCurrency } from "@/lib/currency"
+import Button from "@/Components/ui/Button"
 import {
   TrendingUp, Building2, CalendarCheck, Star, DollarSign, Users,
 } from "lucide-react"
@@ -52,10 +53,9 @@ export default function HostAnalyticsPage() {
         </div>
         <p className="text-lg font-semibold text-gray-900">Failed to load analytics</p>
         <p className="mt-1 text-sm text-gray-400">{error}</p>
-        <button onClick={() => window.location.reload()} className="mt-6 flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800">
-          <RefreshCw className="h-4 w-4" />
+        <Button onClick={() => window.location.reload()} variant="primary" className="mt-6" leftIcon={<RefreshCw className="h-4 w-4" />}>
           Try Again
-        </button>
+        </Button>
       </div>
     )
   }

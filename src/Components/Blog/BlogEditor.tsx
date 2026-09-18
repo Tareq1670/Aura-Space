@@ -49,8 +49,9 @@ function ToolbarButton({
             onClick={onClick}
             disabled={disabled}
             title={title}
+            aria-pressed={isActive}
             className={cn(
-                "flex items-center justify-center w-8 h-8 rounded-md transition-colors",
+                "flex items-center justify-center w-8 h-8 rounded-md transition-colors touch-44",
                 isActive
                     ? "bg-indigo-100 text-indigo-700"
                     : "text-slate-500 hover:bg-slate-100 hover:text-slate-700",
@@ -230,7 +231,7 @@ export default function BlogEditor({
                 </ToolbarButton>
             </div>
 
-            <EditorContent editor={editor} />
+            <EditorContent editor={editor} aria-label="Blog content editor" role="textbox" />
 
             <div className="flex items-center justify-end px-4 py-2 border-t border-slate-100 bg-slate-50">
                 <span className="text-xs text-slate-400">{charCount} characters</span>

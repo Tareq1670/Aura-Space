@@ -10,6 +10,7 @@ import DataTable from "@/Components/Dashboard/DataTable"
 import type { Column } from "@/Components/Dashboard/DataTable"
 import StatusBadge from "@/Components/Booking/StatusBadge"
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal"
+import Button from "@/Components/ui/Button"
 import { bookingAPI, type BookingItem } from "@/lib/api/Guest/booking-api"
 import { exportToCSV } from "@/lib/utils/csv-export"
 import { formatCurrency } from "@/lib/currency"
@@ -166,21 +167,21 @@ export default function AdminBookingsPage() {
         <div className="flex items-center gap-1">
           <button
             onClick={(e) => { e.stopPropagation(); setDetailBooking(r) }}
-            className="rounded-lg border border-gray-200 px-2.5 py-1 text-xs font-semibold text-gray-600 transition hover:bg-gray-50"
+            className="rounded-lg border border-gray-200 px-2.5 py-2 text-xs font-semibold text-gray-600 transition hover:bg-gray-50 touch-44"
           >
             <Eye className="h-3.5 w-3.5" />
           </button>
           {r.status === "confirmed" && (
             <button
               onClick={(e) => { e.stopPropagation(); setCompleteId(r._id) }}
-              className="rounded-lg border border-emerald-200 px-2.5 py-1 text-xs font-semibold text-emerald-600 transition hover:bg-emerald-50"
+              className="rounded-lg border border-emerald-200 px-2.5 py-2 text-xs font-semibold text-emerald-600 transition hover:bg-emerald-50 touch-44"
             >
               <CheckCircle2 className="h-3.5 w-3.5" />
             </button>
           )}
           <button
             onClick={(e) => { e.stopPropagation(); setCancelId(r._id) }}
-            className="rounded-lg border border-red-200 px-2.5 py-1 text-xs font-semibold text-red-600 transition hover:bg-red-50"
+            className="rounded-lg border border-red-200 px-2.5 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-50 touch-44"
           >
             Force Cancel
           </button>
@@ -199,7 +200,7 @@ export default function AdminBookingsPage() {
             <p className="mt-1 text-sm text-gray-500">Manage all bookings across the platform</p>
           </div>
 
-          <button
+          <Button
             onClick={() => exportToCSV(
               bookings as BookingRecord[],
               [
@@ -210,10 +211,11 @@ export default function AdminBookingsPage() {
               ],
               "bookings-export",
             )}
-            className="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+            variant="secondary"
+            size="sm"
           >
             Export CSV
-          </button>
+          </Button>
         </div>
 
         <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -263,10 +265,9 @@ export default function AdminBookingsPage() {
           </div>
           <p className="text-base font-semibold text-gray-900">Failed to load bookings</p>
           <p className="mt-1 text-sm text-gray-400">{error}</p>
-          <button onClick={() => setRefreshKey(k => k + 1)} className="mt-5 flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-gray-800">
-            <RefreshCw className="h-4 w-4" />
+          <Button onClick={() => setRefreshKey(k => k + 1)} variant="primary" className="mt-5" leftIcon={<RefreshCw className="h-4 w-4" />}>
             Try Again
-          </button>
+          </Button>
         </div>
       ) : (
         <>
@@ -327,7 +328,7 @@ export default function AdminBookingsPage() {
                       <Eye className="h-5 w-5 text-white/80" />
                       <h3 className="text-lg font-semibold text-white">Booking Details</h3>
                     </div>
-                    <button onClick={() => setDetailBooking(null)} className="rounded-lg p-1.5 text-white/60 transition-colors hover:bg-white/15 hover:text-white">
+                    <button onClick={() => setDetailBooking(null)} className="rounded-lg p-1.5 text-white/60 transition-colors hover:bg-white/15 hover:text-white touch-44">
                       <X className="h-5 w-5" />
                     </button>
                   </div>
@@ -388,17 +389,17 @@ export default function AdminBookingsPage() {
                   </div>
 
                   <div className="flex gap-3 pt-2">
-                    <button onClick={() => setDetailBooking(null)} className="flex-1 rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-gray-500 transition-all hover:bg-gray-50">
+                    <Button onClick={() => setDetailBooking(null)} variant="secondary" className="flex-1">
                       Close
-                    </button>
+                    </Button>
                     {detailBooking.status === "confirmed" && (
-                      <button onClick={() => { setCompleteId(detailBooking._id); setDetailBooking(null) }} className="flex-1 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/15 transition-all hover:shadow-xl">
+                      <Button onClick={() => { setCompleteId(detailBooking._id); setDetailBooking(null) }} variant="success" className="flex-1">
                         Complete
-                      </button>
+                      </Button>
                     )}
-                    <button onClick={() => { setCancelId(detailBooking._id); setDetailBooking(null) }} className="flex-1 rounded-xl bg-gradient-to-r from-red-500 to-rose-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-red-500/15 transition-all hover:shadow-xl">
+                    <Button onClick={() => { setCancelId(detailBooking._id); setDetailBooking(null) }} variant="danger" className="flex-1">
                       Cancel
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </motion.div>

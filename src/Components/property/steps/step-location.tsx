@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { PropertyFormData } from "@/lib/actions/property";
 import { COUNTRIES } from "@/lib/constants/property-options";
 import { MapPin, Navigation } from "lucide-react";
+import { buttonClasses } from "@/Components/ui/Button";
 
 interface StepLocationProps {
     formData: PropertyFormData;
@@ -64,7 +65,7 @@ export default function StepLocation({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.1 }}
-                    className="text-gray-500 dark:text-gray-400"
+                    className="text-gray-500 dark:text-gray-500"
                 >
                     Your address is only shared with guests after they&apos;ve
                     made a reservation
@@ -79,8 +80,9 @@ export default function StepLocation({
             >
                 {/* Country */}
                 <div>
-                    <label className={labelClass}>Country / Region</label>
+                    <label htmlFor="location-country" className={labelClass}>Country / Region</label>
                     <select
+                        id="location-country"
                         value={formData.location.country}
                         onChange={(e) =>
                             updateNestedField("location", {
@@ -105,11 +107,12 @@ export default function StepLocation({
 
                 {/* Street Address */}
                 <div>
-                    <label className={labelClass}>Street Address</label>
+                    <label htmlFor="location-street" className={labelClass}>Street Address</label>
                     <div className="relative">
-                        <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                         <input
                             type="text"
+                            id="location-street"
                             value={formData.location.address}
                             onChange={(e) =>
                                 updateNestedField("location", {
@@ -130,9 +133,10 @@ export default function StepLocation({
                 {/* City & State */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label className={labelClass}>City</label>
+                        <label htmlFor="location-city" className={labelClass}>City</label>
                         <input
                             type="text"
+                            id="location-city"
                             value={formData.location.city}
                             onChange={(e) =>
                                 updateNestedField("location", {
@@ -149,11 +153,12 @@ export default function StepLocation({
                         )}
                     </div>
                     <div>
-                        <label className={labelClass}>
+                        <label htmlFor="location-state" className={labelClass}>
                             State / Province
                         </label>
                         <input
                             type="text"
+                            id="location-state"
                             value={formData.location.state}
                             onChange={(e) =>
                                 updateNestedField("location", {
@@ -168,9 +173,10 @@ export default function StepLocation({
 
                 {/* Zip Code */}
                 <div>
-                    <label className={labelClass}>ZIP / Postal Code</label>
+                    <label htmlFor="location-zip" className={labelClass}>ZIP / Postal Code</label>
                     <input
                         type="text"
+                        id="location-zip"
                         value={formData.location.zipCode}
                         onChange={(e) =>
                             updateNestedField("location", {
@@ -203,7 +209,7 @@ export default function StepLocation({
                                 <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
                                     Location set
                                 </p>
-                                <p className="text-xs text-gray-400 mt-1">
+                                <p className="text-xs text-gray-500 mt-1">
                                     {formData.location.coordinates.lat.toFixed(
                                         4
                                     )}
@@ -214,7 +220,7 @@ export default function StepLocation({
                                 </p>
                             </div>
                         ) : (
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                            <p className="text-sm text-gray-500 dark:text-gray-500">
                                 Pin your property on the map (optional)
                             </p>
                         )}
@@ -223,7 +229,9 @@ export default function StepLocation({
                             whileTap={{ scale: 0.97 }}
                             type="button"
                             onClick={handleGetCurrentLocation}
-                            className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:shadow-md transition-all"
+                            className={buttonClasses({
+                                variant: "secondary",
+                            })}
                         >
                             <Navigation className="w-4 h-4" />
                             Use my current location

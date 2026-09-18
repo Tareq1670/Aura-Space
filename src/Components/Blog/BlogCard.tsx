@@ -35,7 +35,7 @@ export default function BlogCard({ blog, index = 0 }: BlogCardProps) {
                             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                         />
                         {blog.isFeatured && (
-                            <span className="absolute top-3 right-3 bg-amber-400 text-amber-900 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
+                            <span className="absolute top-3 right-3 bg-amber-400 text-amber-900 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
                                 Featured
                             </span>
                         )}
@@ -47,7 +47,7 @@ export default function BlogCard({ blog, index = 0 }: BlogCardProps) {
                                 {blog.tags.slice(0, 3).map((tag) => (
                                     <span
                                         key={tag}
-                                        className="text-[10px] font-medium uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full"
+                                        className="text-xs font-medium uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full"
                                     >
                                         {tag}
                                     </span>
@@ -77,11 +77,11 @@ export default function BlogCard({ blog, index = 0 }: BlogCardProps) {
                                 ) : (
                                     <User className="w-4 h-4 text-slate-400" />
                                 )}
-                                <span className="text-[11px] text-slate-500 truncate max-w-[80px] sm:max-w-[120px]">
+                                <span className="text-xs text-slate-500 truncate max-w-[80px] sm:max-w-[120px]">
                                     {blog.authorName}
                                 </span>
                             </div>
-                            <div className="flex items-center gap-2 text-[11px] text-slate-400">
+                            <div className="flex items-center gap-2 text-xs text-slate-400">
                                 <span className="flex items-center gap-0.5">
                                     <Clock className="w-3 h-3" />
                                     {blog.readingTime}m

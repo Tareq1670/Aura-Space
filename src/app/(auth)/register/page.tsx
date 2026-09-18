@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
     Form,
-    Button,
     TextField,
     Label,
     Input,
@@ -13,6 +12,7 @@ import {
     Select,
     ListBox,
 } from "@heroui/react";
+import Button from "@/Components/ui/Button";
 import { imageUploader } from "@/lib/imageUploader";
 import { authClient } from "@/lib/auth-client";
 import { validatePasswordServer } from "@/lib/actions/auth";
@@ -290,7 +290,10 @@ function RegisterForm() {
                             }}
                         >
                             <div className="w-full">
-                                <label className="text-xs font-bold uppercase tracking-wider mb-2 block text-slate-700">
+                                <label
+                                    htmlFor="profile-image-input"
+                                    className="text-xs font-bold uppercase tracking-wider mb-2 block text-slate-700"
+                                >
                                     Profile Photo
                                 </label>
                                 <div className="flex items-center gap-4 p-3 rounded-2xl border border-dashed border-slate-200 bg-slate-50/50 hover:border-indigo-300 hover:bg-indigo-50/30 transition-colors">
@@ -307,6 +310,7 @@ function RegisterForm() {
                                                 <button
                                                     type="button"
                                                     onClick={handleRemoveImage}
+                                                    aria-label="Remove profile photo"
                                                     className="absolute -top-1 -right-1 w-5 h-5 bg-rose-500 hover:bg-rose-600 text-white rounded-full flex items-center justify-center shadow transition active:scale-90"
                                                 >
                                                     <svg
@@ -381,7 +385,7 @@ function RegisterForm() {
                                                     : profileImage.name
                                                 : "Choose photo"}
                                         </button>
-                                        <p className="text-[10px] text-slate-400 mt-1 font-medium">
+                                        <p className="text-xs text-slate-400 mt-1 font-medium">
                                             JPG, PNG or WEBP — Max 5MB
                                         </p>
                                     </div>
@@ -546,6 +550,12 @@ function RegisterForm() {
                                         onClick={() =>
                                             setShowPassword(!showPassword)
                                         }
+                                        aria-label={
+                                            showPassword
+                                                ? "Hide password"
+                                                : "Show password"
+                                        }
+                                        aria-pressed={showPassword}
                                         className="absolute inset-y-0 right-3 flex items-center text-slate-400 hover:text-indigo-600 transition"
                                     >
                                         {showPassword ? (
@@ -614,6 +624,12 @@ function RegisterForm() {
                                                 !showConfirmPassword,
                                             )
                                         }
+                                        aria-label={
+                                            showConfirmPassword
+                                                ? "Hide password"
+                                                : "Show password"
+                                        }
+                                        aria-pressed={showConfirmPassword}
                                         className="absolute inset-y-0 right-3 flex items-center text-slate-400 hover:text-indigo-600 transition"
                                     >
                                         {showConfirmPassword ? (
@@ -658,42 +674,30 @@ function RegisterForm() {
                             <div className="flex gap-3 mt-2">
                                 <Button
                                     type="submit"
-                                    className={`w-full py-3 h-11 font-semibold text-sm rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all active:scale-[0.98] ${
-                                        isLoading
-                                            ? "bg-indigo-400 cursor-not-allowed text-white shadow-none"
-                                            : "bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-600/20 hover:shadow-indigo-600/30"
-                                    }`}
-                                    isDisabled={isLoading}
+                                    disabled={isLoading}
+                                    isLoading={isLoading}
+                                    loadingText="Registering..."
+                                    fullWidth
+                                    rightIcon={
+                                        <svg
+                                            className="w-4 h-4"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            strokeWidth="2.5"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                d="M14 5l7 7m0 0l-7 7m7-7H3"
+                                            />
+                                        </svg>
+                                    }
                                 >
-                                    {isLoading ? (
-                                        <>
-                                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                            Registering...
-                                        </>
-                                    ) : (
-                                        <>
-                                            Register Account
-                                            <svg
-                                                className="w-4 h-4"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
-                                                strokeWidth="2.5"
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    d="M14 5l7 7m0 0l-7 7m7-7H3"
-                                                />
-                                            </svg>
-                                        </>
-                                    )}
+                                    Register Account
                                 </Button>
 
-                                <Button
-                                    type="reset"
-                                    className="px-4 h-11 text-sm font-semibold rounded-xl border transition-all border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:border-slate-300 active:scale-[0.98]"
-                                >
+                                <Button type="reset" variant="secondary">
                                     Reset
                                 </Button>
                             </div>

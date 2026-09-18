@@ -12,12 +12,13 @@ import {
 } from "@heroui/react";
 import type { DateValue } from "@internationalized/date";
 import { guestOptions } from "./hero-data";
+import { buttonClasses } from "@/Components/ui/Button";
 
 const FIELD_CLASSES =
     "flex min-h-[50px] flex-col justify-center rounded-xl border border-transparent bg-white px-3 py-2 transition-all duration-200 focus-within:border-indigo-500/50 focus-within:shadow-md focus-within:shadow-indigo-500/8 sm:min-h-[52px] sm:px-3.5";
 
 const LABEL_CLASSES =
-    "mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500 sm:text-[12px]";
+    "mb-1 block text-xs font-bold uppercase tracking-wider text-slate-500 sm:text-xs";
 
 interface SearchState {
     location: string;
@@ -166,7 +167,7 @@ export function HeroSearchBar({
                                 onChange={(e) =>
                                     onSearchChange("location", e.target.value)
                                 }
-                                className="h-5 w-full border-0 bg-transparent p-0 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 sm:text-[13px]"
+                                className="h-5 w-full border-0 bg-transparent p-0 text-xs font-semibold text-slate-800 outline-none placeholder:text-slate-400 sm:text-sm"
                             />
                         </div>
                     </motion.div>
@@ -208,7 +209,7 @@ export function HeroSearchBar({
                                         d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
                                     />
                                 </svg>
-                                <DateField.Input className="flex flex-1 items-center gap-0.5 text-xs font-semibold text-slate-800 sm:text-[13px]">
+                                <DateField.Input className="flex flex-1 items-center gap-0.5 text-xs font-semibold text-slate-800 sm:text-sm">
                                     {(segment) => (
                                         <DateField.Segment
                                             segment={segment}
@@ -219,7 +220,7 @@ export function HeroSearchBar({
                                 <DateField.Suffix>
                                     <DatePicker.Trigger
                                         aria-label="Open date picker"
-                                        className="ml-auto flex h-6 w-6 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-indigo-50 hover:text-indigo-600"
+                                        className="ml-auto flex h-8 w-8 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-indigo-50 hover:text-indigo-600 touch-44"
                                     >
                                         <DatePicker.TriggerIndicator />
                                     </DatePicker.Trigger>
@@ -232,25 +233,25 @@ export function HeroSearchBar({
                                     className="w-[280px] max-w-[calc(100vw-2rem)] p-3 sm:w-[310px]"
                                 >
                                     <Calendar.Header className="mb-2 flex items-center justify-between">
-                                        <Calendar.YearPickerTrigger className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-50 px-3 py-1.5 text-xs font-bold text-indigo-700 transition-colors hover:bg-indigo-100">
+                                        <Calendar.YearPickerTrigger className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-50 px-3 py-2 text-xs font-bold text-indigo-700 transition-colors hover:bg-indigo-100 touch-44">
                                             <Calendar.YearPickerTriggerHeading />
                                             <Calendar.YearPickerTriggerIndicator />
                                         </Calendar.YearPickerTrigger>
                                         <div className="flex gap-1">
                                             <Calendar.NavButton
                                                 slot="previous"
-                                                className="flex h-7 w-7 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-indigo-50 hover:text-indigo-700"
+                                                className="flex h-8 w-8 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-indigo-50 hover:text-indigo-700 touch-44"
                                             />
                                             <Calendar.NavButton
                                                 slot="next"
-                                                className="flex h-7 w-7 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-indigo-50 hover:text-indigo-700"
+                                                className="flex h-8 w-8 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-indigo-50 hover:text-indigo-700 touch-44"
                                             />
                                         </div>
                                     </Calendar.Header>
                                     <Calendar.Grid className="w-full">
                                         <Calendar.GridHeader>
                                             {(day) => (
-                                                <Calendar.HeaderCell className="pb-1.5 text-center text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                                                <Calendar.HeaderCell className="pb-1.5 text-center text-xs font-bold uppercase tracking-wider text-slate-400">
                                                     {day}
                                                 </Calendar.HeaderCell>
                                             )}
@@ -259,7 +260,7 @@ export function HeroSearchBar({
                                             {(date) => (
                                                 <Calendar.Cell
                                                     date={date}
-                                                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-[13px] font-medium text-slate-700 transition-colors hover:bg-indigo-50 hover:text-indigo-700 data-[disabled]:pointer-events-none data-[disabled]:text-slate-300 data-[selected]:bg-indigo-600 data-[selected]:font-bold data-[selected]:text-white data-[today]:font-bold data-[today]:text-indigo-600"
+                                                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-sm font-medium text-slate-700 transition-colors hover:bg-indigo-50 hover:text-indigo-700 data-[disabled]:pointer-events-none data-[disabled]:text-slate-300 data-[selected]:bg-indigo-600 data-[selected]:font-bold data-[selected]:text-white data-[today]:font-bold data-[today]:text-indigo-600 touch-44"
                                                 />
                                             )}
                                         </Calendar.GridBody>
@@ -303,7 +304,7 @@ export function HeroSearchBar({
                             <Label className={LABEL_CLASSES}>
                                 Guests
                             </Label>
-                            <Select.Trigger className="flex h-5 min-h-0 items-center gap-1 border-0 bg-transparent p-0 text-xs font-semibold text-slate-800 shadow-none sm:text-[13px]">
+                            <Select.Trigger className="flex h-5 min-h-0 items-center gap-1 border-0 bg-transparent p-0 text-xs font-semibold text-slate-800 shadow-none sm:text-sm">
                                 <svg
                                     className="mr-0.5 h-3.5 w-3.5 flex-shrink-0 text-slate-400"
                                     fill="none"
@@ -346,8 +347,7 @@ export function HeroSearchBar({
                                 "0 8px 30px rgba(99,102,241,0.45)",
                         }}
                         whileTap={{ scale: 0.96 }}
-                        className="relative min-h-[50px] overflow-hidden rounded-xl bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 px-5 text-[11px] font-bold uppercase tracking-[0.16em] text-white shadow-lg shadow-indigo-600/25 transition-colors sm:col-span-2 sm:min-h-[52px] sm:text-xs lg:col-span-1 lg:min-w-[120px]"
-                        style={{ backgroundSize: "200% 100%" }}
+                        className={buttonClasses({ variant: "primary", size: "md", className: "relative overflow-hidden uppercase tracking-eyebrow sm:col-span-2 lg:col-span-1 lg:min-w-[120px]" })}
                     >
                         <span className="relative z-10 inline-flex items-center justify-center gap-2">
                             <motion.svg

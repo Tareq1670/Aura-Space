@@ -180,7 +180,7 @@ export default function BrandPartners() {
                                               },
                                           }
                                 }
-                                className="group mx-4 flex cursor-default items-center justify-center rounded-2xl border border-transparent px-5 py-3 text-slate-300 transition-all duration-500 hover:border-indigo-100 hover:bg-indigo-50/50 hover:text-indigo-600 hover:shadow-sm sm:mx-6 sm:px-6 sm:py-4"
+                                className="group mx-4 flex cursor-default items-center justify-center rounded-2xl border border-transparent px-5 py-3 text-slate-500 transition-all duration-500 hover:border-indigo-100 hover:bg-indigo-50/50 hover:text-indigo-600 hover:shadow-sm sm:mx-6 sm:px-6 sm:py-4"
                             >
                                 {partner.logo}
                             </motion.div>

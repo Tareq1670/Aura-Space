@@ -6,6 +6,7 @@ import { PropertyFormData } from "@/lib/actions/property";
 import { Minus, Plus, BedDouble, Bath, Users, Bed, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { useState } from "react";
+import Button from "@/Components/ui/Button";
 import AIDescriptionGenerator from "@/Components/property/AIDescriptionGenerator";
 
 interface StepDetailsProps {
@@ -47,7 +48,7 @@ function Counter({
                     <p className="font-semibold text-gray-800 dark:text-gray-200">
                         {label}
                     </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <p className="text-sm text-gray-500 dark:text-gray-500">
                         {sublabel}
                     </p>
                 </div>
@@ -57,10 +58,11 @@ function Counter({
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     type="button"
+                    aria-label={`Decrease ${label}`}
                     onClick={() => onChange(Math.max(min, value - 1))}
                     disabled={value <= min}
                     className={cn(
-                        "w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all",
+                        "w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all touch-44",
                         value <= min
                             ? "border-gray-200 dark:border-gray-700 text-gray-300 dark:text-gray-600 cursor-not-allowed"
                             : "border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-rose-500 hover:text-rose-500"
@@ -75,10 +77,11 @@ function Counter({
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     type="button"
+                    aria-label={`Increase ${label}`}
                     onClick={() => onChange(Math.min(max, value + 1))}
                     disabled={value >= max}
                     className={cn(
-                        "w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all",
+                        "w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all touch-44",
                         value >= max
                             ? "border-gray-200 dark:border-gray-700 text-gray-300 dark:text-gray-600 cursor-not-allowed"
                             : "border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-rose-500 hover:text-rose-500"
@@ -123,7 +126,7 @@ export default function StepDetails({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.1 }}
-                    className="text-gray-500 dark:text-gray-400"
+                    className="text-gray-500 dark:text-gray-500"
                 >
                     Share some basic info to help guests find your listing
                 </motion.p>
@@ -135,9 +138,10 @@ export default function StepDetails({
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15 }}
             >
-                <label className={labelClass}>Listing Title</label>
+                <label htmlFor="details-title" className={labelClass}>Listing Title</label>
                 <input
                     type="text"
+                    id="details-title"
                     value={formData.title}
                     onChange={(e) =>
                         updateFormData({ title: e.target.value })
@@ -152,7 +156,7 @@ export default function StepDetails({
                     ) : (
                         <span />
                     )}
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-gray-500">
                         {formData.title.length}/100
                     </span>
                 </div>
@@ -164,8 +168,9 @@ export default function StepDetails({
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
             >
-                <label className={labelClass}>Description</label>
+                <label htmlFor="details-description" className={labelClass}>Description</label>
                 <textarea
+                    id="details-description"
                     value={formData.description}
                     onChange={(e) =>
                         updateFormData({ description: e.target.value })
@@ -182,18 +187,18 @@ export default function StepDetails({
                     ) : (
                         <span />
                     )}
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-gray-500">
                         {formData.description.length}/2000
                     </span>
                 </div>
-                <button
+                <Button
                     type="button"
                     onClick={() => setAiGeneratorOpen(true)}
-                    className="mt-2 px-4 py-2 rounded-xl text-sm font-medium bg-gradient-to-r from-violet-500 to-indigo-500 text-white hover:shadow-lg hover:shadow-violet-500/25 transition-all flex items-center gap-2"
+                    className="mt-2"
                 >
                     <Sparkles className="w-4 h-4" />
                     Generate with AI
-                </button>
+                </Button>
             </motion.div>
 
             {/* Counters */}
@@ -211,7 +216,7 @@ export default function StepDetails({
                     min={1}
                     max={20}
                     icon={
-                        <Users className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        <Users className="w-5 h-5 text-gray-600 dark:text-gray-500" />
                     }
                 />
                 <Counter
@@ -222,7 +227,7 @@ export default function StepDetails({
                     min={0}
                     max={20}
                     icon={
-                        <BedDouble className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        <BedDouble className="w-5 h-5 text-gray-600 dark:text-gray-500" />
                     }
                 />
                 <Counter
@@ -233,7 +238,7 @@ export default function StepDetails({
                     min={1}
                     max={30}
                     icon={
-                        <Bed className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        <Bed className="w-5 h-5 text-gray-600 dark:text-gray-500" />
                     }
                 />
                 <Counter
@@ -244,7 +249,7 @@ export default function StepDetails({
                     min={0}
                     max={20}
                     icon={
-                        <Bath className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        <Bath className="w-5 h-5 text-gray-600 dark:text-gray-500" />
                     }
                 />
             </motion.div>

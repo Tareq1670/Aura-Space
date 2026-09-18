@@ -2,6 +2,7 @@
 
 import React, { useRef, useState, ReactNode } from "react";
 import { motion, useInView, Variants, AnimatePresence } from "framer-motion";
+import Button, { buttonClasses } from "@/Components/ui/Button";
 import {
     HiShieldCheck,
     HiLockClosed,
@@ -184,59 +185,6 @@ const CustomChip = ({ children, icon, className = "" }: CustomChipProps) => (
     </span>
 );
 
-interface CustomButtonProps {
-    children: ReactNode;
-    variant?: "primary" | "secondary" | "bordered";
-    size?: "md" | "lg";
-    className?: string;
-    onClick?: () => void;
-    as?: "button" | "a";
-    href?: string;
-}
-
-const CustomButton = ({
-    children,
-    variant = "primary",
-    size = "md",
-    className = "",
-    onClick,
-    as = "button",
-    href,
-}: CustomButtonProps) => {
-    const baseStyles =
-        "inline-flex items-center justify-center gap-2 font-semibold rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:ring-offset-2 dark:focus:ring-offset-gray-950 active:scale-[0.98]";
-
-    const variantStyles = {
-        primary:
-            "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-600/20 hover:shadow-violet-600/30 hover:opacity-95 border border-transparent",
-        secondary:
-            "bg-gray-100 hover:bg-gray-200 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] text-gray-900 dark:text-white border border-transparent dark:border-white/[0.06]",
-        bordered:
-            "bg-transparent hover:bg-white/[0.04] border border-gray-200 dark:border-white/[0.1] text-gray-800 dark:text-gray-300 hover:border-gray-300 dark:hover:border-white/[0.2]",
-    };
-
-    const sizeStyles = {
-        md: "px-5 py-2.5 text-sm",
-        lg: "px-7 py-3 text-base",
-    };
-
-    const combinedClasses = `${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`;
-
-    if (as === "a") {
-        return (
-            <a href={href} className={combinedClasses}>
-                {children}
-            </a>
-        );
-    }
-
-    return (
-        <button onClick={onClick} className={combinedClasses}>
-            {children}
-        </button>
-    );
-};
-
 interface SectionHeaderProps {
     badge: string;
     badgeIcon?: ReactNode;
@@ -262,7 +210,7 @@ const SectionHeader = ({
         <motion.h2
             variants={fadeUpVariants}
             custom={1}
-            className="text-3xl sm:text-4xl lg:text-[2.75rem] font-bold text-gray-900 dark:text-white mb-4 leading-[1.15] tracking-tight"
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-tight tracking-tight"
         >
             {title}
         </motion.h2>
@@ -541,7 +489,7 @@ const HeroSection = () => {
                     transition={{ duration: 0.5, delay: 0.1 }}
                     className="mb-6 flex justify-center"
                 >
-                    <span className="text-[11px] font-semibold text-violet-300 tracking-[0.2em] uppercase bg-violet-500/[0.08] px-3.5 py-1.5 rounded-full border border-violet-500/[0.15] backdrop-blur-md">
+                    <span className="text-xs font-semibold text-violet-300 tracking-eyebrow uppercase bg-violet-500/[0.08] px-3.5 py-1.5 rounded-full border border-violet-500/[0.15] backdrop-blur-md">
                         Last Updated — January 15, 2025
                     </span>
                 </motion.div>
@@ -554,7 +502,7 @@ const HeroSection = () => {
                         delay: 0.2,
                         ease: [0.16, 1, 0.3, 1],
                     }}
-                    className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.75rem] font-bold text-white mb-6 tracking-tight leading-[1.1]"
+                    className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight leading-display"
                 >
                     Privacy{" "}
                     <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">
@@ -579,22 +527,21 @@ const HeroSection = () => {
                     transition={{ duration: 0.6, delay: 0.4 }}
                     className="flex flex-wrap gap-4 justify-center"
                 >
-                    <CustomButton
+                    <Button
                         size="lg"
-                        variant="primary"
                         onClick={() =>
                             document
                                 .getElementById("introduction")
                                 ?.scrollIntoView({ behavior: "smooth" })
                         }
+                        rightIcon={<HiArrowRight className="w-4 h-4" />}
                     >
-                        Read Policy <HiArrowRight className="w-4 h-4" />
-                    </CustomButton>
+                        Read Policy
+                    </Button>
 
-                    <CustomButton
+                    <Button
                         size="lg"
-                        variant="bordered"
-                        className="dark:border-white/[0.1] hover:bg-white/[0.04] text-white"
+                        variant="secondary"
                         onClick={() =>
                             document
                                 .getElementById("contact")
@@ -602,7 +549,7 @@ const HeroSection = () => {
                         }
                     >
                         Contact Privacy Team
-                    </CustomButton>
+                    </Button>
                 </motion.div>
 
                 <motion.div
@@ -1322,7 +1269,7 @@ const DataRetentionSection = () => (
                                         <h3 className="text-base font-semibold text-gray-900 dark:text-white">
                                             {step.title}
                                         </h3>
-                                        <CustomChip className="bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-300 border-violet-100 dark:border-violet-500/20 text-[11px]">
+                                        <CustomChip className="bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-300 border-violet-100 dark:border-violet-500/20 text-xs">
                                             {step.duration}
                                         </CustomChip>
                                     </div>
@@ -1707,7 +1654,7 @@ const TrustCTA = () => {
                         <motion.h2
                             variants={fadeUpVariants}
                             custom={1}
-                            className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-5 tracking-tight leading-[1.1]"
+                            className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-5 tracking-tight leading-display"
                         >
                             Your Trust Powers Everything We Build
                         </motion.h2>
@@ -1728,26 +1675,20 @@ const TrustCTA = () => {
                             custom={3}
                             className="flex flex-col sm:flex-row gap-4 justify-center"
                         >
-                            <CustomButton
-                                size="lg"
-                                variant="secondary"
-                                className="bg-white hover:bg-gray-100 text-violet-700 font-semibold"
-                                as="a"
+                            <a
+                                className={buttonClasses({ variant: "secondary", size: "lg" })}
                                 href="mailto:privacy@auraspace.com"
                             >
                                 <HiEnvelope className="w-4 h-4" /> Contact
                                 Support
-                            </CustomButton>
-                            <CustomButton
-                                size="lg"
-                                variant="bordered"
-                                className="border-white/25 text-white hover:bg-white/[0.08]"
-                                as="a"
+                            </a>
+                            <a
+                                className={buttonClasses({ variant: "secondary", size: "lg" })}
                                 href="/terms"
                             >
                                 <HiDocumentText className="w-4 h-4" /> Terms &
                                 Conditions
-                            </CustomButton>
+                            </a>
                         </motion.div>
 
                         <motion.div

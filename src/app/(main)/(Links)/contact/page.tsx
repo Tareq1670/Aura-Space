@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from "react";
 import Link from "next/link";
+import Button, { buttonClasses } from "@/Components/ui/Button";
 import {
   motion,
   useInView,
@@ -261,7 +262,7 @@ function InputField({
     <div>
       <label
         htmlFor={id}
-        className="mb-2 block text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500"
+        className="mb-2 block text-xs font-bold uppercase tracking-eyebrow text-slate-500"
       >
         {label} {required && <span className="text-indigo-500">*</span>}
       </label>
@@ -273,6 +274,7 @@ function InputField({
         onChange={onChange}
         placeholder={placeholder}
         autoComplete={autoComplete}
+        required={required}
         className="h-[52px] w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm font-semibold text-slate-900 outline-none transition-all duration-300 placeholder:font-normal placeholder:text-slate-400 focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-100"
       />
     </div>
@@ -415,7 +417,7 @@ const ContactPage = () => {
           >
             <motion.h1
               variants={itemVariants}
-              className="text-[34px] font-black leading-[1.05] tracking-[-0.035em] text-white sm:text-5xl md:text-[56px] lg:text-6xl"
+              className="text-4xl font-black leading-display tracking-tight text-white sm:text-5xl md:text-6xl lg:text-6xl"
             >
               Let&apos;s Start a{" "}
               <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-fuchsia-300 bg-clip-text text-transparent">
@@ -425,7 +427,7 @@ const ContactPage = () => {
 
             <motion.p
               variants={itemVariants}
-              className="mx-auto mt-6 max-w-2xl text-base leading-[1.8] text-white/60 sm:text-lg"
+              className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/60 sm:text-lg"
             >
               Whether you&apos;re booking a premium stay, listing your venue,
               or planning an unforgettable event — our team is ready to help
@@ -493,7 +495,7 @@ const ContactPage = () => {
                   {method.icon}
                 </div>
 
-                <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-indigo-300">
+                <div className="text-xs font-bold uppercase tracking-eyebrow text-indigo-300">
                   {method.title}
                 </div>
 
@@ -505,7 +507,7 @@ const ContactPage = () => {
                   {method.subtitle}
                 </div>
 
-                <div className="mt-4 inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white/40 transition-all duration-300 group-hover:text-indigo-300">
+                <div className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-eyebrow text-white/40 transition-all duration-300 group-hover:text-indigo-300">
                   Reach out
                   <HiOutlineArrowRight className="h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" />
                 </div>
@@ -543,11 +545,11 @@ const ContactPage = () => {
               <div className="absolute -bottom-16 -left-16 h-40 w-40 rounded-full bg-violet-50/60 blur-3xl" />
 
               <div className="relative">
-                <h2 className="text-2xl font-black leading-[1.15] tracking-[-0.02em] text-slate-950 sm:text-3xl md:text-[32px]">
+                <h2 className="text-2xl font-black leading-tight tracking-tight text-slate-950 sm:text-3xl md:text-3xl">
                   We&apos;d love to hear from you
                 </h2>
 
-                <p className="mt-3 text-sm leading-relaxed text-slate-500 sm:text-[15px]">
+                <p className="mt-3 text-sm leading-relaxed text-slate-500 sm:text-base">
                   Fill out the form and our team will get back to you within
                   24 hours. All fields marked with * are required.
                 </p>
@@ -617,7 +619,7 @@ const ContactPage = () => {
                   <div>
                     <label
                       htmlFor="inquiryType"
-                      className="mb-2 block text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500"
+                      className="mb-2 block text-xs font-bold uppercase tracking-eyebrow text-slate-500"
                     >
                       Inquiry Type <span className="text-indigo-500">*</span>
                     </label>
@@ -671,7 +673,7 @@ const ContactPage = () => {
                   <div>
                     <label
                       htmlFor="message"
-                      className="mb-2 block text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500"
+                      className="mb-2 block text-xs font-bold uppercase tracking-eyebrow text-slate-500"
                     >
                       Message <span className="text-indigo-500">*</span>
                     </label>
@@ -702,7 +704,7 @@ const ContactPage = () => {
                       onChange={handleChange}
                       className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-slate-300 text-indigo-600 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-0"
                     />
-                    <span className="text-[13px] leading-relaxed text-slate-600">
+                    <span className="text-sm leading-relaxed text-slate-600">
                       I agree to receive booking and support-related emails
                       from AuraSpace and understand I can unsubscribe anytime.
                     </span>
@@ -750,23 +752,11 @@ const ContactPage = () => {
                     </motion.div>
                   )}
 
-                  <motion.button
+                  <Button
                     type="submit"
+                    fullWidth
+                    size="lg"
                     disabled={status === "sending"}
-                    whileHover={
-                      reduceMotion || status === "sending"
-                        ? undefined
-                        : {
-                            scale: 1.01,
-                            boxShadow: "0 14px 36px rgba(99,102,241,0.30)",
-                          }
-                    }
-                    whileTap={
-                      reduceMotion || status === "sending"
-                        ? undefined
-                        : { scale: 0.98 }
-                    }
-                    className="flex h-[56px] w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 px-6 text-[11px] font-extrabold uppercase tracking-[0.18em] text-white shadow-[0_10px_28px_rgba(99,102,241,0.25)] transition-all duration-300 hover:from-indigo-700 hover:to-violet-700 disabled:cursor-not-allowed disabled:opacity-70"
                   >
                     {status === "sending" ? (
                       <>
@@ -797,7 +787,7 @@ const ContactPage = () => {
                         <HiOutlinePaperAirplane className="h-4 w-4 rotate-90" />
                       </>
                     )}
-                  </motion.button>
+                  </Button>
                 </form>
               </div>
             </motion.div>
@@ -821,7 +811,7 @@ const ContactPage = () => {
                 <div className="absolute -left-16 bottom-10 h-40 w-40 rounded-full bg-violet-500/20 blur-3xl" />
 
                 <div className="relative z-10">
-                  <h3 className="text-xl font-black leading-tight tracking-[-0.02em] text-white sm:text-2xl">
+                  <h3 className="text-xl font-black leading-tight tracking-tight text-white sm:text-2xl">
                     Reach us at our{" "}
                     <span className="bg-gradient-to-r from-indigo-300 to-violet-300 bg-clip-text text-transparent">
                       Dhaka office
@@ -838,10 +828,10 @@ const ContactPage = () => {
                           {info.icon}
                         </div>
                         <div className="min-w-0">
-                          <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-indigo-300">
+                          <div className="text-xs font-bold uppercase tracking-eyebrow text-indigo-300">
                             {info.title}
                           </div>
-                          <div className="mt-1 text-[13px] leading-relaxed text-white/80">
+                          <div className="mt-1 text-sm leading-relaxed text-white/80">
                             {info.text}
                           </div>
                         </div>
@@ -850,7 +840,7 @@ const ContactPage = () => {
                   </div>
 
                   <div className="mt-6 border-t border-white/10 pt-6">
-                    <div className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-indigo-300">
+                    <div className="mb-3 text-xs font-bold uppercase tracking-eyebrow text-indigo-300">
                       Follow Us
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
@@ -891,7 +881,7 @@ const ContactPage = () => {
               </div>
 
               <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_16px_40px_rgba(15,23,42,0.05)] sm:p-7">
-                <h3 className="text-lg font-black leading-tight tracking-[-0.02em] text-slate-950 sm:text-xl">
+                <h3 className="text-lg font-black leading-tight tracking-tight text-slate-950 sm:text-xl">
                   Looking for something specific?
                 </h3>
 
@@ -937,7 +927,7 @@ const ContactPage = () => {
           >
             <motion.h2
               variants={itemVariants}
-              className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[42px]"
+              className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
             >
               Dedicated Help For{" "}
               <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
@@ -947,7 +937,7 @@ const ContactPage = () => {
 
             <motion.p
               variants={itemVariants}
-              className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-[15px]"
+              className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-base"
             >
               Whether you&apos;re a guest, host, or event organizer — we have a
               dedicated team ready to help you succeed.
@@ -982,17 +972,17 @@ const ContactPage = () => {
                   {channel.icon}
                 </div>
 
-                <h3 className="mt-5 text-lg font-black leading-tight tracking-[-0.02em] text-slate-950 sm:text-xl">
+                <h3 className="mt-5 text-lg font-black leading-tight tracking-tight text-slate-950 sm:text-xl">
                   {channel.title}
                 </h3>
 
-                <p className="mt-3 flex-1 text-[13px] leading-[1.75] text-slate-500">
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-500">
                   {channel.description}
                 </p>
 
                 <Link
                   href={channel.href}
-                  className="mt-6 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-indigo-600 transition-all duration-300 hover:gap-3"
+                  className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-eyebrow text-indigo-600 transition-all duration-300 hover:gap-3"
                 >
                   {channel.cta}
                   <HiOutlineArrowRight className="h-3.5 w-3.5" />
@@ -1017,7 +1007,7 @@ const ContactPage = () => {
           >
             <motion.h2
               variants={itemVariants}
-              className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[42px]"
+              className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
             >
               Find Our{" "}
               <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
@@ -1027,7 +1017,7 @@ const ContactPage = () => {
 
             <motion.p
               variants={itemVariants}
-              className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-[15px]"
+              className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-base"
             >
               Located in the heart of Gulshan, Dhaka. Come say hello or send
               us a message anytime.
@@ -1051,12 +1041,12 @@ const ContactPage = () => {
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.08] px-3 py-1 backdrop-blur-sm">
                     <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.6)]" />
-                    <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-emerald-300">
+                    <span className="text-xs font-bold uppercase tracking-eyebrow text-emerald-300">
                       Open Now
                     </span>
                   </div>
 
-                  <h3 className="mt-5 text-2xl font-black leading-tight tracking-[-0.02em] text-white">
+                  <h3 className="mt-5 text-2xl font-black leading-tight tracking-tight text-white">
                     AuraSpace HQ
                   </h3>
 
@@ -1071,10 +1061,10 @@ const ContactPage = () => {
                         <HiOutlineLocationMarker className="h-4 w-4" />
                       </div>
                       <div>
-                        <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-indigo-300">
+                        <div className="text-xs font-bold uppercase tracking-eyebrow text-indigo-300">
                           Address
                         </div>
-                        <div className="mt-1 text-[13px] leading-relaxed text-white/80">
+                        <div className="mt-1 text-sm leading-relaxed text-white/80">
                           Gulshan Avenue, Gulshan-2
                           <br />
                           Dhaka 1212, Bangladesh
@@ -1087,12 +1077,12 @@ const ContactPage = () => {
                         <HiOutlinePhone className="h-4 w-4" />
                       </div>
                       <div>
-                        <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-indigo-300">
+                        <div className="text-xs font-bold uppercase tracking-eyebrow text-indigo-300">
                           Phone
                         </div>
                         <a
                           href="tel:+8801700000000"
-                          className="mt-1 block text-[13px] text-white/80 transition-colors hover:text-white"
+                          className="mt-1 block text-sm text-white/80 transition-colors hover:text-white"
                         >
                           +880 1700 000 000
                         </a>
@@ -1104,12 +1094,12 @@ const ContactPage = () => {
                         <HiOutlineMail className="h-4 w-4" />
                       </div>
                       <div>
-                        <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-indigo-300">
+                        <div className="text-xs font-bold uppercase tracking-eyebrow text-indigo-300">
                           Email
                         </div>
                         <a
                           href="mailto:hello@auraspace.com"
-                          className="mt-1 block text-[13px] text-white/80 transition-colors hover:text-white"
+                          className="mt-1 block text-sm text-white/80 transition-colors hover:text-white"
                         >
                           hello@auraspace.com
                         </a>
@@ -1118,17 +1108,15 @@ const ContactPage = () => {
                   </div>
                 </div>
 
-                <motion.a
-                  href="https://maps.google.com/?q=Gulshan+Dhaka+Bangladesh"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={reduceMotion ? undefined : { scale: 1.02 }}
-                  whileTap={reduceMotion ? undefined : { scale: 0.98 }}
-                  className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-[11px] font-extrabold uppercase tracking-[0.15em] text-slate-950 shadow-lg transition-all duration-300 hover:bg-indigo-50"
-                >
-                  Open in Google Maps
-                  <HiOutlineArrowRight className="h-3.5 w-3.5" />
-                </motion.a>
+                <a
+                    href="https://maps.google.com/?q=Gulshan+Dhaka+Bangladesh"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={buttonClasses({ variant: "secondary", size: "md", className: "mt-6" })}
+                  >
+                    Open in Google Maps
+                    <HiOutlineArrowRight className="h-3.5 w-3.5" />
+                  </a>
               </div>
 
               <div className="aspect-[16/12] w-full overflow-hidden bg-slate-100 lg:aspect-auto lg:min-h-[500px]">
@@ -1161,7 +1149,7 @@ const ContactPage = () => {
           >
             <motion.h2
               variants={itemVariants}
-              className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[42px]"
+              className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
             >
               Frequently Asked{" "}
               <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
@@ -1171,7 +1159,7 @@ const ContactPage = () => {
 
             <motion.p
               variants={itemVariants}
-              className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-[15px]"
+              className="mt-4 text-sm leading-relaxed text-slate-500 sm:text-base"
             >
               Quick answers to common contact and support questions.
             </motion.p>
@@ -1196,11 +1184,11 @@ const ContactPage = () => {
                   </span>
                 </div>
 
-                <h4 className="text-base font-black leading-snug tracking-[-0.02em] text-slate-950 sm:text-[17px]">
+                <h4 className="text-base font-black leading-snug tracking-tight text-slate-950 sm:text-base">
                   {faq.q}
                 </h4>
 
-                <p className="mt-3 text-[13px] leading-[1.75] text-slate-500 sm:text-sm">
+                <p className="mt-3 text-sm leading-relaxed text-slate-500 sm:text-sm">
                   {faq.a}
                 </p>
               </motion.div>
@@ -1220,7 +1208,7 @@ const ContactPage = () => {
           >
             <Link
               href="/faq"
-              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-[11px] font-extrabold uppercase tracking-[0.15em] text-slate-900 shadow-sm transition-all duration-300 hover:border-indigo-200 hover:bg-indigo-50/50 hover:text-indigo-700"
+              className={buttonClasses({ variant: "secondary", size: "md" })}
             >
               View All FAQs
               <HiOutlineArrowRight className="h-3.5 w-3.5" />
@@ -1228,7 +1216,7 @@ const ContactPage = () => {
 
             <Link
               href="#form"
-              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 px-6 py-3 text-[11px] font-extrabold uppercase tracking-[0.15em] text-white shadow-lg shadow-indigo-500/20 transition-all duration-300 hover:from-indigo-700 hover:to-violet-700"
+              className={buttonClasses({ variant: "primary", size: "md" })}
             >
               Contact Support
               <HiOutlineArrowRight className="h-3.5 w-3.5" />

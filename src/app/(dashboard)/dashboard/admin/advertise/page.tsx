@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
-import { Megaphone, TrendingUp, DollarSign, Users, CheckCircle, ArrowRight, Mail, Loader2, Sparkles, BarChart3, Target, Eye, MousePointerClick } from "lucide-react"
+import { Megaphone, TrendingUp, DollarSign, Users, CheckCircle, ArrowRight, Mail, Sparkles, BarChart3, Target, Eye, MousePointerClick } from "lucide-react"
 import { Skeleton } from "@heroui/react"
 import Link from "next/link"
+import Button, { buttonClasses } from "@/Components/ui/Button"
 import { getAdvertiseStats, joinAdvertiseWaitlist, type AdvertiseStats } from "@/lib/actions/dashboard-admin"
 import { formatCurrency } from "@/lib/currency"
 
@@ -215,7 +216,7 @@ export default function AdminAdvertisePage() {
         <div className="mb-6 flex items-center gap-2">
           <BarChart3 className="h-4 w-4 text-slate-400" />
           <h2 className="text-lg font-extrabold text-slate-900">Advertising Tiers</h2>
-          <span className="rounded-full bg-amber-50 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-600">Coming Soon</span>
+          <span className="rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider text-amber-600">Coming Soon</span>
         </div>
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {TIERS.map((tier, i) => (
@@ -231,7 +232,7 @@ export default function AdminAdvertisePage() {
               }`}
             >
               {tier.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-violet-500 to-indigo-500 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-lg">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-violet-500 to-indigo-500 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white shadow-lg">
                   <Sparkles className="h-3 w-3" />
                   Most Popular
                 </div>
@@ -274,16 +275,10 @@ export default function AdminAdvertisePage() {
               We&apos;ll notify <strong className="text-slate-900">{email}</strong> when advertising launches. In the meantime, explore our current offerings.
             </p>
             <div className="mt-6 flex gap-3">
-              <Link
-                href="/dashboard/admin/main"
-                className="rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800"
-              >
+              <Link href="/dashboard/admin/main" className={buttonClasses({ variant: "primary" })}>
                 Back to Dashboard
               </Link>
-              <Link
-                href="/contact"
-                className="rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-violet-300 hover:text-violet-600"
-              >
+              <Link href="/contact" className={buttonClasses({ variant: "secondary" })}>
                 Contact Sales
               </Link>
             </div>
@@ -328,18 +323,16 @@ export default function AdminAdvertisePage() {
                   />
                 </div>
               </div>
-              <button
+              <Button
                 type="submit"
                 disabled={submitting}
-                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/15 transition-all hover:shadow-xl hover:from-violet-600 hover:to-indigo-700 disabled:opacity-50"
+                isLoading={submitting}
+                loadingText="Joining..."
+                leftIcon={<Mail className="h-4 w-4" />}
+                className="shrink-0"
               >
-                {submitting ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Mail className="h-4 w-4" />
-                )}
-                {submitting ? "Joining..." : "Join Waitlist"}
-              </button>
+                Join Waitlist
+              </Button>
             </form>
           </div>
         )}
@@ -358,7 +351,7 @@ export default function AdminAdvertisePage() {
         </p>
         <Link
           href="/contact"
-          className="mt-4 inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800"
+          className={`${buttonClasses({ variant: "primary" })} mt-4`}
         >
           Contact Us
           <ArrowRight className="h-4 w-4" />

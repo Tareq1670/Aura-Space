@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { buttonClasses } from "@/Components/ui/Button";
 
 export default function NotFoundPage() {
     return (
@@ -13,7 +14,7 @@ export default function NotFoundPage() {
                 </p>
                 <Link
                     href="/"
-                    className="inline-block px-6 py-3 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-500 text-white font-medium hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+                    className={buttonClasses({ variant: "primary", size: "lg", className: "inline-block" })}
                 >
                     Go Home
                 </Link>

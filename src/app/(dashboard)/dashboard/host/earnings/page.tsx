@@ -7,6 +7,7 @@ import { toast } from "sonner"
 import { DollarSign, TrendingUp, Clock, Wallet, X, AlertCircle, RefreshCw } from "lucide-react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import { Pagination, Skeleton } from "@heroui/react"
+import Button from "@/Components/ui/Button"
 import StatCard from "@/Components/Dashboard/StatCard"
 import { transactionAPI, type TransactionItem } from "@/lib/api/Guest/transaction-api"
 import { formatCurrency } from "@/lib/currency"
@@ -155,10 +156,9 @@ export default function HostEarningsPage() {
         </div>
         <p className="text-lg font-semibold text-gray-900">Failed to load earnings</p>
         <p className="mt-1 text-sm text-gray-400">{error}</p>
-        <button onClick={() => window.location.reload()} className="mt-6 flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800">
-          <RefreshCw className="h-4 w-4" />
+        <Button onClick={() => window.location.reload()} variant="primary" className="mt-6" leftIcon={<RefreshCw className="h-4 w-4" />}>
           Try Again
-        </button>
+        </Button>
       </div>
     )
   }
@@ -199,13 +199,13 @@ export default function HostEarningsPage() {
           <h1 className="text-2xl font-bold text-gray-900">Earnings</h1>
           <p className="mt-1 text-sm text-gray-500">Track your revenue and request payouts</p>
         </div>
-        <button
+        <Button
           onClick={() => setShowRequestModal(true)}
-          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/30 transition-all hover:from-violet-600 hover:to-indigo-600 active:scale-[0.97]"
+          variant="primary"
+          leftIcon={<Wallet className="h-4 w-4" />}
         >
-          <Wallet className="h-4 w-4" />
           Request Withdrawal
-        </button>
+        </Button>
       </motion.div>
 
       <motion.div
@@ -451,7 +451,7 @@ export default function HostEarningsPage() {
             >
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-lg font-bold text-gray-900">Request Withdrawal</h2>
-                <button onClick={() => setShowRequestModal(false)} className="rounded-lg p-1.5 text-gray-400 transition hover:bg-gray-100 hover:text-gray-600">
+                <button onClick={() => setShowRequestModal(false)} className="rounded-lg p-1.5 text-gray-400 transition hover:bg-gray-100 hover:text-gray-600 touch-44">
                   <X className="h-5 w-5" />
                 </button>
               </div>
@@ -459,14 +459,15 @@ export default function HostEarningsPage() {
                 Available balance: <span className="font-semibold text-gray-900">{formatCurrency(availableBalance)}</span>
               </p>
               <div className="flex gap-3">
-                <button onClick={() => setShowRequestModal(false)} className="flex-1 rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50">Cancel</button>
-                <button
+                <Button onClick={() => setShowRequestModal(false)} variant="secondary" className="flex-1">Cancel</Button>
+                <Button
                   onClick={handleRequestPayout}
-                  disabled={requesting}
-                  className="flex-1 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-500 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/30 transition-all hover:from-violet-600 hover:to-indigo-600 disabled:opacity-60"
+                  isLoading={requesting}
+                  loadingText="Requesting…"
+                  className="flex-1"
                 >
-                  {requesting ? "Requesting…" : "Confirm Withdrawal"}
-                </button>
+                  Confirm Withdrawal
+                </Button>
               </div>
             </motion.div>
           </motion.div>

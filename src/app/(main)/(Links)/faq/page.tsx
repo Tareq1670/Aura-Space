@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useRef } from "react";
 import Link from "next/link";
+import Button, { buttonClasses } from "@/Components/ui/Button";
 import {
     motion,
     useInView,
@@ -255,7 +256,7 @@ const FaqPage = () => {
                     >
                         <motion.h1
                             variants={itemVariants}
-                            className="text-[36px] font-black leading-[1.05] tracking-[-0.035em] text-white sm:text-5xl md:text-[64px]"
+                            className="text-4xl font-black leading-display tracking-tight text-white sm:text-5xl md:text-6xl"
                         >
                             How can we{" "}
                             <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-fuchsia-300 bg-clip-text text-transparent">
@@ -265,7 +266,7 @@ const FaqPage = () => {
 
                         <motion.p
                             variants={itemVariants}
-                            className="mx-auto mt-6 max-w-2xl text-base leading-[1.8] text-white/60 sm:text-lg"
+                            className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/75 sm:text-lg"
                         >
                             Everything you need to know about booking, hosting,
                             and managing your stays on AuraSpace.
@@ -282,11 +283,12 @@ const FaqPage = () => {
                                         : "border-white/10 hover:border-white/20 hover:bg-white/[0.08]"
                                 }`}
                             >
-                                <div className="pointer-events-none absolute left-6 text-white/30 transition-colors group-focus-within:text-indigo-300">
+                                <div className="pointer-events-none absolute left-6 text-white/75 transition-colors group-focus-within:text-indigo-300">
                                     <HiOutlineSearch className="h-5 w-5" />
                                 </div>
                                 <input
                                     type="text"
+                                    aria-label="Search FAQs"
                                     placeholder="Search for answers..."
                                     value={searchQuery}
                                     onChange={(e) =>
@@ -294,18 +296,19 @@ const FaqPage = () => {
                                     }
                                     onFocus={() => setIsSearchFocused(true)}
                                     onBlur={() => setIsSearchFocused(false)}
-                                    className="h-16 w-full rounded-2xl border-none bg-transparent pl-14 pr-32 text-sm font-medium text-white placeholder:text-white/30 focus:outline-none focus:ring-0 sm:text-base"
+                                    className="h-16 w-full rounded-2xl border-none bg-transparent pl-14 pr-32 text-sm font-medium text-white placeholder:text-white/75 focus:outline-none focus:ring-0 sm:text-base"
                                 />
                                 <div className="absolute right-3 flex items-center gap-2">
                                     {searchQuery && (
                                         <button
                                             onClick={() => setSearchQuery("")}
-                                            className="rounded-full bg-white/10 p-2 text-white/60 transition-all hover:bg-white/20 hover:text-white"
+                                            aria-label="Clear search"
+                                            className="rounded-full bg-white/10 p-2 text-white/75 transition-all hover:bg-white/20 hover:text-white"
                                         >
                                             <HiOutlineX className="h-4 w-4" />
                                         </button>
                                     )}
-                                    <div className="hidden rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-[10px] font-bold text-white/40 sm:block">
+                                    <div className="hidden rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-xs font-bold text-white/70 sm:block">
                                         ⌘K
                                     </div>
                                 </div>
@@ -316,7 +319,7 @@ const FaqPage = () => {
                             variants={itemVariants}
                             className="mx-auto mt-10 flex flex-wrap items-center justify-center gap-3"
                         >
-                            <span className="text-xs text-white/30">
+                            <span className="text-xs text-white/75">
                                 Popular searches:
                             </span>
                             {[
@@ -355,7 +358,7 @@ const FaqPage = () => {
                                     onClick={() =>
                                         setActiveCategory(category.id)
                                     }
-                                    className={`group relative flex items-center gap-2 rounded-full px-5 py-3 text-[11px] font-bold uppercase tracking-[0.12em] transition-all duration-300 sm:text-xs ${
+                                    className={`group relative flex items-center gap-2 rounded-full px-5 py-3 text-xs font-bold uppercase tracking-eyebrow transition-all duration-300 sm:text-xs ${
                                         activeCategory === category.id
                                             ? "text-white shadow-lg shadow-indigo-500/25"
                                             : "border border-slate-200 bg-white text-slate-600 hover:border-indigo-200 hover:bg-indigo-50/30 hover:text-indigo-600"
@@ -376,7 +379,7 @@ const FaqPage = () => {
                                         {category.icon}
                                         {category.label}
                                         <span
-                                            className={`ml-1.5 rounded-full px-2 py-0.5 text-[9px] ${
+                                            className={`ml-1.5 rounded-full px-2 py-0.5 text-xs ${
                                                 activeCategory === category.id
                                                     ? "bg-white/20 text-white"
                                                     : "bg-slate-100 text-slate-500"
@@ -454,7 +457,7 @@ const FaqPage = () => {
                                                             </div>
                                                             <div className="flex-1">
                                                                 <div
-                                                                    className={`mb-1.5 inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider transition-colors duration-300 ${
+                                                                    className={`mb-1.5 inline-flex rounded-full px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider transition-colors duration-300 ${
                                                                         openItems.includes(
                                                                             faq.id,
                                                                         )
@@ -469,7 +472,7 @@ const FaqPage = () => {
                                                                     )?.label ||
                                                                         "General"}
                                                                 </div>
-                                                                <h3 className="text-base font-black leading-snug tracking-[-0.01em] text-slate-900 sm:text-lg">
+                                                                <h3 className="text-base font-black leading-snug tracking-normal text-slate-900 sm:text-lg">
                                                                     {
                                                                         faq.question
                                                                     }
@@ -519,7 +522,7 @@ const FaqPage = () => {
                                                                 className="overflow-hidden"
                                                             >
                                                                 <div className="px-6 pb-6 pl-[72px]">
-                                                                    <p className="text-[15px] leading-[1.8] text-slate-600">
+                                                                    <p className="text-base leading-relaxed text-slate-600">
                                                                         {
                                                                             faq.answer
                                                                         }
@@ -543,7 +546,7 @@ const FaqPage = () => {
                                                                                         true,
                                                                                     );
                                                                                 }}
-                                                                                className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-all ${
+                                                                                className={`flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-bold transition-all touch-44 ${
                                                                                     helpfulItems[
                                                                                         faq
                                                                                             .id
@@ -566,7 +569,7 @@ const FaqPage = () => {
                                                                                         false,
                                                                                     );
                                                                                 }}
-                                                                                className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-all ${
+                                                                                className={`flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-bold transition-all touch-44 ${
                                                                                     helpfulItems[
                                                                                         faq
                                                                                             .id
@@ -610,15 +613,17 @@ const FaqPage = () => {
                                                 different keywords or browse by
                                                 category.
                                             </p>
-                                            <button
+                                            <Button
                                                 onClick={() => {
                                                     setSearchQuery("");
                                                     setActiveCategory("all");
                                                 }}
-                                                className="mt-8 rounded-full bg-slate-950 px-8 py-3 text-xs font-extrabold uppercase tracking-[0.16em] text-white shadow-lg transition-all hover:bg-slate-800 hover:shadow-xl"
+                                                variant="primary"
+                                                size="md"
+                                                className="mt-8"
                                             >
                                                 Clear Filters
-                                            </button>
+                                            </Button>
                                         </motion.div>
                                     )}
                                 </AnimatePresence>
@@ -633,7 +638,7 @@ const FaqPage = () => {
                                             <HiOutlineLightningBolt className="h-6 w-6" />
                                         </div>
                                         <div>
-                                            <h3 className="text-lg font-black tracking-[-0.02em] text-slate-900">
+                                            <h3 className="text-lg font-black tracking-tight text-slate-900">
                                                 Popular Questions
                                             </h3>
                                             <p className="text-xs text-slate-500">
@@ -656,7 +661,7 @@ const FaqPage = () => {
                                                 }}
                                                 className="group flex w-full items-start gap-4 rounded-2xl border border-slate-100 bg-slate-50/50 p-4 text-left transition-all duration-300 hover:border-indigo-200 hover:bg-indigo-50/30"
                                             >
-                                                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 text-[10px] font-bold text-white shadow-md">
+                                                <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 text-xs font-bold text-white shadow-md">
                                                     {idx + 1}
                                                 </div>
                                                 <div className="flex-1">
@@ -678,14 +683,14 @@ const FaqPage = () => {
                                     <div className="relative mb-8">
                                         <div className="mb-2 flex items-center gap-2">
                                             <div className="flex h-2 w-2 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.8)]" />
-                                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-300">
+                                            <span className="text-xs font-bold uppercase tracking-eyebrow text-emerald-300">
                                                 Live Support
                                             </span>
                                         </div>
-                                        <h3 className="text-xl font-black tracking-[-0.02em]">
+                                        <h3 className="text-xl font-black tracking-tight">
                                             Still need help?
                                         </h3>
-                                        <p className="mt-2 text-sm leading-relaxed text-white/50">
+                                        <p className="mt-2 text-sm leading-relaxed text-white/75">
                                             Our team is available 24/7 to assist
                                             you with any questions or concerns.
                                         </p>
@@ -703,7 +708,7 @@ const FaqPage = () => {
                                                 <div className="text-sm font-bold text-white">
                                                     Live Chat
                                                 </div>
-                                                <div className="text-xs text-white/40">
+                                                <div className="text-xs text-white/70">
                                                     Response time: &lt; 2 min
                                                 </div>
                                             </div>
@@ -721,7 +726,7 @@ const FaqPage = () => {
                                                 <div className="text-sm font-bold text-white">
                                                     Email Support
                                                 </div>
-                                                <div className="text-xs text-white/40">
+                                                <div className="text-xs text-white/70">
                                                     Response time: &lt; 24 hours
                                                 </div>
                                             </div>
@@ -739,7 +744,7 @@ const FaqPage = () => {
                                                 <div className="text-sm font-bold text-white">
                                                     Phone Support
                                                 </div>
-                                                <div className="text-xs text-white/40">
+                                                <div className="text-xs text-white/70">
                                                     Available 9 AM - 9 PM
                                                 </div>
                                             </div>
@@ -749,7 +754,7 @@ const FaqPage = () => {
 
                                     <div className="relative mt-8 rounded-2xl border border-white/5 bg-white/[0.03] p-4 backdrop-blur-sm">
                                         <div className="flex items-center justify-between text-xs">
-                                            <span className="text-white/40">
+                                            <span className="text-white/70">
                                                 Avg. response time
                                             </span>
                                             <span className="font-bold text-emerald-400">
@@ -781,7 +786,7 @@ const FaqPage = () => {
                                             </p>
                                             <Link
                                                 href="/community"
-                                                className="mt-4 inline-flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-indigo-500/20 transition-all hover:bg-indigo-700 hover:shadow-xl hover:shadow-indigo-500/30"
+                                                className={buttonClasses({ variant: "primary", size: "md", className: "mt-4" })}
                                             >
                                                 Join Community
                                                 <HiOutlineArrowRight className="h-3.5 w-3.5" />
@@ -807,14 +812,14 @@ const FaqPage = () => {
                         <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
 
                         <div className="relative">
-                            <h2 className="text-3xl font-black tracking-[-0.03em] text-white sm:text-4xl md:text-5xl">
+                            <h2 className="text-3xl font-black tracking-tight text-white sm:text-4xl md:text-5xl">
                                 Can&apos;t find what you&apos;re{" "}
                                 <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-fuchsia-300 bg-clip-text text-transparent">
                                     looking for?
                                 </span>
                             </h2>
 
-                            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/60">
+                            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/75">
                                 Our dedicated support team is here to help you
                                 with any questions or concerns you might have
                                 about your booking.
@@ -823,15 +828,15 @@ const FaqPage = () => {
                             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
                                 <Link
                                     href="/contact"
-                                    className="group inline-flex h-14 items-center justify-center gap-3 rounded-full bg-white px-10 text-sm font-extrabold uppercase tracking-[0.16em] text-slate-950 shadow-[0_14px_40px_rgba(255,255,255,0.2)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_18px_50px_rgba(255,255,255,0.3)]"
+                                    className={buttonClasses({ variant: "secondary", size: "lg" })}
                                 >
                                     Contact Support
-                                    <HiOutlineArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                                    <HiOutlineArrowRight className="h-5 w-5" />
                                 </Link>
 
                                 <Link
                                     href="/listings"
-                                    className="inline-flex h-14 items-center justify-center gap-3 rounded-full border border-white/20 bg-white/[0.06] px-10 text-sm font-extrabold uppercase tracking-[0.16em] text-white backdrop-blur-md transition-all duration-300 hover:border-white/40 hover:bg-white/[0.12]"
+                                    className={buttonClasses({ variant: "secondary", size: "lg" })}
                                 >
                                     Explore Listings
                                 </Link>
@@ -842,7 +847,7 @@ const FaqPage = () => {
                                     <div className="bg-gradient-to-br from-white to-white/70 bg-clip-text text-3xl font-black text-transparent sm:text-4xl">
                                         &lt;2h
                                     </div>
-                                    <div className="mt-2 text-[11px] font-bold uppercase tracking-[0.2em] text-white/40">
+                                    <div className="mt-2 text-xs font-bold uppercase tracking-eyebrow text-white/70">
                                         Response Time
                                     </div>
                                 </div>
@@ -850,7 +855,7 @@ const FaqPage = () => {
                                     <div className="bg-gradient-to-br from-white to-white/70 bg-clip-text text-3xl font-black text-transparent sm:text-4xl">
                                         24/7
                                     </div>
-                                    <div className="mt-2 text-[11px] font-bold uppercase tracking-[0.2em] text-white/40">
+                                    <div className="mt-2 text-xs font-bold uppercase tracking-eyebrow text-white/70">
                                         Support Hours
                                     </div>
                                 </div>
@@ -858,7 +863,7 @@ const FaqPage = () => {
                                     <div className="bg-gradient-to-br from-white to-white/70 bg-clip-text text-3xl font-black text-transparent sm:text-4xl">
                                         99%
                                     </div>
-                                    <div className="mt-2 text-[11px] font-bold uppercase tracking-[0.2em] text-white/40">
+                                    <div className="mt-2 text-xs font-bold uppercase tracking-eyebrow text-white/70">
                                         Satisfaction
                                     </div>
                                 </div>

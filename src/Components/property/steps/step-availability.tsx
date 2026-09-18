@@ -114,7 +114,7 @@ export default function StepAvailability({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.1 }}
-                    className="text-gray-500 dark:text-gray-400"
+                    className="text-gray-500 dark:text-gray-500"
                 >
                     Choose your booking preferences and block dates when
                     you&apos;re not available
@@ -136,11 +136,12 @@ export default function StepAvailability({
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                     <div>
-                        <label className={labelClass}>
+                        <label htmlFor="availability-min-nights" className={labelClass}>
                             Minimum nights
                         </label>
                         <input
                             type="number"
+                            id="availability-min-nights"
                             value={formData.availability.minStay}
                             onChange={(e) =>
                                 updateNestedField("availability", {
@@ -157,11 +158,12 @@ export default function StepAvailability({
                         )}
                     </div>
                     <div>
-                        <label className={labelClass}>
+                        <label htmlFor="availability-max-nights" className={labelClass}>
                             Maximum nights
                         </label>
                         <input
                             type="number"
+                            id="availability-max-nights"
                             value={formData.availability.maxStay}
                             onChange={(e) =>
                                 updateNestedField("availability", {
@@ -178,11 +180,12 @@ export default function StepAvailability({
                         )}
                     </div>
                     <div>
-                        <label className={labelClass}>
+                        <label htmlFor="availability-advance-notice" className={labelClass}>
                             Advance notice (days)
                         </label>
                         <input
                             type="number"
+                            id="availability-advance-notice"
                             value={formData.availability.advanceNotice}
                             onChange={(e) =>
                                 updateNestedField("availability", {
@@ -211,11 +214,12 @@ export default function StepAvailability({
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                        <label className={labelClass}>
+                        <label htmlFor="availability-from" className={labelClass}>
                             Available from
                         </label>
                         <input
                             type="date"
+                            id="availability-from"
                             value={formData.availability.availableFrom}
                             onChange={(e) =>
                                 updateNestedField("availability", {
@@ -226,9 +230,10 @@ export default function StepAvailability({
                         />
                     </div>
                     <div>
-                        <label className={labelClass}>Available to</label>
+                        <label htmlFor="availability-to" className={labelClass}>Available to</label>
                         <input
                             type="date"
+                            id="availability-to"
                             value={formData.availability.availableTo}
                             onChange={(e) =>
                                 updateNestedField("availability", {
@@ -252,7 +257,7 @@ export default function StepAvailability({
                     <h3 className="font-bold text-lg text-gray-900 dark:text-white">
                         Block Dates
                     </h3>
-                    <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                    <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-500">
                         <Info className="w-3.5 h-3.5" />
                         Click dates to block/unblock
                     </div>
@@ -264,8 +269,9 @@ export default function StepAvailability({
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         type="button"
+                        aria-label="Previous month"
                         onClick={() => navigateMonth(-1)}
-                        className="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-700 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                        className="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-700 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors touch-44"
                     >
                         ‹
                     </motion.button>
@@ -276,8 +282,9 @@ export default function StepAvailability({
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         type="button"
+                        aria-label="Next month"
                         onClick={() => navigateMonth(1)}
-                        className="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-700 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                        className="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-700 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors touch-44"
                     >
                         ›
                     </motion.button>
@@ -288,7 +295,7 @@ export default function StepAvailability({
                     {DAYS.map((day) => (
                         <div
                             key={day}
-                            className="text-center text-xs font-semibold text-gray-400 dark:text-gray-500 py-2"
+                            className="text-center text-xs font-semibold text-gray-500 dark:text-gray-500 py-2"
                         >
                             {day}
                         </div>
@@ -337,7 +344,7 @@ export default function StepAvailability({
                         animate={{ opacity: 1 }}
                         className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800"
                     >
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                        <p className="text-sm text-gray-500 dark:text-gray-500">
                             <span className="font-semibold text-red-500">
                                 {formData.availability.blockedDates.length}
                             </span>{" "}

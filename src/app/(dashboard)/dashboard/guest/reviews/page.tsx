@@ -9,6 +9,7 @@ import { Star, Edit3, X, PenLine, Sparkles, Quote, MessageSquareText } from "luc
 import ReviewCard from "@/Components/Review/ReviewCard"
 import RatingStars from "@/Components/Review/RatingStars"
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal"
+import Button from "@/Components/ui/Button"
 import { reviewAPI, type ReviewRecord, type PendingBooking } from "@/lib/api/Guest/review-api"
 import { createReview, updateReview, deleteReview, reportReview } from "@/lib/actions/review"
 
@@ -215,7 +216,7 @@ export default function GuestReviewsPage() {
                   >
                     {averageRating.toFixed(1)}
                   </motion.p>
-                  <p className="text-[11px] text-gray-400 mt-0.5">Average</p>
+                  <p className="text-xs text-gray-400 mt-0.5">Average</p>
                 </div>
               </div>
               <div className="hidden sm:block h-8 w-px bg-gray-100" />
@@ -326,7 +327,7 @@ export default function GuestReviewsPage() {
                   <button
                     disabled={page === 1}
                     onClick={() => setPage((p) => Math.max(1, p - 1))}
-                    className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-medium text-gray-500 transition-all hover:border-violet-200 hover:text-violet-600 disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-medium text-gray-500 transition-all hover:border-violet-200 hover:text-violet-600 disabled:opacity-40 disabled:cursor-not-allowed touch-44"
                   >
                     Previous
                   </button>
@@ -334,7 +335,7 @@ export default function GuestReviewsPage() {
                     <button
                       key={p}
                       onClick={() => setPage(p)}
-                      className={`flex h-9 w-9 items-center justify-center rounded-xl text-xs font-medium transition-all ${
+                      className={`flex h-9 w-9 items-center justify-center rounded-xl text-xs font-medium transition-all touch-44 ${
                         p === page
                           ? "bg-gradient-to-br from-violet-500 to-indigo-600 text-white shadow-md"
                           : "border border-gray-200 bg-white text-gray-500 hover:border-violet-200 hover:text-violet-600"
@@ -346,7 +347,7 @@ export default function GuestReviewsPage() {
                   <button
                     disabled={page === totalPages}
                     onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                    className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-medium text-gray-500 transition-all hover:border-violet-200 hover:text-violet-600 disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-medium text-gray-500 transition-all hover:border-violet-200 hover:text-violet-600 disabled:opacity-40 disabled:cursor-not-allowed touch-44"
                   >
                     Next
                   </button>
@@ -418,17 +419,15 @@ export default function GuestReviewsPage() {
                           {new Date(booking.checkOut).toLocaleDateString()}
                         </p>
                       </div>
-                      <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.97 }}
+                      <Button
                         onClick={() => openWriteModal(booking)}
-                        className="shrink-0 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-600 px-5 py-2.5 text-xs font-semibold text-white shadow-lg shadow-violet-500/15 transition-all hover:shadow-xl hover:shadow-violet-500/25"
+                        variant="primary"
+                        size="sm"
+                        leftIcon={<PenLine className="h-3.5 w-3.5" />}
+                        className="shrink-0"
                       >
-                        <span className="flex items-center gap-1.5">
-                          <PenLine className="h-3.5 w-3.5" />
-                          Write Review
-                        </span>
-                      </motion.button>
+                        Write Review
+                      </Button>
                     </div>
                   </motion.div>
                 ))}
@@ -475,7 +474,7 @@ export default function GuestReviewsPage() {
                       setShowWriteModal(false)
                       setShowEditModal(false)
                     }}
-                    className="rounded-lg p-1.5 text-white/60 transition-colors hover:bg-white/15 hover:text-white"
+                    className="rounded-lg p-1.5 text-white/60 transition-colors hover:bg-white/15 hover:text-white touch-44"
                   >
                     <X className="h-5 w-5" />
                   </button>
@@ -524,27 +523,26 @@ export default function GuestReviewsPage() {
                 </div>
 
                 <div className="flex gap-3">
-                  <button
+                  <Button
                     onClick={() => {
                       setShowWriteModal(false)
                       setShowEditModal(false)
                     }}
-                    className="flex-1 rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-gray-500 transition-all hover:bg-gray-50 hover:text-gray-700"
+                    variant="secondary"
+                    className="flex-1"
                   >
                     Cancel
-                  </button>
-                  <motion.button
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.98 }}
+                  </Button>
+                  <Button
                     onClick={handleSubmit}
                     disabled={submitting || !formRating || !formComment.trim()}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/15 transition-all hover:shadow-xl disabled:opacity-40"
+                    isLoading={submitting}
+                    loadingText="Submitting..."
+                    variant="primary"
+                    className="flex-1"
                   >
-                    {submitting && (
-                      <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white" />
-                    )}
                     {showWriteModal ? "Submit Review" : "Save Changes"}
-                  </motion.button>
+                  </Button>
                 </div>
               </div>
             </motion.div>

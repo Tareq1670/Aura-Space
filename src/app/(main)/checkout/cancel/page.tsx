@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { buttonClasses } from "@/Components/ui/Button"
 
 export const metadata: Metadata = {
   title: "Payment Cancelled",
@@ -36,13 +37,13 @@ export default async function CancelPage({ searchParams }: Props) {
         <div className="flex flex-col gap-3">
           <Link
             href={retryHref}
-            className="rounded-lg bg-emerald-600 px-6 py-3 text-white font-semibold transition hover:bg-emerald-700"
+            className={buttonClasses({ variant: "success", size: "md" })}
           >
             Try Again
           </Link>
           <Link
             href="/"
-            className="rounded-lg border border-gray-300 px-6 py-3 font-semibold text-gray-700 transition hover:bg-gray-50"
+            className={buttonClasses({ variant: "secondary", size: "md" })}
           >
             Back to Home
           </Link>
