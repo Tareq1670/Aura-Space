@@ -11,6 +11,10 @@ import {
 import { Skeleton } from "@heroui/react";
 import { getFeaturedProperties } from "@/lib/actions/property-public";
 import type { PublicProperty } from "@/lib/actions/property-public";
+import SectionHeading from "@/Components/Public/SectionHeading";
+import PropertyCard from "@/Components/Public/PropertyCard";
+import { buttonClasses } from "@/Components/ui/Button";
+import { formatCurrency } from "@/lib/currency";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -102,34 +106,28 @@ export default function FeaturedSpaces() {
                     initial="hidden"
                     animate={isInView ? "visible" : "hidden"}
                     variants={containerVariants}
-                    className="mx-auto mb-10 max-w-2xl text-center sm:mb-12 lg:mb-14"
+                    className="mb-10 sm:mb-12 lg:mb-14"
                 >
-                    <motion.div
-                        variants={itemVariants}
-                        className="mb-3 inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50/80 px-4 py-1.5"
-                    >
-                        <span className="h-1.5 w-1.5 rounded-full bg-indigo-500" />
-                        <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-indigo-600">
-                            Premium Collection
-                        </span>
+                    <motion.div variants={itemVariants}>
+                        <SectionHeading
+                            eyebrow="Premium Collection"
+                            title="Featured "
+                            highlight="Luxury Spaces"
+                            subtitle="Handpicked premium properties with exceptional amenities and stunning locations, curated for the most discerning travelers."
+                            align="center"
+                            action={
+                                <Link
+                                    href="/listings"
+                                    className={buttonClasses({ variant: "secondary", size: "sm" })}
+                                >
+                                    View all
+                                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
+                                </Link>
+                            }
+                        />
                     </motion.div>
-
-                    <motion.h2
-                        variants={itemVariants}
-                        className="text-3xl font-black leading-[1.1] tracking-[-0.03em] text-slate-950 sm:text-4xl md:text-[44px]"
-                    >
-                        Featured{" "}
-                        <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-clip-text text-transparent">
-                            Luxury Spaces
-                        </span>
-                    </motion.h2>
-
-                    <motion.p
-                        variants={itemVariants}
-                        className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-slate-500 sm:text-[15px]"
-                    >
-                        Handpicked premium properties with exceptional amenities and stunning locations, curated for the most discerning travelers.
-                    </motion.p>
                 </motion.div>
 
                 {loading ? (
@@ -179,7 +177,7 @@ export default function FeaturedSpaces() {
                                             </p>
                                             <div className="mt-3 flex items-center gap-4">
                                                 <span className="text-lg font-bold text-white">
-                                                    ${heroProp.price?.perNight}{" "}
+                                                    {formatCurrency(heroProp.price?.perNight ?? 0, heroProp.price?.currency)}{" "}
                                                     <span className="text-sm font-normal text-white/70">/ night</span>
                                                 </span>
                                                 <StarRating rating={heroProp.rating} />
@@ -194,50 +192,9 @@ export default function FeaturedSpaces() {
                             <motion.div
                                 key={prop.id}
                                 variants={itemVariants}
-                                className="group"
+                                className="group h-full"
                             >
-                                <Link href={`/listings/${prop.id}`} className="block h-full">
-                                    <div className="relative h-full overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-shadow duration-300 hover:shadow-md">
-                                        <div className="relative aspect-[4/3] overflow-hidden">
-                                            <img
-                                                src={prop.images?.[0] || "/placeholder-property.svg"}
-                                                alt={prop.title}
-                                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                                onError={(e) => {
-                                                    (e.target as HTMLImageElement).src = "/placeholder-property.svg";
-                                                }}
-                                            />
-                                            <div className="absolute left-2 top-2 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-slate-700 backdrop-blur-sm">
-                                                {prop.category}
-                                            </div>
-                                            {prop.isFeatured && (
-                                                <div className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-amber-400/90 px-2 py-0.5 text-[9px] font-bold text-amber-900 backdrop-blur-sm">
-                                                    <svg className="h-2.5 w-2.5" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                    </svg>
-                                                    Featured
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        <div className="p-4">
-                                            <h3 className="text-sm font-bold leading-snug text-slate-900 line-clamp-1">
-                                                {prop.title}
-                                            </h3>
-                                            <p className="mt-0.5 text-xs text-slate-500">
-                                                {prop.location?.city}, {prop.location?.country}
-                                            </p>
-
-                                            <div className="mt-3 flex items-center justify-between">
-                                                <span className="text-sm font-bold text-slate-900">
-                                                    ${prop.price?.perNight}{" "}
-                                                    <span className="text-xs font-normal text-slate-400">/ night</span>
-                                                </span>
-                                                <StarRating rating={prop.rating} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Link>
+                                <PropertyCard property={prop} />
                             </motion.div>
                         ))}
                     </motion.div>

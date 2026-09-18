@@ -469,8 +469,8 @@ export default function Hero() {
                                     className="hidden rounded-full border border-white/25 bg-white/[0.03] px-6 py-2.5 text-xs font-bold uppercase tracking-[0.15em] text-white backdrop-blur-sm transition-colors hover:bg-white/[0.08] sm:inline-flex"
                                 >
                                     <span className="flex items-center gap-2">
-                                        <motion.span animate={{ rotate: [0, 360] }} transition={{ duration: 8, repeat: Infinity, ease: "linear" }} className="inline-block">✦</motion.span>
-                                        Watch Tour
+                                        <motion.span animate={{ rotate: [0, 360] }} transition={{ duration: 8, repeat: Infinity, ease: "linear" }} className="inline-block" aria-hidden="true">✦</motion.span>
+                                        Learn More
                                     </span>
                                 </motion.button>
                             </motion.div>
@@ -481,7 +481,7 @@ export default function Hero() {
                                         whileHover={{ y: -3, scale: 1.06, transition: { type: "spring", stiffness: 400, damping: 17 } }}
                                         className="group flex cursor-default items-center gap-1.5 sm:gap-2"
                                     >
-                                        <motion.span className="text-sm sm:text-base" whileHover={{ scale: 1.2, rotate: [0, -10, 10, 0], transition: { duration: 0.4 } }}>
+                                        <motion.span className="text-sm sm:text-base" aria-hidden="true" whileHover={{ scale: 1.2, rotate: [0, -10, 10, 0], transition: { duration: 0.4 } }}>
                                             {stat.icon}
                                         </motion.span>
                                         <div>
