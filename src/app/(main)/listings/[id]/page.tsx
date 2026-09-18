@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -24,7 +24,7 @@ import RatingStars from "@/Components/Review/RatingStars";
 import Button from "@/Components/ui/Button";
 import PropertyCard from "@/Components/Public/PropertyCard";
 import { formatCurrency } from "@/lib/currency";
-import { PenLine, Sparkles, X } from "lucide-react";
+import { Minus, PenLine, Plus, Sparkles, X } from "lucide-react";
 
 
 
@@ -63,6 +63,43 @@ function useEscapeKey(open: boolean, onClose: () => void) {
         window.addEventListener("keydown", handler);
         return () => window.removeEventListener("keydown", handler);
     }, [open, onClose]);
+}
+
+function useModalBehavior(
+    open: boolean,
+    onClose: () => void,
+    panelRef: React.RefObject<HTMLDivElement | null>,
+) {
+    useEscapeKey(open, onClose);
+
+    useEffect(() => {
+        if (!open) return;
+        const prevOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        panelRef.current
+            ?.querySelector<HTMLElement>("button, [href], input, select, textarea")
+            ?.focus();
+        return () => {
+            document.body.style.overflow = prevOverflow;
+        };
+    }, [open, panelRef]);
+}
+
+function trapFocusIn(e: React.KeyboardEvent<HTMLElement>, panel: HTMLElement) {
+    if (e.key !== "Tab") return;
+    const focusables = panel.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+    );
+    if (focusables.length === 0) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+    }
 }
 
 function DetailSkeleton() {
@@ -107,6 +144,8 @@ export default function PropertyDetailPage() {
     const [checkOut, setCheckOut] = useState("");
     const [guests, setGuests] = useState(1);
     const [bookingError, setBookingError] = useState<string | null>(null);
+    const lightboxRef = useRef<HTMLDivElement>(null);
+    const reviewModalRef = useRef<HTMLDivElement>(null);
 
     const today = new Date().toISOString().split("T")[0];
 
@@ -178,8 +217,8 @@ export default function PropertyDetailPage() {
         return () => { mounted = false };
     }, [property]);
 
-    useEscapeKey(lightboxOpen, () => setLightboxOpen(false));
-    useEscapeKey(showReviewModal, () => setShowReviewModal(false));
+    useModalBehavior(lightboxOpen, () => setLightboxOpen(false), lightboxRef);
+    useModalBehavior(showReviewModal, () => setShowReviewModal(false), reviewModalRef);
 
     const openLightbox = useCallback((index: number) => {
         setLightboxIndex(index);
@@ -267,6 +306,21 @@ export default function PropertyDetailPage() {
     const price = property.price;
     const details = property.details;
 
+    const perNight = price?.perNight ?? 0;
+    const currency = price?.currency ?? "USD";
+    const cleaningFee = price?.cleaningFee ?? 0;
+    const serviceFee = price?.serviceFee ?? 0;
+    const maxGuests = details?.maxGuests ?? 99;
+    const nights =
+        checkIn && checkOut && checkOut > checkIn
+            ? Math.round((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / 86400000)
+            : 0;
+    const subtotal = nights * perNight;
+    const discountPct =
+        nights >= 28 ? (price?.monthlyDiscount ?? 0) : nights >= 7 ? (price?.weeklyDiscount ?? 0) : 0;
+    const discountAmount = Math.round(subtotal * (discountPct / 100) * 100) / 100;
+    const estimateTotal = subtotal - discountAmount + cleaningFee + serviceFee;
+
     const ratingBreakdown = {
         5: reviews.filter((r) => r.rating >= 4.5).length,
         4: reviews.filter((r) => r.rating >= 3.5 && r.rating < 4.5).length,
@@ -277,7 +331,7 @@ export default function PropertyDetailPage() {
 
     return (
         <div className="min-h-screen bg-white">
-            <div className="container mx-auto px-4 py-6 sm:px-6 lg:px-8">
+            <div className="container mx-auto px-4 pb-28 pt-6 sm:px-6 lg:px-8 lg:pb-8">
                 <Link
                     href="/listings"
                     className="mb-4 inline-flex items-center gap-1.5 text-sm font-semibold text-slate-500 transition-colors hover:text-indigo-600"
@@ -329,7 +383,7 @@ export default function PropertyDetailPage() {
                                         <div className="relative aspect-[4/3] overflow-hidden rounded-lg border-2 border-transparent transition-colors duration-200 [&.swiper-slide-thumb-active]:border-indigo-500">
                                             <Image
                                                 src={img}
-                                                alt={`Thumbnail ${i + 1}`}
+                                                alt={`${property.title} - Thumbnail ${i + 1}`}
                                                 fill
                                                 sizes="(max-width: 640px) 25vw, 15vw"
                                                 className="object-cover"
@@ -349,7 +403,7 @@ export default function PropertyDetailPage() {
                             <div>
                                 <div className="flex flex-wrap items-start justify-between gap-4">
                                     <div>
-                                        <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-indigo-600">
+                                        <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-indigo-600">
                                             {property.category}
                                         </div>
                                         <h1 className="text-2xl font-black text-slate-950 sm:text-3xl lg:text-4xl">
@@ -379,28 +433,28 @@ export default function PropertyDetailPage() {
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                                             </svg>
                                             <p className="mt-2 text-lg font-bold text-slate-900">{details.maxGuests}</p>
-                                            <p className="text-[11px] font-medium uppercase tracking-wider text-slate-400">Guests</p>
+                                            <p className="text-xs font-medium uppercase tracking-wider text-slate-500">Guests</p>
                                         </div>
                                         <div className="rounded-xl border border-slate-100 bg-slate-50/50 p-4 text-center">
                                             <svg className="mx-auto h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205l3 1m1.5.5l-1.5-.5M6.75 7.364V3h-3v18m3-13.636l10.5-3.819" />
                                             </svg>
                                             <p className="mt-2 text-lg font-bold text-slate-900">{details.bedrooms}</p>
-                                            <p className="text-[11px] font-medium uppercase tracking-wider text-slate-400">Bedrooms</p>
+                                            <p className="text-xs font-medium uppercase tracking-wider text-slate-500">Bedrooms</p>
                                         </div>
                                         <div className="rounded-xl border border-slate-100 bg-slate-50/50 p-4 text-center">
                                             <svg className="mx-auto h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" />
                                             </svg>
                                             <p className="mt-2 text-lg font-bold text-slate-900">{details.bathrooms}</p>
-                                            <p className="text-[11px] font-medium uppercase tracking-wider text-slate-400">Bathrooms</p>
+                                            <p className="text-xs font-medium uppercase tracking-wider text-slate-500">Bathrooms</p>
                                         </div>
                                         <div className="rounded-xl border border-slate-100 bg-slate-50/50 p-4 text-center">
                                             <svg className="mx-auto h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
                                             <p className="mt-2 text-lg font-bold text-slate-900">{formatCurrency(price?.perNight ?? 0, price?.currency)}</p>
-                                            <p className="text-[11px] font-medium uppercase tracking-wider text-slate-500">Per Night</p>
+                                            <p className="text-xs font-medium uppercase tracking-wider text-slate-500">Per Night</p>
                                         </div>
                                     </div>
                                 )}
@@ -436,10 +490,10 @@ export default function PropertyDetailPage() {
                                     <h2 className="text-lg font-extrabold text-slate-900">House Rules</h2>
                                     <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
                                         <div className="flex items-center gap-3 rounded-xl bg-slate-50 px-4 py-3">
-                                            <div className={`flex h-8 w-8 items-center justify-center rounded-full ${property.houseRules.smokingAllowed ? "bg-red-100 text-red-500" : "bg-green-100 text-green-500"}`}>
+                                            <div className={`flex h-8 w-8 items-center justify-center rounded-full ${property.houseRules.smokingAllowed ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"}`}>
                                                 {property.houseRules.smokingAllowed ? (
                                                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                                                     </svg>
                                                 ) : (
                                                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -453,19 +507,31 @@ export default function PropertyDetailPage() {
                                         </div>
                                         <div className="flex items-center gap-3 rounded-xl bg-slate-50 px-4 py-3">
                                             <div className={`flex h-8 w-8 items-center justify-center rounded-full ${property.houseRules.petsAllowed ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"}`}>
-                                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 15v3m-3-3h6m-6 0a3 3 0 01-3-3V9a3 3 0 013-3m0 0h6a3 3 0 013 3v6m-9-9h6" />
-                                                </svg>
+                                                {property.houseRules.petsAllowed ? (
+                                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 15v3m-3-3h6m-6 0a3 3 0 01-3-3V9a3 3 0 013-3m0 0h6a3 3 0 013 3v6m-9-9h6" />
+                                                    </svg>
+                                                ) : (
+                                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                                    </svg>
+                                                )}
                                             </div>
                                             <span className="text-sm font-medium text-slate-700">
                                                 {property.houseRules.petsAllowed ? "Pets Allowed" : "No Pets"}
                                             </span>
                                         </div>
                                         <div className="flex items-center gap-3 rounded-xl bg-slate-50 px-4 py-3">
-                                            <div className={`flex h-8 w-8 items-center justify-center rounded-full ${property.houseRules.partiesAllowed ? "bg-red-100 text-red-500" : "bg-green-100 text-green-500"}`}>
-                                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0A2.701 2.701 0 003 15.546M21 12v3.546M3 12v3.546" />
-                                                </svg>
+                                            <div className={`flex h-8 w-8 items-center justify-center rounded-full ${property.houseRules.partiesAllowed ? "bg-green-100 text-green-500" : "bg-red-100 text-red-500"}`}>
+                                                {property.houseRules.partiesAllowed ? (
+                                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0A2.701 2.701 0 003 15.546M21 12v3.546M3 12v3.546" />
+                                                    </svg>
+                                                ) : (
+                                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                                    </svg>
+                                                )}
                                             </div>
                                             <span className="text-sm font-medium text-slate-700">
                                                 {property.houseRules.partiesAllowed ? "Parties Allowed" : "No Parties"}
@@ -561,17 +627,17 @@ export default function PropertyDetailPage() {
                                             <h2 className="text-lg font-extrabold text-slate-900">Share Your Experience</h2>
                                             <p className="mt-1 text-sm text-slate-500">Tell others about your stay at {property.title}</p>
                                         </div>
-                                        <button
+                                        <Button
                                             onClick={() => {
                                                 setReviewRating(0);
                                                 setReviewComment("");
                                                 setShowReviewModal(true);
                                             }}
-                                            className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-amber-500/20 transition-all hover:shadow-xl hover:shadow-amber-500/30"
+                                            className="shrink-0"
+                                            leftIcon={<PenLine className="h-4 w-4" aria-hidden="true" />}
                                         >
-                                            <PenLine className="h-4 w-4" />
                                             Write a Review
-                                        </button>
+                                        </Button>
                                     </div>
                                 </div>
                             )}
@@ -615,48 +681,105 @@ export default function PropertyDetailPage() {
                                         </div>
                                         <div>
                                             <label className="mb-1.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">Guests</label>
-                                            <input
-                                                type="number"
-                                                value={guests}
-                                                min={1}
-                                                max={details?.maxGuests || 99}
-                                                onChange={(e) => {
-                                                    setGuests(Math.max(1, Number(e.target.value) || 1));
-                                                    setBookingError(null);
-                                                }}
-                                                className="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm text-slate-700 outline-none transition-all focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
-                                            />
+                                            <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-3.5 py-2">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setGuests((g) => Math.max(1, g - 1));
+                                                        setBookingError(null);
+                                                    }}
+                                                    disabled={guests <= 1}
+                                                    aria-label="Decrease guests"
+                                                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition-colors hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-40"
+                                                >
+                                                    <Minus className="h-4 w-4" aria-hidden="true" />
+                                                </button>
+                                                <span className="text-sm font-semibold text-slate-900" aria-live="polite">
+                                                    {guests} {guests === maxGuests ? "(max)" : ""}
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setGuests((g) => Math.min(maxGuests, g + 1));
+                                                        setBookingError(null);
+                                                    }}
+                                                    disabled={guests >= maxGuests}
+                                                    aria-label="Increase guests"
+                                                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition-colors hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-40"
+                                                >
+                                                    <Plus className="h-4 w-4" aria-hidden="true" />
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
 
                                     <hr className="my-4 border-slate-100" />
 
                                     <div className="space-y-2 text-sm">
-                                        {price && (price.weeklyDiscount ?? 0) > 0 && (
-                                            <div className="flex items-center justify-between text-green-600">
-                                                <span>Weekly discount (7+ nights)</span>
-                                                <span className="font-medium">{price.weeklyDiscount ?? 0}%</span>
-                                            </div>
-                                        )}
-                                        {price && (price.monthlyDiscount ?? 0) > 0 && (
-                                            <div className="flex items-center justify-between text-green-600">
-                                                <span>Monthly discount (28+ nights)</span>
-                                                <span className="font-medium">{price.monthlyDiscount ?? 0}%</span>
-                                            </div>
-                                        )}
-                                        {price && (price.cleaningFee ?? 0) > 0 && (
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-slate-500">Cleaning fee</span>
-                                                <span className="font-medium text-slate-700">{formatCurrency(price.cleaningFee ?? 0, price.currency)}</span>
-                                            </div>
-                                        )}
-                                        {price && (price.serviceFee ?? 0) > 0 && (
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-slate-500">Service fee</span>
-                                                <span className="font-medium text-slate-700">{formatCurrency(price.serviceFee ?? 0, price.currency)}</span>
-                                            </div>
+                                        {nights > 0 ? (
+                                            <>
+                                                <div className="flex items-center justify-between">
+                                                    <span className="text-slate-500">
+                                                        {formatCurrency(perNight, currency)} × {nights} night{nights > 1 ? "s" : ""}
+                                                    </span>
+                                                    <span className="font-medium text-slate-700">{formatCurrency(subtotal, currency)}</span>
+                                                </div>
+                                                {discountPct > 0 && (
+                                                    <div className="flex items-center justify-between text-green-600">
+                                                        <span>{nights >= 28 ? "Monthly discount" : "Weekly discount"} ({discountPct}%)</span>
+                                                        <span className="font-medium">-{formatCurrency(discountAmount, currency)}</span>
+                                                    </div>
+                                                )}
+                                                {cleaningFee > 0 && (
+                                                    <div className="flex items-center justify-between">
+                                                        <span className="text-slate-500">Cleaning fee</span>
+                                                        <span className="font-medium text-slate-700">{formatCurrency(cleaningFee, currency)}</span>
+                                                    </div>
+                                                )}
+                                                {serviceFee > 0 && (
+                                                    <div className="flex items-center justify-between">
+                                                        <span className="text-slate-500">Service fee</span>
+                                                        <span className="font-medium text-slate-700">{formatCurrency(serviceFee, currency)}</span>
+                                                    </div>
+                                                )}
+                                                <div className="flex items-center justify-between border-t border-slate-100 pt-2">
+                                                    <span className="text-sm font-bold text-slate-900">Total before taxes</span>
+                                                    <span className="text-base font-black text-slate-900">{formatCurrency(estimateTotal, currency)}</span>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                {(price?.weeklyDiscount ?? 0) > 0 && (
+                                                    <div className="flex items-center justify-between text-green-600">
+                                                        <span>Weekly discount (7+ nights)</span>
+                                                        <span className="font-medium">{price?.weeklyDiscount ?? 0}%</span>
+                                                    </div>
+                                                )}
+                                                {(price?.monthlyDiscount ?? 0) > 0 && (
+                                                    <div className="flex items-center justify-between text-green-600">
+                                                        <span>Monthly discount (28+ nights)</span>
+                                                        <span className="font-medium">{price?.monthlyDiscount ?? 0}%</span>
+                                                    </div>
+                                                )}
+                                                {cleaningFee > 0 && (
+                                                    <div className="flex items-center justify-between">
+                                                        <span className="text-slate-500">Cleaning fee</span>
+                                                        <span className="font-medium text-slate-700">{formatCurrency(cleaningFee, currency)}</span>
+                                                    </div>
+                                                )}
+                                                {serviceFee > 0 && (
+                                                    <div className="flex items-center justify-between">
+                                                        <span className="text-slate-500">Service fee</span>
+                                                        <span className="font-medium text-slate-700">{formatCurrency(serviceFee, currency)}</span>
+                                                    </div>
+                                                )}
+                                            </>
                                         )}
                                     </div>
+
+                                    {nights === 0 && (
+                                        <p className="mt-3 text-xs text-slate-400">Select your dates for an estimated total.</p>
+                                    )}
 
                                     {bookingError && (
                                         <p role="alert" className="mt-3 text-xs font-medium text-red-500">{bookingError}</p>
@@ -744,11 +867,13 @@ export default function PropertyDetailPage() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
+                        ref={lightboxRef}
                         role="dialog"
                         aria-modal="true"
                         aria-label="Image viewer"
                         className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
                         onClick={() => setLightboxOpen(false)}
+                        onKeyDown={(e) => trapFocusIn(e, e.currentTarget)}
                     >
                         <button
                             onClick={() => setLightboxOpen(false)}
@@ -792,7 +917,6 @@ export default function PropertyDetailPage() {
                             }}
                             aria-label="Next image"
                             className="absolute right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
-                            style={{ right: "4rem" }}
                         >
                             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
@@ -824,14 +948,14 @@ export default function PropertyDetailPage() {
                                 variant="secondary"
                                 size="sm"
                                 isLoading={messaging}
-                                aria-label="Message host"
                                 leftIcon={
                                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
                                     </svg>
                                 }
-                                className="px-4"
-                            />
+                            >
+                                Message
+                            </Button>
                         )}
                         <Button
                             onClick={async () => {
@@ -879,9 +1003,11 @@ export default function PropertyDetailPage() {
                             exit={{ opacity: 0, scale: 0.92, y: 24 }}
                             transition={{ type: "spring", stiffness: 300, damping: 26 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-2xl bg-white shadow-2xl"
+                            onKeyDown={(e) => trapFocusIn(e, e.currentTarget)}
+                            ref={reviewModalRef}
+                            className="w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-2xl bg-white shadow-2xl outline-none"
                         >
-                            <div className="relative overflow-hidden bg-gradient-to-r from-amber-500 to-orange-500 px-6 py-5 shrink-0">
+                            <div className="relative overflow-hidden bg-gradient-to-r from-indigo-500 via-violet-500 to-indigo-500 px-6 py-5 shrink-0">
                                 <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-30" />
                                 <div className="relative flex items-center justify-between">
                                     <div className="flex items-center gap-3">
@@ -912,10 +1038,10 @@ export default function PropertyDetailPage() {
 
                             <div className="px-6 py-5">
                                 <div className="mb-5">
-                                    <label className="mb-2.5 block text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                    <label className="mb-2.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                         Rating
                                     </label>
-                                    <div className="inline-block rounded-xl bg-gray-50 px-4 py-3">
+                                    <div className="inline-block rounded-xl bg-slate-50 px-4 py-3">
                                         <RatingStars
                                             rating={reviewRating}
                                             onRate={setReviewRating}
@@ -926,7 +1052,7 @@ export default function PropertyDetailPage() {
                                 </div>
 
                                 <div className="mb-5">
-                                    <label className="mb-2.5 block text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                    <label className="mb-2.5 block text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                         Comment
                                     </label>
                                     <textarea
@@ -934,29 +1060,27 @@ export default function PropertyDetailPage() {
                                         onChange={(e) => setReviewComment(e.target.value)}
                                         rows={4}
                                         placeholder="Share your experience..."
-                                        className="w-full resize-none rounded-xl border border-gray-200 bg-white p-3.5 text-sm text-gray-700 outline-none placeholder-gray-300 transition-all hover:border-amber-200 focus:border-amber-400 focus:ring-2 focus:ring-amber-100"
+                                        className="w-full resize-none rounded-xl border border-slate-200 bg-white p-3.5 text-sm text-slate-700 outline-none placeholder-slate-400 transition-all hover:border-indigo-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
                                     />
                                 </div>
 
                                 <div className="flex gap-3">
-                                    <button
+                                    <Button
+                                        variant="secondary"
+                                        className="flex-1"
                                         onClick={() => setShowReviewModal(false)}
-                                        className="flex-1 rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-gray-500 transition-all hover:bg-gray-50 hover:text-gray-700"
                                     >
                                         Cancel
-                                    </button>
-                                    <motion.button
-                                        whileHover={{ scale: 1.01 }}
-                                        whileTap={{ scale: 0.98 }}
+                                    </Button>
+                                    <Button
+                                        className="flex-1"
                                         onClick={handleSubmitReview}
                                         disabled={submittingReview || !reviewRating || !reviewComment.trim()}
-                                        className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-amber-500/15 transition-all hover:shadow-xl disabled:opacity-40"
+                                        isLoading={submittingReview}
+                                        loadingText="Submitting..."
                                     >
-                                        {submittingReview && (
-                                            <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white" />
-                                        )}
                                         Submit Review
-                                    </motion.button>
+                                    </Button>
                                 </div>
                             </div>
                         </motion.div>
