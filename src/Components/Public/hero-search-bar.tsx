@@ -17,7 +17,7 @@ const FIELD_CLASSES =
     "flex min-h-[50px] flex-col justify-center rounded-xl border border-transparent bg-white px-3 py-2 transition-all duration-200 focus-within:border-indigo-500/50 focus-within:shadow-md focus-within:shadow-indigo-500/8 sm:min-h-[52px] sm:px-3.5";
 
 const LABEL_CLASSES =
-    "mb-0.5 block text-[8px] font-black uppercase tracking-[0.2em] text-slate-400 sm:text-[9px]";
+    "mb-1 block text-[11px] font-bold uppercase tracking-wider text-slate-500 sm:text-[12px]";
 
 interface SearchState {
     location: string;
@@ -160,7 +160,6 @@ export function HeroSearchBar({
                             <input
                                 id="hero-location"
                                 type="text"
-                                required
                                 autoComplete="off"
                                 placeholder="City, region, or property..."
                                 value={searchQuery.location}
@@ -347,7 +346,7 @@ export function HeroSearchBar({
                                 "0 8px 30px rgba(99,102,241,0.45)",
                         }}
                         whileTap={{ scale: 0.96 }}
-                        className="relative min-h-[50px] overflow-hidden rounded-xl bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 px-5 text-[10px] font-bold uppercase tracking-[0.18em] text-white shadow-lg shadow-indigo-600/25 transition-colors sm:col-span-2 sm:min-h-[52px] sm:text-xs lg:col-span-1 lg:min-w-[120px]"
+                        className="relative min-h-[50px] overflow-hidden rounded-xl bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 px-5 text-[11px] font-bold uppercase tracking-[0.16em] text-white shadow-lg shadow-indigo-600/25 transition-colors sm:col-span-2 sm:min-h-[52px] sm:text-xs lg:col-span-1 lg:min-w-[120px]"
                         style={{ backgroundSize: "200% 100%" }}
                     >
                         <span className="relative z-10 inline-flex items-center justify-center gap-2">

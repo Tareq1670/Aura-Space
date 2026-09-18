@@ -398,7 +398,7 @@ export default function Hero() {
                                     variants={tagAnimation} initial="hidden" animate="visible" exit="exit"
                                 >
                                     <motion.span
-                                        className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.08] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-indigo-300 backdrop-blur-xl sm:px-3.5 sm:py-1.5 sm:text-[10px]"
+                                        className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.08] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-indigo-300 backdrop-blur-xl sm:px-3.5 sm:py-1.5"
                                         whileHover={{ scale: 1.05, borderColor: "rgba(129,140,248,0.4)", backgroundColor: "rgba(255,255,255,0.12)" }}
                                         transition={{ type: "spring", stiffness: 400, damping: 17 }}
                                     >
@@ -444,7 +444,7 @@ export default function Hero() {
                                     type="button"
                                     onClick={() => router.push("/listings")}
                                     variants={magneticHover} initial="rest" whileHover="hover" whileTap="tap"
-                                    className="relative overflow-hidden rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.15em] text-white shadow-lg shadow-indigo-950/40 sm:px-6 sm:py-2.5 sm:text-xs"
+                                    className="relative overflow-hidden rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.14em] text-white shadow-lg shadow-indigo-950/40 sm:px-6 sm:py-2.5 sm:text-xs"
                                     style={{ backgroundSize: "200% 100%" }}
                                 >
                                     <motion.span
@@ -488,7 +488,7 @@ export default function Hero() {
                                             <motion.div className="text-xs font-extrabold leading-none text-white sm:text-sm" whileHover={{ color: "rgb(165, 180, 252)", transition: { duration: 0.2 } }}>
                                                 {stat.value}
                                             </motion.div>
-                                            <div className="mt-0.5 text-[7px] font-bold uppercase tracking-[0.16em] text-slate-400 transition-colors group-hover:text-slate-300 sm:text-[8px]">{stat.label}</div>
+                                            <div className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400 transition-colors group-hover:text-slate-300">{stat.label}</div>
                                         </div>
                                     </motion.div>
                                 ))}
@@ -535,12 +535,12 @@ export default function Hero() {
                                                             initial={{ opacity: 0, y: 10, scale: 0.8 }}
                                                             animate={{ opacity: 1, y: 0, scale: 1 }}
                                                             transition={{ delay: 0.2, type: "spring", stiffness: 400, damping: 17 }}
-                                                            className="mb-1 inline-flex rounded-full bg-indigo-600/90 px-2 py-0.5 text-[7px] font-bold uppercase tracking-wider text-white"
+                                                            className="mb-1 inline-flex rounded-full bg-indigo-600/90 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white"
                                                         >
                                                             {slide.tag}
                                                         </motion.span>
                                                     )}
-                                                    <p className={`line-clamp-2 font-bold uppercase tracking-[0.11em] text-white ${isActive ? "text-[10px]" : "text-[8px]"}`}>{slide.highlight}</p>
+                                                    <p className={`line-clamp-2 font-bold uppercase tracking-[0.11em] text-white ${isActive ? "text-[11px]" : "text-[9px]"}`}>{slide.highlight}</p>
                                                     {isActive && (
                                                         <motion.div initial={{ width: 0 }} animate={{ width: 28 }} transition={{ duration: 0.4, delay: 0.25, ease: "easeOut" }}
                                                             className="mt-1.5 h-[2px] rounded-full bg-gradient-to-r from-indigo-400 to-violet-400" />
