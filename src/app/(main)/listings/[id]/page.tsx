@@ -20,6 +20,9 @@ import { authClient } from "@/lib/auth-client";
 import { reviewAPI, type PendingBooking } from "@/lib/api/Guest/review-api";
 import { createReview } from "@/lib/actions/review";
 import RatingStars from "@/Components/Review/RatingStars";
+import Button from "@/Components/ui/Button";
+import PropertyCard from "@/Components/Public/PropertyCard";
+import { formatCurrency } from "@/lib/currency";
 import { PenLine, Sparkles, X } from "lucide-react";
 
 
@@ -48,6 +51,17 @@ function AmenityIcon({ amenity }: { amenity: string }) {
 function formatDate(dateStr: string): string {
     const date = new Date(dateStr);
     return date.toLocaleDateString("en-US", { year: "numeric", month: "long" });
+}
+
+function useEscapeKey(open: boolean, onClose: () => void) {
+    useEffect(() => {
+        if (!open) return;
+        const handler = (e: KeyboardEvent) => {
+            if (e.key === "Escape") onClose();
+        };
+        window.addEventListener("keydown", handler);
+        return () => window.removeEventListener("keydown", handler);
+    }, [open, onClose]);
 }
 
 function DetailSkeleton() {
@@ -165,6 +179,9 @@ export default function PropertyDetailPage() {
         return () => { mounted = false };
     }, [property]);
 
+    useEscapeKey(lightboxOpen, () => setLightboxOpen(false));
+    useEscapeKey(showReviewModal, () => setShowReviewModal(false));
+
     const openLightbox = useCallback((index: number) => {
         setLightboxIndex(index);
         setLightboxOpen(true);
@@ -180,7 +197,7 @@ export default function PropertyDetailPage() {
                 toast.success("Conversation started");
                 router.push("/dashboard/guest/messages");
             } else {
-                toast.error((res as any).message || res.error || "Failed to start conversation");
+                toast.error(res.error || "Failed to start conversation");
             }
         } catch {
             toast.error("Something went wrong");
@@ -208,7 +225,7 @@ export default function PropertyDetailPage() {
                 setReviewComment("");
                 setPendingBooking(null);
             } else {
-                toast.error((res as any).message || res.error || "Failed to submit review");
+                toast.error(res.error || "Failed to submit review");
             }
         } catch {
             toast.error("Something went wrong");
@@ -262,6 +279,15 @@ export default function PropertyDetailPage() {
     return (
         <div className="min-h-screen bg-white">
             <div className="container mx-auto px-4 py-6 sm:px-6 lg:px-8">
+                <Link
+                    href="/listings"
+                    className="mb-4 inline-flex items-center gap-1.5 text-sm font-semibold text-slate-500 transition-colors hover:text-indigo-600"
+                >
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                    </svg>
+                    Back to Explore
+                </Link>
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
                     <div className="relative overflow-hidden rounded-2xl bg-slate-100">
                         <Swiper
@@ -338,7 +364,7 @@ export default function PropertyDetailPage() {
                                         </div>
                                         <div className="mt-3 flex items-center gap-1.5">
                                             <RatingStars rating={property.rating} showValue readonly size="sm" />
-                                            <span className="text-sm text-slate-400">({property.reviewCount} reviews)</span>
+                                            <span className="text-sm text-slate-500">({property.reviewCount} reviews)</span>
                                         </div>
                                     </div>
                                 </div>
@@ -370,8 +396,8 @@ export default function PropertyDetailPage() {
                                             <svg className="mx-auto h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
-                                            <p className="mt-2 text-lg font-bold text-slate-900">${price?.perNight}</p>
-                                            <p className="text-[11px] font-medium uppercase tracking-wider text-slate-400">Per Night</p>
+                                            <p className="mt-2 text-lg font-bold text-slate-900">{formatCurrency(price?.perNight ?? 0, price?.currency)}</p>
+                                            <p className="text-[11px] font-medium uppercase tracking-wider text-slate-500">Per Night</p>
                                         </div>
                                     </div>
                                 )}
@@ -550,10 +576,10 @@ export default function PropertyDetailPage() {
 
                         <div className="lg:col-span-1">
                             <div className="sticky top-24 space-y-6">
-                                <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-lg shadow-slate-200/50">
+                                <div id="booking-card" className="rounded-2xl border border-slate-100 bg-white p-6 shadow-lg shadow-slate-200/50">
                                     <div className="flex items-baseline gap-1">
-                                        <span className="text-2xl font-black text-slate-900">${price?.perNight}</span>
-                                        <span className="text-sm text-slate-400">/ night</span>
+                                        <span className="text-2xl font-black text-slate-900">{formatCurrency(price?.perNight ?? 0, price?.currency)}</span>
+                                        <span className="text-sm text-slate-500">/ night</span>
                                     </div>
 
                                     <div className="mt-4 space-y-3">
@@ -618,22 +644,22 @@ export default function PropertyDetailPage() {
                                         {price && (price.cleaningFee ?? 0) > 0 && (
                                             <div className="flex items-center justify-between">
                                                 <span className="text-slate-500">Cleaning fee</span>
-                                                <span className="font-medium text-slate-700">${price.cleaningFee ?? 0}</span>
+                                                <span className="font-medium text-slate-700">{formatCurrency(price.cleaningFee ?? 0, price.currency)}</span>
                                             </div>
                                         )}
                                         {price && (price.serviceFee ?? 0) > 0 && (
                                             <div className="flex items-center justify-between">
                                                 <span className="text-slate-500">Service fee</span>
-                                                <span className="font-medium text-slate-700">${price.serviceFee ?? 0}</span>
+                                                <span className="font-medium text-slate-700">{formatCurrency(price.serviceFee ?? 0, price.currency)}</span>
                                             </div>
                                         )}
                                     </div>
 
                                     {bookingError && (
-                                        <p className="mt-3 text-xs font-medium text-red-500">{bookingError}</p>
+                                        <p role="alert" className="mt-3 text-xs font-medium text-red-500">{bookingError}</p>
                                     )}
 
-                                    <button
+                                    <Button
                                         onClick={async () => {
                                             const url = validateAndGetBookingUrl();
                                             if (!url) return;
@@ -648,13 +674,15 @@ export default function PropertyDetailPage() {
                                                 router.push(`/login?redirect=${encodeURIComponent(url)}`);
                                             }
                                         }}
-                                        className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-600/20 transition-all hover:bg-indigo-700 hover:shadow-xl hover:shadow-indigo-600/30"
+                                        leftIcon={
+                                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                                            </svg>
+                                        }
+                                        className="mt-5 w-full"
                                     >
-                                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-                                        </svg>
                                         Book Now
-                                    </button>
+                                    </Button>
                                 </div>
 
                                 {host && (
@@ -673,16 +701,20 @@ export default function PropertyDetailPage() {
                                                 <p className="text-xs text-slate-400">Member since {formatDate(host.createdAt)}</p>
                                             </div>
                                         </div>
-                                        <button
+                                        <Button
                                             onClick={handleMessageHost}
-                                            disabled={messaging}
-                                            className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-700 transition-colors hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 disabled:opacity-50"
+                                            variant="secondary"
+                                            isLoading={messaging}
+                                            loadingText="Starting..."
+                                            leftIcon={
+                                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                                                </svg>
+                                            }
+                                            className="mt-4 w-full"
                                         >
-                                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-                                            </svg>
-                                            {messaging ? "Starting..." : "Message Host"}
-                                        </button>
+                                            Message Host
+                                        </Button>
                                     </div>
                                 )}
                             </div>
@@ -694,39 +726,7 @@ export default function PropertyDetailPage() {
                             <h2 className="text-xl font-extrabold text-slate-900">Similar Properties</h2>
                             <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                                 {related.slice(0, 4).map((prop) => (
-                                    <Link key={prop.id} href={`/listings/${prop.id}`} className="group block">
-                                        <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:shadow-md hover:border-indigo-200">
-                                            <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
-                                                <img
-                                                    src={prop.images?.[0] || "/placeholder-property.svg"}
-                                                    alt={prop.title}
-                                                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                                    loading="lazy"
-                                                    onError={(e) => {
-                                                        (e.target as HTMLImageElement).src = "/placeholder-property.svg";
-                                                    }}
-                                                />
-                                                <div className="absolute left-2.5 top-2.5 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-slate-700 backdrop-blur-sm">
-                                                    {prop.category}
-                                                </div>
-                                            </div>
-                                            <div className="p-4">
-                                                <h3 className="text-sm font-bold leading-snug text-slate-900 line-clamp-1">{prop.title}</h3>
-                                                <p className="mt-0.5 text-xs text-slate-500">
-                                                    {prop.location?.city}{prop.location?.city && prop.location?.country ? ", " : ""}{prop.location?.country}
-                                                </p>
-                                                <div className="mt-3 flex items-center justify-between">
-                                                    <span className="text-sm font-bold text-slate-900">
-                                                        ${prop.price?.perNight} <span className="text-xs font-normal text-slate-400">/ night</span>
-                                                    </span>
-                                                    <div className="flex items-center gap-1">
-                                                        <RatingStars rating={5} readonly size="sm" />
-                                                        <span className="text-xs font-semibold text-slate-600">{prop.rating.toFixed(1)}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Link>
+                                    <PropertyCard key={prop.id} property={prop} />
                                 ))}
                             </div>
                         </div>
@@ -741,11 +741,15 @@ export default function PropertyDetailPage() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Image viewer"
                         className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
                         onClick={() => setLightboxOpen(false)}
                     >
                         <button
                             onClick={() => setLightboxOpen(false)}
+                            aria-label="Close image viewer"
                             className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
                         >
                             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -757,6 +761,7 @@ export default function PropertyDetailPage() {
                                 e.stopPropagation();
                                 setLightboxIndex((i) => (i > 0 ? i - 1 : images.length - 1));
                             }}
+                            aria-label="Previous image"
                             className="absolute left-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
                         >
                             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -782,6 +787,7 @@ export default function PropertyDetailPage() {
                                 e.stopPropagation();
                                 setLightboxIndex((i) => (i < images.length - 1 ? i + 1 : 0));
                             }}
+                            aria-label="Next image"
                             className="absolute right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
                             style={{ right: "4rem" }}
                         >
@@ -798,27 +804,39 @@ export default function PropertyDetailPage() {
             </ModalPortal>
 
             <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-slate-200 bg-white/95 backdrop-blur-md lg:hidden">
+                {bookingError && (
+                    <p role="alert" className="border-b border-rose-100 bg-rose-50/80 px-4 py-2 text-xs font-medium text-red-600">
+                        {bookingError}
+                    </p>
+                )}
                 <div className="flex items-center justify-between px-4 py-3">
                     <div>
-                        <span className="text-lg font-black text-slate-900">${price?.perNight}</span>
-                        <span className="text-xs text-slate-400"> / night</span>
+                        <span className="text-lg font-black text-slate-900">{formatCurrency(price?.perNight ?? 0, price?.currency)}</span>
+                        <span className="text-xs text-slate-500"> / night</span>
                     </div>
                     <div className="flex items-center gap-2">
                         {host && (
-                            <button
+                            <Button
                                 onClick={handleMessageHost}
-                                disabled={messaging}
-                                className="rounded-xl border border-slate-200 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-600 transition-colors hover:bg-indigo-50 hover:text-indigo-600 disabled:opacity-50"
-                            >
-                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-                                </svg>
-                            </button>
+                                variant="secondary"
+                                size="sm"
+                                isLoading={messaging}
+                                aria-label="Message host"
+                                leftIcon={
+                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                                    </svg>
+                                }
+                                className="px-4"
+                            />
                         )}
-                        <button
+                        <Button
                             onClick={async () => {
                                 const url = validateAndGetBookingUrl();
-                                if (!url) return;
+                                if (!url) {
+                                    document.getElementById("booking-card")?.scrollIntoView({ behavior: "smooth", block: "center" });
+                                    return;
+                                }
                                 try {
                                     const session = await authClient.getSession();
                                     if (!session?.data?.user) {
@@ -830,10 +848,11 @@ export default function PropertyDetailPage() {
                                     router.push(`/login?redirect=${encodeURIComponent(url)}`);
                                 }
                             }}
-                            className="rounded-xl bg-indigo-600 px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-indigo-600/20 transition-colors hover:bg-indigo-700"
+                            size="sm"
+                            className="px-5"
                         >
                             Book Now
-                        </button>
+                        </Button>
                     </div>
                 </div>
             </div>
@@ -846,6 +865,9 @@ export default function PropertyDetailPage() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setShowReviewModal(false)}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="review-modal-title"
                         className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/30 backdrop-blur-sm p-4"
                     >
                         <motion.div
@@ -861,10 +883,11 @@ export default function PropertyDetailPage() {
                                 <div className="relative flex items-center justify-between">
                                     <div className="flex items-center gap-3">
                                         <Sparkles className="h-5 w-5 text-white/80" />
-                                        <h3 className="text-lg font-semibold text-white">Write a Review</h3>
+                                        <h3 id="review-modal-title" className="text-lg font-semibold text-white">Write a Review</h3>
                                     </div>
                                     <button
                                         onClick={() => setShowReviewModal(false)}
+                                        aria-label="Close review form"
                                         className="rounded-lg p-1.5 text-white/60 transition-colors hover:bg-white/15 hover:text-white"
                                     >
                                         <X className="h-5 w-5" />
