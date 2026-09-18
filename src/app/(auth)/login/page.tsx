@@ -184,43 +184,6 @@ function LoginForm() {
                         <div className="grid grid-cols-2 gap-3 mb-5">
                             <button
                                 type="button"
-                                className="flex items-center justify-center gap-2 px-4 py-2.5 border rounded-xl text-sm font-semibold transition border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-slate-700 active:scale-[0.98]"
-                            >
-                                <svg className="w-4 h-4" viewBox="0 0 24 24">
-                                    <path
-                                        fill="#EA4335"
-                                        d="M12.24 10.285V14.4h6.887c-.275 1.565-1.88 4.604-6.887 4.604-4.33 0-7.866-3.577-7.866-8s3.536-8 7.866-8c2.46 0 4.105 1.025 5.047 1.926l3.227-3.103C18.22 1.45 15.48.5 12.24.5c-6.35 0-11.5 5.15-11.5 11.5s5.15 11.5 11.5 11.5c6.63 0 11.04-4.654 11.04-11.23 0-.754-.081-1.332-.181-1.985H12.24z"
-                                    />
-                                </svg>
-                                Google
-                            </button>
-
-                            <button
-                                type="button"
-                                className="flex items-center justify-center gap-2 px-4 py-2.5 border rounded-xl text-sm font-semibold transition border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-slate-700 active:scale-[0.98]"
-                            >
-                                <svg
-                                    className="w-4 h-4 fill-[#1877F2]"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                                </svg>
-                                Facebook
-                            </button>
-                        </div>
-
-                        <div className="relative flex items-center justify-center my-5">
-                            <div className="absolute inset-0 flex items-center">
-                                <div className="w-full border-t border-slate-200"></div>
-                            </div>
-                            <span className="relative px-3 text-[11px] uppercase tracking-wider font-semibold bg-white text-slate-400">
-                                Or sign in with email
-                            </span>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-3 mb-5">
-                            <button
-                                type="button"
                                 onClick={() => handleDemoLogin("guest")}
                                 className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 active:scale-[0.98]"
                             >
