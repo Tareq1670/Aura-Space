@@ -199,7 +199,7 @@ export default function FeaturedBlogs() {
                                                         {blog.authorName}
                                                     </span>
                                                 </div>
-                                                <div className="flex items-center gap-2 text-[11px] text-slate-400">
+                                                <div className="flex items-center gap-2 text-xs text-slate-500">
                                                     <span className="flex items-center gap-0.5">
                                                         <Clock className="w-3 h-3" />
                                                         {blog.readingTime}m

@@ -104,7 +104,7 @@ export default function PropertyCard({ property, className, priority = false }: 
                     <div className="mt-3 flex items-center justify-between border-t border-slate-50 pt-3">
                         <span className="text-sm font-bold text-slate-900">
                             {formatCurrency(perNight, currency)}{" "}
-                            <span className="text-xs font-normal text-slate-400">/ night</span>
+                            <span className="text-xs font-normal text-slate-500">/ night</span>
                         </span>
 
                         {property.rating > 0 && (
@@ -117,7 +117,7 @@ export default function PropertyCard({ property, className, priority = false }: 
                                 <span className="text-xs font-semibold text-slate-700 tabular-nums">
                                     {property.rating.toFixed(1)}
                                 </span>
-                                <span className="text-[11px] text-slate-400">
+                                <span className="text-xs text-slate-500">
                                     ({property.reviewCount ?? 0})
                                 </span>
                             </span>

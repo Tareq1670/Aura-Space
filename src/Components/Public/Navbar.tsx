@@ -400,7 +400,7 @@ const handleSignOut = async () => {
               </div>
             )}
 
-            <p className="px-4 pt-1 pb-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">Menu</p>
+            <p className="px-4 pt-1 pb-2 text-xs font-bold uppercase tracking-wider text-slate-500">Menu</p>
             <div className="flex flex-col gap-1">
               {routes.map((route) => (
                 <Link
@@ -422,7 +422,7 @@ const handleSignOut = async () => {
 
             {session && (
               <>
-                <p className="px-4 pt-4 pb-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">Account</p>
+                <p className="px-4 pt-4 pb-2 text-xs font-bold uppercase tracking-wider text-slate-500">Account</p>
                 <div className="flex flex-col gap-1">
                   {profileMenuRoutes.map((route) => (
                     <Link
