@@ -17,6 +17,15 @@ interface Props {
   specialRequest?: string
 }
 
+interface BookingCreated {
+  id?: string
+  _id?: string
+}
+
+type BookingCreateResponse = {
+  data?: BookingCreated & { booking?: BookingCreated }
+}
+
 export function CheckoutPaymentWrapper({ propertyId, checkIn, checkOut, guests, specialRequest }: Props) {
   const [bookingId, setBookingId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -28,7 +37,7 @@ export function CheckoutPaymentWrapper({ propertyId, checkIn, checkOut, guests, 
 
     async function init() {
       try {
-        const bookingData = await apiClientFetch<Record<string, any>>("/api/bookings", {
+        const bookingData = await apiClientFetch<BookingCreateResponse>("/api/bookings", {
           method: "POST",
           body: JSON.stringify({
             propertyId,

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import ModalPortal from "@/lib/modal-portal"
 import { toast } from "sonner"
@@ -109,7 +110,7 @@ export default function GuestReviewsPage() {
           setWriteBooking(null)
           setRefreshKey((k) => k + 1)
         } else {
-          toast.error((res as any).message || res.error || "Failed to submit review")
+          toast.error(res.error || "Failed to submit review")
         }
       } else if (showEditModal && editReview) {
         const res = await updateReview(editReview._id, {
@@ -122,7 +123,7 @@ export default function GuestReviewsPage() {
           setEditReview(null)
           setRefreshKey((k) => k + 1)
         } else {
-          toast.error((res as any).message || res.error || "Failed to update review")
+          toast.error(res.error || "Failed to update review")
         }
       }
     } catch (err) {
@@ -142,7 +143,7 @@ export default function GuestReviewsPage() {
         setDeleteId(null)
         setRefreshKey((k) => k + 1)
       } else {
-        toast.error((res as any).message || res.error || "Failed to delete review")
+        toast.error(res.error || "Failed to delete review")
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to delete")
@@ -158,7 +159,7 @@ export default function GuestReviewsPage() {
         toast.success("Review reported for moderation")
         setRefreshKey((k) => k + 1)
       } else {
-        toast.error((res as any).message || res.error || "Failed to report review")
+        toast.error(res.error || "Failed to report review")
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to report")
@@ -396,9 +397,11 @@ export default function GuestReviewsPage() {
                     <div className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b from-violet-400 to-indigo-500 opacity-40 group-hover:opacity-100 transition-opacity" />
                     <div className="flex w-full items-center gap-4 pl-5 pr-6 py-4">
                       {booking.propertyImage ? (
-                        <img
+                        <Image
                           src={booking.propertyImage}
                           alt={booking.propertyTitle}
+                          width={64}
+                          height={64}
                           className="h-16 w-16 shrink-0 rounded-xl object-cover ring-2 ring-white shadow-sm"
                         />
                       ) : (

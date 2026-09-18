@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Edit, Trash2, Copy, ExternalLink, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { cn } from "@/lib/utils/cn";
 import StatusBadge from "@/Components/property/StatusBadge";
 import type { PropertyListItem } from "@/lib/api/Host/host-property-api";
@@ -20,6 +22,7 @@ export default function PropertyCard({ property, onDelete, onDuplicate, onStatus
     const coverImage = Array.isArray(p.images) && p.images.length > 0
         ? p.images[0]
         : "/placeholder-property.svg";
+    const [coverSrc, setCoverSrc] = useState<string>(coverImage);
     const locationStr = [p.location?.city, p.location?.country].filter(Boolean).join(", ") || "Location not set";
     const priceStr = p.price?.perNight
         ? `${p.price.currency || "USD"} ${p.price.perNight.toLocaleString()}/night`
@@ -34,13 +37,13 @@ export default function PropertyCard({ property, onDelete, onDuplicate, onStatus
             className="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
         >
             <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
-                <img
-                    src={coverImage}
+                <Image
+                    fill
+                    src={coverSrc}
                     alt={p.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    onError={(e) => {
-                        (e.target as HTMLImageElement).src = "/placeholder-property.svg";
-                    }}
+                    onError={() => setCoverSrc("/placeholder-property.svg")}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 400px"
                 />
                 <div className="absolute top-3 left-3">
                     <StatusBadge status={p.status} size="sm" />

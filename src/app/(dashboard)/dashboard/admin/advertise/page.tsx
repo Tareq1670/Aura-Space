@@ -102,8 +102,8 @@ export default function AdminAdvertisePage() {
       } else {
         toast.error(res.message || "Failed to join waitlist")
       }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to join waitlist")
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Failed to join waitlist")
     } finally {
       setSubmitting(false)
     }
@@ -269,7 +269,7 @@ export default function AdminAdvertisePage() {
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 mb-4">
               <CheckCircle className="h-8 w-8 text-emerald-600" />
             </div>
-            <h2 className="text-xl font-black text-slate-900">You're on the List!</h2>
+            <h2 className="text-xl font-black text-slate-900">You&apos;re on the List!</h2>
             <p className="mt-2 text-sm text-slate-600 max-w-md">
               We&apos;ll notify <strong className="text-slate-900">{email}</strong> when advertising launches. In the meantime, explore our current offerings.
             </p>

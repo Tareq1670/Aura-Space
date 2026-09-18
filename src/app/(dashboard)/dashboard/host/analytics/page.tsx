@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import { toast } from "sonner"
 import { AlertCircle, RefreshCw } from "lucide-react"
 import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, CartesianGrid,
+  XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, CartesianGrid,
 } from "recharts"
 import { getHostDashboard, type HostDashboardData } from "@/lib/actions/dashboard-host"
 import { formatCurrency } from "@/lib/currency"
@@ -20,8 +20,9 @@ export default function HostAnalyticsPage() {
 
   useEffect(() => {
     let mounted = true
-    setError(null)
     ;(async () => {
+      if (!mounted) return
+      setError(null)
       try {
         const res = await getHostDashboard()
         if (!mounted) return

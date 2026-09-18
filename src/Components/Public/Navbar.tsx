@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 
@@ -235,10 +236,13 @@ const handleSignOut = async () => {
                     }`}
                   >
                     {session.user.image ? (
-                      <img
+                      <Image
                         src={session.user.image}
                         alt={session.user.name}
                         className="w-9 h-9 rounded-full object-cover ring-2 ring-indigo-500/20"
+                        width={36}
+                        height={36}
+                        unoptimized
                       />
                     ) : (
                       <span className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white text-sm font-bold">
@@ -266,10 +270,13 @@ const handleSignOut = async () => {
                     <div className="p-4 border-b border-slate-100 bg-gradient-to-br from-indigo-50/80 to-slate-50/50">
                       <div className="flex items-center gap-3">
                         {session.user.image ? (
-                          <img
+                          <Image
                             src={session.user.image}
                             alt={session.user.name}
                             className="w-10 h-10 rounded-full object-cover ring-2 ring-indigo-500/20"
+                            width={40}
+                            height={40}
+                            unoptimized
                           />
                         ) : (
                           <span className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white text-sm font-bold">
@@ -367,10 +374,13 @@ const handleSignOut = async () => {
               <div className="p-3 mb-3 rounded-2xl bg-gradient-to-br from-indigo-50/80 to-slate-50/50 border border-slate-100">
                 <div className="flex items-center gap-3">
                   {session.user.image ? (
-                    <img
+                    <Image
                       src={session.user.image}
                       alt={session.user.name}
                       className="w-11 h-11 rounded-full object-cover ring-2 ring-indigo-500/20"
+                      width={44}
+                      height={44}
+                      unoptimized
                     />
                   ) : (
                     <span className="w-11 h-11 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white text-base font-bold">

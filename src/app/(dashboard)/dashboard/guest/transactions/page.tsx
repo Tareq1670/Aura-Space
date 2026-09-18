@@ -70,8 +70,9 @@ export default function GuestTransactionsPage() {
 
   useEffect(() => {
     let mounted = true
-    setError(null)
     ;(async () => {
+      if (!mounted) return
+      setError(null)
       try {
         const [txnRes, statsRes] = await Promise.all([
           transactionAPI.getMyTransactions({
@@ -90,10 +91,10 @@ export default function GuestTransactionsPage() {
           setTotalSpend(statsRes.data.totalSpend ?? 0)
           setThisMonthSpend(statsRes.data.thisMonthSpend ?? null)
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         if (!mounted) return
-        setError(err.message || "Failed to load transactions")
-        toast.error(err.message || "Failed to load transactions")
+        setError(err instanceof Error ? err.message : "Failed to load transactions")
+        toast.error(err instanceof Error ? err.message : "Failed to load transactions")
       } finally {
         if (mounted) setLoading(false)
       }

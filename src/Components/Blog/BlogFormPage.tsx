@@ -13,7 +13,6 @@ import {
     createBlog,
     updateBlog,
     getMyBlogs,
-    type Blog,
     type CreateBlogData,
 } from "@/lib/actions/blog";
 import BlogEditor from "@/Components/Blog/BlogEditor";

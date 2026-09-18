@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Image from "next/image"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { toast } from "sonner"
@@ -83,7 +84,7 @@ export default function GuestMainPage() {
                       {(data.upcomingBookings as Record<string, unknown>[]).map((b: Record<string, unknown>) => (
                         <Link key={b._id as string} href="/dashboard/guest/bookings" className="flex items-center gap-3 rounded-xl border border-gray-50 bg-gray-50/50 p-3 transition-colors hover:bg-gray-100">
                           <div className="h-12 w-16 shrink-0 overflow-hidden rounded-lg">
-                            <img src={(b.propertyImage as string) || "/placeholder.svg"} alt={b.propertyTitle as string} className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg" }} />
+                            <Image src={(b.propertyImage as string) || "/placeholder.svg"} alt={b.propertyTitle as string} width={64} height={48} className="h-full w-full object-cover" onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder.svg" }} />
                           </div>
                           <div className="min-w-0 flex-1">
                             <p className="truncate text-sm font-medium text-gray-900">{b.propertyTitle as string}</p>

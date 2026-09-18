@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { getUnreadCount } from "@/lib/actions/message";
 import { getGuestDashboard } from "@/lib/actions/dashboard-guest";
@@ -353,7 +353,6 @@ const SidebarInner = ({
     isMinimized,
     isLoggingOut,
     pathname,
-    router,
     inDrawer,
     onClose,
     onToggleMinimize,
@@ -368,7 +367,6 @@ const SidebarInner = ({
     isMinimized: boolean;
     isLoggingOut: boolean;
     pathname: string;
-    router: ReturnType<typeof useRouter>;
     inDrawer?: boolean;
     onClose?: () => void;
     onToggleMinimize?: () => void;
@@ -666,7 +664,6 @@ const SidebarInner = ({
 
 const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
     const pathname = usePathname();
-    const router = useRouter();
     const [isMinimized, setIsMinimized] = useState(false);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
@@ -761,7 +758,6 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
         isMinimized,
         isLoggingOut,
         pathname,
-        router,
         handleLogout,
         onToggleMinimize: toggleMinimize,
         searchQuery,

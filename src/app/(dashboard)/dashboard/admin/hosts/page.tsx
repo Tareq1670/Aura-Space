@@ -1,11 +1,12 @@
 "use client"
 
 import { useEffect, useState, useCallback, useMemo } from "react"
+import Image from "next/image"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
-import { Shield, Search, Ban, CheckCircle, MoreHorizontal } from "lucide-react"
+import { Shield, Search, Ban, CheckCircle } from "lucide-react"
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal"
-import { getUsersList, adminUpdateUserStatus, adminUpdateUserRole } from "@/lib/action/admin-users"
+import { getUsersList, adminUpdateUserStatus } from "@/lib/action/admin-users"
 
 interface Host {
   id: string
@@ -44,7 +45,7 @@ export default function AdminHostsPage() {
     }
   }, [])
 
-  useEffect(() => { fetchHosts() }, [fetchHosts])
+  useEffect(() => { void (async () => { await fetchHosts() })() }, [fetchHosts])
 
   const filtered = useMemo(
     () => hosts.filter((h) => `${h.name} ${h.email}`.toLowerCase().includes(search.toLowerCase())),
@@ -120,7 +121,7 @@ export default function AdminHostsPage() {
               >
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-purple-100 to-indigo-100 text-sm font-bold text-purple-600">
                   {host.image ? (
-                    <img src={host.image} alt={host.name} className="h-full w-full object-cover" />
+                    <Image src={host.image} alt={host.name} width={40} height={40} unoptimized className="h-full w-full object-cover" />
                   ) : (
                     host.name?.charAt(0)?.toUpperCase() || "H"
                   )}

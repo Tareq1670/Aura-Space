@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
     motion,
     useInView,
-    useReducedMotion,
     type Variants,
 } from "framer-motion";
 import { Skeleton } from "@heroui/react";
@@ -75,7 +75,6 @@ export default function FeaturedSpaces() {
     const [loading, setLoading] = useState(true);
     const sectionRef = useRef<HTMLElement>(null);
     const isInView = useInView(sectionRef, { once: true, margin: "-60px" });
-    const reduceMotion = !!useReducedMotion();
 
     useEffect(() => {
         async function fetchData() {
@@ -155,12 +154,14 @@ export default function FeaturedSpaces() {
                             >
                                 <Link href={`/listings/${heroProp.id}`} className="block h-full">
                                     <div className="relative h-full min-h-[300px] overflow-hidden rounded-2xl sm:min-h-[400px] lg:min-h-[460px]">
-                                        <img
+                                        <Image
                                             src={heroProp.images?.[0] || "/placeholder-property.svg"}
                                             alt={heroProp.title}
-                                            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                            fill
+                                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 50vw"
+                                            className="object-cover transition-transform duration-700 group-hover:scale-105"
                                             onError={(e) => {
-                                                (e.target as HTMLImageElement).src = "/placeholder-property.svg";
+                                                (e.currentTarget as HTMLImageElement).src = "/placeholder-property.svg";
                                             }}
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent" />

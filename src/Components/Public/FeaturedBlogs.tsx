@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
     motion,
     useInView,
@@ -129,16 +130,18 @@ export default function FeaturedBlogs() {
                                 >
                                     <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:shadow-md hover:border-indigo-200">
                                         <div className="relative aspect-[16/9] overflow-hidden bg-slate-100">
-                                            <img
+                                            <Image
                                                 src={
                                                     blog.coverImage ||
                                                     "/placeholder-property.svg"
                                                 }
                                                 alt={blog.title}
-                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                fill
+                                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                                className="object-cover group-hover:scale-105 transition-transform duration-500"
                                                 onError={(e) => {
                                                     (
-                                                        e.target as HTMLImageElement
+                                                        e.currentTarget as HTMLImageElement
                                                     ).src =
                                                         "/placeholder-property.svg";
                                                 }}
@@ -177,13 +180,16 @@ export default function FeaturedBlogs() {
                                             <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
                                                 <div className="flex items-center gap-1.5">
                                                     {blog.authorImage ? (
-                                                        <img
+                                                        <Image
                                                             src={
                                                                 blog.authorImage
                                                             }
                                                             alt={
                                                                 blog.authorName
                                                             }
+                                                            width={20}
+                                                            height={20}
+                                                            unoptimized
                                                             className="w-5 h-5 rounded-full object-cover"
                                                         />
                                                     ) : (

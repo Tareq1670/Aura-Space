@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import {
     ArrowLeft,
@@ -11,9 +12,7 @@ import {
     User,
     Calendar,
     Share2,
-    Copy,
     CheckCircle2,
-    Loader2,
 } from "lucide-react";
 import { getBlogBySlug, getPublicBlogs, type Blog } from "@/lib/actions/blog";
 import BlogCard from "@/Components/Blog/BlogCard";
@@ -173,10 +172,13 @@ export default function BlogDetailPage() {
                     <div className="flex items-center flex-wrap gap-4 text-sm text-slate-500 mb-6">
                         <div className="flex items-center gap-2">
                             {blog.authorImage ? (
-                                <img
+                                <Image
                                     src={blog.authorImage}
                                     alt={blog.authorName}
                                     className="w-7 h-7 rounded-full object-cover"
+                                    width={28}
+                                    height={28}
+                                    unoptimized
                                 />
                             ) : (
                                 <User className="w-5 h-5 text-slate-400" />
@@ -210,11 +212,13 @@ export default function BlogDetailPage() {
                     </div>
 
                     {blog.coverImage && (
-                        <div className="aspect-[16/9] overflow-hidden rounded-2xl mb-8 bg-slate-100">
-                            <img
+                        <div className="relative aspect-[16/9] overflow-hidden rounded-2xl mb-8 bg-slate-100">
+                            <Image
                                 src={blog.coverImage}
                                 alt={blog.title}
-                                className="w-full h-full object-cover"
+                                fill
+                                sizes="(max-width: 768px) 100vw, 768px"
+                                className="object-cover"
                             />
                         </div>
                     )}

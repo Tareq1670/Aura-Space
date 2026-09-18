@@ -31,9 +31,10 @@ export default function AdminBookingsPage() {
 
   useEffect(() => {
     let mounted = true
-    setError(null)
-    setLoading(true)
     ;(async () => {
+      if (!mounted) return
+      setError(null)
+      setLoading(true)
       try {
         const res = await bookingAPI.getAdminBookings({
           status: statusFilter !== "all" ? statusFilter : undefined,
@@ -47,10 +48,11 @@ export default function AdminBookingsPage() {
           setError("Failed to load bookings")
           toast.error("Failed to load bookings")
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         if (!mounted) return
-        setError(err.message || "Failed to load bookings")
-        toast.error(err.message || "Failed to load bookings")
+        const message = err instanceof Error ? err.message : "Failed to load bookings"
+        setError(message)
+        toast.error(message)
       } finally {
         if (mounted) setLoading(false)
       }
@@ -70,8 +72,8 @@ export default function AdminBookingsPage() {
       } else {
         toast.error("Failed to cancel booking")
       }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to cancel")
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Failed to cancel booking")
     } finally {
       setProcessing(false)
     }
@@ -89,8 +91,8 @@ export default function AdminBookingsPage() {
       } else {
         toast.error("Failed to complete booking")
       }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to complete")
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Failed to complete booking")
     } finally {
       setProcessing(false)
     }
@@ -110,7 +112,7 @@ export default function AdminBookingsPage() {
       key: "guest",
       header: "Guest",
       accessor: (r) => r.guest?.name || "—",
-      render: (r, val) => (
+      render: (r) => (
         <div className="flex items-center gap-2">
           <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 text-xs font-bold text-gray-600">
             {(r.guest?.name?.charAt(0) || "?").toUpperCase()}

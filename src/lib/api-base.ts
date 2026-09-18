@@ -1,6 +1,22 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
+export interface BetterAuthServerUser {
+    id: string;
+    name?: string;
+    email?: string;
+    role?: string;
+}
+
+export interface BetterAuthApi {
+    getToken: (args: { headers: Headers }) => Promise<{ token?: string }>;
+    getSession: (
+        args: { headers: Headers }
+    ) => Promise<{ user: BetterAuthServerUser | null } | null>;
+}
+
+export const authApi = auth.api as unknown as BetterAuthApi;
+
 export function getApiBase(): string {
     const raw = process.env.NEXT_PUBLIC_SERVER_URL ||
                 process.env.NEXT_PUBLIC_API_URL ||
@@ -12,7 +28,7 @@ export function getApiBase(): string {
 
 export async function getSessionToken(): Promise<string> {
     const headersList = await headers();
-    const tokenResponse = await (auth.api as any).getToken({ headers: headersList });
+    const tokenResponse = await authApi.getToken({ headers: headersList });
     if (tokenResponse?.token) {
         return tokenResponse.token;
     }

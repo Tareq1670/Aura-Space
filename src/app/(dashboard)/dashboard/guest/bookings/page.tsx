@@ -50,9 +50,9 @@ export default function GuestBookingsPage() {
           setBookings(res.data.bookings)
           setTotal(res.data.pagination.total)
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         if (!mounted) return
-        toast.error(err.message || "Failed to load bookings")
+        toast.error(err instanceof Error ? err.message : "Failed to load bookings")
       } finally {
         if (mounted) setLoading(false)
       }
@@ -69,7 +69,7 @@ export default function GuestBookingsPage() {
         toast.success("Conversation started with host")
         router.push("/dashboard/guest/messages")
       } else {
-        toast.error((res as any).message || res.error || "Failed to start conversation")
+        toast.error(res.error || "Failed to start conversation")
       }
     } catch {
       toast.error("Something went wrong")
@@ -90,8 +90,8 @@ export default function GuestBookingsPage() {
       } else {
         toast.error("Failed to cancel booking")
       }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to cancel")
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Failed to cancel")
     } finally {
       setCancelling(false)
     }

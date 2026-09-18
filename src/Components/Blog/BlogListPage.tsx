@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -92,7 +93,9 @@ export default function BlogListPage({ backLink }: BlogListPageProps) {
     }, [page, statusFilter]);
 
     useEffect(() => {
-        fetchBlogs();
+        void (async () => {
+            await fetchBlogs();
+        })();
     }, [fetchBlogs]);
 
     const handleDelete = async () => {
@@ -191,9 +194,11 @@ export default function BlogListPage({ backLink }: BlogListPageProps) {
                                 >
                                     <div className="flex items-center gap-3 min-w-0">
                                         {blog.coverImage ? (
-                                            <img
+                                            <Image
                                                 src={blog.coverImage}
                                                 alt={blog.title}
+                                                width={64}
+                                                height={40}
                                                 className="w-12 sm:w-16 h-10 rounded-lg object-cover shrink-0"
                                             />
                                         ) : (

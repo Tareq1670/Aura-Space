@@ -10,7 +10,8 @@ interface Props {
   bookingId: string
 }
 
-export function PaymentForm({ bookingId }: Props) {
+export function PaymentForm({ bookingId: _bookingId }: Props) {
+  void _bookingId;
   const stripe = useStripe()
   const elements = useElements()
   const router = useRouter()

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Image from "next/image";
 import { Upload, X, Loader2, ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 import { uploadBlogCover } from "@/lib/actions/blog";
@@ -89,10 +90,12 @@ export default function BlogCoverUpload({ value, onChange, className }: BlogCove
 
                 {value ? (
                     <div className="relative aspect-[16/9] overflow-hidden rounded-lg">
-                        <img
+                        <Image
+                            fill
                             src={value}
                             alt="Cover preview"
                             className="w-full h-full object-cover"
+                            sizes="(max-width: 768px) 100vw, 640px"
                         />
                         <div className="absolute inset-0 bg-black/0 hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 hover:opacity-100">
                             <div className="flex items-center gap-2">

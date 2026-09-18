@@ -2,6 +2,7 @@
 
 import { Edit, Trash2, Copy, ExternalLink } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import DataTable, { type Column } from "@/Components/Dashboard/DataTable";
 import StatusBadge from "@/Components/property/StatusBadge";
 import type { PropertyListItem } from "@/lib/api/Host/host-property-api";
@@ -19,12 +20,14 @@ export default function PropertyDataTable({ properties, onDelete, onDuplicate }:
             header: "Image",
             accessor: (row) => row.images?.[0] || "",
             render: (row, val) => (
-                <img
+                <Image
                     src={String(val) || "/placeholder-property.svg"}
                     alt={row.title}
+                    width={48}
+                    height={36}
                     className="w-12 h-9 rounded-lg object-cover bg-gray-100"
                     onError={(e) => {
-                        (e.target as HTMLImageElement).src = "/placeholder-property.svg";
+                        (e.currentTarget as HTMLImageElement).src = "/placeholder-property.svg";
                     }}
                 />
             ),

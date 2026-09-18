@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
-import { DollarSign, TrendingUp, Clock, Users, Trophy, Building2, ArrowUp, ArrowDown } from "lucide-react"
+import { DollarSign, TrendingUp, Clock, Trophy, Building2, ArrowUp, ArrowDown } from "lucide-react"
 import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import { Select, Label, ListBox, Skeleton } from "@heroui/react"
 import StatCard from "@/Components/Dashboard/StatCard"
@@ -11,7 +11,6 @@ import { getAdminRevenue, type AdminRevenueData } from "@/lib/actions/dashboard-
 import { formatCurrency } from "@/lib/currency"
 
 const PIE_COLORS = ["#7c3aed", "#3b82f6", "#f59e0b", "#059669", "#ef4444", "#ec4899"]
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 const PERIOD_OPTIONS = [
   { id: "monthly", label: "Monthly" },
   { id: "quarterly", label: "Quarterly" },
@@ -58,9 +57,9 @@ export default function AdminRevenuePage() {
         } else {
           toast.error(res.message || "Failed to load revenue data")
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         if (!mounted) return
-        toast.error(err.message || "Failed to load revenue data")
+        toast.error(err instanceof Error ? err.message : "Failed to load revenue data")
       } finally {
         if (mounted) setLoading(false)
       }
@@ -203,7 +202,7 @@ export default function AdminRevenuePage() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                 <XAxis dataKey="name" tick={{ fontSize: 12 }} stroke="#9ca3af" />
                 <YAxis tick={{ fontSize: 12 }} stroke="#9ca3af" tickFormatter={(v) => formatCurrency(v)} />
-                <Tooltip formatter={(v: any) => [formatCurrency(Number(v || 0)), "Revenue"]} />
+                <Tooltip formatter={(v) => [formatCurrency(Number(v || 0)), "Revenue"]} />
                 <Line type="monotone" dataKey="revenue" stroke="#7c3aed" strokeWidth={2} dot={{ fill: "#7c3aed", r: 3 }} />
               </LineChart>
             </ResponsiveContainer>
@@ -231,11 +230,11 @@ export default function AdminRevenuePage() {
                   innerRadius={60}
                   outerRadius={90}
                   dataKey="value"
-                  label={({ name, percent }: any) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
                 >
                   {PIE_COLORS.slice(0, 4).map((c, i) => <Cell key={i} fill={c} />)}
                 </Pie>
-                <Tooltip formatter={(v: any) => [formatCurrency(Number(v || 0)), "Amount"]} />
+                <Tooltip formatter={(v) => [formatCurrency(Number(v || 0)), "Amount"]} />
               </PieChart>
             </ResponsiveContainer>
           </div>

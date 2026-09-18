@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import StatusBadge from "./StatusBadge"
 import type { BookingItem } from "@/lib/api/Guest/booking-api"
 import { formatCurrency } from "@/lib/currency"
@@ -21,11 +22,13 @@ export default function BookingCard({ booking, onCancel, onMessage, messageLoadi
     <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition hover:shadow-md">
       <div className="flex gap-4">
         <div className="h-24 w-36 flex-shrink-0 overflow-hidden rounded-lg">
-          <img
+          <Image
             src={booking.propertyImage || "/placeholder.svg"}
             alt={booking.propertyTitle}
+            width={144}
+            height={96}
             className="h-full w-full object-cover"
-            onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg" }}
+            onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder.svg" }}
           />
         </div>
 

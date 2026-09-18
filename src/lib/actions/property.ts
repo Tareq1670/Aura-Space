@@ -1,6 +1,6 @@
 "use server";
 
-import { getApiBase, getAuthHeaders, getSessionToken } from "@/lib/api-base";
+import { getApiBase, getAuthHeaders } from "@/lib/api-base";
 
 const API_BASE = getApiBase();
 

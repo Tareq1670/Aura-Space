@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useMemo } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Label, ListBox, Pagination, Select, Skeleton, Input } from "@heroui/react";
 import { toast } from "sonner";
@@ -9,7 +10,6 @@ import { getWishlist, getLists } from "@/lib/api/Guest/wishlist-api";
 import { removeFromWishlist, createList } from "@/lib/actions/wishlist";
 import WishlistButton from "@/Components/Wishlist/WishlistButton";
 import type { WishlistItem } from "@/lib/api/Guest/wishlist-api";
-import { formatCurrency } from "@/lib/currency";
 
 type SortKey = "date-desc" | "date-asc" | "price-asc" | "price-desc" | "rating-desc";
 
@@ -310,11 +310,13 @@ export default function WishlistPage() {
                                         <Link href={`/space/${item.propertyId}`} className="block">
                                             <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
                                                 {prop?.images?.[0] ? (
-                                                    <img
+                                                    <Image
                                                         src={prop.images[0]}
                                                         alt={prop.title}
-                                                        className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                                                        onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder-property.svg"; }}
+                                                        fill
+                                                        sizes="(max-width: 768px) 50vw, 25vw"
+                                                        className="object-cover transition duration-500 group-hover:scale-105"
+                                                        onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder-property.svg"; }}
                                                     />
                                                 ) : (
                                                     <div className="flex h-full items-center justify-center text-gray-300">

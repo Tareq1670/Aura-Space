@@ -66,9 +66,9 @@ export default function HostReservationsPage() {
           setBookings(res.data.bookings)
           setTotal(res.data.pagination.total)
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         if (!mounted) return
-        toast.error(err.message || "Failed to load reservations")
+        toast.error(err instanceof Error ? err.message : "Failed to load reservations")
       } finally {
         if (mounted) setLoading(false)
       }
@@ -131,7 +131,7 @@ export default function HostReservationsPage() {
         toast.success("Conversation started with " + (booking.guest?.name || "guest"))
         router.push("/dashboard/host/messages")
       } else {
-        toast.error((res as any).message || res.error || "Failed to start conversation")
+        toast.error(res.error || "Failed to start conversation")
       }
     } catch {
       toast.error("Something went wrong")
@@ -155,8 +155,8 @@ export default function HostReservationsPage() {
       } else {
         toast.error("Action failed")
       }
-    } catch (err: any) {
-      toast.error(err.message || "Action failed")
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Action failed")
     } finally {
       setProcessing(false)
     }
@@ -333,8 +333,8 @@ export default function HostReservationsPage() {
                             } else {
                               toast.error(res.message || "Failed to complete");
                             }
-                          } catch (err: any) {
-                            toast.error(err.message || "Failed to complete");
+                          } catch (err: unknown) {
+                            toast.error(err instanceof Error ? err.message : "Failed to complete");
                           }
                         }}
                         className="rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:from-blue-600 hover:to-blue-700 active:scale-[0.97]"

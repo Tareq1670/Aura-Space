@@ -133,10 +133,10 @@ export default function EditPropertyPage() {
         if (!id) return;
 
         let cancelled = false;
-        setLoading(true);
-        setError(null);
 
         async function load() {
+            setLoading(true);
+            setError(null);
             try {
                 const res = await hostPropertyAPI.getProperty(id);
                 if (cancelled) return;

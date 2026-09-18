@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from "react"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
-import { Filter, Search, CheckCircle, AlertCircle, RefreshCw, DollarSign, ArrowUpRight, ArrowDownRight } from "lucide-react"
+import { Filter, Search, CheckCircle, AlertCircle, RefreshCw } from "lucide-react"
 import { ListBox, Pagination, Select, Skeleton } from "@heroui/react"
 import ConfirmModal from "@/Components/Dashboard/ConfirmModal"
 import { transactionAPI, type TransactionItem } from "@/lib/api/Guest/transaction-api"
@@ -94,9 +94,10 @@ export default function AdminTransactionsPage() {
 
   useEffect(() => {
     let mounted = true
-    setLoading(true)
-    setError(null)
     ;(async () => {
+      if (!mounted) return
+      setLoading(true)
+      setError(null)
       try {
         const res = await transactionAPI.getAdminTransactions({
           page, limit,
@@ -113,10 +114,10 @@ export default function AdminTransactionsPage() {
           setError("Failed to load transactions")
           toast.error("Failed to load transactions")
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         if (!mounted) return
-        setError(err.message || "Failed to load transactions")
-        toast.error(err.message || "Failed to load transactions")
+        setError(err instanceof Error ? err.message : "Failed to load transactions")
+        toast.error(err instanceof Error ? err.message : "Failed to load transactions")
       } finally {
         if (mounted) setLoading(false)
       }
@@ -135,8 +136,8 @@ export default function AdminTransactionsPage() {
       } else {
         toast.error(res.message || "Failed to process payout")
       }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to process payout")
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Failed to process payout")
     } finally {
       setProcessing(false)
     }

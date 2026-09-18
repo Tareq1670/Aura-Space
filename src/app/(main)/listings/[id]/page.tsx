@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Skeleton } from "@heroui/react";
 import { toast } from "sonner";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -14,7 +15,7 @@ import "swiper/css/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import ModalPortal from "@/lib/modal-portal";
 import { getPropertyDetail } from "@/lib/actions/property-public";
-import type { PublicProperty, PublicReview } from "@/lib/actions/property-public";
+import type { PublicProperty } from "@/lib/actions/property-public";
 import { startConversation } from "@/lib/actions/message";
 import { authClient } from "@/lib/auth-client";
 import { reviewAPI, type PendingBooking } from "@/lib/api/Guest/review-api";
@@ -102,7 +103,6 @@ export default function PropertyDetailPage() {
     const [reviewRating, setReviewRating] = useState(0);
     const [reviewComment, setReviewComment] = useState("");
     const [submittingReview, setSubmittingReview] = useState(false);
-    const [reviewLoading, setReviewLoading] = useState(false);
     const [checkIn, setCheckIn] = useState("");
     const [checkOut, setCheckOut] = useState("");
     const [guests, setGuests] = useState(1);
@@ -165,7 +165,6 @@ export default function PropertyDetailPage() {
             try {
                 const session = await authClient.getSession();
                 if (!session?.data?.user || !mounted) return;
-                setReviewLoading(true);
                 const res = await reviewAPI.getMyReviews({ limit: 50 });
                 if (!mounted) return;
                 const match = res.pending.find((b) => b.propertyId === property.id);
@@ -173,7 +172,7 @@ export default function PropertyDetailPage() {
             } catch {
                 // not logged in — no review prompt
             } finally {
-                if (mounted) setReviewLoading(false);
+                if (!mounted) return;
             }
         })();
         return () => { mounted = false };
@@ -300,13 +299,15 @@ export default function PropertyDetailPage() {
                         >
                             {images.map((img, i) => (
                                 <SwiperSlide key={i}>
-                                    <button onClick={() => openLightbox(i)} className="h-full w-full cursor-pointer" aria-label="View image">
-                                        <img
+                                    <button onClick={() => openLightbox(i)} className="relative h-full w-full cursor-pointer" aria-label="View image">
+                                        <Image
                                             src={img}
                                             alt={`${property.title} - Image ${i + 1}`}
-                                            className="h-full w-full object-cover"
+                                            fill
+                                            sizes="(max-width: 640px) 100vw, 66vw"
+                                            className="object-cover"
                                             onError={(e) => {
-                                                (e.target as HTMLImageElement).src = "/placeholder-property.svg";
+                                                (e.currentTarget as HTMLImageElement).src = "/placeholder-property.svg";
                                             }}
                                         />
                                     </button>
@@ -325,13 +326,15 @@ export default function PropertyDetailPage() {
                             >
                                 {images.map((img, i) => (
                                     <SwiperSlide key={i} className="cursor-pointer opacity-60 transition-opacity duration-200 hover:opacity-100 [&.swiper-slide-thumb-active]:opacity-100">
-                                        <div className="aspect-[4/3] overflow-hidden rounded-lg border-2 border-transparent transition-colors duration-200 [&.swiper-slide-thumb-active]:border-indigo-500">
-                                            <img
+                                        <div className="relative aspect-[4/3] overflow-hidden rounded-lg border-2 border-transparent transition-colors duration-200 [&.swiper-slide-thumb-active]:border-indigo-500">
+                                            <Image
                                                 src={img}
                                                 alt={`Thumbnail ${i + 1}`}
-                                                className="h-full w-full object-cover"
+                                                fill
+                                                sizes="(max-width: 640px) 25vw, 15vw"
+                                                className="object-cover"
                                                 onError={(e) => {
-                                                    (e.target as HTMLImageElement).src = "/placeholder-property.svg";
+                                                    (e.currentTarget as HTMLImageElement).src = "/placeholder-property.svg";
                                                 }}
                                             />
                                         </div>
@@ -529,7 +532,7 @@ export default function PropertyDetailPage() {
                                                 <div className="flex items-center gap-3">
                                                     <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-indigo-100 text-sm font-bold text-indigo-600">
                                                         {review.guestImage ? (
-                                                            <img src={review.guestImage} alt={review.guestName} className="h-full w-full object-cover" />
+                                                            <Image src={review.guestImage} alt={review.guestName} width={40} height={40} unoptimized className="h-full w-full object-cover" />
                                                         ) : (
                                                             review.guestName?.charAt(0)?.toUpperCase() || "G"
                                                         )}
@@ -691,7 +694,7 @@ export default function PropertyDetailPage() {
                                         <div className="mt-3 flex items-center gap-3">
                                             <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-indigo-100 text-lg font-bold text-indigo-600">
                                                 {host.image ? (
-                                                    <img src={host.image} alt={host.name} className="h-full w-full object-cover" />
+                                                    <Image src={host.image} alt={host.name} width={48} height={48} unoptimized className="h-full w-full object-cover" />
                                                 ) : (
                                                     host.name?.charAt(0)?.toUpperCase() || "H"
                                                 )}

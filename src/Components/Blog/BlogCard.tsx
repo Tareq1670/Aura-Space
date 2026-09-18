@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Clock, Eye, User } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import type { Blog } from "@/lib/actions/blog";
 
 interface BlogCardProps {
@@ -11,7 +13,9 @@ interface BlogCardProps {
 }
 
 export default function BlogCard({ blog, index = 0 }: BlogCardProps) {
-    const coverImage = blog.coverImage || "/placeholder-property.svg";
+    const [coverSrc, setCoverSrc] = useState<string>(
+        blog.coverImage || "/placeholder-property.svg"
+    );
 
     return (
         <motion.div
@@ -22,13 +26,13 @@ export default function BlogCard({ blog, index = 0 }: BlogCardProps) {
             <Link href={`/blogs/${blog.slug}`} className="group block h-full">
                 <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:shadow-md hover:border-indigo-200">
                     <div className="relative aspect-[16/9] overflow-hidden bg-slate-100">
-                        <img
-                            src={coverImage}
+                        <Image
+                            fill
+                            src={coverSrc}
                             alt={blog.title}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                            onError={(e) => {
-                                (e.target as HTMLImageElement).src = "/placeholder-property.svg";
-                            }}
+                            onError={() => setCoverSrc("/placeholder-property.svg")}
+                            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                         />
                         {blog.isFeatured && (
                             <span className="absolute top-3 right-3 bg-amber-400 text-amber-900 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
@@ -62,9 +66,12 @@ export default function BlogCard({ blog, index = 0 }: BlogCardProps) {
                         <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
                             <div className="flex items-center gap-1.5">
                                 {blog.authorImage ? (
-                                    <img
+                                    <Image
                                         src={blog.authorImage}
                                         alt={blog.authorName}
+                                        width={20}
+                                        height={20}
+                                        unoptimized
                                         className="w-5 h-5 rounded-full object-cover"
                                     />
                                 ) : (

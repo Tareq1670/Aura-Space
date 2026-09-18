@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState, useMemo } from "react"
+import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import ModalPortal from "@/lib/modal-portal"
 import { toast } from "sonner"
@@ -53,9 +54,10 @@ export default function AdminReviewsPage() {
 
   useEffect(() => {
     let mounted = true
-    setLoading(true)
-    setError(null)
     ;(async () => {
+      if (!mounted) return
+      setLoading(true)
+      setError(null)
       try {
         const res = await reviewAPI.getAdminReviews({
           reported: reportedFilter !== "all" ? reportedFilter : undefined,
@@ -89,7 +91,7 @@ export default function AdminReviewsPage() {
         setDeleteId(null)
         setRefreshKey((k) => k + 1)
       } else {
-        toast.error((res as any).message || res.error || "Failed to delete review")
+        toast.error(res.error || "Failed to delete review")
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to delete")
@@ -108,7 +110,7 @@ export default function AdminReviewsPage() {
         setDismissId(null)
         setRefreshKey((k) => k + 1)
       } else {
-        toast.error((res as any).message || (res as any).error || "Failed to dismiss report")
+        toast.error(res.error || "Failed to dismiss report")
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to dismiss")
@@ -125,9 +127,12 @@ export default function AdminReviewsPage() {
       render: (r, val) => (
         <div className="flex items-center gap-2.5">
           {r.guest?.image ? (
-            <img
+            <Image
               src={r.guest.image}
               alt={String(val)}
+              width={28}
+              height={28}
+              unoptimized
               className="h-7 w-7 rounded-full object-cover ring-2 ring-white shadow-sm"
             />
           ) : (
@@ -448,9 +453,12 @@ export default function AdminReviewsPage() {
                   className="mb-5 flex items-center gap-4"
                 >
                   {detailReview.guest?.image ? (
-                    <img
+                    <Image
                       src={detailReview.guest.image}
                       alt={detailReview.guest.name}
+                      width={48}
+                      height={48}
+                      unoptimized
                       className="h-12 w-12 shrink-0 rounded-full object-cover ring-2 ring-white shadow-md"
                     />
                   ) : (

@@ -36,8 +36,8 @@ export default function HostPayoutSettingsPage() {
             bankAddress: res.data.bankAddress || "",
           })
         }
-      } catch (err: any) {
-        toast.error(err.message || "Failed to load payout settings")
+      } catch (err: unknown) {
+        toast.error(err instanceof Error ? err.message : "Failed to load payout settings")
       } finally {
         setLoading(false)
       }
@@ -60,8 +60,8 @@ export default function HostPayoutSettingsPage() {
       } else {
         toast.error(res.message || "Failed to save")
       }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to save payout method")
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Failed to save payout method")
     } finally {
       setSaving(false)
     }

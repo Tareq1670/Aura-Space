@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
     motion,
     useInView,
-    useReducedMotion,
     type Variants,
 } from "framer-motion";
 import { Skeleton } from "@heroui/react";
@@ -37,7 +37,6 @@ export default function PopularDestinations() {
     const [loading, setLoading] = useState(true);
     const sectionRef = useRef<HTMLElement>(null);
     const isInView = useInView(sectionRef, { once: true, margin: "-60px" });
-    const reduceMotion = !!useReducedMotion();
 
     useEffect(() => {
         async function fetchData() {
@@ -120,13 +119,14 @@ export default function PopularDestinations() {
                                     className="block h-full"
                                 >
                                     <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
-                                        <img
+                                        <Image
                                             src={dest.image || "/placeholder-property.svg"}
                                             alt={dest.city}
-                                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                            loading="lazy"
+                                            fill
+                                            sizes="(max-width: 640px) 50vw, 25vw"
+                                            className="object-cover transition-transform duration-500 group-hover:scale-110"
                                             onError={(e) => {
-                                                (e.target as HTMLImageElement).src = "/placeholder-property.svg";
+                                                (e.currentTarget as HTMLImageElement).src = "/placeholder-property.svg";
                                             }}
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent" />

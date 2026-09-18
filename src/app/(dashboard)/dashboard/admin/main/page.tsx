@@ -31,8 +31,9 @@ export default function AdminMainPage() {
 
   useEffect(() => {
     let mounted = true
-    setError(null)
     ;(async () => {
+      if (!mounted) return
+      setError(null)
       setLoading(true)
       try {
         const res = await getAdminDashboard()

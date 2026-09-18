@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useMemo } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import {
@@ -95,11 +96,13 @@ export default function AdminBlogsPage() {
         } finally {
             setLoading(false);
         }
-    }, [page, statusFilter, featuredFilter, search, refreshKey]);
+    }, [page, statusFilter, featuredFilter, search]);
 
     useEffect(() => {
-        fetchBlogs();
-    }, [fetchBlogs]);
+        void (async () => {
+            await fetchBlogs();
+        })();
+    }, [fetchBlogs, refreshKey]);
 
     const handleToggleFeatured = useCallback(
         async (blogId: string) => {
@@ -256,9 +259,11 @@ export default function AdminBlogsPage() {
                                 >
                                     <div className="flex items-center gap-3 min-w-0">
                                         {blog.coverImage ? (
-                                            <img
+                                            <Image
                                                 src={blog.coverImage}
                                                 alt={blog.title}
+                                                width={64}
+                                                height={40}
                                                 className="w-16 h-10 rounded-lg object-cover shrink-0"
                                             />
                                         ) : (
@@ -279,9 +284,12 @@ export default function AdminBlogsPage() {
                                     <div className="flex md:hidden items-center gap-2 mt-2 flex-wrap">
                                         <div className="flex items-center gap-1.5 min-w-0">
                                             {blog.authorImage ? (
-                                                <img
+                                                <Image
                                                     src={blog.authorImage}
                                                     alt={blog.authorName}
+                                                    width={16}
+                                                    height={16}
+                                                    unoptimized
                                                     className="w-4 h-4 rounded-full object-cover shrink-0"
                                                 />
                                             ) : (
@@ -366,12 +374,15 @@ export default function AdminBlogsPage() {
                                     <div className="hidden md:grid md:grid-cols-[1fr_60px_70px_60px_80px_100px_100px] lg:grid-cols-[1fr_100px_90px_80px_100px_120px_130px] md:gap-2 lg:gap-4 md:items-center md:mt-2">
                                         <div></div>
 
-                                        <div className="flex items-center gap-1 min-w-0">
+<div className="flex items-center gap-1 min-w-0">
                                             {blog.authorImage ? (
-                                                <img
+                                                <Image
                                                     src={blog.authorImage}
                                                     alt={blog.authorName}
-                                                    className="w-4 lg:w-5 h-4 lg:h-5 rounded-full object-cover shrink-0"
+                                                    width={16}
+                                                    height={16}
+                                                    unoptimized
+                                                    className="w-4 h-4 rounded-full object-cover shrink-0"
                                                 />
                                             ) : (
                                                 <div className="w-4 lg:w-5 h-4 lg:h-5 rounded-full bg-gray-200 shrink-0" />

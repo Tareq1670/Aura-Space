@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
+import Image from "next/image"
 
 export const metadata: Metadata = {
   title: "Checkout",
@@ -14,6 +15,22 @@ interface PageProps {
   searchParams: Promise<{ propertyId?: string; checkIn?: string; checkOut?: string; guests?: string; error?: string }>
 }
 
+interface CheckoutProperty {
+  title: string
+  images?: string[]
+  rating?: number
+  location?: { city?: string; country?: string }
+  price?:
+    | number
+    | {
+        perNight?: number
+        cleaningFee?: number
+        serviceFee?: number
+        weeklyDiscount?: number
+        monthlyDiscount?: number
+      }
+}
+
 export default async function CheckoutPage({ searchParams }: PageProps) {
   const { propertyId, checkIn, checkOut, guests, error } = await searchParams
 
@@ -23,14 +40,14 @@ export default async function CheckoutPage({ searchParams }: PageProps) {
 
   await requireAuth()
 
-  let property: Record<string, any> | null = null
+  let property: CheckoutProperty | null = null
   try {
     const res = await fetch(`${getApiBase()}/properties/${propertyId}`, {
       cache: "no-store",
     })
     if (res.ok) {
       const data = await res.json()
-      property = data?.data?.property ?? null
+      property = (data?.data?.property ?? null) as CheckoutProperty | null
     }
   } catch {
     // backend unreachable — fall through to notFound
@@ -41,14 +58,15 @@ export default async function CheckoutPage({ searchParams }: PageProps) {
   const checkInDate = new Date(checkIn)
   const checkOutDate = new Date(checkOut)
   const nights = Math.max(1, Math.round((checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24)))
-  const pricePerNight = property.price?.perNight || property.price || 0
+  const priceObject = typeof property.price === "object" ? property.price : null
+  const pricePerNight = priceObject?.perNight || (typeof property.price === "number" ? property.price : 0) || 0
   const subtotal = pricePerNight * nights
-  const cleaningFee = property.price?.cleaningFee || 0
-  const serviceFee = property.price?.serviceFee || 0
+  const cleaningFee = priceObject?.cleaningFee || 0
+  const serviceFee = priceObject?.serviceFee || 0
 
   // Apply weekly/monthly discounts
-  const weeklyDiscountPct = property.price?.weeklyDiscount || 0
-  const monthlyDiscountPct = property.price?.monthlyDiscount || 0
+  const weeklyDiscountPct = priceObject?.weeklyDiscount || 0
+  const monthlyDiscountPct = priceObject?.monthlyDiscount || 0
   let discountPercent = 0
   if (nights >= 28 && monthlyDiscountPct > 0) {
     discountPercent = monthlyDiscountPct
@@ -79,9 +97,11 @@ export default async function CheckoutPage({ searchParams }: PageProps) {
 
               <div className="mb-6 flex gap-4">
                 <div className="h-24 w-36 flex-shrink-0 overflow-hidden rounded-lg">
-                  <img
+                  <Image
                     src={property.images?.[0] || "/placeholder.svg"}
                     alt={property.title}
+                    width={144}
+                    height={96}
                     className="h-full w-full object-cover"
                   />
                 </div>

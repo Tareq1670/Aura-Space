@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
+import Image from "next/image"
 import RatingStars from "@/Components/Review/RatingStars"
 import { Star, MessageSquare, Flag, Edit3, Trash2, Reply, Clock } from "lucide-react"
 
@@ -97,9 +98,12 @@ export default function ReviewCard({
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-3.5 min-w-0">
             {review.guest?.image ? (
-              <img
+              <Image
                 src={review.guest.image}
                 alt={review.guest.name}
+                width={40}
+                height={40}
+                unoptimized
                 className="h-10 w-10 shrink-0 rounded-full object-cover ring-2 ring-white shadow-md"
               />
             ) : (

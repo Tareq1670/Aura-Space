@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState, useMemo, useCallback } from "react"
+import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import ModalPortal from "@/lib/modal-portal"
 import { Select, ListBox, Skeleton } from "@heroui/react"
@@ -191,9 +192,9 @@ export default function AdminPropertiesPage() {
                 } else {
                     toast.error(res.message || "Failed to load properties")
                 }
-            } catch (err: any) {
+            } catch (err: unknown) {
                 if (!mounted) return
-                toast.error(err.message || "Failed to load properties")
+                toast.error(err instanceof Error ? err.message : "Failed to load properties")
             } finally {
                 if (mounted) setLoading(false)
             }
@@ -339,7 +340,7 @@ export default function AdminPropertiesPage() {
                 render: (r, val) => (
                     <div className="h-10 w-14 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
                         {val ? (
-                            <img src={val as string} alt={r.title as string} className="h-full w-full object-cover" />
+                            <Image src={val as string} alt={r.title as string} width={56} height={40} className="h-full w-full object-cover" />
                         ) : (
                             <div className="flex h-full items-center justify-center text-gray-400">
                                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -614,7 +615,7 @@ export default function AdminPropertiesPage() {
                                 <div className="flex items-center gap-3">
                                     <div className="h-8 w-12 overflow-hidden rounded-lg bg-gray-100">
                                         {p.images?.[0] ? (
-                                            <img src={p.images[0]} alt={p.title} className="h-full w-full object-cover" />
+                                            <Image src={p.images[0]} alt={p.title} width={48} height={32} className="h-full w-full object-cover" />
                                         ) : (
                                             <div className="flex h-full items-center justify-center text-gray-300">
                                                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -767,7 +768,7 @@ export default function AdminPropertiesPage() {
                             <div className="relative">
                                 <div className="h-48 overflow-hidden rounded-t-2xl bg-gray-100">
                                     {selectedProperty.images?.[0] ? (
-                                        <img src={selectedProperty.images[0]} alt={selectedProperty.title} className="h-full w-full object-cover" />
+                                        <Image src={selectedProperty.images[0]} alt={selectedProperty.title} width={672} height={192} className="h-full w-full object-cover" />
                                     ) : (
                                         <div className="flex h-full items-center justify-center text-gray-300">
                                             <svg className="h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">

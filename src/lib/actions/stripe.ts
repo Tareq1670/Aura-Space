@@ -1,9 +1,8 @@
 "use server";
 
 import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
 import { getStripeServer } from "@/lib/stripe";
-import { getApiBase, getSessionToken } from "@/lib/api-base";
+import { getApiBase, getSessionToken, authApi } from "@/lib/api-base";
 
 const API_BASE = getApiBase();
 
@@ -35,7 +34,7 @@ export async function createCheckoutSession(bookingId: string): Promise<string> 
     }
 
     // Get user session to prefill name and email in Stripe Checkout
-    const userSession = await (auth.api as any).getSession({ headers: headersList });
+    const userSession = await authApi.getSession({ headers: headersList });
     const userEmail = userSession?.user?.email;
     const userName = userSession?.user?.name;
 

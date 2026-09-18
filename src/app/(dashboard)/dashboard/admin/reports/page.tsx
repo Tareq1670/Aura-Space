@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
+import Image from "next/image"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
 import { Flag, Trash2, XCircle, Search, RefreshCw } from "lucide-react"
@@ -32,7 +33,7 @@ export default function AdminReportsPage() {
     }
   }, [])
 
-  useEffect(() => { fetchReported() }, [fetchReported])
+  useEffect(() => { void (async () => { await fetchReported() })() }, [fetchReported])
 
   const filtered = search.trim()
     ? reviews.filter((r) =>
@@ -58,7 +59,7 @@ export default function AdminReportsPage() {
             : prev.map((r) => (r._id === actionReview._id ? { ...r, isReported: false } : r)),
         )
       } else {
-        toast.error((res as any).error || (res as any).message || "Action failed")
+        toast.error(res.error || "Action failed")
       }
     } catch {
       toast.error("Something went wrong")
@@ -131,7 +132,7 @@ export default function AdminReportsPage() {
                   <div className="flex items-center gap-2.5">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-rose-100 text-sm font-bold text-rose-600">
                       {review.guest?.image ? (
-                        <img src={review.guest.image} alt={review.guest.name} className="h-full w-full object-cover" />
+                        <Image src={review.guest.image} alt={review.guest.name} width={36} height={36} unoptimized className="h-full w-full object-cover" />
                       ) : (
                         review.guest?.name?.charAt(0)?.toUpperCase() || "G"
                       )}

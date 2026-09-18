@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState, useRef, useCallback } from "react"
+import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import { toast } from "sonner"
 import { Search, Send, ArrowLeft, Check, CheckCheck, Clock } from "lucide-react"
@@ -235,7 +236,7 @@ export default function MessagesContent({ role }: MessagesContentProps) {
         }
         scrollToBottom()
       } else {
-        toast.error((res as any).message || res.error || "Failed to send message")
+        toast.error(res.error || "Failed to send message")
       }
     } catch {
       toast.error("Failed to send message")
@@ -322,11 +323,14 @@ export default function MessagesContent({ role }: MessagesContentProps) {
                       }`}
                     >
                       {conv.otherUser?.image ? (
-                        <img
+                        <Image
                           src={conv.otherUser.image}
                           alt={conv.otherUser.name}
+                          width={48}
+                          height={48}
+                          unoptimized
                           className="h-12 w-12 shrink-0 rounded-full object-cover"
-                          onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }}
+                          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none" }}
                         />
                       ) : (
                         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-100 to-indigo-100 text-sm font-bold text-violet-600">
@@ -372,11 +376,14 @@ export default function MessagesContent({ role }: MessagesContentProps) {
                 <ArrowLeft className="h-5 w-5" />
               </button>
               {activeConv.otherUser?.image ? (
-                <img
+                <Image
                   src={activeConv.otherUser.image}
                   alt={activeConv.otherUser.name}
+                  width={36}
+                  height={36}
+                  unoptimized
                   className="h-9 w-9 shrink-0 rounded-full object-cover"
-                  onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }}
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none" }}
                 />
               ) : (
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-100 to-indigo-100 text-sm font-bold text-violet-600">

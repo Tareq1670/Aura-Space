@@ -52,6 +52,7 @@ export function validateStep3(data: {
 
 export function validateStep4(_data: { amenities: string[] }): StepValidation {
     const errors: Record<string, string> = {};
+    void _data;
     // Amenities are optional, so no strict validation
     return { isValid: true, errors };
 }

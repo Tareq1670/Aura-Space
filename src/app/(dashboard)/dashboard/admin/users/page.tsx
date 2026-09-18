@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useMemo } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import ModalPortal from "@/lib/modal-portal";
 import { ListBox, Select, Skeleton } from "@heroui/react";
@@ -473,10 +474,13 @@ export default function AdminUsersPage() {
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-400 to-indigo-500 flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-sm overflow-hidden">
               {u.image ? (
-                <img
+                <Image
                   src={u.image as string}
                   alt={u.name as string}
                   className="w-full h-full object-cover"
+                  width={40}
+                  height={40}
+                  unoptimized
                 />
               ) : (
                 (u.name as string)?.charAt(0).toUpperCase()

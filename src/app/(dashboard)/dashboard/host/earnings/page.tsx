@@ -69,9 +69,10 @@ export default function HostEarningsPage() {
 
   useEffect(() => {
     let mounted = true
-    setError(null)
-    setLoading(true)
     ;(async () => {
+      if (!mounted) return
+      setError(null)
+      setLoading(true)
       try {
         const [statsRes, payoutRes, txnRes] = await Promise.all([
           transactionAPI.getTransactionStats(),
@@ -79,7 +80,15 @@ export default function HostEarningsPage() {
           transactionAPI.getHostTransactions({ page: txnPage, limit }),
         ])
         if (!mounted) return
-        if (statsRes.success && statsRes.data) setStats(statsRes.data as any)
+        if (statsRes.success && statsRes.data) {
+          setStats({
+            totalEarned: statsRes.data.totalEarned ?? 0,
+            totalSpend: statsRes.data.totalSpend ?? 0,
+            commissionEarned: statsRes.data.commissionEarned ?? 0,
+            pendingPayouts: statsRes.data.pendingPayouts ?? 0,
+            platformFeePercent: statsRes.data.platformFeePercent ?? 10,
+          })
+        }
         if (payoutRes.success && payoutRes.data) {
           setPayouts(payoutRes.data.transactions)
           setPayoutTotal(payoutRes.data.pagination.total)
@@ -88,10 +97,10 @@ export default function HostEarningsPage() {
           setTransactions(txnRes.data.transactions)
           setTxnTotal(txnRes.data.pagination.total)
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         if (!mounted) return
-        setError(err.message || "Failed to load earnings")
-        toast.error(err.message || "Failed to load earnings")
+        setError(err instanceof Error ? err.message : "Failed to load earnings")
+        toast.error(err instanceof Error ? err.message : "Failed to load earnings")
       } finally {
         if (mounted) setLoading(false)
       }
@@ -126,8 +135,8 @@ export default function HostEarningsPage() {
       } else {
         toast.error(res.message || "Failed to request payout")
       }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to request payout")
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Failed to request payout")
     } finally {
       setRequesting(false)
     }
@@ -238,7 +247,7 @@ export default function HostEarningsPage() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                 <XAxis dataKey="name" tick={{ fontSize: 12 }} stroke="#9ca3af" />
                 <YAxis tick={{ fontSize: 12 }} stroke="#9ca3af" tickFormatter={(v) => formatCurrency(v)} />
-                <Tooltip formatter={(v: any) => [formatCurrency(Number(v || 0)), "Earnings"]} />
+                <Tooltip formatter={(v) => [formatCurrency(Number(v || 0)), "Earnings"]} />
                 <Line type="monotone" dataKey="earnings" stroke="#7c3aed" strokeWidth={2} dot={{ fill: "#7c3aed", r: 3 }} />
               </LineChart>
             </ResponsiveContainer>

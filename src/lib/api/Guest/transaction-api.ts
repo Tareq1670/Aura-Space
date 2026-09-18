@@ -44,7 +44,7 @@ interface StatsResponse {
 interface SimpleResponse {
     success: boolean
     message?: string
-    data?: any
+    data?: unknown
 }
 
 interface Params {
