@@ -228,7 +228,7 @@ const FaqPage = () => {
         <main className="min-h-screen w-full bg-slate-50/30">
             <section
                 ref={heroRef}
-                className="relative w-full overflow-hidden bg-slate-950 pb-24 pt-28 sm:pb-32 sm:pt-36 lg:pb-40 lg:pt-44"
+                className="relative w-full overflow-hidden bg-brand-dark pb-24 pt-28 sm:pb-32 sm:pt-36 lg:pb-40 lg:pt-44"
             >
                 <div className="pointer-events-none absolute inset-0 opacity-[0.03]">
                     <div
@@ -244,7 +244,7 @@ const FaqPage = () => {
                 <div className="pointer-events-none absolute inset-0">
                     <div className="absolute -left-40 top-0 h-[500px] w-[500px] rounded-full bg-indigo-500/15 blur-3xl" />
                     <div className="absolute -right-40 bottom-0 h-[500px] w-[500px] rounded-full bg-violet-500/15 blur-3xl" />
-                    <div className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-fuchsia-500/8 blur-3xl" />
+                    <div className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-500/8 blur-3xl" />
                 </div>
 
                 <div className="container relative mx-auto w-full px-4 sm:px-6 lg:px-8">
@@ -259,7 +259,7 @@ const FaqPage = () => {
                             className="text-4xl font-black leading-display tracking-tight text-white sm:text-5xl md:text-6xl"
                         >
                             How can we{" "}
-                            <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-fuchsia-300 bg-clip-text text-transparent">
+                            <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-violet-300 bg-clip-text text-transparent">
                                 help you?
                             </span>
                         </motion.h1>
@@ -735,9 +735,9 @@ const FaqPage = () => {
 
                                         <Link
                                             href="tel:+8801700000000"
-                                            className="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.05] p-5 backdrop-blur-sm transition-all duration-300 hover:border-fuchsia-400/30 hover:bg-fuchsia-500/10"
+                                            className="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.05] p-5 backdrop-blur-sm transition-all duration-300 hover:border-violet-400/30 hover:bg-violet-500/10"
                                         >
-                                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-fuchsia-500 to-pink-600 text-white shadow-brand">
+                                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-pink-600 text-white shadow-brand">
                                                 <HiOutlinePhone className="h-6 w-6" />
                                             </div>
                                             <div className="flex-1">
@@ -748,7 +748,7 @@ const FaqPage = () => {
                                                     Available 9 AM - 9 PM
                                                 </div>
                                             </div>
-                                            <HiOutlineArrowRight className="h-5 w-5 text-white/20 transition-all duration-300 group-hover:translate-x-1 group-hover:text-fuchsia-400" />
+                                            <HiOutlineArrowRight className="h-5 w-5 text-white/20 transition-all duration-300 group-hover:translate-x-1 group-hover:text-violet-400" />
                                         </Link>
                                     </div>
 
@@ -814,7 +814,7 @@ const FaqPage = () => {
                         <div className="relative">
                             <h2 className="text-3xl font-black tracking-tight text-white sm:text-4xl md:text-5xl">
                                 Can&apos;t find what you&apos;re{" "}
-                                <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-fuchsia-300 bg-clip-text text-transparent">
+                                <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-violet-300 bg-clip-text text-transparent">
                                     looking for?
                                 </span>
                             </h2>

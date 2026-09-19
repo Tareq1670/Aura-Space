@@ -39,7 +39,7 @@ const ACCENT_COLORS = [
   "from-emerald-400 to-teal-500",
   "from-rose-400 to-pink-500",
   "from-sky-400 to-cyan-500",
-  "from-fuchsia-400 to-purple-500",
+  "from-violet-400 to-violet-500",
 ]
 
 const AVATAR_BGS = [
@@ -48,7 +48,7 @@ const AVATAR_BGS = [
   "from-emerald-100 to-teal-100",
   "from-rose-100 to-pink-100",
   "from-sky-100 to-cyan-100",
-  "from-fuchsia-100 to-purple-100",
+  "from-violet-100 to-violet-100",
 ]
 
 const AVATAR_TXT = [
@@ -57,7 +57,7 @@ const AVATAR_TXT = [
   "text-teal-600",
   "text-pink-600",
   "text-cyan-600",
-  "text-purple-600",
+  "text-violet-600",
 ]
 
 export default function ReviewCard({

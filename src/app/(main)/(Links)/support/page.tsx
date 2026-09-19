@@ -121,14 +121,14 @@ const categories: Category[] = [
         title: "Payments & Refunds",
         description: "Billing, payment methods, refunds, and charges",
         icon: <HiOutlineCreditCard className="h-6 w-6" />,
-        color: "from-violet-500 to-fuchsia-600",
+        color: "from-violet-500 to-violet-600",
     },
     {
         id: "account",
         title: "Account Settings",
         description: "Profile, security, verification, and preferences",
         icon: <HiOutlineUserCircle className="h-6 w-6" />,
-        color: "from-fuchsia-500 to-pink-600",
+        color: "from-violet-500 to-pink-600",
     },
     {
         id: "host",
@@ -210,7 +210,7 @@ const contactMethods: ContactMethod[] = [
         description: "Speak with an agent",
         value: "+880 1700-000-000",
         icon: <HiOutlinePhone className="h-6 w-6" />,
-        color: "from-violet-500 to-fuchsia-600",
+        color: "from-violet-500 to-violet-600",
         action: "Call Now",
     },
     {
@@ -331,7 +331,7 @@ const SupportPage = () => {
         <main className="min-h-screen w-full bg-slate-50/30">
             <section
                 ref={heroRef}
-                className="relative w-full overflow-hidden bg-slate-950 pb-28 pt-32 sm:pb-36 sm:pt-40 lg:pb-44 lg:pt-48"
+                className="relative w-full overflow-hidden bg-brand-dark pb-28 pt-32 sm:pb-36 sm:pt-40 lg:pb-44 lg:pt-48"
             >
                 <motion.div
                     className="absolute inset-0 -z-10"
@@ -340,7 +340,7 @@ const SupportPage = () => {
                     <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-indigo-950/90 to-slate-900" />
                     <div className="absolute -left-40 top-0 h-[600px] w-[600px] rounded-full bg-indigo-500/15 blur-3xl" />
                     <div className="absolute -right-40 bottom-0 h-[600px] w-[600px] rounded-full bg-violet-500/15 blur-3xl" />
-                    <div className="absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-fuchsia-500/[0.08] blur-3xl" />
+                    <div className="absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-500/[0.08] blur-3xl" />
                 </motion.div>
 
                 <div
@@ -364,7 +364,7 @@ const SupportPage = () => {
                             className="text-5xl font-black leading-display tracking-tight text-white sm:text-6xl md:text-7xl lg:text-7xl"
                         >
                             How can we{" "}
-                            <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-fuchsia-300 bg-clip-text text-transparent">
+                            <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-violet-300 bg-clip-text text-transparent">
                                 help you?
                             </span>
                         </motion.h1>
@@ -1147,7 +1147,7 @@ const SupportPage = () => {
                 </div>
             </section>
 
-            <section className="relative w-full overflow-hidden bg-slate-950 py-24 sm:py-32">
+            <section className="relative w-full overflow-hidden bg-brand-dark py-24 sm:py-32">
                 <div className="pointer-events-none absolute inset-0">
                     <div className="absolute -left-40 top-0 h-[500px] w-[500px] rounded-full bg-indigo-500/20 blur-3xl" />
                     <div className="absolute -right-40 bottom-0 h-[500px] w-[500px] rounded-full bg-violet-500/20 blur-3xl" />

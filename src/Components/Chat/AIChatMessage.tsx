@@ -43,7 +43,7 @@ export default function AIChatMessage({ role, content, isTyping }: AIChatMessage
         )}
       </div>
       {isUser && (
-        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center">
+        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center">
           <User className="w-4 h-4 text-white" />
         </div>
       )}

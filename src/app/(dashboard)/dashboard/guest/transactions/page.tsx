@@ -14,7 +14,7 @@ const STATUS_CONFIG: Record<string, { dot: string; label: string }> = {
   success: { dot: "bg-emerald-500", label: "Success" },
   pending: { dot: "bg-amber-500", label: "Pending" },
   failed: { dot: "bg-red-500", label: "Failed" },
-  refunded: { dot: "bg-purple-500", label: "Refunded" },
+  refunded: { dot: "bg-violet-500", label: "Refunded" },
 }
 
 const METHOD_OPTIONS = [
@@ -53,7 +53,7 @@ const STATUS_STYLES: Record<string, { border: string; bg: string; text: string }
   success: { border: "border-emerald-200", bg: "bg-emerald-50", text: "text-emerald-700" },
   pending: { border: "border-amber-200", bg: "bg-amber-50", text: "text-amber-700" },
   failed: { border: "border-red-200", bg: "bg-red-50", text: "text-red-700" },
-  refunded: { border: "border-purple-200", bg: "bg-purple-50", text: "text-purple-700" },
+  refunded: { border: "border-violet-200", bg: "bg-violet-50", text: "text-violet-700" },
 }
 
 export default function GuestTransactionsPage() {

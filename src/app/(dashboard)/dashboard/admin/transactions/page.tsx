@@ -14,13 +14,13 @@ const STATUS_STYLES: Record<string, string> = {
   success: "bg-emerald-50 text-emerald-700 border-emerald-200",
   pending: "bg-amber-50 text-amber-700 border-amber-200",
   failed: "bg-red-50 text-red-700 border-red-200",
-  refunded: "bg-purple-50 text-purple-700 border-purple-200",
+  refunded: "bg-violet-50 text-violet-700 border-violet-200",
 }
 
 const TYPE_STYLES: Record<string, string> = {
   payment: "bg-blue-50 text-blue-700 border-blue-200",
   payout: "bg-emerald-50 text-emerald-700 border-emerald-200",
-  refund: "bg-purple-50 text-purple-700 border-purple-200",
+  refund: "bg-violet-50 text-violet-700 border-violet-200",
   commission: "bg-gray-50 text-gray-700 border-gray-200",
 }
 
@@ -358,7 +358,7 @@ export default function AdminTransactionsPage() {
                         <span className={`h-1.5 w-1.5 rounded-full ${
                           t.type === "payment" ? "bg-blue-500" :
                           t.type === "payout" ? "bg-emerald-500" :
-                          t.type === "refund" ? "bg-purple-500" : "bg-gray-400"
+                          t.type === "refund" ? "bg-violet-500" : "bg-gray-400"
                         }`} />
                         {t.type}
                       </span>
@@ -369,7 +369,7 @@ export default function AdminTransactionsPage() {
                           t.status === "success" ? "bg-emerald-500" :
                           t.status === "pending" ? "bg-amber-500" :
                           t.status === "failed" ? "bg-red-500" :
-                          t.status === "refunded" ? "bg-purple-500" : "bg-gray-400"
+                          t.status === "refunded" ? "bg-violet-500" : "bg-gray-400"
                         }`} />
                         {t.status}
                       </span>

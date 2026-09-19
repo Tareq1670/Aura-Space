@@ -428,7 +428,7 @@ export default function ProfilePage() {
         if (role === "admin")
             return "bg-gradient-to-r from-rose-500 to-red-500 text-white";
         if (role === "host")
-            return "bg-gradient-to-r from-indigo-500 to-purple-600 text-white";
+            return "bg-gradient-to-r from-indigo-500 to-violet-600 text-white";
         return "bg-gradient-to-r from-emerald-500 to-teal-600 text-white";
     };
 
@@ -504,7 +504,7 @@ export default function ProfilePage() {
                     transition={{ duration: 0.3 }}
                     className="bg-white rounded-3xl shadow-card border border-slate-200/60 overflow-hidden mb-6"
                 >
-                    <div className="h-32 sm:h-40 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-800 relative overflow-hidden">
+                    <div className="h-32 sm:h-40 bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-800 relative overflow-hidden">
                         <motion.div
                             animate={{
                                 backgroundPosition: ["0% 0%", "100% 100%"],
@@ -551,7 +551,7 @@ export default function ProfilePage() {
                                             className="w-full h-full object-cover"
                                         />
                                     ) : (
-                                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-400">
+                                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-100 to-violet-100 text-indigo-400">
                                             <svg
                                                 className="w-14 h-14"
                                                 fill="none"
@@ -577,7 +577,7 @@ export default function ProfilePage() {
                                     }
                                     disabled={isUploadingImage}
                                     aria-label="Change profile photo"
-                                    className="absolute -bottom-1 -right-1 w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white flex items-center justify-center shadow-brand disabled:opacity-60"
+                                    className="absolute -bottom-1 -right-1 w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 text-white flex items-center justify-center shadow-brand disabled:opacity-60"
                                 >
                                     {isUploadingImage ? (
                                         <Spinner className="w-4 h-4" />
@@ -727,7 +727,7 @@ export default function ProfilePage() {
                         <div className="flex items-center gap-3">
                             <motion.div
                                 whileHover={{ rotate: 10 }}
-                                className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-brand"
+                                className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-brand"
                             >
                                 <svg
                                     className="w-5 h-5 text-white"

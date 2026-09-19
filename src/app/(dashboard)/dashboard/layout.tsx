@@ -146,7 +146,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                                     ease: "linear",
                                 },
                             }}
-                            className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 via-indigo-500 to-purple-600 flex items-center justify-center shadow-brand"
+                            className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 via-indigo-500 to-violet-600 flex items-center justify-center shadow-brand"
                         >
                             <HiSparkles className="w-7 h-7 text-white" />
                         </motion.div>
@@ -213,7 +213,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                             </motion.button>
 
                             <Link href="/" className="flex items-center gap-2">
-                                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 via-indigo-500 to-purple-600 flex items-center justify-center shadow-brand">
+                                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 via-indigo-500 to-violet-600 flex items-center justify-center shadow-brand">
                                     <HiSparkles className="w-4 h-4 text-white" />
                                 </div>
                                 <div className="flex items-center gap-1.5">

@@ -134,13 +134,13 @@ const stats: Stat[] = [
         value: "64",
         label: "Cities Connected",
         icon: <HiOutlineGlobe className="h-6 w-6" />,
-        color: "from-violet-500 to-fuchsia-600",
+        color: "from-violet-500 to-violet-600",
     },
     {
         value: "120K+",
         label: "Successful Bookings",
         icon: <HiOutlineCheckCircle className="h-6 w-6" />,
-        color: "from-fuchsia-500 to-pink-600",
+        color: "from-violet-500 to-pink-600",
     },
     {
         value: "8.5K",
@@ -169,14 +169,14 @@ const features: Feature[] = [
         description:
             "Build relationships with property owners, get insider tips about neighborhoods, and unlock special perks.",
         icon: <HiOutlineHeart className="h-6 w-6" />,
-        color: "from-violet-500 to-fuchsia-600",
+        color: "from-violet-500 to-violet-600",
     },
     {
         title: "Ask & Share",
         description:
             "Get instant answers to your questions and share your own experiences to help others in the community.",
         icon: <HiOutlineChatAlt2 className="h-6 w-6" />,
-        color: "from-fuchsia-500 to-pink-600",
+        color: "from-violet-500 to-pink-600",
     },
     {
         title: "Exclusive Tips",
@@ -218,7 +218,7 @@ const groups: Group[] = [
             "Remote workers seeking the perfect work-from-anywhere spots",
         members: "12.8K",
         icon: <HiOutlineSparkles className="h-5 w-5" />,
-        color: "from-violet-500 to-fuchsia-600",
+        color: "from-violet-500 to-violet-600",
         image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80",
     },
     {
@@ -227,7 +227,7 @@ const groups: Group[] = [
         description: "Property owners sharing spaces and hospitality tips",
         members: "8.2K",
         icon: <HiOutlineHeart className="h-5 w-5" />,
-        color: "from-fuchsia-500 to-pink-600",
+        color: "from-violet-500 to-pink-600",
         image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80",
     },
     {
@@ -434,7 +434,7 @@ const CommunityPage = () => {
         <main className="w-full bg-slate-50/30">
             <section
                 ref={heroRef}
-                className="relative w-full overflow-hidden bg-slate-950 pb-24 pt-28 sm:pb-32 sm:pt-36 lg:pb-40 lg:pt-44"
+                className="relative w-full overflow-hidden bg-brand-dark pb-24 pt-28 sm:pb-32 sm:pt-36 lg:pb-40 lg:pt-44"
             >
                 <motion.div
                     className="absolute inset-0 -z-10"
@@ -443,7 +443,7 @@ const CommunityPage = () => {
                     <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-indigo-950/90 to-slate-900" />
                     <div className="absolute -left-40 top-0 h-[600px] w-[600px] rounded-full bg-indigo-500/20 blur-3xl" />
                     <div className="absolute -right-40 bottom-0 h-[600px] w-[600px] rounded-full bg-violet-500/20 blur-3xl" />
-                    <div className="absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-fuchsia-500/10 blur-3xl" />
+                    <div className="absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-500/10 blur-3xl" />
                 </motion.div>
 
                 <div
@@ -467,7 +467,7 @@ const CommunityPage = () => {
                             className="text-5xl font-black leading-display tracking-tight text-white sm:text-6xl md:text-7xl lg:text-7xl"
                         >
                             Where Travelers{" "}
-                            <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-fuchsia-300 bg-clip-text text-transparent">
+                            <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-violet-300 bg-clip-text text-transparent">
                                 Become Family
                             </span>
                         </motion.h1>
@@ -597,7 +597,7 @@ const CommunityPage = () => {
                             className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
                         >
                             More than just{" "}
-                            <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
+                            <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-violet-500 bg-clip-text text-transparent">
                                 bookings
                             </span>
                         </motion.h2>
@@ -764,7 +764,7 @@ const CommunityPage = () => {
                             className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
                         >
                             Stories from our{" "}
-                            <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
+                            <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-violet-500 bg-clip-text text-transparent">
                                 community
                             </span>
                         </motion.h2>
@@ -985,7 +985,7 @@ const CommunityPage = () => {
                             className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
                         >
                             Loved by our{" "}
-                            <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
+                            <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-violet-500 bg-clip-text text-transparent">
                                 community
                             </span>
                         </motion.h2>
@@ -1185,7 +1185,7 @@ const CommunityPage = () => {
                 </div>
             </section>
 
-            <section className="relative w-full overflow-hidden bg-slate-950 py-24 sm:py-32">
+            <section className="relative w-full overflow-hidden bg-brand-dark py-24 sm:py-32">
                 <div className="pointer-events-none absolute inset-0">
                     <div className="absolute -left-40 top-0 h-[500px] w-[500px] rounded-full bg-indigo-500/20 blur-3xl" />
                     <div className="absolute -right-40 bottom-0 h-[500px] w-[500px] rounded-full bg-violet-500/20 blur-3xl" />
@@ -1220,7 +1220,7 @@ const CommunityPage = () => {
                             className="text-3xl font-black leading-display tracking-tight text-white sm:text-5xl md:text-6xl"
                         >
                             Ready to join our{" "}
-                            <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-fuchsia-300 bg-clip-text text-transparent">
+                            <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-violet-300 bg-clip-text text-transparent">
                                 family?
                             </span>
                         </motion.h2>

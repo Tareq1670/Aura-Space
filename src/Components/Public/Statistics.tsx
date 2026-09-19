@@ -195,7 +195,7 @@ export default function Statistics() {
                         className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl lg:text-5xl"
                     >
                         Built for{" "}
-                        <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
+                        <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-violet-500 bg-clip-text text-transparent">
                             Premium Stays
                         </span>{" "}
                         & Exceptional Events
@@ -237,8 +237,8 @@ export default function Statistics() {
                             }
                             className="group relative h-full overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 shadow-card transition-all duration-500 hover:border-indigo-200 hover:shadow-card-hover sm:rounded-3xl sm:p-6"
                         >
-                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/80 via-white to-fuchsia-50/70 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                            <div className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500 transition-transform duration-500 group-hover:scale-x-100" />
+                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/80 via-white to-violet-50/70 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                            <div className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-gradient-to-r from-indigo-500 via-violet-500 to-violet-500 transition-transform duration-500 group-hover:scale-x-100" />
                             <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-indigo-50 blur-2xl transition-all duration-500 group-hover:scale-150 group-hover:bg-violet-100/70" />
 
                             <div className="relative z-10 flex h-full flex-col">
@@ -256,7 +256,7 @@ export default function Statistics() {
                                                   },
                                               }
                                     }
-                                    className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-50 via-violet-50 to-fuchsia-50 text-indigo-600 ring-1 ring-inset ring-indigo-100 shadow-sm"
+                                    className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-50 via-violet-50 to-violet-50 text-indigo-600 ring-1 ring-inset ring-indigo-100 shadow-sm"
                                 >
                                     {stat.icon}
                                 </motion.div>

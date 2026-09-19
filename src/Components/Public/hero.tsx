@@ -116,7 +116,7 @@ function SlideProgress({ active }: { active: boolean }) {
     return (
         <div className="h-[2px] flex-1 overflow-hidden rounded-full bg-white/15">
             <motion.div
-                className="h-full origin-left rounded-full bg-gradient-to-r from-indigo-400 via-violet-400 to-fuchsia-400"
+                className="h-full origin-left rounded-full bg-gradient-to-r from-indigo-400 via-violet-400 to-violet-400"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: active ? 1 : 0 }}
                 transition={
@@ -189,7 +189,7 @@ function AuroraBackground() {
                 transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
             />
             <motion.div
-                className="absolute left-1/3 top-1/3 h-[40%] w-[40%] rounded-full bg-fuchsia-500/[0.04] blur-[80px]"
+                className="absolute left-1/3 top-1/3 h-[40%] w-[40%] rounded-full bg-violet-500/[0.04] blur-[80px]"
                 animate={{
                     x: [0, 60, -40, 0], y: [0, -60, 40, 0],
                     scale: [0.9, 1.15, 0.85, 0.9],
@@ -381,7 +381,7 @@ export default function Hero() {
                 transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
             />
             <motion.div
-                className="pointer-events-none absolute left-[45%] top-[20%] z-[2] h-32 w-32 rounded-full bg-fuchsia-400/[0.05] blur-3xl sm:h-40 sm:w-40"
+                className="pointer-events-none absolute left-[45%] top-[20%] z-[2] h-32 w-32 rounded-full bg-violet-400/[0.05] blur-3xl sm:h-40 sm:w-40"
                 animate={{ scale: [1, 1.25, 0.9, 1], opacity: [0.03, 0.1, 0.05, 0.03], x: [-20, 30, -10, -20], y: [0, -20, 15, 0] }}
                 transition={{ duration: 14, repeat: Infinity, ease: "easeInOut", delay: 3 }}
             />
@@ -418,7 +418,7 @@ export default function Hero() {
                                     <h1 className="text-3xl font-black leading-display tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
                                         <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>{currentSlide.title}</motion.span><br />
                                         <motion.span
-                                            className="bg-gradient-to-r from-indigo-300 via-violet-200 to-fuchsia-300 bg-clip-text text-transparent"
+                                            className="bg-gradient-to-r from-indigo-300 via-violet-200 to-violet-300 bg-clip-text text-transparent"
                                             animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
                                             transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
                                             style={{ backgroundSize: "200% 200%" }}
@@ -522,7 +522,7 @@ export default function Hero() {
                                                 <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/95 via-indigo-950/15 to-transparent" />
                                                 {isActive && (
                                                     <>
-                                                        <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.6, ease: "easeOut" }} className="absolute inset-x-0 top-0 h-[2px] origin-left bg-gradient-to-r from-indigo-400 via-violet-400 to-fuchsia-400" />
+                                                        <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.6, ease: "easeOut" }} className="absolute inset-x-0 top-0 h-[2px] origin-left bg-gradient-to-r from-indigo-400 via-violet-400 to-violet-400" />
                                                         <motion.div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10"
                                                             animate={{ boxShadow: ["inset 0 0 0 rgba(129,140,248,0)", "inset 0 0 20px rgba(129,140,248,0.1)", "inset 0 0 0 rgba(129,140,248,0)"] }}
                                                             transition={{ duration: 3, repeat: Infinity }}

@@ -150,7 +150,7 @@ function FeaturedCard({
             className="relative overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-card"
         >
             <motion.div
-                className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500"
+                className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-indigo-500 via-violet-500 to-violet-500"
                 animate={
                     reduceMotion
                         ? {}
@@ -235,7 +235,7 @@ function FeaturedCard({
                     className="flex h-full flex-col justify-between rounded-[24px] border border-slate-200 bg-gradient-to-br from-slate-50 to-indigo-50/50 p-5 sm:p-6"
                 >
                     <div className="flex items-start justify-between gap-4">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-500 text-white shadow-brand">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-600 via-violet-600 to-violet-500 text-white shadow-brand">
                             <svg
                                 className="h-5 w-5"
                                 fill="currentColor"
@@ -306,7 +306,7 @@ function MarqueeCard({
             }
             className="group relative mx-3 w-[290px] overflow-hidden rounded-[26px] border border-slate-200 bg-white p-5 shadow-card transition-all duration-500 hover:border-indigo-200 hover:shadow-card-hover sm:w-[320px]"
         >
-            <div className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500 transition-transform duration-500 group-hover:scale-x-100" />
+            <div className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-gradient-to-r from-indigo-500 via-violet-500 to-violet-500 transition-transform duration-500 group-hover:scale-x-100" />
 
             <div className="flex items-center justify-between gap-3">
                 <div className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1 text-xs font-bold uppercase tracking-eyebrow text-indigo-700">
@@ -376,7 +376,7 @@ export default function Testimonials() {
                         className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl lg:text-5xl"
                     >
                         Trusted by Guests, Hosts{" "}
-                        <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
+                        <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-violet-500 bg-clip-text text-transparent">
                             & Event Clients
                         </span>
                     </motion.h2>

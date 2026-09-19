@@ -376,7 +376,7 @@ const termsData: TermsCardProps[] = [
     title: "Privacy & Data Protection",
     content:
       "Your privacy is paramount. We collect, process, and store personal data in accordance with our Privacy Policy, GDPR, CCPA, and applicable data protection laws. We employ enterprise-grade encryption and security measures to protect your information.",
-    gradient: "from-violet-500 to-purple-500",
+    gradient: "from-violet-500 to-violet-500",
     bulletPoints: [
       "Data handling governed by our comprehensive Privacy Policy",
       "AES-256 encryption for all data at rest",
@@ -685,7 +685,7 @@ const HeroSection = () => {
 
       <FloatingOrb className="w-[520px] h-[520px] bg-violet-200/30 -top-28 -left-28" delay={0} />
       <FloatingOrb className="w-[420px] h-[420px] bg-indigo-200/20 top-1/4 -right-24" delay={2.5} />
-      <FloatingOrb className="w-[320px] h-[320px] bg-purple-200/20 bottom-16 left-1/3" delay={5} />
+      <FloatingOrb className="w-[320px] h-[320px] bg-violet-200/20 bottom-16 left-1/3" delay={5} />
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
         <motion.div
@@ -695,7 +695,7 @@ const HeroSection = () => {
           className="mb-8 inline-flex"
         >
           <div className="relative p-1 rounded-3xl bg-gradient-to-b from-violet-200/60 to-transparent">
-            <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-violet-500 via-indigo-500 to-purple-600 flex items-center justify-center shadow-brand relative overflow-hidden">
+            <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-violet-500 via-indigo-500 to-violet-600 flex items-center justify-center shadow-brand relative overflow-hidden">
               <FaGavel className="w-9 h-9 md:w-11 md:h-11 text-white relative z-10" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-white/10" />
             </div>
@@ -721,7 +721,7 @@ const HeroSection = () => {
           className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 tracking-tight leading-display"
         >
           Terms &{" "}
-          <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">
             Conditions
           </span>
         </motion.h1>
@@ -1093,7 +1093,7 @@ const TrustCTA = () => {
         className="max-w-4xl mx-auto"
       >
         <motion.div variants={scaleInVariants} className="relative rounded-3xl overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-violet-600 via-indigo-600 to-purple-700" />
+          <div className="absolute inset-0 bg-gradient-to-br from-violet-600 via-indigo-600 to-violet-700" />
 
           <div className="absolute inset-0 opacity-20 [background-image:linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:40px_40px]" />
 

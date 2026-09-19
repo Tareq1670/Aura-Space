@@ -495,7 +495,7 @@ function LargeCard({
                 />
             )}
 
-            <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500 transition-transform duration-700 ease-out group-hover:scale-x-100" />
+            <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-indigo-500 via-violet-500 to-violet-500 transition-transform duration-700 ease-out group-hover:scale-x-100" />
 
             <div className="relative z-10 flex h-full flex-col p-6 sm:p-8 lg:p-9">
                 <div className="mb-5 flex flex-wrap items-center gap-3 sm:mb-6">
@@ -687,7 +687,7 @@ function ImageCard({
                           },
                       }
             }
-            className="relative flex h-full min-h-[240px] w-full flex-col overflow-hidden rounded-2xl border border-slate-800 bg-slate-950 transition-all duration-500 group-hover:border-indigo-400/40 group-hover:shadow-card-hover sm:min-h-[260px] sm:rounded-3xl lg:min-h-0"
+            className="relative flex h-full min-h-[240px] w-full flex-col overflow-hidden rounded-2xl border border-slate-800 bg-brand-dark transition-all duration-500 group-hover:border-indigo-400/40 group-hover:shadow-card-hover sm:min-h-[260px] sm:rounded-3xl lg:min-h-0"
         >
             {service.image && (
                 <div className="absolute inset-0 z-0 overflow-hidden">
@@ -710,7 +710,7 @@ function ImageCard({
                 </div>
             )}
 
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-indigo-400 via-violet-400 to-fuchsia-400 transition-transform duration-700 ease-out group-hover:scale-x-100" />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[3px] origin-left scale-x-0 bg-gradient-to-r from-indigo-400 via-violet-400 to-violet-400 transition-transform duration-700 ease-out group-hover:scale-x-100" />
 
             <div className="relative z-10 flex h-full flex-col justify-end p-5 sm:p-7 lg:p-8">
                 <motion.div
@@ -850,7 +850,7 @@ function TextCard({
             }
             className="relative flex h-full min-h-[200px] w-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 transition-all duration-500 group-hover:border-indigo-200 group-hover:shadow-card-hover sm:min-h-[220px] sm:rounded-3xl sm:p-6 lg:min-h-0 lg:p-7"
         >
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500 transition-transform duration-700 ease-out group-hover:scale-x-100" />
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 bg-gradient-to-r from-indigo-500 via-violet-500 to-violet-500 transition-transform duration-700 ease-out group-hover:scale-x-100" />
 
             <motion.div
                 className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-indigo-50/80 blur-2xl transition-all duration-700 group-hover:bg-indigo-100/60"

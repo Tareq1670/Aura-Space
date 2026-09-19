@@ -9,7 +9,7 @@ function HeroSkeleton() {
     <section className="relative w-full min-h-[65vh] bg-gradient-to-br from-slate-100 to-indigo-50/40 overflow-hidden px-4 sm:px-8 lg:px-16 flex items-center">
       {/* Decorative blobs — purely visual, no skeleton needed */}
       <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-indigo-100/50 blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-purple-100/40 blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-violet-100/40 blur-3xl pointer-events-none" />
 
       <div className="relative w-full max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 lg:gap-16 items-center py-16 lg:py-24">
         {/* ── Left: text content ── */}
@@ -197,7 +197,7 @@ function HowItWorksSkeleton() {
 // Mirrors: full-width coloured band with 4 big-number stat counters
 function StatisticsSkeleton() {
   return (
-    <section className="w-full py-16 sm:py-20 bg-gradient-to-r from-indigo-600 to-purple-700">
+    <section className="w-full py-16 sm:py-20 bg-gradient-to-r from-indigo-600 to-violet-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
           {Array.from({ length: 4 }).map((_, i) => (
@@ -319,7 +319,7 @@ function FAQSkeleton() {
 // Mirrors: full-width CTA band — headline, sub-text, email input + button
 function NewsletterSkeleton() {
   return (
-    <section className="w-full py-16 sm:py-20 bg-gradient-to-br from-indigo-600 to-purple-700">
+    <section className="w-full py-16 sm:py-20 bg-gradient-to-br from-indigo-600 to-violet-700">
       <div className="max-w-2xl mx-auto px-4 sm:px-8 text-center space-y-6">
         {/* Badge */}
         <Skeleton className="h-6 w-32 rounded-full mx-auto bg-white/20" />

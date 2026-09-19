@@ -17,7 +17,7 @@ import { formatCurrency } from "@/lib/currency"
 const COLORS = ["#8b5cf6", "#10b981", "#f59e0b", "#ef4444", "#06b6d4", "#ec4899", "#84cc16", "#6366f1"]
 
 const quickLinks = [
-  { label: "Manage Users", href: "/dashboard/admin/users", color: "from-violet-500 to-purple-600" },
+  { label: "Manage Users", href: "/dashboard/admin/users", color: "from-violet-500 to-violet-600" },
   { label: "Manage Properties", href: "/dashboard/admin/properties", color: "from-blue-500 to-indigo-600" },
   { label: "All Bookings", href: "/dashboard/admin/bookings", color: "from-emerald-500 to-teal-600" },
   { label: "Revenue", href: "/dashboard/admin/revenue", color: "from-amber-500 to-orange-600" },

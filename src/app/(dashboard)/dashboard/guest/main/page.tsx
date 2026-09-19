@@ -12,7 +12,7 @@ import { getGuestDashboard, type GuestDashboardData } from "@/lib/actions/dashbo
 import { formatCurrency } from "@/lib/currency"
 
 const quickLinks = [
-  { label: "Browse Spaces", href: "/spaces", color: "from-violet-500 to-purple-600" },
+  { label: "Browse Spaces", href: "/spaces", color: "from-violet-500 to-violet-600" },
   { label: "My Bookings", href: "/dashboard/guest/bookings", color: "from-blue-500 to-indigo-600" },
   { label: "Wishlist", href: "/dashboard/guest/wishlist", color: "from-rose-500 to-pink-600" },
   { label: "My Reviews", href: "/dashboard/guest/reviews", color: "from-emerald-500 to-teal-600" },

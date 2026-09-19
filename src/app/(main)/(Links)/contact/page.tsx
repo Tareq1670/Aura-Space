@@ -119,7 +119,7 @@ const contactMethods: ContactMethod[] = [
     value: "+880 1700 000 000",
     subtitle: "Sat – Thu, 9 AM – 9 PM",
     href: "tel:+8801700000000",
-    accent: "from-violet-500 to-fuchsia-600",
+    accent: "from-violet-500 to-violet-600",
     icon: <HiOutlinePhone className="h-6 w-6" />,
   },
   {
@@ -127,7 +127,7 @@ const contactMethods: ContactMethod[] = [
     value: "Gulshan, Dhaka",
     subtitle: "Gulshan Avenue, Dhaka 1212",
     href: "#location",
-    accent: "from-fuchsia-500 to-pink-600",
+    accent: "from-violet-500 to-pink-600",
     icon: <HiOutlineLocationMarker className="h-6 w-6" />,
   },
 ];
@@ -396,7 +396,7 @@ const ContactPage = () => {
         >
           <div className="absolute -left-24 top-10 h-[400px] w-[400px] rounded-full bg-indigo-500/15 blur-3xl" />
           <div className="absolute -right-24 bottom-10 h-[400px] w-[400px] rounded-full bg-violet-500/15 blur-3xl" />
-          <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-fuchsia-500/5 blur-3xl" />
+          <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-500/5 blur-3xl" />
         </motion.div>
 
         <div
@@ -420,7 +420,7 @@ const ContactPage = () => {
               className="text-4xl font-black leading-display tracking-tight text-white sm:text-5xl md:text-6xl lg:text-6xl"
             >
               Let&apos;s Start a{" "}
-              <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-fuchsia-300 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-indigo-300 via-violet-300 to-violet-300 bg-clip-text text-transparent">
                 Conversation
               </span>
             </motion.h1>
@@ -930,7 +930,7 @@ const ContactPage = () => {
               className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
             >
               Dedicated Help For{" "}
-              <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-violet-500 bg-clip-text text-transparent">
                 Every Journey
               </span>
             </motion.h2>
@@ -1010,7 +1010,7 @@ const ContactPage = () => {
               className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
             >
               Find Our{" "}
-              <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-violet-500 bg-clip-text text-transparent">
                 Head Office
               </span>
             </motion.h2>
@@ -1152,7 +1152,7 @@ const ContactPage = () => {
               className="text-3xl font-black leading-display tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
             >
               Frequently Asked{" "}
-              <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-violet-500 bg-clip-text text-transparent">
                 Questions
               </span>
             </motion.h2>

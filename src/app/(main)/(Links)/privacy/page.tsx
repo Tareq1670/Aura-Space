@@ -442,7 +442,7 @@ const HeroSection = () => {
     return (
         <section
             ref={ref}
-            className="relative min-h-[92vh] flex items-center justify-center overflow-hidden bg-[#050816]"
+            className="relative min-h-[92vh] flex items-center justify-center overflow-hidden bg-brand-dark"
         >
             <div className="absolute inset-0 bg-[linear-gradient(180deg,#050816_0%,#0B1120_24%,#140b2d_58%,#050816_100%)]" />
 
@@ -464,7 +464,7 @@ const HeroSection = () => {
                 delay={2.5}
             />
             <FloatingOrb
-                className="w-[320px] h-[320px] bg-purple-500/12 bottom-16 left-1/3"
+                className="w-[320px] h-[320px] bg-violet-500/12 bottom-16 left-1/3"
                 delay={5}
             />
 
@@ -476,7 +476,7 @@ const HeroSection = () => {
                     className="mb-8 inline-flex"
                 >
                     <div className="relative p-1 rounded-3xl bg-gradient-to-b from-white/10 to-transparent">
-                        <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-violet-500 via-indigo-500 to-purple-600 flex items-center justify-center shadow-brand relative overflow-hidden">
+                        <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-violet-500 via-indigo-500 to-violet-600 flex items-center justify-center shadow-brand relative overflow-hidden">
                             <HiShieldCheck className="w-10 h-10 md:w-12 md:h-12 text-white relative z-10" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/10" />
                         </div>
@@ -505,7 +505,7 @@ const HeroSection = () => {
                     className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight leading-display"
                 >
                     Privacy{" "}
-                    <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">
+                    <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent">
                         Policy
                     </span>
                 </motion.h1>
@@ -617,7 +617,7 @@ const IntroductionSection = () => (
         >
             <div className="relative bg-gradient-to-br from-violet-50 to-indigo-50 dark:from-violet-950/20 dark:to-indigo-950/15 rounded-3xl p-8 md:p-12 border border-violet-100 dark:border-violet-500/10 overflow-hidden">
                 <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-gradient-to-br from-violet-200/60 to-indigo-200/60 dark:from-violet-600/10 dark:to-indigo-600/10 blur-3xl" />
-                <div className="absolute -bottom-16 -left-16 w-48 h-48 rounded-full bg-gradient-to-tr from-purple-200/40 to-pink-200/40 dark:from-purple-600/8 dark:to-pink-600/8 blur-3xl" />
+                <div className="absolute -bottom-16 -left-16 w-48 h-48 rounded-full bg-gradient-to-tr from-violet-200/40 to-pink-200/40 dark:from-violet-600/8 dark:to-pink-600/8 blur-3xl" />
 
                 <div className="relative z-10 grid md:grid-cols-3 gap-10">
                     {[
@@ -695,7 +695,7 @@ const collectItems: IconCardProps[] = [
         title: "Booking Information",
         description:
             "Check-in/out dates, number of guests, special requests, accommodation preferences, booking history, and property reviews.",
-        gradient: "from-violet-500 to-purple-500",
+        gradient: "from-violet-500 to-violet-500",
     },
     {
         icon: <HiCreditCard className="w-5 h-5" />,
@@ -792,7 +792,7 @@ const usageItems: IconCardProps[] = [
         title: "Platform Improvements",
         description:
             "Analyzing usage patterns to optimize performance, develop new features, conduct A/B testing, and enhance overall user experience.",
-        gradient: "from-purple-500 to-fuchsia-500",
+        gradient: "from-violet-500 to-violet-500",
     },
 ];
 
@@ -1122,7 +1122,7 @@ const rightsItems: IconCardProps[] = [
         title: "Rectify Information",
         description:
             "Correct or update any inaccurate personal information directly from your account settings at any time.",
-        gradient: "from-violet-500 to-purple-500",
+        gradient: "from-violet-500 to-violet-500",
     },
     {
         icon: <HiTrash className="w-5 h-5" />,
@@ -1189,8 +1189,8 @@ const DataRetentionSection = () => (
             />
 
             <div className="relative">
-                <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-violet-300 via-indigo-300 to-purple-300 dark:from-violet-600/30 dark:via-indigo-600/30 dark:to-purple-600/30 -translate-x-1/2 hidden md:block" />
-                <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-violet-300 via-indigo-300 to-purple-300 dark:from-violet-600/30 dark:via-indigo-600/30 dark:to-purple-600/30 md:hidden" />
+                <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-violet-300 via-indigo-300 to-violet-300 dark:from-violet-600/30 dark:via-indigo-600/30 dark:to-violet-600/30 -translate-x-1/2 hidden md:block" />
+                <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-violet-300 via-indigo-300 to-violet-300 dark:from-violet-600/30 dark:via-indigo-600/30 dark:to-violet-600/30 md:hidden" />
 
                 <div className="space-y-8 md:space-y-14">
                     {timelineSteps.map((step, i) => {
@@ -1621,7 +1621,7 @@ const TrustCTA = () => {
                     variants={scaleInVariants}
                     className="relative rounded-3xl overflow-hidden"
                 >
-                    <div className="absolute inset-0 bg-gradient-to-br from-violet-600 via-indigo-600 to-purple-700" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-violet-600 via-indigo-600 to-violet-700" />
                     <div
                         className="absolute inset-0 opacity-50"
                         style={{

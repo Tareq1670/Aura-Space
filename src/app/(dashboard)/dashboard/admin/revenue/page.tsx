@@ -142,7 +142,7 @@ export default function AdminRevenuePage() {
           <StatCard icon={<Clock className="h-5 w-5" />} label="Pending Payouts" value={summary.pendingPayouts} gradient="from-amber-500 to-orange-500" />
         </motion.div>
         <motion.div variants={cardVariants}>
-          <StatCard icon={<DollarSign className="h-5 w-5" />} label="This Month" value={summary.thisMonthRevenue} gradient="from-purple-600 to-purple-500" />
+          <StatCard icon={<DollarSign className="h-5 w-5" />} label="This Month" value={summary.thisMonthRevenue} gradient="from-violet-600 to-violet-500" />
         </motion.div>
       </motion.div>
 

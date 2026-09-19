@@ -128,7 +128,7 @@ const steps: Step[] = [
         description:
             "Read verified guest reviews, explore high-resolution photo galleries, and compare properties side-by-side to find your perfect match.",
         icon: <HiOutlineLocationMarker className="h-6 w-6" />,
-        accent: "from-violet-500 to-fuchsia-600",
+        accent: "from-violet-500 to-violet-600",
         features: [
             "Verified reviews & ratings",
             "HD photo galleries",
@@ -142,7 +142,7 @@ const steps: Step[] = [
         description:
             "Select your dates, choose add-on services like decoration or catering, and confirm your booking in under 60 seconds.",
         icon: <HiOutlineCalendar className="h-6 w-6" />,
-        accent: "from-fuchsia-500 to-pink-600",
+        accent: "from-violet-500 to-pink-600",
         features: [
             "Instant confirmation",
             "Flexible date selection",
@@ -614,7 +614,7 @@ const HowItWorks = () => {
         <main className="w-full bg-white">
             <section
                 ref={heroRef}
-                className="relative w-full overflow-hidden bg-slate-950 py-20 sm:py-24 lg:py-32"
+                className="relative w-full overflow-hidden bg-brand-dark py-20 sm:py-24 lg:py-32"
             >
                 <motion.div
                     className="absolute inset-0 -z-10"
@@ -835,7 +835,7 @@ const HowItWorks = () => {
                     <div className="relative mx-auto max-w-6xl">
                         <div className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-slate-200/70 lg:block">
                             <motion.div
-                                className="absolute left-0 top-0 w-full origin-top bg-gradient-to-b from-indigo-500 via-violet-500 to-fuchsia-500"
+                                className="absolute left-0 top-0 w-full origin-top bg-gradient-to-b from-indigo-500 via-violet-500 to-violet-500"
                                 style={{ scaleY: lineProgress, height: "100%" }}
                             />
                         </div>
@@ -1252,7 +1252,7 @@ const HowItWorks = () => {
 
             <section
                 ref={ctaRef}
-                className="relative w-full overflow-hidden bg-slate-950 py-16 sm:py-20 lg:py-24"
+                className="relative w-full overflow-hidden bg-brand-dark py-16 sm:py-20 lg:py-24"
             >
                 <div
                     className="pointer-events-none absolute inset-0 opacity-[0.05]"
@@ -1266,7 +1266,7 @@ const HowItWorks = () => {
                 <div className="pointer-events-none absolute inset-0">
                     <div className="absolute -left-32 top-10 h-[500px] w-[500px] rounded-full bg-indigo-500/20 blur-3xl" />
                     <div className="absolute -right-32 bottom-10 h-[500px] w-[500px] rounded-full bg-violet-500/20 blur-3xl" />
-                    <div className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-fuchsia-500/10 blur-3xl" />
+                    <div className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-500/10 blur-3xl" />
                 </div>
 
                 <div className="container relative mx-auto w-full px-4 sm:px-6 lg:px-8">

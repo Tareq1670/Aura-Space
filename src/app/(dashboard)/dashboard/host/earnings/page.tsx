@@ -224,7 +224,7 @@ export default function HostEarningsPage() {
           <StatCard icon={<Clock className="h-5 w-5" />} label="Pending Payout" value={stats.pendingPayouts} gradient="from-amber-500 to-orange-500" />
         </motion.div>
         <motion.div variants={rowVariants}>
-          <StatCard icon={<DollarSign className="h-5 w-5" />} label="Commission Deducted" value={stats.commissionEarned} gradient="from-purple-600 to-purple-500" />
+          <StatCard icon={<DollarSign className="h-5 w-5" />} label="Commission Deducted" value={stats.commissionEarned} gradient="from-violet-600 to-violet-500" />
         </motion.div>
       </motion.div>
 

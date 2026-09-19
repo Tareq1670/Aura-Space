@@ -103,7 +103,7 @@ export function HeroSearchBar({
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 transition={{ duration: 0.3 }}
-                                className="pointer-events-none absolute -inset-px rounded-2xl bg-gradient-to-r from-indigo-500/20 via-violet-400/10 to-fuchsia-500/15 blur-sm"
+                                className="pointer-events-none absolute -inset-px rounded-2xl bg-gradient-to-r from-indigo-500/20 via-violet-400/10 to-violet-500/15 blur-sm"
                             />
                         </>
                     )}
@@ -382,7 +382,7 @@ export function HeroSearchBar({
                             }}
                         />
                         <motion.span
-                            className="absolute inset-0 bg-gradient-to-r from-violet-600/0 via-fuchsia-500/30 to-violet-600/0"
+                            className="absolute inset-0 bg-gradient-to-r from-violet-600/0 via-violet-500/30 to-violet-600/0"
                             animate={{ opacity: [0, 0.5, 0] }}
                             transition={{
                                 duration: 2,

@@ -77,8 +77,8 @@ export default function AdminHostsPage() {
     <div className="space-y-6 p-6">
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100">
-            <Shield className="h-5 w-5 text-purple-600" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100">
+            <Shield className="h-5 w-5 text-violet-600" />
           </div>
           <div>
             <h1 className="text-xl font-black text-slate-900">Manage Hosts</h1>
@@ -119,7 +119,7 @@ export default function AdminHostsPage() {
                 transition={{ delay: i * 0.03 }}
                 className="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-slate-50/50"
               >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-purple-100 to-indigo-100 text-sm font-bold text-purple-600">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-violet-100 to-indigo-100 text-sm font-bold text-violet-600">
                   {host.image ? (
                     <Image src={host.image} alt={host.name} width={40} height={40} unoptimized className="h-full w-full object-cover" />
                   ) : (
