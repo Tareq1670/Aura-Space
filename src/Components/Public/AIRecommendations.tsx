@@ -125,7 +125,7 @@ export default function AIRecommendations() {
             >
               <Link
                 href={`/listings/${item.propertyId}`}
-                className="group block rounded-xl overflow-hidden bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:shadow-violet-500/10 transition-all duration-300"
+                className="group block rounded-xl overflow-hidden bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 hover:shadow-card-hover transition-all duration-300"
               >
                 <div className="relative h-48 overflow-hidden">
                   <Image

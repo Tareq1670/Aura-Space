@@ -213,7 +213,7 @@ function RegisterForm() {
 
     return (
         <div className="bg-gradient-to-br from-slate-50 via-white to-indigo-50/40 text-slate-900 min-h-screen flex items-center justify-center p-4 md:p-8 font-sans">
-            <div className="w-full max-w-5xl rounded-[2rem] shadow-xl shadow-indigo-950/5 overflow-hidden grid md:grid-cols-12 min-h-[680px] border border-slate-200/80 bg-white/90 backdrop-blur-sm">
+            <div className="w-full max-w-5xl rounded-[2rem] shadow-card overflow-hidden grid md:grid-cols-12 min-h-[680px] border border-slate-200/80 bg-white/90 backdrop-blur-sm">
                 <div className="hidden md:flex md:col-span-5 bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-900 p-12 flex-col justify-between text-white relative overflow-hidden">
                     <div className="absolute inset-0 opacity-[0.07] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:18px_18px]"></div>
                     <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-emerald-400/20 rounded-full blur-3xl"></div>
@@ -463,7 +463,7 @@ function RegisterForm() {
                                     <Select.Value className="truncate" />
                                     <Select.Indicator className="text-slate-400 shrink-0 ml-2" />
                                 </Select.Trigger>
-                                <Select.Popover className="w-[var(--trigger-width)] bg-white border border-slate-200 rounded-xl shadow-xl shadow-slate-950/5 p-1.5 overflow-hidden">
+                                <Select.Popover className="w-[var(--trigger-width)] bg-white border border-slate-200 rounded-xl shadow-overlay p-1.5 overflow-hidden">
                                     <ListBox className="outline-none">
                                         <ListBox.Item
                                             id="guest"

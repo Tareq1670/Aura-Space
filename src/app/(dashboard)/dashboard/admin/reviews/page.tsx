@@ -258,7 +258,7 @@ export default function AdminReviewsPage() {
             transition={spring}
             className="flex items-center gap-4"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 shadow-lg shadow-violet-500/15">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 shadow-brand">
               <Shield className="h-6 w-6 text-white" />
             </div>
             <div>

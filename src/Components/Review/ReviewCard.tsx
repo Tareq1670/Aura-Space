@@ -91,7 +91,7 @@ export default function ReviewCard({
         boxShadow: "0 12px 40px rgba(0,0,0,0.07)",
         transition: { type: "spring", stiffness: 300 },
       }}
-      className="group relative overflow-hidden rounded-2xl bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04)] transition-shadow duration-300 hover:shadow-lg"
+      className="group relative overflow-hidden rounded-2xl bg-white shadow-card transition-shadow duration-300 hover:shadow-lg"
     >
       <div className={`absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b ${accentGrad} opacity-40 group-hover:opacity-100 transition-opacity duration-300`} />
 

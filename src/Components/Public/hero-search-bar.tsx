@@ -15,7 +15,7 @@ import { guestOptions } from "./hero-data";
 import { buttonClasses } from "@/Components/ui/Button";
 
 const FIELD_CLASSES =
-    "flex min-h-[50px] flex-col justify-center rounded-xl border border-transparent bg-white px-3 py-2 transition-all duration-200 focus-within:border-indigo-500/50 focus-within:shadow-md focus-within:shadow-indigo-500/8 sm:min-h-[52px] sm:px-3.5";
+    "flex min-h-[50px] flex-col justify-center rounded-xl border border-transparent bg-white px-3 py-2 transition-all duration-200 focus-within:border-indigo-500/50 focus-within:shadow-brand sm:min-h-[52px] sm:px-3.5";
 
 const LABEL_CLASSES =
     "mb-1 block text-xs font-bold uppercase tracking-wider text-slate-500 sm:text-xs";
@@ -227,7 +227,7 @@ export function HeroSearchBar({
                                 </DateField.Suffix>
                             </DateField.Group>
 
-                            <DatePicker.Popover className="z-[100] rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-indigo-950/10">
+                            <DatePicker.Popover className="z-[100] rounded-2xl border border-slate-200 bg-white shadow-overlay">
                                 <Calendar
                                     aria-label="Check-in date"
                                     className="w-[280px] max-w-[calc(100vw-2rem)] p-3 sm:w-[310px]"
@@ -321,7 +321,7 @@ export function HeroSearchBar({
                                 <Select.Value className="flex-1 truncate" />
                                 <Select.Indicator className="ml-auto text-slate-400" />
                             </Select.Trigger>
-                            <Select.Popover className="z-[100] rounded-xl border border-slate-200 bg-white p-1 shadow-2xl shadow-indigo-950/10">
+                            <Select.Popover className="z-[100] rounded-xl border border-slate-200 bg-white p-1 shadow-overlay">
                                 <ListBox>
                                     {guestOptions.map((option) => (
                                         <ListBox.Item

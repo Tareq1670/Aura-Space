@@ -23,19 +23,19 @@ const variants = {
     gradient: "from-red-500 to-red-600",
     iconBg: "bg-red-50",
     iconBorder: "border-red-100",
-    shadow: "shadow-red-500/20",
+    shadow: "shadow-error",
   },
   warning: {
     gradient: "from-amber-500 to-orange-500",
     iconBg: "bg-amber-50",
     iconBorder: "border-amber-100",
-    shadow: "shadow-amber-500/20",
+    shadow: "shadow-warning",
   },
   info: {
     gradient: "from-violet-500 to-indigo-600",
     iconBg: "bg-violet-50",
     iconBorder: "border-violet-100",
-    shadow: "shadow-violet-500/20",
+    shadow: "shadow-brand",
   },
 };
 

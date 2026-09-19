@@ -422,7 +422,7 @@ function StepCard({ step, index, reduceMotion }: StepCardProps) {
             <div className="relative flex flex-col justify-center">
                 <div className="mb-4 flex items-center gap-3">
                     <div
-                        className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${step.accent} text-white shadow-lg shadow-indigo-500/25`}
+                        className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${step.accent} text-white shadow-brand`}
                     >
                         {step.icon}
                     </div>
@@ -470,7 +470,7 @@ function StepCard({ step, index, reduceMotion }: StepCardProps) {
                 }
                 className="relative"
             >
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[28px] border border-slate-200 bg-slate-100 shadow-[0_20px_60px_rgba(15,23,42,0.10)]">
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[28px] border border-slate-200 bg-slate-100 shadow-card">
                     <Image
                         src={step.image}
                         alt={step.title}
@@ -505,7 +505,7 @@ function FaqAccordion({ faq, index, isOpen, onToggle }: FaqAccordionProps) {
                 ease: [0.16, 1, 0.3, 1],
                 type: "tween",
             }}
-            className={`overflow-hidden rounded-2xl border transition-all duration-300 ${isOpen ? "border-indigo-200 bg-indigo-50/40 shadow-[0_8px_24px_rgba(99,102,241,0.08)]" : "border-slate-200 bg-white hover:border-slate-300"}`}
+            className={`overflow-hidden rounded-2xl border transition-all duration-300 ${isOpen ? "border-indigo-200 bg-indigo-50/40 shadow-brand" : "border-slate-200 bg-white hover:border-slate-300"}`}
         >
             <button
                 type="button"
@@ -903,12 +903,12 @@ const HowItWorks = () => {
                                               },
                                           }
                                 }
-                                className="group relative flex h-full flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm transition-all duration-500 hover:border-indigo-200 hover:shadow-[0_20px_50px_rgba(99,102,241,0.08)] sm:p-7"
+                                className="group relative flex h-full flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white p-6 shadow-card transition-all duration-500 hover:border-indigo-200 hover:shadow-card-hover sm:p-7"
                             >
                                 <div className="absolute -right-16 -top-16 h-32 w-32 rounded-full bg-indigo-50 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
 
                                 <div className="relative flex items-start justify-between">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-md shadow-indigo-500/20">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-brand">
                                         {benefit.icon}
                                     </div>
 
@@ -991,7 +991,7 @@ const HowItWorks = () => {
                                 {activePersona === persona.id && (
                                     <motion.div
                                         layoutId="persona-pill"
-                                        className="absolute inset-0 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 shadow-md shadow-indigo-500/20"
+                                        className="absolute inset-0 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 shadow-brand"
                                         transition={{
                                             type: "spring",
                                             stiffness: 320,
@@ -1020,7 +1020,7 @@ const HowItWorks = () => {
                                         ease: [0.16, 1, 0.3, 1],
                                         type: "tween",
                                     }}
-                                    className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)] sm:p-8 lg:p-10"
+                                    className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-card sm:p-8 lg:p-10"
                                 >
                                     <div className="mb-8 text-center">
                                         <h3 className="text-2xl font-black leading-tight tracking-tight text-slate-950 sm:text-3xl">
@@ -1131,7 +1131,7 @@ const HowItWorks = () => {
                                               },
                                           }
                                 }
-                                className="group relative flex h-full flex-col rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm transition-all duration-500 hover:border-indigo-200 hover:shadow-[0_20px_50px_rgba(99,102,241,0.08)] sm:p-7"
+                                className="group relative flex h-full flex-col rounded-[24px] border border-slate-200 bg-white p-6 shadow-card transition-all duration-500 hover:border-indigo-200 hover:shadow-card-hover sm:p-7"
                             >
                                 <div className="mb-4 flex items-center gap-1">
                                     {Array.from({

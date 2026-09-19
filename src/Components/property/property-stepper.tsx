@@ -86,7 +86,7 @@ export default function PropertyStepper({
                                 className={cn(
                                     "w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 border-2",
                                     isActive
-                                        ? "bg-rose-500 border-rose-500 text-white shadow-lg shadow-rose-500/30 scale-110"
+                                        ? "bg-rose-500 border-rose-500 text-white shadow-error scale-110"
                                         : isCompleted || isPast
                                         ? "bg-rose-500 border-rose-500 text-white"
                                         : "bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-400"

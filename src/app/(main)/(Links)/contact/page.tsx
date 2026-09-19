@@ -440,7 +440,7 @@ const ContactPage = () => {
             >
               <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4 py-2 backdrop-blur-sm">
                 <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500/20">
-                  <div className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.6)]" />
+                  <div className="h-2 w-2 rounded-full bg-emerald-400 shadow-success" />
                 </div>
                 <span className="text-xs font-semibold text-white/70">
                   Response within 24 hours
@@ -490,7 +490,7 @@ const ContactPage = () => {
                 className="group relative flex flex-col overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.06] p-6 text-left backdrop-blur-md transition-all duration-300 hover:border-indigo-400/40 hover:bg-white/[0.10]"
               >
                 <div
-                  className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${method.accent} text-white shadow-lg shadow-indigo-500/25`}
+                  className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${method.accent} text-white shadow-brand`}
                 >
                   {method.icon}
                 </div>
@@ -539,7 +539,7 @@ const ContactPage = () => {
                 ease: [0.16, 1, 0.3, 1],
                 type: "tween",
               }}
-              className="relative overflow-hidden rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.06)] sm:p-8 lg:p-10"
+              className="relative overflow-hidden rounded-[28px] border border-slate-200 bg-white p-6 shadow-card sm:p-8 lg:p-10"
             >
               <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-indigo-50/60 blur-3xl" />
               <div className="absolute -bottom-16 -left-16 h-40 w-40 rounded-full bg-violet-50/60 blur-3xl" />
@@ -805,7 +805,7 @@ const ContactPage = () => {
               }}
               className="flex flex-col gap-6"
             >
-              <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.15)] sm:p-7">
+              <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 p-6 shadow-card sm:p-7">
                 <div className="absolute inset-0 bg-gradient-to-br from-white/[0.06] via-transparent to-transparent" />
                 <div className="absolute -right-16 top-10 h-40 w-40 rounded-full bg-indigo-500/20 blur-3xl" />
                 <div className="absolute -left-16 bottom-10 h-40 w-40 rounded-full bg-violet-500/20 blur-3xl" />
@@ -824,7 +824,7 @@ const ContactPage = () => {
                         key={info.title}
                         className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.06] p-4 backdrop-blur-sm transition-all duration-300 hover:border-indigo-400/30 hover:bg-white/[0.10]"
                       >
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-sm shadow-indigo-500/20">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-brand">
                           {info.icon}
                         </div>
                         <div className="min-w-0">
@@ -880,7 +880,7 @@ const ContactPage = () => {
                 </div>
               </div>
 
-              <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_16px_40px_rgba(15,23,42,0.05)] sm:p-7">
+              <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-card sm:p-7">
                 <h3 className="text-lg font-black leading-tight tracking-tight text-slate-950 sm:text-xl">
                   Looking for something specific?
                 </h3>
@@ -966,9 +966,9 @@ const ContactPage = () => {
                         },
                       }
                 }
-                className="group relative flex h-full flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white p-6 shadow-[0_1px_3px_rgba(15,23,42,0.04)] transition-all duration-500 hover:border-indigo-200 hover:shadow-[0_20px_50px_rgba(99,102,241,0.08)] sm:p-7"
+                className="group relative flex h-full flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white p-6 shadow-card transition-all duration-500 hover:border-indigo-200 hover:shadow-card-hover sm:p-7"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-md shadow-indigo-500/20">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-brand">
                   {channel.icon}
                 </div>
 
@@ -1034,13 +1034,13 @@ const ContactPage = () => {
               ease: [0.16, 1, 0.3, 1],
               type: "tween",
             }}
-            className="relative overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_16px_50px_rgba(15,23,42,0.06)]"
+            className="relative overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-card"
           >
             <div className="grid gap-0 lg:grid-cols-[380px_minmax(0,1fr)]">
               <div className="flex flex-col justify-between border-b border-slate-200 bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 p-6 text-white sm:p-8 lg:border-b-0 lg:border-r">
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.08] px-3 py-1 backdrop-blur-sm">
-                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.6)]" />
+                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-success" />
                     <span className="text-xs font-bold uppercase tracking-eyebrow text-emerald-300">
                       Open Now
                     </span>

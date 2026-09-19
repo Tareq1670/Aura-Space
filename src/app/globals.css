@@ -27,6 +27,17 @@
   /* Radii — consistent component shapes */
   --radius-btn: 0.75rem;
   --radius-card: 1rem;
+
+  /* Shadows — normalized elevation scale */
+  --shadow-card: 0 1px 3px rgb(15 23 42 / 0.04), 0 4px 16px -2px rgb(15 23 42 / 0.05);
+  --shadow-card-hover: 0 20px 50px -12px rgb(99 102 241 / 0.15);
+  --shadow-brand: 0 8px 24px rgb(99 102 241 / 0.2);
+  --shadow-glow: 0 0 30px rgb(99 102 241 / 0.22);
+  --shadow-overlay: 0 12px 32px -4px rgb(15 23 42 / 0.15);
+  --shadow-modal: 0 28px 60px -8px rgb(15 23 42 / 0.25);
+  --shadow-success: 0 0 10px rgb(52 211 153 / 0.5);
+  --shadow-warning: 0 0 12px rgb(245 158 11 / 0.2);
+  --shadow-error: 0 0 12px rgb(244 63 94 / 0.2);
 }
 
 /* ========== Hero Swiper Fixes ========== */

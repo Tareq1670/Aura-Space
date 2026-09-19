@@ -21,7 +21,7 @@ const BUTTON_BASE =
 
 const VARIANT_CLASSES: Record<Variant, string> = {
     primary:
-        "bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-[length:200%_100%] bg-left text-white shadow-sm shadow-indigo-600/25 hover:bg-right hover:shadow-md hover:shadow-indigo-600/30 hover:brightness-110 active:brightness-95",
+        "bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-[length:200%_100%] bg-left text-white shadow-brand hover:bg-right hover:shadow-card-hover hover:brightness-110 active:brightness-95",
     secondary:
         "border border-slate-300 bg-white text-slate-700 shadow-sm hover:border-indigo-300 hover:bg-indigo-50/60 hover:text-indigo-600 active:bg-indigo-100/60",
     outline:

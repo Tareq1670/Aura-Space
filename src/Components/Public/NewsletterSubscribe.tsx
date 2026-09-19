@@ -93,7 +93,7 @@ export default function NewsletterSubscribe() {
                     initial="hidden"
                     animate={isInView ? "visible" : "hidden"}
                     variants={containerVariants}
-                    className="relative overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 shadow-[0_28px_80px_rgba(15,23,42,0.16)]"
+                    className="relative overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 shadow-card"
                 >
                     <div className="absolute inset-0 bg-gradient-to-br from-white/[0.06] via-transparent to-transparent" />
 
@@ -160,9 +160,9 @@ export default function NewsletterSubscribe() {
 
                         <motion.div variants={itemVariants} className="w-full">
                             <div className="rounded-[24px] border border-white/10 bg-white/[0.05] p-3 backdrop-blur-md sm:p-4">
-                                <div className="rounded-[18px] border border-slate-200/80 bg-white p-5 shadow-[0_20px_50px_rgba(15,23,42,0.10)] sm:p-6">
+                                <div className="rounded-[18px] border border-slate-200/80 bg-white p-5 shadow-card sm:p-6">
                                     <div className="flex items-start gap-4">
-                                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-500/20">
+                                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 text-white shadow-brand">
                                             <svg
                                                 className="h-5 w-5"
                                                 fill="none"

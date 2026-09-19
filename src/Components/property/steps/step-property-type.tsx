@@ -95,7 +95,7 @@ export default function StepPropertyType({
                                 className={cn(
                                     "relative flex flex-col items-center gap-3 p-5 rounded-2xl border-2 transition-all duration-200 cursor-pointer group",
                                     isSelected
-                                        ? "border-rose-500 bg-rose-50 dark:bg-rose-950/30 shadow-lg shadow-rose-500/10"
+                                        ? "border-rose-500 bg-rose-50 dark:bg-rose-950/30 shadow-error"
                                         : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800/50"
                                 )}
                             >
@@ -195,7 +195,7 @@ export default function StepPropertyType({
                                 className={cn(
                                     "w-full flex items-center justify-between p-5 rounded-2xl border-2 transition-all cursor-pointer text-left",
                                     isSelected
-                                        ? "border-rose-500 bg-rose-50 dark:bg-rose-950/30 shadow-lg shadow-rose-500/10"
+                                        ? "border-rose-500 bg-rose-50 dark:bg-rose-950/30 shadow-error"
                                         : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800/50"
                                 )}
                             >

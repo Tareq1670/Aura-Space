@@ -190,7 +190,7 @@ const handleSignOut = async () => {
       <header
         className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${
           isScrolled
-            ? "bg-white/90 backdrop-blur-md shadow-lg shadow-indigo-950/5 border-b border-slate-200/80"
+            ? "bg-white/90 backdrop-blur-md shadow-card border-b border-slate-200/80"
             : "bg-white border-b border-slate-100"
         }`}
       >
@@ -232,8 +232,8 @@ const handleSignOut = async () => {
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     className={`flex items-center gap-2 p-1 pr-2.5 rounded-full border transition-all active:scale-[0.98] ${
                       isDropdownOpen
-                        ? "border-indigo-300 bg-indigo-50/50 shadow-md shadow-indigo-600/5"
-                        : "border-slate-200 bg-white hover:border-indigo-300 hover:shadow-md hover:shadow-indigo-600/5"
+                        ? "border-indigo-300 bg-indigo-50/50 shadow-brand"
+                        : "border-slate-200 bg-white hover:border-indigo-300 hover:shadow-card-hover"
                     }`}
                   >
                     {session.user.image ? (
@@ -262,7 +262,7 @@ const handleSignOut = async () => {
                   </button>
 
                   <div
-                    className={`absolute right-0 mt-2.5 w-64 bg-white border border-slate-200 rounded-2xl shadow-xl shadow-slate-950/10 overflow-hidden transition-all duration-200 origin-top-right ${
+                    className={`absolute right-0 mt-2.5 w-64 bg-white border border-slate-200 rounded-2xl shadow-overlay overflow-hidden transition-all duration-200 origin-top-right ${
                       isDropdownOpen
                         ? "opacity-100 scale-100 translate-y-0"
                         : "opacity-0 scale-95 -translate-y-1 pointer-events-none"

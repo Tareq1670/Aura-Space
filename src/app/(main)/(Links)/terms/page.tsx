@@ -194,14 +194,14 @@ const TermsCard = ({
     variants={scaleInVariants}
     custom={index}
     whileHover={{ y: -6, transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] } }}
-    className="group relative bg-white rounded-2xl p-6 md:p-7 border border-gray-100 hover:border-violet-200 shadow-sm hover:shadow-xl hover:shadow-violet-500/[0.08] transition-all duration-500 overflow-hidden"
+    className="group relative bg-white rounded-2xl p-6 md:p-7 border border-gray-100 hover:border-violet-200 shadow-card hover:shadow-card-hover transition-all duration-500 overflow-hidden"
   >
     <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-violet-50 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
     <div className="relative z-10">
       <div className="flex items-start gap-4 mb-4">
         <div
-          className={`w-11 h-11 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white shadow-lg shadow-violet-500/15 group-hover:scale-110 transition-transform duration-300 flex-shrink-0`}
+          className={`w-11 h-11 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white shadow-brand group-hover:scale-110 transition-transform duration-300 flex-shrink-0`}
         >
           {icon}
         </div>
@@ -242,10 +242,10 @@ const StatCard = ({ icon, title, description, stat, statLabel, index = 0 }: Stat
     variants={scaleInVariants}
     custom={index}
     whileHover={{ y: -6, transition: { duration: 0.25 } }}
-    className="group relative bg-white rounded-2xl p-6 border border-gray-100 hover:border-violet-200 shadow-sm hover:shadow-xl hover:shadow-violet-500/[0.08] transition-all duration-500"
+    className="group relative bg-white rounded-2xl p-6 border border-gray-100 hover:border-violet-200 shadow-card hover:shadow-card-hover transition-all duration-500"
   >
     <div className="flex items-start justify-between mb-4">
-      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-violet-500/15 group-hover:scale-110 transition-transform duration-300">
+      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white shadow-brand group-hover:scale-110 transition-transform duration-300">
         {icon}
       </div>
       <div className="text-right">
@@ -695,7 +695,7 @@ const HeroSection = () => {
           className="mb-8 inline-flex"
         >
           <div className="relative p-1 rounded-3xl bg-gradient-to-b from-violet-200/60 to-transparent">
-            <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-violet-500 via-indigo-500 to-purple-600 flex items-center justify-center shadow-2xl shadow-violet-500/25 relative overflow-hidden">
+            <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-violet-500 via-indigo-500 to-purple-600 flex items-center justify-center shadow-brand relative overflow-hidden">
               <FaGavel className="w-9 h-9 md:w-11 md:h-11 text-white relative z-10" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-white/10" />
             </div>
@@ -1025,7 +1025,7 @@ const ContactSection = () => (
             variants={scaleInVariants}
             custom={i}
             whileHover={{ y: -6, transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] } }}
-            className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-violet-200 shadow-sm hover:shadow-xl hover:shadow-violet-500/[0.08] transition-all duration-500 text-center block"
+            className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-violet-200 shadow-card hover:shadow-card-hover transition-all duration-500 text-center block"
           >
             <div
               className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center text-white shadow-lg mx-auto mb-5 group-hover:scale-110 transition-transform duration-300`}

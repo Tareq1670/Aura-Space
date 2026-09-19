@@ -472,7 +472,7 @@ function LargeCard({
                           },
                       }
             }
-            className="relative flex h-full min-h-[340px] w-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white transition-all duration-500 group-hover:border-indigo-200 group-hover:shadow-2xl group-hover:shadow-indigo-500/10 sm:min-h-[400px] sm:rounded-3xl lg:min-h-0"
+            className="relative flex h-full min-h-[340px] w-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white transition-all duration-500 group-hover:border-indigo-200 group-hover:shadow-card-hover sm:min-h-[400px] sm:rounded-3xl lg:min-h-0"
         >
             {service.image && (
                 <div className="absolute inset-0 z-0">
@@ -500,7 +500,7 @@ function LargeCard({
             <div className="relative z-10 flex h-full flex-col p-6 sm:p-8 lg:p-9">
                 <div className="mb-5 flex flex-wrap items-center gap-3 sm:mb-6">
                     <motion.div
-                        className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-lg shadow-indigo-500/30 sm:h-12 sm:w-12"
+                        className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-brand sm:h-12 sm:w-12"
                         whileHover={
                             reduceMotion
                                 ? undefined
@@ -687,7 +687,7 @@ function ImageCard({
                           },
                       }
             }
-            className="relative flex h-full min-h-[240px] w-full flex-col overflow-hidden rounded-2xl border border-slate-800 bg-slate-950 transition-all duration-500 group-hover:border-indigo-400/40 group-hover:shadow-2xl group-hover:shadow-indigo-500/20 sm:min-h-[260px] sm:rounded-3xl lg:min-h-0"
+            className="relative flex h-full min-h-[240px] w-full flex-col overflow-hidden rounded-2xl border border-slate-800 bg-slate-950 transition-all duration-500 group-hover:border-indigo-400/40 group-hover:shadow-card-hover sm:min-h-[260px] sm:rounded-3xl lg:min-h-0"
         >
             {service.image && (
                 <div className="absolute inset-0 z-0 overflow-hidden">
@@ -848,7 +848,7 @@ function TextCard({
                           },
                       }
             }
-            className="relative flex h-full min-h-[200px] w-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 transition-all duration-500 group-hover:border-indigo-200 group-hover:shadow-2xl group-hover:shadow-indigo-500/10 sm:min-h-[220px] sm:rounded-3xl sm:p-6 lg:min-h-0 lg:p-7"
+            className="relative flex h-full min-h-[200px] w-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 transition-all duration-500 group-hover:border-indigo-200 group-hover:shadow-card-hover sm:min-h-[220px] sm:rounded-3xl sm:p-6 lg:min-h-0 lg:p-7"
         >
             <div className="pointer-events-none absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500 transition-transform duration-700 ease-out group-hover:scale-x-100" />
 

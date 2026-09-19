@@ -384,7 +384,7 @@ const SupportPage = () => {
                             <div
                                 className={`group relative flex items-center rounded-2xl border bg-white/5 backdrop-blur-xl transition-all duration-500 ${
                                     isSearchFocused
-                                        ? "border-indigo-400/50 bg-white/10 shadow-[0_0_60px_rgba(99,102,241,0.25)]"
+                                        ? "border-indigo-400/50 bg-white/10 shadow-glow"
                                         : "border-white/10 hover:border-white/20 hover:bg-white/[0.08]"
                                 }`}
                             >
@@ -472,10 +472,10 @@ const SupportPage = () => {
                                         damping: 20,
                                     },
                                 }}
-                                className="group cursor-pointer rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_4px_20px_rgba(15,23,42,0.04)] transition-all duration-500 hover:border-indigo-200 hover:shadow-[0_20px_50px_rgba(99,102,241,0.1)] sm:p-8"
+                                className="group cursor-pointer rounded-3xl border border-slate-200 bg-white p-6 shadow-card transition-all duration-500 hover:border-indigo-200 hover:shadow-card-hover sm:p-8"
                             >
                                 <div
-                                    className={`mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${category.color} text-white shadow-lg shadow-indigo-500/20 transition-transform duration-300 group-hover:scale-110`}
+                                    className={`mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${category.color} text-white shadow-brand transition-transform duration-300 group-hover:scale-110`}
                                 >
                                     {category.icon}
                                 </div>
@@ -623,7 +623,7 @@ const SupportPage = () => {
                                     delay: idx * 0.1,
                                     type: "tween",
                                 }}
-                                className="flex flex-col items-center rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-[0_4px_20px_rgba(15,23,42,0.04)]"
+                                className="flex flex-col items-center rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-card"
                             >
                                 <div className="mb-3 text-indigo-500">
                                     {stat.icon}
@@ -679,7 +679,7 @@ const SupportPage = () => {
                                         damping: 20,
                                     },
                                 }}
-                                className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 text-center shadow-[0_4px_20px_rgba(15,23,42,0.04)] transition-all duration-500 hover:shadow-[0_20px_50px_rgba(99,102,241,0.12)]"
+                                className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 text-center shadow-card transition-all duration-500 hover:shadow-card-hover"
                             >
                                 <div
                                     className={`mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${method.color} text-white shadow-lg`}
@@ -709,7 +709,7 @@ const SupportPage = () => {
                 className="relative w-full bg-slate-50/50 py-24 sm:py-32"
             >
                 <div className="container mx-auto w-full px-4 sm:px-6 lg:px-8">
-                    <div className="mx-auto max-w-5xl overflow-hidden rounded-[32px] bg-white shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+                    <div className="mx-auto max-w-5xl overflow-hidden rounded-[32px] bg-white shadow-card">
                         <div className="grid lg:grid-cols-5">
                             <div className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 p-10 text-white lg:col-span-2">
                                 <div className="absolute -left-20 -top-20 h-40 w-40 rounded-full bg-indigo-500/30 blur-3xl" />
@@ -975,7 +975,7 @@ const SupportPage = () => {
                                 variants={itemVariants}
                                 className={`overflow-hidden rounded-2xl border transition-all duration-300 ${
                                     openFaq === faq.id
-                                        ? "border-indigo-200 bg-indigo-50/40 shadow-[0_8px_24px_rgba(99,102,241,0.08)]"
+                                        ? "border-indigo-200 bg-indigo-50/40 shadow-brand"
                                         : "border-slate-200 bg-white hover:border-slate-300"
                                 }`}
                             >
@@ -1108,7 +1108,7 @@ const SupportPage = () => {
                                 key={testimonial.id}
                                 variants={itemVariants}
                                 whileHover={{ y: -6 }}
-                                className="rounded-3xl border border-slate-200 bg-slate-50/50 p-8 transition-all duration-300 hover:border-indigo-200 hover:shadow-[0_20px_50px_rgba(99,102,241,0.1)]"
+                                className="rounded-3xl border border-slate-200 bg-slate-50/50 p-8 transition-all duration-300 hover:border-indigo-200 hover:shadow-card-hover"
                             >
                                 <div className="mb-4 flex gap-1">
                                     {[...Array(testimonial.rating)].map(

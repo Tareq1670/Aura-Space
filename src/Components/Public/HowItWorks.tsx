@@ -251,7 +251,7 @@ function StepCard({
         >
             <div className="absolute -inset-px rounded-[24px] bg-gradient-to-br from-indigo-500/0 via-violet-500/0 to-indigo-500/0 opacity-0 blur-xl transition-all duration-500 group-hover:from-indigo-500/10 group-hover:via-violet-500/10 group-hover:to-indigo-500/10 group-hover:opacity-100" />
 
-            <div className="relative flex h-full flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white p-6 shadow-[0_1px_3px_rgba(15,23,42,0.04)] transition-all duration-500 hover:border-indigo-200 hover:shadow-[0_20px_50px_rgba(99,102,241,0.08)] sm:p-7">
+            <div className="relative flex h-full flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white p-6 shadow-card transition-all duration-500 hover:border-indigo-200 hover:shadow-card-hover sm:p-7">
                 <div className="flex items-start justify-between gap-3">
                     <motion.div
                         whileHover={
@@ -267,7 +267,7 @@ function StepCard({
                                       },
                                   }
                         }
-                        className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-md shadow-indigo-500/20"
+                        className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-brand"
                     >
                         {!reduceMotion && (
                             <motion.span

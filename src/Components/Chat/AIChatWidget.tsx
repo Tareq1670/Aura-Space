@@ -290,7 +290,7 @@ export default function AIChatWidget() {
         onClick={() => setIsOpen(!isOpen)}
         aria-label={isOpen ? "Close AI chat assistant" : "Open AI chat assistant"}
         aria-expanded={isOpen}
-        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-gradient-to-r from-violet-500 to-indigo-500 text-white shadow-lg hover:shadow-xl hover:shadow-violet-500/30 flex items-center justify-center z-50 transition-shadow"
+        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-gradient-to-r from-violet-500 to-indigo-500 text-white shadow-brand hover:shadow-glow flex items-center justify-center z-50 transition-shadow"
       >
         {isOpen ? <X className="w-6 h-6" /> : <MessageCircle className="w-6 h-6" />}
       </motion.button>

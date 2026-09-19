@@ -146,7 +146,7 @@ const itemVariants: Variants = {
 };
 
 const cardClass =
-    "relative overflow-hidden rounded-[24px] border border-slate-200/80 bg-white shadow-[0_16px_40px_rgba(15,23,42,0.05)]";
+    "relative overflow-hidden rounded-[24px] border border-slate-200/80 bg-white shadow-card";
 
 function FAQAccordionItem({
     item,
@@ -175,7 +175,7 @@ function FAQAccordionItem({
                           },
                       }
             }
-            className={`${cardClass} group transition-all duration-300 hover:border-indigo-200 hover:shadow-[0_22px_50px_rgba(99,102,241,0.08)]`}
+            className={`${cardClass} group transition-all duration-300 hover:border-indigo-200 hover:shadow-card-hover`}
         >
             <button
                 type="button"
@@ -399,7 +399,7 @@ export default function FAQSection() {
                                         className="rounded-[20px] border border-slate-200 bg-slate-50 p-4 transition-all duration-300 hover:border-indigo-200 hover:bg-indigo-50/40"
                                     >
                                         <div className="flex items-start gap-3">
-                                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-sm shadow-indigo-500/20">
+                                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-brand">
                                                 {supportItem.icon}
                                             </div>
                                             <div>

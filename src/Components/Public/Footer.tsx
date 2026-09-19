@@ -226,7 +226,7 @@ export default function Footer() {
                         },
                       }
                 }
-                className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-500/25"
+                className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-brand"
               >
                 <svg
                   className="h-5 w-5 text-white"

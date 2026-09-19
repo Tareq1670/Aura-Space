@@ -552,7 +552,7 @@ const CommunityPage = () => {
                                 : { opacity: 0, y: 40 }
                         }
                         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                        className="grid grid-cols-2 gap-4 rounded-3xl border border-slate-200 bg-white p-4 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:grid-cols-3 lg:grid-cols-5"
+                        className="grid grid-cols-2 gap-4 rounded-3xl border border-slate-200 bg-white p-4 shadow-card sm:grid-cols-3 lg:grid-cols-5"
                     >
                         {stats.map((stat, idx) => (
                             <motion.div
@@ -567,7 +567,7 @@ const CommunityPage = () => {
                                 className="group flex flex-col items-center rounded-2xl border border-slate-100 bg-slate-50/50 p-6 text-center transition-all duration-300 hover:border-indigo-200 hover:bg-indigo-50/30"
                             >
                                 <div
-                                    className={`mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${stat.color} text-white shadow-lg shadow-indigo-500/20 transition-transform duration-300 group-hover:scale-110`}
+                                    className={`mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${stat.color} text-white shadow-brand transition-transform duration-300 group-hover:scale-110`}
                                 >
                                     {stat.icon}
                                 </div>
@@ -630,10 +630,10 @@ const CommunityPage = () => {
                                         damping: 20,
                                     },
                                 }}
-                                className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 shadow-[0_4px_20px_rgba(15,23,42,0.04)] transition-all duration-500 hover:border-indigo-200 hover:shadow-[0_20px_50px_rgba(99,102,241,0.1)]"
+                                className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 shadow-card transition-all duration-500 hover:border-indigo-200 hover:shadow-card-hover"
                             >
                                 <div
-                                    className={`mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${feature.color} text-white shadow-lg shadow-indigo-500/20 transition-transform duration-300 group-hover:scale-110`}
+                                    className={`mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${feature.color} text-white shadow-brand transition-transform duration-300 group-hover:scale-110`}
                                 >
                                     {feature.icon}
                                 </div>
@@ -689,7 +689,7 @@ const CommunityPage = () => {
                             <motion.div
                                 key={group.id}
                                 variants={itemVariants}
-                                className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_4px_20px_rgba(15,23,42,0.04)] transition-all duration-500 hover:shadow-[0_20px_50px_rgba(99,102,241,0.12)]"
+                                className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-card transition-all duration-500 hover:shadow-card-hover"
                             >
                                 <div className="relative h-48 w-full overflow-hidden">
                                     <Image
@@ -781,7 +781,7 @@ const CommunityPage = () => {
                             <motion.div
                                 key={post.id}
                                 variants={itemVariants}
-                                className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_4px_20px_rgba(15,23,42,0.04)] transition-all duration-300 hover:shadow-[0_20px_50px_rgba(99,102,241,0.08)]"
+                                className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-card transition-all duration-300 hover:shadow-card-hover"
                             >
                                 <div className="flex items-center gap-3 border-b border-slate-100 p-6">
                                     <div className="relative h-12 w-12 overflow-hidden rounded-full ring-2 ring-slate-100">
@@ -890,7 +890,7 @@ const CommunityPage = () => {
                                         damping: 20,
                                     },
                                 }}
-                                className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_4px_20px_rgba(15,23,42,0.04)] transition-all duration-500 hover:shadow-[0_25px_60px_rgba(99,102,241,0.15)]"
+                                className="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-card transition-all duration-500 hover:shadow-card-hover"
                             >
                                 <div className="relative h-56 w-full overflow-hidden">
                                     <Image
@@ -1010,7 +1010,7 @@ const CommunityPage = () => {
                                         damping: 20,
                                     },
                                 }}
-                                className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 shadow-[0_4px_20px_rgba(15,23,42,0.04)] transition-all duration-500 hover:shadow-[0_20px_50px_rgba(99,102,241,0.1)]"
+                                className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 shadow-card transition-all duration-500 hover:shadow-card-hover"
                             >
                                 <div className="mb-6 flex gap-1">
                                     {[...Array(testimonial.rating)].map(
@@ -1131,7 +1131,7 @@ const CommunityPage = () => {
                                 variants={itemVariants}
                                 className={`overflow-hidden rounded-2xl border transition-all duration-300 ${
                                     openFaq === idx
-                                        ? "border-indigo-200 bg-indigo-50/40 shadow-[0_8px_24px_rgba(99,102,241,0.08)]"
+                                        ? "border-indigo-200 bg-indigo-50/40 shadow-brand"
                                         : "border-slate-200 bg-white hover:border-slate-300"
                                 }`}
                             >
@@ -1210,7 +1210,7 @@ const CommunityPage = () => {
                     >
                         <motion.div
                             variants={itemVariants}
-                            className="mx-auto mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-xl shadow-indigo-500/25"
+                            className="mx-auto mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-brand"
                         >
                             <HiOutlineEmojiHappy className="h-8 w-8" />
                         </motion.div>

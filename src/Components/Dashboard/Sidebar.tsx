@@ -403,7 +403,7 @@ const SidebarInner = ({
                         >
                             <div className="relative flex-shrink-0">
                                 <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 blur-lg opacity-60 group-hover:opacity-80 transition-opacity" />
-                                <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 via-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-violet-500/40 overflow-hidden group-hover:scale-105 transition-transform duration-300">
+                                <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 via-indigo-500 to-purple-600 flex items-center justify-center shadow-brand overflow-hidden group-hover:scale-105 transition-transform duration-300">
                                     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20" />
                                     <HiSparkles className="w-5 h-5 text-white relative z-10" />
                                 </div>
@@ -557,7 +557,7 @@ showLabels ? "gap-3 px-3 py-2.5" : "p-2.5 justify-center touch-44"
                                                 {active && (
                                                     <motion.div
                                                         layoutId={inDrawer ? "activeMobile" : "activeDesktop"}
-                                                        className="absolute inset-0 bg-gradient-to-r from-violet-500 to-indigo-500 rounded-xl shadow-lg shadow-violet-500/30"
+                                                        className="absolute inset-0 bg-gradient-to-r from-violet-500 to-indigo-500 rounded-xl shadow-brand"
                                                         transition={{ type: "spring", stiffness: 350, damping: 30 }}
                                                     />
                                                 )}
@@ -783,7 +783,7 @@ const DashboardSidebar = ({ user, isOpen, onClose }: DashboardSidebarProps) => {
             <motion.aside
                 animate={{ width: isMinimized ? 76 : 272 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="hidden lg:flex fixed top-0 left-0 h-screen border-r border-white/[0.06] z-30 shadow-[0_0_60px_-12px_rgba(139,92,246,0.15)]"
+                className="hidden lg:flex fixed top-0 left-0 h-screen border-r border-white/[0.06] z-30 shadow-glow"
             >
                 <SidebarInner {...sidebarProps} />
             </motion.aside>

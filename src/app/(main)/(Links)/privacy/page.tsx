@@ -243,10 +243,10 @@ const IconCard = ({
         variants={scaleInVariants}
         custom={index}
         whileHover={{ y: -6, transition: { duration: 0.2, ease: "easeOut" } }}
-        className="group relative bg-white dark:bg-white/[0.02] rounded-2xl p-6 border border-gray-100 dark:border-white/[0.06] shadow-sm hover:shadow-xl hover:shadow-violet-500/[0.04] dark:hover:shadow-violet-500/[0.06] transition-all duration-400 backdrop-blur-sm"
+        className="group relative bg-white dark:bg-white/[0.02] rounded-2xl p-6 border border-gray-100 dark:border-white/[0.06] shadow-card hover:shadow-card-hover dark:hover:shadow-card-hover transition-all duration-400 backdrop-blur-sm"
     >
         <div
-            className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center mb-4 text-white text-xl shadow-lg shadow-violet-500/10 group-hover:scale-105 transition-all duration-300`}
+            className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center mb-4 text-white text-xl shadow-brand group-hover:scale-105 transition-all duration-300`}
         >
             {icon}
         </div>
@@ -280,10 +280,10 @@ const StatCard = ({
         variants={scaleInVariants}
         custom={index}
         whileHover={{ y: -6, transition: { duration: 0.2, ease: "easeOut" } }}
-        className="group relative bg-white dark:bg-white/[0.02] rounded-2xl p-6 border border-gray-100 dark:border-white/[0.06] shadow-sm hover:shadow-xl hover:shadow-violet-500/[0.04] dark:hover:shadow-violet-500/[0.06] transition-all duration-400 backdrop-blur-sm"
+        className="group relative bg-white dark:bg-white/[0.02] rounded-2xl p-6 border border-gray-100 dark:border-white/[0.06] shadow-card hover:shadow-card-hover dark:hover:shadow-card-hover transition-all duration-400 backdrop-blur-sm"
     >
         <div className="flex items-start justify-between mb-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-violet-500/10 group-hover:scale-105 transition-transform duration-300">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white shadow-brand group-hover:scale-105 transition-transform duration-300">
                 {icon}
             </div>
             <div className="text-right">
@@ -476,7 +476,7 @@ const HeroSection = () => {
                     className="mb-8 inline-flex"
                 >
                     <div className="relative p-1 rounded-3xl bg-gradient-to-b from-white/10 to-transparent">
-                        <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-violet-500 via-indigo-500 to-purple-600 flex items-center justify-center shadow-2xl shadow-violet-500/20 relative overflow-hidden">
+                        <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-gradient-to-br from-violet-500 via-indigo-500 to-purple-600 flex items-center justify-center shadow-brand relative overflow-hidden">
                             <HiShieldCheck className="w-10 h-10 md:w-12 md:h-12 text-white relative z-10" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/10" />
                         </div>
@@ -1213,7 +1213,7 @@ const DataRetentionSection = () => (
                                 <div className="md:hidden relative z-10 flex-shrink-0">
                                     <motion.div
                                         whileHover={{ scale: 1.15 }}
-                                        className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-violet-500/25"
+                                        className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white shadow-brand"
                                     >
                                         {step.icon}
                                     </motion.div>
@@ -1240,7 +1240,7 @@ const DataRetentionSection = () => (
                                 <div className="hidden md:flex items-center justify-center w-20 flex-shrink-0 relative z-10">
                                     <motion.div
                                         whileHover={{ scale: 1.2 }}
-                                        className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-violet-500/25 border-4 border-white dark:border-gray-950"
+                                        className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white shadow-brand border-4 border-white dark:border-gray-950"
                                     >
                                         {step.icon}
                                     </motion.div>
@@ -1306,7 +1306,7 @@ const ChildrensPrivacySection = () => (
 
                     <div className="relative z-10">
                         <div className="flex items-center gap-4 mb-6">
-                            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-500 to-orange-500 flex items-center justify-center text-white shadow-lg shadow-rose-500/20">
+                            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-500 to-orange-500 flex items-center justify-center text-white shadow-error">
                                 <HiExclamationTriangle className="w-7 h-7" />
                             </div>
                             <div>
@@ -1533,7 +1533,7 @@ const ContactSection = () => (
                         variants={scaleInVariants}
                         custom={i}
                         whileHover={{ y: -6, transition: { duration: 0.25 } }}
-                        className="group bg-white dark:bg-white/[0.02] rounded-2xl p-6 border border-gray-100 dark:border-white/[0.06] shadow-sm hover:shadow-xl hover:shadow-violet-500/[0.04] dark:hover:shadow-violet-500/[0.06] transition-all duration-400 text-center block"
+                        className="group bg-white dark:bg-white/[0.02] rounded-2xl p-6 border border-gray-100 dark:border-white/[0.06] shadow-card hover:shadow-card-hover dark:hover:shadow-card-hover transition-all duration-400 text-center block"
                     >
                         <div
                             className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center text-white shadow-lg mx-auto mb-5 group-hover:scale-105 transition-all duration-300`}

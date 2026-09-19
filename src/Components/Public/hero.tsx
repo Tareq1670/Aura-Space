@@ -515,7 +515,7 @@ export default function Hero() {
                                                 whileHover={{ y: -6, opacity: 1, scale: isActive ? 1.03 : 0.96, transition: { type: "spring", stiffness: 400, damping: 17 } }}
                                                 onClick={() => goToSlide(slide.originalIndex)}
                                                 aria-label={`View ${slide.highlight}`}
-                                                className={`relative flex-shrink-0 overflow-hidden rounded-2xl text-left transition-shadow duration-300 ${isActive ? "h-[200px] w-[160px] shadow-2xl shadow-indigo-500/25 ring-2 ring-indigo-400/60" : "h-[168px] w-[82px] shadow-lg hover:shadow-xl"}`}
+                                                className={`relative flex-shrink-0 overflow-hidden rounded-2xl text-left transition-shadow duration-300 ${isActive ? "h-[200px] w-[160px] shadow-brand ring-2 ring-indigo-400/60" : "h-[168px] w-[82px] shadow-lg hover:shadow-xl"}`}
                                                 style={{ perspective: 600 }}
                                             >
                                                 <Image height={1080} width={1920} src={slide.image} alt="" draggable={false} className="pointer-events-none h-full w-full object-cover" />

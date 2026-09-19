@@ -140,7 +140,7 @@ export default function HostReviewsPage() {
             transition={spring}
             className="flex items-center gap-4"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 shadow-lg shadow-violet-500/15">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 shadow-brand">
               <MessageSquare className="h-6 w-6 text-white" />
             </div>
             <div>
@@ -220,7 +220,7 @@ export default function HostReviewsPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ ...spring, delay: 0.15 }}
-              className="rounded-2xl border border-gray-100 bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
+              className="rounded-2xl border border-gray-100 bg-white p-5 shadow-card"
             >
               <div className="flex items-center gap-2 mb-4">
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-50">
@@ -260,7 +260,7 @@ export default function HostReviewsPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ ...spring, delay: 0.25 }}
-              className="rounded-2xl border border-gray-100 bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
+              className="rounded-2xl border border-gray-100 bg-white p-5 shadow-card"
             >
               <div className="flex items-center gap-2 mb-4">
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-50">

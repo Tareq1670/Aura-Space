@@ -586,7 +586,7 @@ export default function AboutPage() {
             </motion.div>
 
             <motion.div variants={itemVariants} className="relative">
-              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[28px] border border-slate-200 shadow-[0_24px_60px_rgba(15,23,42,0.10)]">
+              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[28px] border border-slate-200 shadow-card">
                 <Image
                   src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&h=1000&fit=crop&auto=format&q=80"
                   alt="AuraSpace premium property"
@@ -725,7 +725,7 @@ export default function AboutPage() {
                         },
                       }
                 }
-                className="group relative flex h-full flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white p-6 shadow-[0_1px_3px_rgba(15,23,42,0.04)] transition-all duration-500 hover:border-indigo-200 hover:shadow-[0_20px_50px_rgba(99,102,241,0.08)]"
+                className="group relative flex h-full flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white p-6 shadow-card transition-all duration-500 hover:border-indigo-200 hover:shadow-card-hover"
               >
                 <div className="flex items-center gap-3">
                   <motion.div
@@ -742,7 +742,7 @@ export default function AboutPage() {
                             },
                           }
                     }
-                    className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-md shadow-indigo-500/20"
+                    className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-brand"
                   >
                     {!reduceMotion && (
                       <motion.span
@@ -857,10 +857,10 @@ export default function AboutPage() {
                         },
                       }
                 }
-                className="group relative flex h-full flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white p-6 shadow-[0_1px_3px_rgba(15,23,42,0.04)] transition-all duration-500 hover:border-indigo-200 hover:shadow-[0_20px_50px_rgba(99,102,241,0.08)]"
+                className="group relative flex h-full flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white p-6 shadow-card transition-all duration-500 hover:border-indigo-200 hover:shadow-card-hover"
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-md shadow-indigo-500/20">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-brand">
                     <span className="text-xs font-black">
                       {String(i + 1).padStart(2, "0")}
                     </span>
@@ -933,7 +933,7 @@ export default function AboutPage() {
                         },
                       }
                 }
-                className="group relative flex h-full flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white p-6 shadow-[0_1px_3px_rgba(15,23,42,0.04)] transition-all duration-500 hover:border-indigo-200 hover:shadow-[0_20px_50px_rgba(99,102,241,0.08)]"
+                className="group relative flex h-full flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white p-6 shadow-card transition-all duration-500 hover:border-indigo-200 hover:shadow-card-hover"
               >
                 <motion.div
                   whileHover={
@@ -949,7 +949,7 @@ export default function AboutPage() {
                           },
                         }
                   }
-                  className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-md shadow-indigo-500/20"
+                  className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-brand"
                 >
                   {!reduceMotion && (
                     <motion.span
@@ -1023,7 +1023,7 @@ export default function AboutPage() {
                 key={step.step}
                 variants={itemVariants}
                 whileHover={reduceMotion ? undefined : { y: -6 }}
-                className="group relative flex h-full flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white p-6 shadow-[0_1px_3px_rgba(15,23,42,0.04)] transition-all duration-500 hover:border-indigo-200 hover:shadow-[0_20px_50px_rgba(99,102,241,0.08)]"
+                className="group relative flex h-full flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white p-6 shadow-card transition-all duration-500 hover:border-indigo-200 hover:shadow-card-hover"
               >
                 <span className="bg-gradient-to-br from-indigo-500 to-violet-500 bg-clip-text text-5xl font-black leading-none tracking-tighter text-transparent opacity-15 transition-opacity duration-500 group-hover:opacity-30">
                   {step.step}
@@ -1093,12 +1093,12 @@ export default function AboutPage() {
                       : "lg:flex-row-reverse lg:text-right"
                   }`}
                 >
-                  <div className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-lg shadow-indigo-500/25 lg:absolute lg:left-1/2 lg:top-0 lg:-translate-x-1/2">
+                  <div className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-brand lg:absolute lg:left-1/2 lg:top-0 lg:-translate-x-1/2">
                     <span className="text-xs font-black">{i + 1}</span>
                   </div>
 
                   <div className="flex-1 lg:max-w-[calc(50%-2rem)]">
-                    <div className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-[0_12px_30px_rgba(15,23,42,0.05)] transition-all duration-300 hover:border-indigo-200 hover:shadow-[0_20px_50px_rgba(99,102,241,0.08)]">
+                    <div className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-card transition-all duration-300 hover:border-indigo-200 hover:shadow-card-hover">
                       <div
                         className={`mb-3 inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1 ${
                           i % 2 !== 0 ? "lg:ml-auto" : ""
@@ -1242,7 +1242,7 @@ export default function AboutPage() {
                 key={t.name}
                 variants={itemVariants}
                 whileHover={reduceMotion ? undefined : { y: -6 }}
-                className="flex h-full flex-col rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm transition-all duration-500 hover:border-indigo-200 hover:shadow-[0_20px_50px_rgba(99,102,241,0.08)]"
+                className="flex h-full flex-col rounded-[24px] border border-slate-200 bg-white p-6 shadow-card transition-all duration-500 hover:border-indigo-200 hover:shadow-card-hover"
               >
                 <svg
                   className="h-8 w-8 text-indigo-500/40"
@@ -1294,7 +1294,7 @@ export default function AboutPage() {
               ease: [0.16, 1, 0.3, 1],
               type: "tween",
             }}
-            className="relative overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 shadow-[0_28px_80px_rgba(15,23,42,0.16)]"
+            className="relative overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 shadow-card"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-white/[0.06] via-transparent to-transparent" />
             <div className="absolute -left-16 top-10 h-[300px] w-[300px] rounded-full bg-indigo-500/15 blur-3xl" />

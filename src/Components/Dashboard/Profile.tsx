@@ -117,7 +117,7 @@ function ProfilePageSkeleton() {
                 </div>
 
                 {/* ── Hero Profile Card Skeleton ── */}
-                <div className="bg-white rounded-3xl shadow-xl shadow-indigo-950/5 border border-slate-200/60 overflow-hidden mb-6">
+                <div className="bg-white rounded-3xl shadow-card border border-slate-200/60 overflow-hidden mb-6">
 
                     {/* Cover banner */}
                     <Skeleton className="h-32 sm:h-40 w-full rounded-none" />
@@ -149,7 +149,7 @@ function ProfilePageSkeleton() {
                 </div>
 
                 {/* ── Personal Information Card Skeleton ── */}
-                <div className="bg-white rounded-3xl shadow-lg shadow-indigo-950/5 border border-slate-200/60 p-5 sm:p-8 mb-6">
+                <div className="bg-white rounded-3xl shadow-card border border-slate-200/60 p-5 sm:p-8 mb-6">
 
                     {/* Card header */}
                     <div className="flex items-center justify-between mb-6 flex-wrap gap-2">
@@ -178,7 +178,7 @@ function ProfilePageSkeleton() {
                 </div>
 
                 {/* ── Password & Security Card Skeleton ── */}
-                <div className="bg-white rounded-3xl shadow-lg shadow-indigo-950/5 border border-slate-200/60 p-5 sm:p-8 mb-6">
+                <div className="bg-white rounded-3xl shadow-card border border-slate-200/60 p-5 sm:p-8 mb-6">
 
                     {/* Card header */}
                     <div className="flex items-center justify-between mb-6 flex-wrap gap-2">
@@ -203,7 +203,7 @@ function ProfilePageSkeleton() {
                 </div>
 
                 {/* ── Danger Zone Card Skeleton ── */}
-                <div className="bg-white rounded-3xl shadow-lg shadow-rose-950/5 border-2 border-rose-200/60 p-5 sm:p-8">
+                <div className="bg-white rounded-3xl shadow-error border-2 border-rose-200/60 p-5 sm:p-8">
 
                     {/* Card header */}
                     <div className="flex items-center gap-3 mb-5">
@@ -502,7 +502,7 @@ export default function ProfilePage() {
                     variants={cardVariants}
                     whileHover={{ y: -2 }}
                     transition={{ duration: 0.3 }}
-                    className="bg-white rounded-3xl shadow-xl shadow-indigo-950/5 border border-slate-200/60 overflow-hidden mb-6"
+                    className="bg-white rounded-3xl shadow-card border border-slate-200/60 overflow-hidden mb-6"
                 >
                     <div className="h-32 sm:h-40 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-800 relative overflow-hidden">
                         <motion.div
@@ -577,7 +577,7 @@ export default function ProfilePage() {
                                     }
                                     disabled={isUploadingImage}
                                     aria-label="Change profile photo"
-                                    className="absolute -bottom-1 -right-1 w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white flex items-center justify-center shadow-xl shadow-indigo-600/40 disabled:opacity-60"
+                                    className="absolute -bottom-1 -right-1 w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white flex items-center justify-center shadow-brand disabled:opacity-60"
                                 >
                                     {isUploadingImage ? (
                                         <Spinner className="w-4 h-4" />
@@ -721,13 +721,13 @@ export default function ProfilePage() {
                 <motion.div
                     variants={cardVariants}
                     whileHover={{ y: -2 }}
-                    className="bg-white rounded-3xl shadow-lg shadow-indigo-950/5 border border-slate-200/60 p-5 sm:p-8 mb-6"
+                    className="bg-white rounded-3xl shadow-card border border-slate-200/60 p-5 sm:p-8 mb-6"
                 >
                     <div className="flex items-center justify-between mb-6 flex-wrap gap-2">
                         <div className="flex items-center gap-3">
                             <motion.div
                                 whileHover={{ rotate: 10 }}
-                                className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30"
+                                className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-brand"
                             >
                                 <svg
                                     className="w-5 h-5 text-white"
@@ -898,13 +898,13 @@ export default function ProfilePage() {
                 <motion.div
                     variants={cardVariants}
                     whileHover={{ y: -2 }}
-                    className="bg-white rounded-3xl shadow-lg shadow-indigo-950/5 border border-slate-200/60 p-5 sm:p-8 mb-6"
+                    className="bg-white rounded-3xl shadow-card border border-slate-200/60 p-5 sm:p-8 mb-6"
                 >
                     <div className="flex items-center justify-between mb-6 flex-wrap gap-2">
                         <div className="flex items-center gap-3">
                             <motion.div
                                 whileHover={{ rotate: 10 }}
-                                className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/30"
+                                className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-warning"
                             >
                                 <svg
                                     className="w-5 h-5 text-white"
@@ -1108,7 +1108,7 @@ export default function ProfilePage() {
                                 exit={{ opacity: 0 }}
                                 className="flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50/50 border-2 border-emerald-100"
                             >
-                                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shrink-0 shadow-lg shadow-emerald-500/30">
+                                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shrink-0 shadow-success">
                                     <svg
                                         className="w-4 h-4 text-white"
                                         fill="none"
@@ -1141,13 +1141,13 @@ export default function ProfilePage() {
                 <motion.div
                     variants={cardVariants}
                     whileHover={{ y: -2 }}
-                    className="bg-white rounded-3xl shadow-lg shadow-rose-950/5 border-2 border-rose-200/60 p-5 sm:p-8"
+                    className="bg-white rounded-3xl shadow-error border-2 border-rose-200/60 p-5 sm:p-8"
                 >
                     <div className="flex items-center gap-3 mb-5">
                         <motion.div
                             animate={{ scale: [1, 1.05, 1] }}
                             transition={{ duration: 2, repeat: Infinity }}
-                            className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-rose-500 to-red-600 flex items-center justify-center shadow-lg shadow-rose-500/30"
+                            className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-rose-500 to-red-600 flex items-center justify-center shadow-error"
                         >
                             <svg
                                 className="w-5 h-5 text-white"

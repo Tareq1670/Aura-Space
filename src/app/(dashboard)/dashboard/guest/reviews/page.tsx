@@ -179,7 +179,7 @@ export default function GuestReviewsPage() {
             transition={spring}
             className="flex items-center gap-4"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 shadow-lg shadow-violet-500/15">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 shadow-brand">
               <MessageSquareText className="h-6 w-6 text-white" />
             </div>
             <div>
@@ -393,7 +393,7 @@ export default function GuestReviewsPage() {
                       y: -2,
                       boxShadow: "0 12px 40px rgba(0,0,0,0.07)",
                     }}
-                    className="group relative flex items-center gap-5 overflow-hidden rounded-2xl bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04)] transition-shadow duration-300 hover:shadow-lg"
+                    className="group relative flex items-center gap-5 overflow-hidden rounded-2xl bg-white shadow-card transition-shadow duration-300 hover:shadow-lg"
                   >
                     <div className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b from-violet-400 to-indigo-500 opacity-40 group-hover:opacity-100 transition-opacity" />
                     <div className="flex w-full items-center gap-4 pl-5 pr-6 py-4">

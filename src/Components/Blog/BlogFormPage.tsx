@@ -226,11 +226,11 @@ export default function BlogFormPage({ blogId, backLink }: BlogFormPageProps) {
                         initial="hidden"
                         animate="visible"
                         whileHover={{ y: -2 }}
-                        className="bg-white rounded-3xl shadow-xl shadow-indigo-950/5 border border-slate-200/60 overflow-hidden"
+                        className="bg-white rounded-3xl shadow-card border border-slate-200/60 overflow-hidden"
                     >
                         <div className="p-5 sm:p-8">
                             <div className="flex items-center gap-3 mb-6">
-                                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30 shrink-0">
+                                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-brand shrink-0">
                                     <PenLine className="w-5 h-5 text-white" />
                                 </div>
                                 <div>
@@ -269,11 +269,11 @@ export default function BlogFormPage({ blogId, backLink }: BlogFormPageProps) {
                         initial="hidden"
                         animate="visible"
                         whileHover={{ y: -2 }}
-                        className="bg-white rounded-3xl shadow-xl shadow-indigo-950/5 border border-slate-200/60 overflow-hidden"
+                        className="bg-white rounded-3xl shadow-card border border-slate-200/60 overflow-hidden"
                     >
                         <div className="p-5 sm:p-8">
                             <div className="flex items-center gap-3 mb-6">
-                                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/30 shrink-0">
+                                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-success shrink-0">
                                     <FileText className="w-5 h-5 text-white" />
                                 </div>
                                 <div>
@@ -300,11 +300,11 @@ export default function BlogFormPage({ blogId, backLink }: BlogFormPageProps) {
                         initial="hidden"
                         animate="visible"
                         whileHover={{ y: -2 }}
-                        className="bg-white rounded-3xl shadow-xl shadow-indigo-950/5 border border-slate-200/60 overflow-hidden"
+                        className="bg-white rounded-3xl shadow-card border border-slate-200/60 overflow-hidden"
                     >
                         <div className="p-5 sm:p-8">
                             <div className="flex items-center gap-3 mb-6">
-                                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/30 shrink-0">
+                                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-warning shrink-0">
                                     <Tag className="w-5 h-5 text-white" />
                                 </div>
                                 <div>
@@ -399,7 +399,7 @@ export default function BlogFormPage({ blogId, backLink }: BlogFormPageProps) {
                     transition={{ delay: 0.3, duration: 0.4 }}
                     className="sticky bottom-4 sm:bottom-6 z-10 mt-8"
                 >
-                    <div className="bg-white/90 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-xl shadow-indigo-950/10 border border-slate-200/60 px-3 sm:px-8 py-3 sm:py-4 flex items-center justify-end gap-2 sm:gap-3">
+                    <div className="bg-white/90 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-overlay border border-slate-200/60 px-3 sm:px-8 py-3 sm:py-4 flex items-center justify-end gap-2 sm:gap-3">
                     <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}

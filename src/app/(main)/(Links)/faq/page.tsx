@@ -279,7 +279,7 @@ const FaqPage = () => {
                             <div
                                 className={`group relative flex items-center rounded-2xl border bg-white/5 backdrop-blur-xl transition-all duration-500 ${
                                     isSearchFocused
-                                        ? "border-indigo-400/50 bg-white/10 shadow-[0_0_60px_rgba(99,102,241,0.25)]"
+                                        ? "border-indigo-400/50 bg-white/10 shadow-glow"
                                         : "border-white/10 hover:border-white/20 hover:bg-white/[0.08]"
                                 }`}
                             >
@@ -360,7 +360,7 @@ const FaqPage = () => {
                                     }
                                     className={`group relative flex items-center gap-2 rounded-full px-5 py-3 text-xs font-bold uppercase tracking-eyebrow transition-all duration-300 sm:text-xs ${
                                         activeCategory === category.id
-                                            ? "text-white shadow-lg shadow-indigo-500/25"
+                                            ? "text-white shadow-brand"
                                             : "border border-slate-200 bg-white text-slate-600 hover:border-indigo-200 hover:bg-indigo-50/30 hover:text-indigo-600"
                                     }`}
                                 >
@@ -424,7 +424,7 @@ const FaqPage = () => {
                                                         openItems.includes(
                                                             faq.id,
                                                         )
-                                                            ? "border-indigo-200 bg-gradient-to-br from-indigo-50/80 to-violet-50/30 shadow-[0_8px_30px_rgba(99,102,241,0.08)]"
+                                                            ? "border-indigo-200 bg-gradient-to-br from-indigo-50/80 to-violet-50/30 shadow-brand"
                                                             : "border-slate-200 bg-white shadow-sm hover:border-indigo-200/60 hover:shadow-md"
                                                     }`}
                                                 >
@@ -444,7 +444,7 @@ const FaqPage = () => {
                                                                     openItems.includes(
                                                                         faq.id,
                                                                     )
-                                                                        ? "bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-lg shadow-indigo-500/25"
+                                                                        ? "bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-brand"
                                                                         : "bg-slate-100 text-slate-500 group-hover:bg-indigo-100 group-hover:text-indigo-600"
                                                                 }`}
                                                             >
@@ -630,11 +630,11 @@ const FaqPage = () => {
                             </div>
 
                             <div className="space-y-6">
-                                <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 shadow-[0_8px_30px_rgba(15,23,42,0.04)]">
+                                <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 shadow-card">
                                     <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-gradient-to-br from-indigo-50 to-violet-50 blur-3xl" />
 
                                     <div className="relative mb-8 flex items-center gap-4">
-                                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-lg shadow-indigo-500/20">
+                                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-brand">
                                             <HiOutlineLightningBolt className="h-6 w-6" />
                                         </div>
                                         <div>
@@ -682,7 +682,7 @@ const FaqPage = () => {
 
                                     <div className="relative mb-8">
                                         <div className="mb-2 flex items-center gap-2">
-                                            <div className="flex h-2 w-2 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.8)]" />
+                                            <div className="flex h-2 w-2 animate-pulse rounded-full bg-emerald-400 shadow-success" />
                                             <span className="text-xs font-bold uppercase tracking-eyebrow text-emerald-300">
                                                 Live Support
                                             </span>
@@ -701,7 +701,7 @@ const FaqPage = () => {
                                             href="/contact"
                                             className="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.05] p-5 backdrop-blur-sm transition-all duration-300 hover:border-emerald-400/30 hover:bg-emerald-500/10"
                                         >
-                                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/20">
+                                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-success">
                                                 <HiOutlineChatAlt2 className="h-6 w-6" />
                                             </div>
                                             <div className="flex-1">
@@ -719,7 +719,7 @@ const FaqPage = () => {
                                             href="mailto:support@auraspace.com"
                                             className="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.05] p-5 backdrop-blur-sm transition-all duration-300 hover:border-indigo-400/30 hover:bg-indigo-500/10"
                                         >
-                                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-lg shadow-indigo-500/20">
+                                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-brand">
                                                 <HiOutlineMail className="h-6 w-6" />
                                             </div>
                                             <div className="flex-1">
@@ -737,7 +737,7 @@ const FaqPage = () => {
                                             href="tel:+8801700000000"
                                             className="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.05] p-5 backdrop-blur-sm transition-all duration-300 hover:border-fuchsia-400/30 hover:bg-fuchsia-500/10"
                                         >
-                                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-fuchsia-500 to-pink-600 text-white shadow-lg shadow-fuchsia-500/20">
+                                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-fuchsia-500 to-pink-600 text-white shadow-brand">
                                                 <HiOutlinePhone className="h-6 w-6" />
                                             </div>
                                             <div className="flex-1">
@@ -771,7 +771,7 @@ const FaqPage = () => {
                                     <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-indigo-200/50 blur-3xl" />
 
                                     <div className="relative flex items-start gap-5">
-                                        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white text-indigo-600 shadow-lg shadow-indigo-200">
+                                        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white text-indigo-600 shadow-brand">
                                             <HiOutlineGlobe className="h-7 w-7" />
                                         </div>
                                         <div>
